@@ -10,27 +10,16 @@
         <span>TFR Managment</span>
       </a>
       <span class="example-spacer"></span>
-      <div fxShow="true" fxHide.lt-md="true">
-      <a mat-button routerLink="home">Home</a>
-      <a mat-button routerLink="tfrs">TFRs</a>
-      <a mat-button routerLink="milestones">Milestones</a>
-      <a mat-button routerLink="alerts">Alerts</a>
-      <a mat-button routerLink="reports">Reports</a>
-      <a mat-button routerLink="permissions">Permissions</a>
-
+      <div *ngFor="let route of RouteList" fxShow="true" fxHide.lt-md="true">
+      <a mat-button *ngIf="route.showOnNavigationBar"  routerLink={{route.path}}>{{route.name}}</a>
       </div>
 
     </mat-toolbar>
     <mat-sidenav-container fxFlexFill class="example-container">
 
       <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over"  opened="false" fxHide.gt-sm="true">
-        <div fxLayout="column">
-          <a mat-button routerLink="home">Home</a>
-          <a mat-button routerLink="tfrs">TFRs</a>
-          <a mat-button routerLink="milestones">Milestones</a>
-          <a mat-button routerLink="alerts">Alerts</a>
-          <a mat-button routerLink="reports">Reports</a>
-          <a mat-button routerLink="permissions">Permissions</a>
+        <div fxLayout="column" *ngFor="let route of RouteList">
+          <a mat-button *ngIf="route.showOnNavigationBar"  routerLink={{route.path}}>{{route.name}}</a>
         </div>
       </mat-sidenav>
       <mat-sidenav-content fxFlexFill>

@@ -13,10 +13,10 @@ import { RouteFull } from './RouteFull';
 })
 export class RoutesService {
   public static RouteList : RouteFull[] = [{name:'Home',showOnNavigationBar:true,
-    path:'home',component: HomeComponent
+    path:'Home',component: HomeComponent
   },
   {
-    name:'Home',showOnNavigationBar:true,path:'tfrs',component: TfrsComponent
+    name:'TFRs',showOnNavigationBar:true,path:'tfrs',component: TfrsComponent
   },
   {
     name:'Home',showOnNavigationBar:false,path:'tfr/:id',component: TfrComponent
@@ -25,16 +25,16 @@ export class RoutesService {
     name:'Home',showOnNavigationBar:false,path:'tfr',component: TfrComponent
   },
   {
-    name:'Home',showOnNavigationBar:true,path:'milestones',component: MilestonesComponent
+    name:'Milestones',showOnNavigationBar:true,path:'milestones',component: MilestonesComponent
   },
   {
-    name:'Home',showOnNavigationBar:true,path:'alerts',component: AlertsComponent
+    name:'Alerts',showOnNavigationBar:true,path:'alerts',component: AlertsComponent
   },
   {
-    name:'Home',showOnNavigationBar:true,path:'reporting',component: ReportingComponent
+    name:'Reports',showOnNavigationBar:true,path:'reporting',component: ReportingComponent
   },
   {
-    name:'Home',showOnNavigationBar:true,path:'permissions',component: PermissionsComponent
+    name:'Permissions',showOnNavigationBar:true,path:'permissions',component: PermissionsComponent
   },
 
   { name:'Home',showOnNavigationBar:false,path: '**', redirectTo:'home' }];

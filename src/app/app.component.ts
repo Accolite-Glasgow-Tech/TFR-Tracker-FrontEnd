@@ -7,7 +7,8 @@ import { RoutesService } from './routes.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  RouteList = RoutesService.RouteList;
   constructor() {}
   title = 'TFR-Management';
-  NavigatorData = RoutesService.RouteList;
+
 }
