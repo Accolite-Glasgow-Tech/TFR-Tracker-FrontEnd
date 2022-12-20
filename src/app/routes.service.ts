@@ -13,7 +13,7 @@ import { RouteFull } from './RouteFull';
 })
 export class RoutesService {
   public static RouteList : RouteFull[] = [{name:'Home',showOnNavigationBar:true,
-    path:'Home',component: HomeComponent
+    path:'home',component: HomeComponent
   },
   {
     name:'TFRs',showOnNavigationBar:true,path:'tfrs',component: TfrsComponent
@@ -39,4 +39,7 @@ export class RoutesService {
 
   { name:'Home',showOnNavigationBar:false,path: '**', redirectTo:'home' }];
   constructor() { }
+  getRoutes() {
+    return RoutesService.RouteList;
+  }
 }
