@@ -15,7 +15,7 @@ export const routes: Routes = [{
   path:'tfrs',component: TfrsComponent
 },
 {
-  path:'tfr/id:',component: TfrComponent
+  path:'tfr/:id',component: TfrComponent
 },
 {
   path:'tfr',component: TfrComponent
