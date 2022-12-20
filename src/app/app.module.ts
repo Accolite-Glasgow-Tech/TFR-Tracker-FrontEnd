@@ -10,6 +10,7 @@ import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { MilestonesComponent } from './components/milestones/milestones.component';
 import { AlertsComponent } from './components/alerts/alerts.component';
 import { ReportingComponent } from './components/reporting/reporting.component';
+import { TfrComponent } from './components/tfr/tfr.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ReportingComponent } from './components/reporting/reporting.component';
     TfrsComponent,
     MilestonesComponent,
     AlertsComponent,
-    ReportingComponent
+    ReportingComponent,
+    TfrComponent
   ],
   imports: [
     BrowserModule,

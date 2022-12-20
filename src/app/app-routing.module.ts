@@ -6,6 +6,7 @@ import { MilestonesComponent } from './components/milestones/milestones.componen
 import { PermissionsComponent } from './components/permissions/permissions.component';
 import { ReportingComponent } from './components/reporting/reporting.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
+import { TfrComponent } from './components/tfr/tfr.component';
 
 export const routes: Routes = [{
   path:'home',component: HomeComponent
@@ -14,7 +15,10 @@ export const routes: Routes = [{
   path:'tfrs',component: TfrsComponent
 },
 {
-  path:'tfrs/id:',component: TfrsComponent
+  path:'tfr/id:',component: TfrComponent
+},
+{
+  path:'tfr',component: TfrComponent
 },
 {
   path:'milestones',component: MilestonesComponent
