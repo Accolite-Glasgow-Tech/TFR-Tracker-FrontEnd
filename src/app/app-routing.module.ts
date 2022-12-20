@@ -14,6 +14,9 @@ export const routes: Routes = [{
   path:'tfrs',component: TfrsComponent
 },
 {
+  path:'tfrs/id:',component: TfrsComponent
+},
+{
   path:'milestones',component: MilestonesComponent
 },
 {

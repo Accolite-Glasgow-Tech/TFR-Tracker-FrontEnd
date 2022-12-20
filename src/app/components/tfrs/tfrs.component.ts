@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tfrs',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tfrs.component.scss']
 })
 export class TfrsComponent implements OnInit {
+  TfrId!: String | null;
+  constructor(private route: ActivatedRoute) {}
 
-  constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.TfrId = this.route.snapshot.paramMap.get('id');
   }
 
 }
