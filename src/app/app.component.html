@@ -1,11 +1,11 @@
-<div style="height: 100vh;"> 
+<div style="height: 100vh;">
     <mat-toolbar color="primary">
       <div fxShow="true" fxHide.gt-sm="true">
         <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
       </div>
-  
+
       <a mat-button class="acc-tfr" routerLink="/">
         <span>TFR Managment</span>
       </a>
@@ -17,10 +17,10 @@
       <a mat-button routerLink="/offer">Alerts</a>
       <a mat-button routerLink="/contact">Reports</a>
       </div>
-  
+
     </mat-toolbar>
     <mat-sidenav-container fxFlexFill class="example-container">
-  
+
       <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over"  opened="false" fxHide.gt-sm="true">
         <div fxLayout="column">
             <a mat-button routerLink="/about-us">Home</a>
@@ -31,8 +31,8 @@
         </div>
       </mat-sidenav>
       <mat-sidenav-content fxFlexFill>
-        TFR Details 
+        <router-outlet></router-outlet>
       </mat-sidenav-content>
-  
+
     </mat-sidenav-container>
   </div>
