@@ -32,7 +32,8 @@
       </mat-sidenav>
       <mat-sidenav-content fxFlexFill>
         TFR Details 
-      <app-vendor></app-vendor>
+      <app-vendors [vendors]="vendors" (onSelected)="onVendorSelected($event)"
+      ></app-vendors>
       </mat-sidenav-content>
     </mat-sidenav-container>
   </div>

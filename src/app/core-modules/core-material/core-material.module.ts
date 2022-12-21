@@ -18,17 +18,19 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatSelectModule} from '@angular/material/select';
+
+const materialModules = [MatIconModule, MatButtonModule, MatSidenavModule, MatToolbarModule,
+  MatSelectModule,FlexLayoutModule]
 
 @NgModule({
   declarations: [],
-  imports:      [
-    BrowserModule, FormsModule, FlexLayoutModule, BrowserAnimationsModule,
-    MatIconModule, MatButtonModule, MatSidenavModule, MatToolbarModule,
-    CommonModule
-  ],
+  imports:  [BrowserModule, FormsModule, BrowserAnimationsModule,CommonModule,
+    materialModules],
   exports:[
-    FlexLayoutModule,
-    MatIconModule, MatButtonModule, MatSidenavModule, MatToolbarModule
+    materialModules
   ]
 })
-export class CoreMaterialModule { }
+export class CoreMaterialModule { 
+
+}
