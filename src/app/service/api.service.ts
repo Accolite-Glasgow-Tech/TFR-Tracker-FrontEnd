@@ -6,7 +6,7 @@ import { Vendor } from '../types/types';
 @Injectable({
   providedIn: 'root',
 })
-export class ApiserviceService {
+export class ApiService {
   Vendors: Vendor[] = require('../../assets/json/vendors.json');
 
   constructor(private httpClient: HttpClient) {
