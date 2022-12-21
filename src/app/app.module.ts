@@ -8,19 +8,16 @@ import { CoreMaterialModule } from './core-modules/core-material/core-material.m
 import { VendorsComponent } from './components/vendors/vendors.component';
 import { HttpClientModule } from '@angular/common/http';
 
-
 @NgModule({
-    declarations: [
-        AppComponent,
-        VendorsComponent    ],
-    providers: [],
-    bootstrap: [AppComponent],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        CoreMaterialModule,
-        HttpClientModule
-    ]
+  declarations: [AppComponent, VendorsComponent],
+  providers: [],
+  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    CoreMaterialModule,
+    HttpClientModule,
+  ],
 })
-export class AppModule { }
+export class AppModule {}
