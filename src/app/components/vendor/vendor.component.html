@@ -1,0 +1,8 @@
+<p>vendor works!</p>
+<mat-form-field appearance="fill">
+    <mat-select>
+        <mat-option *ngFor="let vend of vendor" [value]="vend.title" (click)="onSelectedVendor(vend)">
+            {{vend.title}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
