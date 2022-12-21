@@ -10,7 +10,7 @@ import { Vendor } from 'src/app/types/types';
 export class AppComponent {
   vendors: Vendor[] = [];
 
-  // title = 'TFR-Management';
+   title = 'TFR-Management';
   constructor(private service: ApiserviceService) {}
   ngOnInit() {
     this.service.getVendorData().subscribe((response) => {
