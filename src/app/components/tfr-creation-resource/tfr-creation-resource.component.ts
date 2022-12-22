@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 interface ResourceListType {
   resource_name: string;
@@ -17,6 +17,8 @@ export class TfrCreationResourceComponent implements OnInit {
   selectedCar!: string;
   selectedResources: ResourceListType[] = [];
 
+  @Output() selectedResourceEmitter : EventEmitter<ResourceListType[]> = new EventEmitter();
+
   resources: ResourceListType[] = [
     {resource_name: 'Laura', resource_id: '1', selected: false},
     {resource_name: 'Rishali', resource_id: '2', selected: false},
@@ -34,23 +36,16 @@ export class TfrCreationResourceComponent implements OnInit {
   addingNewResource(selectedResource : ResourceListType){
     selectedResource.selected = true;
     this.selectedResources.push(selectedResource);
-    console.log("Start adding");
-    console.log(this.resources);
-    console.log(this.selectedResources);
-    console.log("Finish adding");
+    this.selectedResourceEmitter.emit(this.selectedResources);
   }
 
   removeResource(removedResource : ResourceListType){
     removedResource.selected = false;
-    this.resources.push(removedResource);
     const index = this.selectedResources.indexOf(removedResource, 0);
     if (index > -1) {
       this.selectedResources.splice(index, 1);
     }
-    console.log("Start removing");
-    console.log(this.resources);
-    console.log(this.selectedResources);
-    console.log("Finish removing");
+    this.selectedResourceEmitter.emit(this.selectedResources);
   }
 
 }

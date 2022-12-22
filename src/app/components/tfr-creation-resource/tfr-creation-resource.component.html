@@ -2,17 +2,21 @@
     <h4>Select the resources for this project</h4>
     <mat-form-field appearance="fill">
       <mat-label>Resources</mat-label>
-      <mat-select [(ngModel)]="selectedValue" name="resource" (selectionChange)="addingNewResource($event.value)" >
-        <mat-option *ngFor="let resource of resources" [value]="resource">
-          {{resource.resource_name}}
-        </mat-option>
+      <mat-select ngModel name="selected" required #selected="ngModel" (selectionChange)="addingNewResource($event.value)">
+        <ng-container *ngFor="let resource of resources">
+          <mat-option *ngIf="!resource.selected" [value]="resource">
+            {{resource.resource_name}}
+          </mat-option>
+        </ng-container>
       </mat-select>
     </mat-form-field>
-    
 </form>
-
+<ng-container *ngIf="selectedResources.length == 0 && selected.touched">
+  <mat-error >Select at least 1 resource</mat-error>
+  
+</ng-container>
 <mat-chip-list
-  class="example-chip">
+  class="resource-chip">
   <mat-chip
       *ngFor="let resource of selectedResources"
       (removed)="removeResource(resource)">
@@ -22,3 +26,4 @@
       </button>
     </mat-chip>
 </mat-chip-list>
+<br>

@@ -8,7 +8,7 @@
         <input matInput formControlName="tfrName" required>
       </mat-form-field>
       <div>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-raised-button color="primary" matStepperNext>Next</button>
       </div>
       <!--  -->
     </form>
@@ -21,18 +21,18 @@
         <input matInput formControlName="milestoneName" required>
       </mat-form-field>
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-raised-button color="primary" class="navigation-btn" matStepperPrevious>Back</button>
+        <button mat-raised-button color="primary" class="navigation-btn" matStepperNext>Next</button>
       </div>
       <!--  -->
     </form>
   </mat-step>
-  <mat-step [stepControl]="resourceFormGroup" label="Resources">
+  <mat-step [completed]="resourceSelectionValid" label="Resources">
     <!-- Resource Component Here -->
-    <app-tfr-creation-resource></app-tfr-creation-resource>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext>Next</button>
+    <app-tfr-creation-resource (selectedResourceEmitter)="resourceSelected($event)" ></app-tfr-creation-resource>
+    <div class="navigation-btn">
+      <button mat-raised-button color="primary" class="navigation-btn" matStepperPrevious>Back</button>
+      <button mat-raised-button color="primary" class="navigation-btn" matStepperNext>Next</button>
     </div>
     <!--  -->
   </mat-step>
@@ -40,7 +40,7 @@
     <ng-template matStepLabel>Done</ng-template>
     <p>You are now done.</p>
     <div>
-      <button mat-button matStepperPrevious>Back</button>
+      <button mat-raised-button color="primary" matStepperPrevious>Back</button>
     </div>
   </mat-step>
 </mat-stepper>
