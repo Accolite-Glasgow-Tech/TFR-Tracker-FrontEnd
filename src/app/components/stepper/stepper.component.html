@@ -1,0 +1,45 @@
+<mat-stepper [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="tfrDetailsFormGroup">
+    <form [formGroup]="tfrDetailsFormGroup">
+      <ng-template matStepLabel>TFR Basic Details</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>TFR Name</mat-label>
+        <input matInput formControlName="tfrName" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="milestoneFormGroup" label="Milestones">
+    <form [formGroup]="milestoneFormGroup">
+      <mat-form-field appearance="fill">
+        <mat-label>Milestone Name</mat-label>
+        <input matInput formControlName="milestoneName" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="resourceFormGroup" label="Resources">
+    <form [formGroup]="resourceFormGroup">
+      <mat-form-field appearance="fill">
+        <mat-label>Resource Name</mat-label>
+        <input matInput formControlName="resourceName" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+    </div>
+  </mat-step>
+</mat-stepper>
