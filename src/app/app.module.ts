@@ -7,11 +7,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreMaterialModule } from './core-modules/core-material/core-material.module';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TfrCreationResourceComponent } from './components/tfr-creation-resource/tfr-creation-resource.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    StepperComponent
+    StepperComponent,
+    TfrCreationResourceComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,24 @@
+<form>
+    <h4>Select the resources for this project</h4>
+    <mat-form-field appearance="fill">
+      <mat-label>Resources</mat-label>
+      <mat-select [(ngModel)]="selectedValue" name="resource" (selectionChange)="addingNewResource($event.value)" >
+        <mat-option *ngFor="let resource of resources" [value]="resource">
+          {{resource.resource_name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+</form>
+
+<mat-chip-list
+  class="example-chip">
+  <mat-chip
+      *ngFor="let resource of selectedResources"
+      (removed)="removeResource(resource)">
+      {{resource.resource_name}}
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+</mat-chip-list>

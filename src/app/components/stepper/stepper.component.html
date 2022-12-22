@@ -2,6 +2,7 @@
   <mat-step [stepControl]="tfrDetailsFormGroup">
     <form [formGroup]="tfrDetailsFormGroup">
       <ng-template matStepLabel>TFR Basic Details</ng-template>
+      <!-- TFR Basic Details Component Here -->
       <mat-form-field appearance="fill">
         <mat-label>TFR Name</mat-label>
         <input matInput formControlName="tfrName" required>
@@ -9,10 +10,12 @@
       <div>
         <button mat-button matStepperNext>Next</button>
       </div>
+      <!--  -->
     </form>
   </mat-step>
   <mat-step [stepControl]="milestoneFormGroup" label="Milestones">
     <form [formGroup]="milestoneFormGroup">
+      <!-- Milestone Component Here -->
       <mat-form-field appearance="fill">
         <mat-label>Milestone Name</mat-label>
         <input matInput formControlName="milestoneName" required>
@@ -21,19 +24,17 @@
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>
       </div>
+      <!--  -->
     </form>
   </mat-step>
   <mat-step [stepControl]="resourceFormGroup" label="Resources">
-    <form [formGroup]="resourceFormGroup">
-      <mat-form-field appearance="fill">
-        <mat-label>Resource Name</mat-label>
-        <input matInput formControlName="resourceName" required>
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
+    <!-- Resource Component Here -->
+    <app-tfr-creation-resource></app-tfr-creation-resource>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+    <!--  -->
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>

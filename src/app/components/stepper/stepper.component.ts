@@ -14,7 +14,7 @@ export class StepperComponent {
     milestoneName: ['', Validators.required],
   });
   resourceFormGroup = this._formBuilder.group({
-    resourceName: ['', Validators.required],
+    resourceName: ['asd', Validators.required],
   });
   isLinear = true;
 
