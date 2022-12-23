@@ -14,7 +14,7 @@ export class TfrBasicDetailsService {
 
   createNewProject(project: Project): void{
     console.log("service called create new project");
-    this.httpClient.put(url, project);
+    this.httpClient.put('http://localhost:8080/projects', project).subscribe();
   }
 
 }

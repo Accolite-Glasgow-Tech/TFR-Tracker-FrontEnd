@@ -2,29 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
 import { TfrBasicDetailsService } from 'src/app/services/tfr-basic-details.service';
-import { Project } from 'src/app/types/types'
-
-
+import { Project } from 'src/app/types/types';
 
 @Component({
   selector: 'app-tfrbasic-details',
   templateUrl: './tfrbasic-details.component.html',
-  styleUrls: ['./tfrbasic-details.component.scss']
+  styleUrls: ['./tfrbasic-details.component.scss'],
 })
 export class TFRBasicDetailsComponent implements OnInit {
+  constructor(private tfrService: TfrBasicDetailsService) {}
 
-  constructor(private tfrService: TfrBasicDetailsService) { }
-
-  tfrDetails!:FormGroup;
-  project!:Project;
+  tfrDetails!: FormGroup;
+  project!: Project;
+  editMode!: Boolean;
+  selectedProject!: Project;
 
   ngOnInit(): void {
     this.tfrDetails = new FormGroup({
       name: new FormControl('', [Validators.required]),
       startDate: new FormControl<Date | null>(null),
       endDate: new FormControl<Date | null>(null),
-      vendorId: new FormControl('', [Validators.required]),
-      vendorSpecifc: new FormControl('', [Validators.required])
+      vendorId: new FormControl(''),
+      vendorSpecifc: new FormControl(''),
     });
 
     // this.tfrDetails.valueChanges.pipe(
@@ -33,11 +32,10 @@ export class TFRBasicDetailsComponent implements OnInit {
     // .subscribe(
     //   (data) => {console.log(data);}
     // );
-
   }
 
-  createNewTFR():void {
-    console.log("button clicked");
+  createNewTFR(): void {
+    console.log('button clicked');
 
     // take current values in tfrDetails form group
     this.project = {
@@ -48,14 +46,22 @@ export class TFRBasicDetailsComponent implements OnInit {
       version: '0.5',
       vendorId: 1,
       vendorSpecific: '{"key":"value"}',
-      status: 'DRAFT'
-    }
+      status: 'DRAFT',
+      milestones: [],
+      isDeleted: false,
+    };
     console.log(this.project);
-    
-    // combine with other fixed values for a created project, like version and status
-    // call api service that does Http Put Request
 
     this.tfrService.createNewProject(this.project);
   }
 
+  openInEditMode(project: Project): void {
+    this.editMode = true;
+    this.selectedProject = project;
+    // populate fields with info from provided project
+  }
+
+  updateTFR(){
+    // take data from tfrDetails and combine with residual info from selected project id
+  }
 }

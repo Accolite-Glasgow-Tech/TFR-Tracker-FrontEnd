@@ -26,7 +26,8 @@
 </p>
 
 <p>
-  <button mat-button color="primary" (click)="createNewTFR()">Save</button>
+  <button mat-raised-button [disabled]="tfrDetails.invalid" *ngIf="!editMode" color="primary" (click)="createNewTFR()">Save</button>
+  <button mat-raised-button [disabled]="tfrDetails.invalid" *ngIf="editMode" color="primary" (click)="updateTFR()">Save Updates</button>
 </p>
   
 </form>

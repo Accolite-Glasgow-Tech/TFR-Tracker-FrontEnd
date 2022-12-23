@@ -7,6 +7,8 @@ export interface Project{
     status: string;
     version: string;
     vendorSpecific: string;
+    milestones: Milestone[];
+    isDeleted: Boolean;
 }
 
 export interface Milestone {
