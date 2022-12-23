@@ -1,12 +1,20 @@
 <br/>
 <br/>
-<div class="basicDetails">
+<form [formGroup]="tfrDetails">
+<p>
+  <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name">
+    <mat-error *ngIf="tfrDetails.get('name')?.invalid">Invalid name</mat-error>
+  </mat-form-field>
+</p>
 
+<p>
   <mat-form-field appearance="fill">
     <mat-label>Enter a date range</mat-label>
-    <mat-date-range-input [formGroup]="tfrDetails" [rangePicker]="picker">
-      <input matStartDate formControlName="start" placeholder="Start date">
-      <input matEndDate formControlName="end" placeholder="End date">
+    <mat-date-range-input [rangePicker]="picker">
+      <input matStartDate formControlName="startDate" placeholder="Start date">
+      <input matEndDate formControlName="endDate" placeholder="End date">
     </mat-date-range-input>
     <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -15,8 +23,13 @@
     <mat-error *ngIf="tfrDetails.get('endDate')?.invalid">Invalid start date</mat-error>
     <mat-error *ngIf="tfrDetails.get('startDate')?.invalid">Invalid end date</mat-error>
   </mat-form-field>
+</p>
+
+<p>
+  <button mat-button color="primary" (click)="createNewTFR()">Save</button>
+</p>
   
-</div>
+</form>
 
 
   
