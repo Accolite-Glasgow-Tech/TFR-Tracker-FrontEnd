@@ -1,30 +1,38 @@
-<div style="height: 100vh;">
-    <mat-toolbar color="primary">
-      <div fxShow="true" fxHide.gt-sm="true">
-        <button mat-icon-button (click)="sidenav.toggle()">
-          <mat-icon>menu</mat-icon>
-        </button>
+<div style="height: 100vh">
+  <mat-toolbar color="primary">
+    <div fxShow="true" fxHide.gt-sm="true">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    <a mat-button class="acc-tfr" routerLink="/">
+      <span>TFR Managment</span>
+    </a>
+    <span class="example-spacer"></span>
+    <div *ngFor="let route of RouteList" fxShow="true" fxHide.lt-md="true">
+      <a mat-button *ngIf="route.label" routerLink="{{ route.path }}">{{
+        route.label
+      }}</a>
+    </div>
+  </mat-toolbar>
+  <mat-sidenav-container fxFlexFill class="example-container">
+    <mat-sidenav
+      color="primary"
+      #sidenav
+      fxLayout="column"
+      mode="over"
+      opened="false"
+      fxHide.gt-sm="true"
+    >
+      <div fxLayout="column" *ngFor="let route of RouteList">
+        <a mat-button *ngIf="route.label" routerLink="{{ route.path }}">{{
+          route.label
+        }}</a>
       </div>
-
-      <a mat-button class="acc-tfr" routerLink="/">
-        <span>TFR Managment</span>
-      </a>
-      <span class="example-spacer"></span>
-      <div *ngFor="let route of RouteList" fxShow="true" fxHide.lt-md="true">
-      <a mat-button *ngIf="route.showOnNavigationBar"  routerLink={{route.path}}>{{route.name}}</a>
-      </div>
-
-    </mat-toolbar>
-    <mat-sidenav-container fxFlexFill class="example-container">
-
-      <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over"  opened="false" fxHide.gt-sm="true">
-        <div fxLayout="column" *ngFor="let route of RouteList">
-          <a mat-button *ngIf="route.showOnNavigationBar"  routerLink={{route.path}}>{{route.name}}</a>
-        </div>
-      </mat-sidenav>
-      <mat-sidenav-content fxFlexFill>
-        <router-outlet></router-outlet>
-      </mat-sidenav-content>
-
-    </mat-sidenav-container>
-  </div>
+    </mat-sidenav>
+    <mat-sidenav-content fxFlexFill>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

@@ -8,9 +8,8 @@ describe('TfrsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TfrsComponent ]
-    })
-    .compileComponents();
+      declarations: [TfrsComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TfrsComponent);
     component = fixture.componentInstance;

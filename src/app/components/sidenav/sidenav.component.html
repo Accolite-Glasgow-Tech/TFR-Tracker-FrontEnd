@@ -1,0 +1,14 @@
+<mat-sidenav
+  color="primary"
+  #sidenav
+  fxLayout="column"
+  mode="over"
+  opened="false"
+  fxHide.gt-sm="true"
+>
+  <div fxLayout="column" *ngFor="let route of RouteList">
+    <a mat-button *ngIf="route.label" routerLink="{{ route.path }}">{{
+      route.label
+    }}</a>
+  </div>
+</mat-sidenav>

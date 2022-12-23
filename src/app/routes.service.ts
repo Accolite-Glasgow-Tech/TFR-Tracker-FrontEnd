@@ -3,43 +3,54 @@ import { AlertsComponent } from './components/alerts/alerts.component';
 import { HomeComponent } from './components/home/home.component';
 import { MilestonesComponent } from './components/milestones/milestones.component';
 import { PermissionsComponent } from './components/permissions/permissions.component';
-import { ReportingComponent } from './components/reporting/reporting.component';
+import { ReportsComponent } from './components/reports/reports.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
-import { RouteFull } from './RouteFull';
+import { TFRRoute } from './TFRRoute';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RoutesService {
-  public static RouteList : RouteFull[] = [{name:'Home',showOnNavigationBar:true,
-    path:'home',component: HomeComponent
-  },
-  {
-    name:'TFRs',showOnNavigationBar:true,path:'tfrs',component: TfrsComponent
-  },
-  {
-    name:'Home',showOnNavigationBar:false,path:'tfr/:id',component: TfrComponent
-  },
-  {
-    name:'Home',showOnNavigationBar:false,path:'tfr',component: TfrComponent
-  },
-  {
-    name:'Milestones',showOnNavigationBar:true,path:'milestones',component: MilestonesComponent
-  },
-  {
-    name:'Alerts',showOnNavigationBar:true,path:'alerts',component: AlertsComponent
-  },
-  {
-    name:'Reports',showOnNavigationBar:true,path:'reporting',component: ReportingComponent
-  },
-  {
-    name:'Permissions',showOnNavigationBar:true,path:'permissions',component: PermissionsComponent
-  },
+  public static RouteList: TFRRoute[] = [
+    {
+      label: 'Home',
+      path: 'home',
+      component: HomeComponent,
+    },
+    {
+      label: 'TFRs',
+      path: 'tfrs',
+      component: TfrsComponent,
+    },
+    {
+      path: 'tfr/:id',
+      component: TfrComponent,
+    },
+    {
+      label: 'Milestones',
+      path: 'milestones',
+      component: MilestonesComponent,
+    },
+    {
+      label: 'Alerts',
+      path: 'alerts',
+      component: AlertsComponent,
+    },
+    {
+      label: 'Reports',
+      path: 'reports',
+      component: ReportsComponent,
+    },
+    {
+      label: 'Permissions',
+      path: 'permissions',
+      component: PermissionsComponent,
+    },
 
-  { name:'Home',showOnNavigationBar:false,path: '**', redirectTo:'home' }];
-  constructor() { }
-  getRoutes() {
-    return RoutesService.RouteList;
-  }
+    {
+      path: '**',
+      redirectTo: 'home',
+    },
+  ];
 }
