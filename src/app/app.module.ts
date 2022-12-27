@@ -13,7 +13,7 @@ import { TfrCreationResourceComponent } from './components/tfr-creation-resource
   declarations: [
     AppComponent,
     StepperComponent,
-    TfrCreationResourceComponent,
+    TfrCreationResourceComponent
   ],
   imports: [
     BrowserModule,

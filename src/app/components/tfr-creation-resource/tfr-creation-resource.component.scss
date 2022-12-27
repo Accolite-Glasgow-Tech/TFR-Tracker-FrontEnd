@@ -1,0 +1,35 @@
+.resource_selection{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#resource_div{
+    padding: 10px; 
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.navigation-btn{
+    margin: 5px;
+}
+
+#intro_div{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.data-cell{
+    text-align: center
+}
+
+.data-row .data-cell{
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+
+.data-row:hover .data-cell{
+    color: blue;
+}

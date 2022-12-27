@@ -1,29 +1,69 @@
-<form>
-    <h4>Select the resources for this project</h4>
-    <mat-form-field appearance="fill">
-      <mat-label>Resources</mat-label>
-      <mat-select ngModel name="selected" required #selected="ngModel" (selectionChange)="addingNewResource($event.value)">
-        <ng-container *ngFor="let resource of resources">
-          <mat-option *ngIf="!resource.selected" [value]="resource">
-            {{resource.resource_name}}
-          </mat-option>
-        </ng-container>
-      </mat-select>
+<div id="resource_div">
+  <div id="intro_div">
+    <label>Add the resources and assign their respective roles for this project</label> 
+    <div>
+      <button mat-raised-button class="navigation-btn" color="primary" matStepperPrevious>Back</button>
+      <button mat-raised-button class="navigation-btn" color="primary" [disabled]="allocatedResources.length===0" (click)="triggerNextStep()" matStepperNext>Next</button>
+    </div>
+  </div>
+  <br>
+  <form [formGroup]="resourceFormGroup" >
+    <mat-form-field class="resource_selection" appearance="fill" >
+      <mat-label>Resource</mat-label>
+      <input type="text" required matInput formControlName="resource_name" [matAutocomplete]="auto1" #resource>
+      <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
+        <mat-option
+          *ngFor="let filteredResource of filteredResourceOption | async" 
+          [value]="filteredResource.resource_name">
+          {{filteredResource.resource_name}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-error *ngFor="let validation of validation_msgs.role">
+        <div *ngIf="resourceFormGroup.get('resource_name')?.hasError(validation.type) ">
+          {{validation.message}}
+        </div>
+      </mat-error>
     </mat-form-field>
-</form>
-<ng-container *ngIf="selectedResources.length == 0 && selected.touched">
-  <mat-error >Select at least 1 resource</mat-error>
   
-</ng-container>
-<mat-chip-list
-  class="resource-chip">
-  <mat-chip
-      *ngFor="let resource of selectedResources"
-      (removed)="removeResource(resource)">
-      {{resource.resource_name}}
-      <button matChipRemove>
-        <mat-icon>cancel</mat-icon>
-      </button>
-    </mat-chip>
-</mat-chip-list>
-<br>
+    <mat-form-field class="resource_selection" appearance="fill">
+      <mat-label>Role</mat-label>
+      <input type="text" required matInput formControlName="role" [matAutocomplete]="auto2" id="role" #role>
+      <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
+        <mat-option *ngFor="let filteredRole of filteredRoleOption | async" [value]="filteredRole">
+          {{filteredRole}}
+        </mat-option>
+      </mat-autocomplete>
+
+      <mat-error *ngFor="let validation of validation_msgs.role">
+        <div *ngIf="resourceFormGroup.get('role')?.hasError(validation.type) ">
+          {{validation.message}}
+        </div>
+      </mat-error>
+    </mat-form-field>
+
+    <button [disabled]="!resourceFormGroup.valid||resource.value===''||role.value===''" (click)="addResource(resource.value, role.value)" mat-raised-button color="primary">Add</button>
+    
+  </form>
+
+  <br>
+  <ng-container *ngIf="allocatedResources.length!==0">
+    <table mat-table class="mat-elevation-z8 demo-table">
+      <tr>
+        <th></th>
+        <th>Resource Name</th>
+        <th>Role</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let allocatedResource of allocatedResources; let i = index" class="data-row" (click)="displayInfo(allocatedResource)">
+        <td class="data-cell">{{i+1}}</td>
+        <td class="data-cell">{{allocatedResource.resource_name}}</td>
+        <td class="data-cell">{{allocatedResource.role}}</td>
+        <button mat-icon-button color="warn" (click)="removeResource(allocatedResource.resource_id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </tr>
+    </table>
+  </ng-container>
+
+</div>

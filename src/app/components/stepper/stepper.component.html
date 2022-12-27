@@ -13,6 +13,7 @@
       <!--  -->
     </form>
   </mat-step>
+
   <mat-step [stepControl]="milestoneFormGroup" label="Milestones">
     <form [formGroup]="milestoneFormGroup">
       <!-- Milestone Component Here -->
@@ -27,15 +28,13 @@
       <!--  -->
     </form>
   </mat-step>
+
   <mat-step [completed]="resourceSelectionValid" label="Resources">
     <!-- Resource Component Here -->
-    <app-tfr-creation-resource (selectedResourceEmitter)="resourceSelected($event)" ></app-tfr-creation-resource>
-    <div class="navigation-btn">
-      <button mat-raised-button color="primary" class="navigation-btn" matStepperPrevious>Back</button>
-      <button mat-raised-button color="primary" class="navigation-btn" matStepperNext>Next</button>
-    </div>
+    <app-tfr-creation-resource></app-tfr-creation-resource>
     <!--  -->
   </mat-step>
+
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
     <p>You are now done.</p>
@@ -43,4 +42,5 @@
       <button mat-raised-button color="primary" matStepperPrevious>Back</button>
     </div>
   </mat-step>
+
 </mat-stepper>

@@ -20,14 +20,11 @@ export class StepperComponent {
     milestoneName: ['', Validators.required],
   });
   resourceFormGroup = this._formBuilder.group({
-    resourceName: ['asd', Validators.required],
+    resourceName: ['', Validators.required],
   });
   resourceSelectionValid : boolean = false;
-  isLinear = true;
+  isLinear = false;
 
   constructor(private _formBuilder: FormBuilder) {}
 
-  resourceSelected(event : ResourceListType[]){
-    this.resourceSelectionValid = event.length != 0;
-  }
 }
