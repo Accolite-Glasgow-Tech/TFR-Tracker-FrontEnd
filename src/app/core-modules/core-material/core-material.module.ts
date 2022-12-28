@@ -13,9 +13,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
-import {MatCardModule} from '@angular/material/card';
-import {MatDialogModule} from '@angular/material/dialog';
-
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 
 let modules = [
   BrowserModule,
@@ -33,8 +32,8 @@ let modules = [
   MatFormFieldModule,
   MatInputModule,
   MatCardModule,
-  MatDialogModule
-]
+  MatDialogModule,
+];
 
 @NgModule({
   declarations: [],
