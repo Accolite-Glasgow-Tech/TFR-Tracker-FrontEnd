@@ -9,6 +9,8 @@ import { ReportsComponent } from './components/reports/reports.component';
 
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonModule } from '@angular/material/button';
 
 import { FrequencyPickerComponent } from './components/frequency-picker/frequency-picker.component';
 
@@ -30,6 +32,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     CoreMaterialModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatChipsModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
