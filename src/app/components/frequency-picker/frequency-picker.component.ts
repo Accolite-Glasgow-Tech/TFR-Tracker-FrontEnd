@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { stringToKeyValue } from '@angular/flex-layout/extended/style/style-transforms';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChip, MatChipList } from '@angular/material/chips';
 
@@ -6,7 +7,6 @@ enum Frequency {
   daily = 'Daily',
   weekly = 'Weekly',
   monthly = 'Montly',
-  yearly = 'Yearly',
 }
 
 enum Days {
@@ -30,7 +30,6 @@ export class FrequencyPickerComponent implements OnInit {
     Frequency.daily,
     Frequency.weekly,
     Frequency.monthly,
-    Frequency.yearly,
   ];
 
   daysOfWeek: String[] = [
@@ -44,6 +43,7 @@ export class FrequencyPickerComponent implements OnInit {
   ];
 
   frequencyPicker = new FormGroup({
+    timeControl: new FormControl('08:00'),
     frequencyControl: new FormControl(Frequency.weekly),
     dayControl: new FormControl(''),
   });
@@ -66,10 +66,18 @@ export class FrequencyPickerComponent implements OnInit {
   }
 
   toCron(): String {
-    return '* * * * * *';
+    const [hours, minutes] = this.frequencyPicker
+      .get('timeControl')!
+      .value!.split(':');
+
+    const days =
+      this.selectedDays.size === 0
+        ? '*'
+        : Array.from(this.selectedDays).join(',');
+    return [0, minutes, hours, '*', '*', days].join(' ');
   }
 
   buttonClick() {
-    console.log(Array.from(this.selectedDays).join(','));
+    console.log(this.toCron());
   }
 }

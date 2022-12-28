@@ -1,6 +1,12 @@
 <form [formGroup]="frequencyPicker">
   <div>
     <mat-form-field appearance="outline">
+      <mat-label>Time</mat-label>
+      <input matInput formControlName="timeControl" type="time" />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="outline">
       <mat-label>Frequency</mat-label>
       <mat-select #frequency formControlName="frequencyControl">
         <mat-option *ngFor="let frequency of frequencies" [value]="frequency">
@@ -26,6 +32,5 @@
       </mat-chip-list>
     </mat-form-field>
   </div>
-
   <button mat-button (click)="buttonClick()">Basic</button>
 </form>

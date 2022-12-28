@@ -11,6 +11,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 import { FrequencyPickerComponent } from './components/frequency-picker/frequency-picker.component';
 
@@ -34,6 +35,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatSelectModule,
     MatChipsModule,
     MatButtonModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
