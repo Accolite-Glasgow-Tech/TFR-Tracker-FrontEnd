@@ -1,29 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {FormControl, Validators} from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
-interface Animal {
-  name: string;
-  sound: string;
+enum Frequency {
+  daily = 'Daily',
+  weekly = 'Weekly',
+  monthly = 'Montly',
+  yearly = 'Yearly',
 }
 
 @Component({
   selector: 'app-frequency-picker',
   templateUrl: './frequency-picker.component.html',
-  styleUrls: ['./frequency-picker.component.scss']
+  styleUrls: ['./frequency-picker.component.scss'],
 })
 export class FrequencyPickerComponent implements OnInit {
-  animalControl = new FormControl<Animal | null>(null, Validators.required);
-  selectFormControl = new FormControl('', Validators.required);
-  animals: Animal[] = [
-    {name: 'Dog', sound: 'Woof!'},
-    {name: 'Cat', sound: 'Meow!'},
-    {name: 'Cow', sound: 'Moo!'},
-    {name: 'Fox', sound: 'Wa-pa-pa-pa-pa-pa-pow!'},
+  frequency: String = Frequency.daily;
+
+  frequencyControl = new FormControl<String>(this.frequency);
+  frequencies: String[] = [
+    Frequency.daily,
+    Frequency.weekly,
+    Frequency.monthly,
+    Frequency.yearly,
   ];
 
-  constructor() { }
+  constructor(cron: String) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  toCron(): String {
+    return '* * * * * *';
   }
 }
