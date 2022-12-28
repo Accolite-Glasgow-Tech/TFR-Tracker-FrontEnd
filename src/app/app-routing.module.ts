@@ -10,7 +10,7 @@ import { TfrComponent } from './components/tfr/tfr.component';
 import { RoutesService } from './routes.service';
 
 @NgModule({
-  imports: [RouterModule.forRoot(RoutesService.RouteList)],
+  imports: [RouterModule.forRoot(RoutesService.RoutesList)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

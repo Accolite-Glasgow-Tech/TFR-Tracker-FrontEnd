@@ -11,7 +11,7 @@ export class ToolbarComponent implements OnInit {
   constructor(private sidenavToggleService: SidenavToggleService) {}
 
   ngOnInit(): void {}
-  RouteList = RoutesService.RouteList;
+  RoutesList = RoutesService.RoutesList;
   toggle() {
     this.sidenavToggleService.toggle();
   }

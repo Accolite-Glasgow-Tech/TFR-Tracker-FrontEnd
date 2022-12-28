@@ -12,7 +12,7 @@ import { TFRRoute } from './TFRRoute';
   providedIn: 'root',
 })
 export class RoutesService {
-  public static RouteList: TFRRoute[] = [
+  public static RoutesList: TFRRoute[] = [
     {
       label: 'Home',
       path: 'home',
@@ -25,6 +25,10 @@ export class RoutesService {
     },
     {
       path: 'tfr/:id',
+      component: TfrComponent,
+    },
+    {
+      path: 'tfr',
       component: TfrComponent,
     },
     {
