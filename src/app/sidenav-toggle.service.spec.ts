@@ -13,4 +13,11 @@ describe('SidenavToggleService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should emit a toggle', () => {
+    let hasToggled = false;
+    service.toggleEmitter.subscribe(() => (hasToggled = true));
+    service.toggle();
+    expect(hasToggled).toBeTruthy();
+  });
 });

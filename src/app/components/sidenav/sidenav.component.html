@@ -1,14 +1,18 @@
-<mat-sidenav
-  color="primary"
-  #sidenav
-  fxLayout="column"
-  mode="over"
-  opened="false"
-  fxHide.gt-sm="true"
->
-  <div fxLayout="column" *ngFor="let route of RouteList">
-    <a mat-button *ngIf="route.label" routerLink="{{ route.path }}">{{
-      route.label
-    }}</a>
-  </div>
-</mat-sidenav>
+<mat-sidenav-container fxFlexFill class="example-container">
+  <mat-sidenav
+    color="primary"
+    fxLayout="column"
+    mode="over"
+    [(opened)]="isOpen"
+    fxHide.gt-sm="true"
+  >
+    <div fxLayout="column" *ngFor="let route of RoutesList">
+      <a mat-button *ngIf="route.label" routerLink="{{ route.path }}">{{
+        route.label
+      }}</a>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content fxFlexFill>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
