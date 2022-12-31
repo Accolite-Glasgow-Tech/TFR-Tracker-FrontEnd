@@ -8,7 +8,11 @@
   <div>
     <mat-form-field appearance="outline">
       <mat-label>Frequency</mat-label>
-      <mat-select #frequency formControlName="frequencyControl">
+      <mat-select
+        #frequency
+        formControlName="frequencyControl"
+        (selectionChange)="frequencyChange()"
+      >
         <mat-option *ngFor="let frequency of frequencies" [value]="frequency">
           {{ frequency }}
         </mat-option>
@@ -20,17 +24,18 @@
       *ngIf="frequency.value === eFrequency.weekly"
       appearance="outline"
     >
-      <mat-chip-list selectable multiple formControlName="dayControl">
+      <mat-chip-list selectable multiple formControlName="dayOfWeekControl">
         <mat-chip
           #chip="matChip"
-          *ngFor="let day of daysOfWeek"
+          *ngFor="let day of [0, 1, 2, 3, 4, 5, 6]"
           [value]="day"
+          [selected]="selectedDays.has(day)"
           (click)="toggleSelection(chip)"
         >
-          {{ day }}
+          {{ daysOfWeek.get(day)!.slice(0, 1).toUpperCase() }}
         </mat-chip>
       </mat-chip-list>
     </mat-form-field>
   </div>
-  <button mat-button (click)="buttonClick()">Basic</button>
+  <button mat-button (click)="buttonClick()">Log</button>
 </form>
