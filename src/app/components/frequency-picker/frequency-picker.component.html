@@ -1,40 +1,80 @@
 <form [formGroup]="frequencyPicker">
   <div>
     <mat-form-field appearance="outline">
-      <mat-label>Time</mat-label>
-      <input matInput formControlName="timeControl" type="time" />
+      <mat-label>Schedule at</mat-label>
+      <input matInput type="time" formControlName="timeControl" />
     </mat-form-field>
   </div>
-  <div>
-    <mat-form-field appearance="outline">
-      <mat-label>Frequency</mat-label>
+  <div class="flexContainer mid">
+    <mat-form-field>
+      <mat-label>Repeat</mat-label>
       <mat-select
         #frequency
         formControlName="frequencyControl"
         (selectionChange)="frequencyChange()"
+        disableRipple
       >
-        <mat-option *ngFor="let frequency of frequencies" [value]="frequency">
+        <mat-option
+          *ngFor="
+            let frequency of [
+              frequencyEnum.daily,
+              frequencyEnum.weekly,
+              frequencyEnum.monthly
+            ]
+          "
+          [value]="frequency"
+        >
           {{ frequency }}
         </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
   <div>
-    <mat-form-field
-      *ngIf="frequency.value === eFrequency.weekly"
-      appearance="outline"
-    >
+    <mat-form-field *ngIf="frequency.value === frequencyEnum.weekly">
+      <mat-label>Repeat on</mat-label>
       <mat-chip-list selectable multiple formControlName="dayOfWeekControl">
-        <mat-chip
-          #chip="matChip"
-          *ngFor="let day of [0, 1, 2, 3, 4, 5, 6]"
-          [value]="day"
-          [selected]="selectedDays.has(day)"
-          (click)="toggleSelection(chip)"
-        >
-          {{ daysOfWeek.get(day)!.slice(0, 1).toUpperCase() }}
-        </mat-chip>
+        <div class="flexContainer mid">
+          <mat-chip
+            #chip="matChip"
+            *ngFor="let day of [0, 1, 2, 3, 4, 5, 6]"
+            [value]="day"
+            [selected]="selectedDays.has(day)"
+            (click)="toggleSelection(chip)"
+          >
+            {{ daysOfWeek.get(day)!.slice(0, 1).toUpperCase() }}
+          </mat-chip>
+        </div>
       </mat-chip-list>
+    </mat-form-field>
+  </div>
+  <div *ngIf="frequency.value === frequencyEnum.monthly">
+    <mat-form-field>
+      <mat-select #dayOfMonth formControlName="dayOfMonthControl" disableRipple>
+        <mat-option
+          *ngFor="
+            let day of [
+              DayOfMonthEnum.first,
+              DayOfMonthEnum.last,
+              DayOfMonthEnum.custom
+            ]
+          "
+          [value]="day"
+        >
+          {{ day }} day of month
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="dayOfMonth.value === DayOfMonthEnum.custom">
+      <input
+        matInput
+        type="number"
+        id="quantity"
+        name="quantity"
+        min="1"
+        max="29"
+        formControlName="customDayofMonthControl"
+      />
+      <mat-error> Value of day should be between 1 and 28</mat-error>
     </mat-form-field>
   </div>
   <button mat-button (click)="buttonClick()">Log</button>

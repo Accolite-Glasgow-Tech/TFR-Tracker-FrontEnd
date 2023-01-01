@@ -4,9 +4,15 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChip, MatChipList } from '@angular/material/chips';
 
 enum Frequency {
-  daily = 'Daily',
-  weekly = 'Weekly',
-  monthly = 'Montly',
+  daily = 'daily',
+  weekly = 'weekly',
+  monthly = 'monthly',
+}
+
+enum DayOfMonth {
+  first = 'First',
+  last = 'Last',
+  custom = 'Custom',
 }
 
 @Component({
@@ -15,12 +21,8 @@ enum Frequency {
   styleUrls: ['./frequency-picker.component.scss'],
 })
 export class FrequencyPickerComponent implements OnInit {
-  eFrequency = Frequency;
-  frequencies: String[] = [
-    Frequency.daily,
-    Frequency.weekly,
-    Frequency.monthly,
-  ];
+  frequencyEnum = Frequency;
+  DayOfMonthEnum = DayOfMonth;
 
   daysOfWeek: Map<number, String> = new Map([
     [0, 'Sunday'],
@@ -35,8 +37,9 @@ export class FrequencyPickerComponent implements OnInit {
   frequencyPicker = new FormGroup({
     timeControl: new FormControl('08:00', Validators.required),
     frequencyControl: new FormControl(Frequency.weekly, Validators.required),
-    dayOfWeekControl: new FormControl([new Date().getDay()]),
-    dayOfMonthControl: new FormControl([]),
+    dayOfWeekControl: new FormControl(new Date().getDay()),
+    dayOfMonthControl: new FormControl(DayOfMonth.last),
+    customDayofMonthControl: new FormControl(new Date().getDate()),
   });
 
   selectedDays: Set<number> = new Set([new Date().getDay()]);
@@ -47,38 +50,36 @@ export class FrequencyPickerComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  range(start: number, end: number) {
-    return Array.from({ length: end - start + 1 }, (_, i) => i);
-  }
-
-  frequencyChange() {
+  frequencyChange(): void {
     this.firstSelection = true;
     this.selectedDays = new Set([new Date().getDay()]);
   }
 
-  toggleSelection(chip: MatChip) {
+  toggleSelection(chip: MatChip): void {
     if (!this.selectedDays.has(chip.value)) {
+      if (this.firstSelection) {
+        this.selectedDays.clear();
+        this.firstSelection = false;
+      }
       this.selectedDays.add(chip.value);
-      this.firstSelection = false;
     } else if (this.selectedDays.size > 1) {
       this.selectedDays.delete(chip.value);
     }
   }
 
   toCron(): String {
-    // const [hours, minutes] = this.frequencyPicker
-    //   .get('timeControl')!
-    //   .value!.split(':');
+    const [hours, minutes] = this.frequencyPicker
+      .get('timeControl')!
+      .value!.split(':');
 
     // const days =
     //   this.selectedDays.size === 0
     //     ? '*'
     //     : Array.from(this.selectedDays).join(',');
-    // return [0, minutes, hours, '*', '*', days].join(' ');
-    return '';
+    return [0, minutes, hours, '*', '*', '*'].join(' ');
   }
 
   buttonClick() {
-    console.log(Array.from(this.selectedDays).sort());
+    console.log(this.toCron());
   }
 }
