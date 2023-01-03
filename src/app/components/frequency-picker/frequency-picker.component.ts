@@ -12,6 +12,7 @@ enum Frequency {
 enum DayOfMonth {
   first = 'First',
   last = 'Last',
+  specificLast = 'SpecificLast',
   custom = 'Custom',
 }
 
@@ -23,6 +24,7 @@ enum DayOfMonth {
 export class FrequencyPickerComponent implements OnInit {
   frequencyEnum = Frequency;
   DayOfMonthEnum = DayOfMonth;
+  today: Date = new Date();
 
   daysOfWeek: Map<number, String> = new Map([
     [0, 'Sunday'],
@@ -37,22 +39,23 @@ export class FrequencyPickerComponent implements OnInit {
   frequencyPicker = new FormGroup({
     timeControl: new FormControl('08:00', Validators.required),
     frequencyControl: new FormControl(Frequency.weekly, Validators.required),
-    dayOfWeekControl: new FormControl(new Date().getDay()),
+    dayOfWeekControl: new FormControl(this.today.getDay()),
     dayOfMonthControl: new FormControl(DayOfMonth.last),
-    customDayofMonthControl: new FormControl(new Date().getDate()),
+    customDayofMonthControl: new FormControl(this.today.getDate()),
   });
 
-  selectedDays: Set<number> = new Set([new Date().getDay()]);
-  selectedMonthDays: Set<number> = new Set([new Date().getDate()]);
+  selectedDays: Set<number> = new Set([this.today.getDay()]);
   firstSelection: Boolean = true;
+  cron: string = '';
 
   constructor() {}
 
   ngOnInit(): void {}
 
   frequencyChange(): void {
+    this.today = new Date();
     this.firstSelection = true;
-    this.selectedDays = new Set([new Date().getDay()]);
+    this.selectedDays = new Set([this.today.getDay()]);
   }
 
   toggleSelection(chip: MatChip): void {
@@ -67,19 +70,52 @@ export class FrequencyPickerComponent implements OnInit {
     }
   }
 
-  toCron(): String {
-    const [hours, minutes] = this.frequencyPicker
+  getCron(): String {
+    const cronSecond: number = 0;
+    const [cronHour, cronMinute] = this.frequencyPicker
       .get('timeControl')!
       .value!.split(':');
 
-    // const days =
-    //   this.selectedDays.size === 0
-    //     ? '*'
-    //     : Array.from(this.selectedDays).join(',');
-    return [0, minutes, hours, '*', '*', '*'].join(' ');
+    const customDayOfMonth = this.frequencyPicker.get(
+      'customDayofMonthControl'
+    )!.value;
+
+    let cronDayOfMonth: string = '*';
+    let cronMonth = '*';
+    let cronDayOfWeek: string = '*';
+    switch (this.frequencyPicker.get('frequencyControl')!.value) {
+      case Frequency.weekly:
+        cronDayOfWeek = Array.from(this.selectedDays).sort().join(',');
+        break;
+      case Frequency.monthly:
+        switch (this.frequencyPicker.get('dayOfMonthControl')!.value) {
+          case DayOfMonth.first:
+            cronDayOfMonth = '1';
+            break;
+          case DayOfMonth.last:
+            cronDayOfMonth = 'L';
+            break;
+          case DayOfMonth.specificLast:
+            cronDayOfMonth = this.today.getDay().toString() + 'L';
+            break;
+          case DayOfMonth.custom:
+            cronDayOfMonth = customDayOfMonth!.toString();
+        }
+        break;
+    }
+    return [
+      cronSecond,
+      cronMinute,
+      cronHour,
+      cronDayOfMonth,
+      cronMonth,
+      cronDayOfWeek,
+    ].join(' ');
   }
 
-  buttonClick() {
-    console.log(this.toCron());
+  updateCron() {
+    this.cron = this.getCron().toString();
   }
+
+  interval = setInterval(() => this.updateCron(), 100);
 }
