@@ -15,13 +15,13 @@ export class ResourceService {
   ];
 
   roles: string[] = [
-    'Product Owner',
-    'Project Manager',
-    'Scrum Master',
-    'Business Analyst',
-    'Software Developer',
-    'Team Lead',
-    'UX/UI Designer',
+    'PRODUCT_OWNER',
+    'PROJECT_MANAGER',
+    'SCRUM_MASTER',
+    'BUSINESS_ANALYST',
+    'SOFTWARE_DEVELOPER',
+    'TEAM_LEAD',
+    'UX_UI_DESIGNER',
   ];
 
   constructor() {}
@@ -31,6 +31,6 @@ export class ResourceService {
   }
 
   getAllRoles(): string[] {
-    return this.roles;
+    return this.roles.map((role) => role.replace(/_/g, ' '));
   }
 }

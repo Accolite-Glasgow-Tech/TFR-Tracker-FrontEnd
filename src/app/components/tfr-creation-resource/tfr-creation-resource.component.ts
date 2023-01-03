@@ -1,6 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ResourceService } from 'src/app/services/resource/resource.service';
-import { ResourceListType, AllocatedResourceType } from 'src/app/types/types';
+import {
+  ResourceListType,
+  AllocatedResourceType,
+  ProjectResource,
+} from 'src/app/types/types';
 import {
   FormControl,
   FormGroup,
@@ -10,6 +14,7 @@ import {
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 
 function autocompleteObjectValidator(
   validOptions: Array<ResourceListType>
@@ -44,9 +49,14 @@ export class TfrCreationResourceComponent implements OnInit {
   filteredResourceOption!: Observable<ResourceListType[]>;
   filteredRoleOption!: Observable<string[]>;
   allocatedResources: AllocatedResourceType[] = [];
+  savedAllocatedResource: ProjectResource[] = [];
+  resourceListUpdated: boolean = false;
   @Output() nextStepEmitter = new EventEmitter<boolean>();
 
-  constructor(private resourceService: ResourceService) {}
+  constructor(
+    private resourceService: ResourceService,
+    private tfrManagementService: TfrManagementService
+  ) {}
 
   public validation_msgs = {
     resource_name: [
@@ -69,6 +79,7 @@ export class TfrCreationResourceComponent implements OnInit {
   ngOnInit(): void {
     this.resources = this.resourceService.getAllResources();
     this.roles = this.resourceService.getAllRoles();
+
     this.resourceFormGroup = new FormGroup({
       resource_name: new FormControl('', {
         validators: [
@@ -96,6 +107,13 @@ export class TfrCreationResourceComponent implements OnInit {
       startWith(''),
       map((value) => this._filterResource(value || ''))
     );
+
+    let temp: ProjectResource[] | undefined =
+      this.tfrManagementService.getProjectResources();
+    if (temp !== undefined) {
+      this.savedAllocatedResource = temp;
+      this.updateResourceList();
+    }
   }
 
   private _filterRole(value: string): string[] {
@@ -115,6 +133,7 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   addResource(resource_name: string, role: string) {
+    this.resourceListUpdated = true;
     const index = this.resources.findIndex(
       (resource) => resource.resource_name === resource_name
     );
@@ -133,6 +152,7 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   removeResource(resource_id: number) {
+    this.resourceListUpdated = true;
     const indexForResourcesArr = this.resources.findIndex(
       (resource) => resource.resource_id === resource_id
     );
@@ -150,11 +170,35 @@ export class TfrCreationResourceComponent implements OnInit {
     this.resourceFormGroup.controls['role'].setErrors(null);
   }
 
+  updateResourceList() {
+    this.savedAllocatedResource.forEach((resource) => {
+      let indexOfResource = this.resources.findIndex(
+        (val) => val.resource_id === resource.resource_id
+      );
+
+      this.resources[indexOfResource].selected = true;
+
+      const allocatedResource: AllocatedResourceType = {
+        project_id: resource.project_id,
+        resource_id: resource.resource_id,
+        resource_name: this.resources[indexOfResource].resource_name,
+        role: resource.role,
+      };
+
+      this.allocatedResources.push(allocatedResource);
+    });
+  }
+
   triggerNextStep() {
-    // console.log("save to database");
-    // console.log(this.allocatedResources);
+    if (this.resourceListUpdated) {
+      const newArray = this.allocatedResources.map(
+        ({ resource_name, ...keepAttrs }) => keepAttrs
+      );
+
+      this.tfrManagementService.setProjectResources(newArray);
+      this.resourceListUpdated = false;
+    }
     this.nextStepEmitter.emit(true);
-    console.log('entered');
   }
 
   displayInfo(allocatedResource: AllocatedResourceType) {
