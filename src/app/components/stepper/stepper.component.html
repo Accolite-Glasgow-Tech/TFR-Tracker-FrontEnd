@@ -5,7 +5,7 @@
       <!-- TFR Basic Details Component Here -->
       <mat-form-field appearance="fill">
         <mat-label>TFR Name</mat-label>
-        <input matInput formControlName="tfrName" required>
+        <input matInput formControlName="tfrName" required />
       </mat-form-field>
       <div>
         <button mat-raised-button color="primary" matStepperNext>Next</button>
@@ -19,11 +19,25 @@
       <!-- Milestone Component Here -->
       <mat-form-field appearance="fill">
         <mat-label>Milestone Name</mat-label>
-        <input matInput formControlName="milestoneName" required>
+        <input matInput formControlName="milestoneName" required />
       </mat-form-field>
       <div>
-        <button mat-raised-button color="primary" class="navigation-btn" matStepperPrevious>Back</button>
-        <button mat-raised-button color="primary" class="navigation-btn" matStepperNext>Next</button>
+        <button
+          mat-raised-button
+          color="primary"
+          class="navigation-btn"
+          matStepperPrevious
+        >
+          Back
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          class="navigation-btn"
+          matStepperNext
+        >
+          Next
+        </button>
       </div>
       <!--  -->
     </form>
@@ -31,7 +45,9 @@
 
   <mat-step [completed]="resourceSelectionValid" label="Resources">
     <!-- Resource Component Here -->
-    <app-tfr-creation-resource></app-tfr-creation-resource>
+    <app-tfr-creation-resource
+      (nextStepEmitter)="nextStep()"
+    ></app-tfr-creation-resource>
     <!--  -->
   </mat-step>
 
@@ -42,5 +58,4 @@
       <button mat-raised-button color="primary" matStepperPrevious>Back</button>
     </div>
   </mat-step>
-
 </mat-stepper>

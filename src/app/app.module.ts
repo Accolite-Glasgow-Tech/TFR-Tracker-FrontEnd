@@ -10,20 +10,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TfrCreationResourceComponent } from './components/tfr-creation-resource/tfr-creation-resource.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    StepperComponent,
-    TfrCreationResourceComponent
-  ],
+  declarations: [AppComponent, StepperComponent, TfrCreationResourceComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    CoreMaterialModule, 
+    CoreMaterialModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

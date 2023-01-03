@@ -8,9 +8,8 @@ describe('TfrCreationResourceComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TfrCreationResourceComponent ]
-    })
-    .compileComponents();
+      declarations: [TfrCreationResourceComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TfrCreationResourceComponent);
     component = fixture.componentInstance;
