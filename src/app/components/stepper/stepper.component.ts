@@ -21,6 +21,7 @@ interface ResourceListType {
 })
 export class StepperComponent implements OnInit {
   @ViewChild('stepper') private myStepper!: MatStepper;
+  //@Input() private project!: Project;
 
   tfrDetailsFormGroup = this._formBuilder.group({
     tfrName: ['', Validators.required],
