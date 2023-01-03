@@ -1,24 +1,32 @@
-<p>reports works!</p>
-<h1>Hello?</h1>
+<div id="form" [formGroup]="schedulerForm">
+  <label class="formLabel">Select TFR</label>
+  <mat-form-field appearance="fill">
+    <mat-label>Select TFR</mat-label>
+    <mat-select>
+      <mat-option></mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<mat-form-field appearance="fill">
-  <mat-label>Select TFR</mat-label>
-  <mat-select>
-    <mat-option></mat-option>
-  </mat-select>
-</mat-form-field>
+  <label class="formLabel">Select Template</label>
+  <mat-form-field appearance="fill">
+    <mat-label>Select Template</mat-label>
+    <mat-select>
+      <mat-option></mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<mat-form-field appearance="fill">
-  <mat-label>Select TFR</mat-label>
-  <mat-select>
-    <mat-option></mat-option>
-  </mat-select>
-</mat-form-field>
+  <app-frequency-picker></app-frequency-picker>
 
-<app-frequency-picker></app-frequency-picker>
-
-<mat-radio-group aria-label="Select an option">
-  <mat-radio-button value="1">Option 1</mat-radio-button>
-  <mat-radio-button value="2">Option 2</mat-radio-button>
-  <mat-radio-button value="3">Option 3</mat-radio-button>
-</mat-radio-group>
+  <label class="formLabel">Who do you wish to send reports to?</label>
+  <mat-radio-group class="recipientsRadio">
+    <mat-radio-button class="recipientsRadioButton" value="self"
+      >Only me</mat-radio-button
+    >
+    <mat-radio-button class="recipientsRadioButton" value="all"
+      >All project contacts</mat-radio-button
+    >
+    <mat-radio-button class="recipientsRadioButton" value="custom"
+      >Custom</mat-radio-button
+    >
+  </mat-radio-group>
+</div>
