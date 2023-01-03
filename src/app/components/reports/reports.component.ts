@@ -18,11 +18,15 @@ export class ReportsComponent implements OnInit {
 
   schedulerForm!: FormGroup;
 
-  constructor() {
-    reportsService: ReportsService;
-  }
+  resourceId!: number;
+
+  tfrList: any;
+
+  constructor(private reportsService: ReportsService) {}
 
   ngOnInit(): void {
+    this.resourceId = 1;
+
     this.schedulerForm = new FormGroup({
       tfr: new FormControl('', [Validators.required]),
       type: new FormControl('', [Validators.required]),
@@ -30,6 +34,8 @@ export class ReportsComponent implements OnInit {
       schedule: new FormControl('', [Validators.required]),
       receiver: new FormControl('', [Validators.required]),
     });
+
+    this.tfrList = this.reportsService.getResourceTFRList(this.resourceId);
   }
 
   submit() {

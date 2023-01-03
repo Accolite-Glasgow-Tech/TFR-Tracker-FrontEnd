@@ -3,7 +3,10 @@
   <mat-form-field appearance="fill">
     <mat-label>Select TFR</mat-label>
     <mat-select>
-      <mat-option></mat-option>
+      <mat-option
+        *ngFor="let tta of taskTypeAreas"
+        [value]="tta.name"
+      ></mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -11,7 +14,8 @@
   <mat-form-field appearance="fill">
     <mat-label>Select Template</mat-label>
     <mat-select>
-      <mat-option></mat-option>
+      <mat-option>Alert</mat-option>
+      <mat-option>Report</mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -29,4 +33,6 @@
       >Custom</mat-radio-button
     >
   </mat-radio-group>
+
+  <button mat-raised-button color="primary">Schedule</button>
 </div>
