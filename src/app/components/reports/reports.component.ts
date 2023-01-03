@@ -35,7 +35,7 @@ export class ReportsComponent implements OnInit {
       receiver: new FormControl('', [Validators.required]),
     });
 
-    this.tfrList = this.reportsService.getResourceTFRList(this.resourceId);
+    //this.tfrList = this.reportsService.getResourceTFRList(this.resourceId);
   }
 
   submit() {

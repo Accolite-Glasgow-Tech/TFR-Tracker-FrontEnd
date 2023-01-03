@@ -19,6 +19,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [AppComponent, FrequencyPickerComponent, ReportsComponent],
   imports: [
@@ -36,6 +38,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatChipsModule,
     MatButtonModule,
     MatInputModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
