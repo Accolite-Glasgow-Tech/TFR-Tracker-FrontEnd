@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { stringToKeyValue } from '@angular/flex-layout/extended/style/style-transforms';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatChip, MatChipList } from '@angular/material/chips';
+import { MatChip, MatChipListbox } from '@angular/material/chips';
 
 enum Frequency {
   daily = 'daily',
