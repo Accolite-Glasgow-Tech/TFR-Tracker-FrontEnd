@@ -75,10 +75,9 @@ export class TFRBasicDetailsComponent implements OnInit {
     this.tfrDetails.get('name')?.setValue(project.name);
     this.tfrDetails.get('startDate')?.setValue(project.startDate);
     this.tfrDetails.get('endDate')?.setValue(project.endDate);
-    
   }
 
-  updateTFR(){
+  updateTFR() {
     // take data from tfrDetails and combine with residual info from selected project id
     let updatedProject = {
       id: this.selectedProject.id,
@@ -99,27 +98,28 @@ export class TFRBasicDetailsComponent implements OnInit {
     this.tfrService.addOrUpdateProject(updatedProject);
   }
 
-  testFormGroup(){
-    this.tfrDetails.get('name')?.setValue("test works");
-    this.tfrDetails.get('startDate')?.setValue(new Date("2022-12-15"));
-    this.tfrDetails.get('endDate')?.setValue(new Date("2022-12-18"));
+  testFormGroup() {
+    this.tfrDetails.get('name')?.setValue('test works');
+    this.tfrDetails.get('startDate')?.setValue(new Date('2022-12-15'));
+    this.tfrDetails.get('endDate')?.setValue(new Date('2022-12-18'));
   }
 
-  switchMode(project: Project){
-    if(this.editMode){
+  switchMode(project: Project) {
+    if (this.editMode) {
       this.editMode = false;
       // set form details to blank
-      this.tfrDetails.get('name')?.setValue("");
+      this.tfrDetails.get('name')?.setValue('');
       this.tfrDetails.get('startDate')?.setValue('');
       this.tfrDetails.get('endDate')?.setValue('');
-    }
-    else{
+    } else {
       this.openInEditMode(project);
     }
   }
 
-  onVendorSelect(vendor: Vendor){
+  onVendorSelect(vendor: Vendor) {
     this.tfrDetails.get('vendorId')?.setValue(vendor.id);
-    this.tfrDetails.get('vendorSpecific')?.setValue('{"name":"' + vendor.name + '"}');
+    this.tfrDetails
+      .get('vendorSpecific')
+      ?.setValue('{"name":"' + vendor.name + '"}');
   }
 }

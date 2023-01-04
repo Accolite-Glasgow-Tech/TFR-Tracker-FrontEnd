@@ -17,15 +17,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 
 let modules = [
-  BrowserModule,
-  FormsModule,
-  FlexLayoutModule,
-  BrowserAnimationsModule,
   MatIconModule,
   MatButtonModule,
   MatSidenavModule,
   MatToolbarModule,
-  CommonModule,
   MatDatepickerModule,
   MatNativeDateModule,
   MatSelectModule,
@@ -37,7 +32,17 @@ let modules = [
 
 @NgModule({
   declarations: [],
-  imports: [modules],
-  exports: [modules],
+  imports: [
+    modules,
+    BrowserModule,
+    FormsModule,
+    FlexLayoutModule,
+    BrowserAnimationsModule,
+    CommonModule,
+  ],
+  exports: [
+    modules,
+    FlexLayoutModule,
+  ],
 })
 export class CoreMaterialModule {}

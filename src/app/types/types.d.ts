@@ -1,3 +1,4 @@
+
 export interface Project {
   id: number;
   name: string;
@@ -33,4 +34,10 @@ export interface Tracker {
 export interface Vendor {
   id: number;
   name: string;
+}
+
+export interface ProjectResourceType{
+  project_id: number,
+  resource_id: number,
+  role: string
 }
