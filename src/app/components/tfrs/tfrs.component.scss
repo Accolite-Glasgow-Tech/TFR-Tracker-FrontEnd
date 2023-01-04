@@ -1,0 +1,39 @@
+table {
+    width: 100%;
+  }
+
+  .example-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 600px;
+  }  
+  
+  .mat-table {
+    overflow: auto;
+    max-height: 500px;
+    min-width: 600px;
+  }
+
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
+
+
+
+.delivered{
+  color: rgb(7, 247, 107);
+}
+
+.inprogress{
+  color: rgb(233, 28, 9);
+}
+
+.archived{
+  color: rgb(7, 247, 107);;
+}
+
+.draft{
+  color: black;
+}
