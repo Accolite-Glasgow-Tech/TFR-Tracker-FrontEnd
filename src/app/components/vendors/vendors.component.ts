@@ -11,7 +11,6 @@ export class VendorsComponent {
 
   @Output() onSelected = new EventEmitter<Vendor>();
   onSelectedVendor(vendor: Vendor) {
-    console.log(vendor);
     this.onSelected.emit(vendor);
   }
 }
