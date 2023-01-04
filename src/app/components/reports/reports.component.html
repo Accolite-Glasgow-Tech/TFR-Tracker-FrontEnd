@@ -1,16 +1,16 @@
 <form id="form" [formGroup]="schedulerForm">
   <label class="formLabel">Select TFR</label>
-  <mat-form-field appearance="fill">
+  <mat-form-field class="mat-selector" appearance="fill">
     <mat-label>Select TFR</mat-label>
     <mat-select formControlName="tfr">
-      <mat-option *ngFor="let tfr of tfrList" [value]="tfr">
+      <mat-option *ngFor="let tfr of tfrDummyList" [value]="tfr">
         {{ tfr }}
       </mat-option>
     </mat-select>
   </mat-form-field>
 
   <label class="formLabel">Select Template</label>
-  <mat-form-field appearance="fill">
+  <mat-form-field class="mat-selector" appearance="fill">
     <mat-label>Select Template</mat-label>
     <mat-select formControlName="type">
       <mat-option *ngFor="let template of templates" [value]="template.value">
@@ -23,7 +23,10 @@
 
   <label class="formLabel">Who do you wish to send reports to?</label>
   <mat-radio-group class="recipientsRadio" formControlName="receiver">
-    <mat-radio-button class="recipientsRadioButton" value="self"
+    <mat-radio-button
+      [checked]="true"
+      class="recipientsRadioButton"
+      value="self"
       >Only me</mat-radio-button
     >
     <mat-radio-button class="recipientsRadioButton" value="all"
@@ -34,7 +37,13 @@
     >
   </mat-radio-group>
 
-  <button type="submit" (click)="submit()" mat-raised-button color="primary">
+  <button
+    class="btn-submit"
+    type="submit"
+    (click)="submit()"
+    mat-raised-button
+    color="primary"
+  >
     Schedule
   </button>
 </form>

@@ -1,18 +1,25 @@
 #form {
   display: flex;
   flex-direction: column;
-  justify-items: left;
+  align-items: center;
 }
 
 .formLabel {
-  text-align: justify;
   padding-bottom: 1rem;
 }
 
 .recipientsRadio {
-  justify-items: left;
 }
 
 .recipientsRadioButton {
   padding-right: 1rem;
+  padding-bottom: 2rem;
+}
+
+.btn-submit {
+  width: 20%;
+}
+
+.mat-selector {
+  width: 40%;
 }

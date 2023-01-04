@@ -25,7 +25,9 @@ export class ReportsComponent implements OnInit {
 
   resourceId!: number;
 
-  tfrList: number[] = [1, 2, 3];
+  tfrDummyList: number[] = [1, 2, 3];
+
+  tfrList: any;
 
   templates: Template[] = [
     { value: 'Alert', viewValue: 'Alert' },
@@ -38,14 +40,15 @@ export class ReportsComponent implements OnInit {
     this.resourceId = 1;
 
     this.schedulerForm = new FormGroup({
-      tfr: new FormControl('1', [Validators.required]),
+      tfr: new FormControl(1, [Validators.required]),
       type: new FormControl('Alert', [Validators.required]),
       frequency: new FormControl('', [Validators.required]),
       schedule: new FormControl('', [Validators.required]),
       receiver: new FormControl('Self', [Validators.required]),
     });
 
-    //this.tfrList = this.reportsService.getResourceTFRList(this.resourceId);
+    this.tfrList = this.reportsService.getResourceTFRList(this.resourceId);
+    console.log(this.tfrList);
   }
 
   submit() {
