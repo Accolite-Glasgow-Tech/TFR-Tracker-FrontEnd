@@ -4,8 +4,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChartOptions, Colors } from 'chart.js';
 import { ChartsService } from './charts.service';
 import { ApiService } from 'src/app/service/api.service';
-import { Status } from 'src/app/types/types.status';
 import { Observable } from 'rxjs';
+import { IStatus } from 'src/app/Interface/Status.Interface';
 
 @Component({
   selector: 'app-charts',
@@ -48,7 +48,7 @@ export class ChartsComponent implements OnInit {
   // }
 
   ngOnInit() {
-    const data1: Observable<Status[]> = this.service.gettfrStatusData();
+    const data1: Observable<IStatus[]> = this.service.gettfrStatusData();
     console.log('tttttttttt ', data1);
   }
 

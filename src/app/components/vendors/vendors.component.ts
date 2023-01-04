@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { Vendor } from 'src/app/types/types';
+import { IVendor } from 'src/app/Interface/Vendor.Interface';
 
 @Component({
   selector: 'app-vendors',
@@ -7,10 +7,10 @@ import { Vendor } from 'src/app/types/types';
   styleUrls: ['./vendors.component.scss'],
 })
 export class VendorsComponent {
-  @Input() vendors: Vendor[] = [];
+  @Input() vendors: IVendor[] = [];
 
-  @Output() onSelected = new EventEmitter<Vendor>();
-  onSelectedVendor(vendor: Vendor) {
+  @Output() onSelected = new EventEmitter<IVendor>();
+  onSelectedVendor(vendor: IVendor) {
     this.onSelected.emit(vendor);
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { of, Observable } from 'rxjs';
-import { Status } from '../types/types.status';
+import { IStatus } from '../Interface/Status.Interface';
 
 @Injectable({
   providedIn: 'root',
@@ -23,8 +23,8 @@ export class ApiService {
   //   return this.http.get(this.StatusUrl);
   // }
 
-  tfrStatus: Status[] = require('../../assets/json/status.json');
-  gettfrStatusData(): Observable<Status[]> {
+  tfrStatus: IStatus[] = require('../../assets/json/status.json');
+  gettfrStatusData(): Observable<IStatus[]> {
     console.log('*********************', this.tfrStatus);
     return of(this.tfrStatus);
   }

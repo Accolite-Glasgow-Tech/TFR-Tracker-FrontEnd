@@ -10,9 +10,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChartsComponent } from './components/charts/charts.component';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartsService } from './components/charts/charts.service';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+
 
 @NgModule({
-  declarations: [AppComponent, VendorsComponent, ChartsComponent],
+  declarations: [AppComponent, VendorsComponent, ChartsComponent, ToolbarComponent],
   providers: [ChartsService],
   bootstrap: [AppComponent],
   imports: [
