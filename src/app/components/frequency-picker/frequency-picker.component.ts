@@ -37,6 +37,7 @@ export class FrequencyPickerComponent implements OnInit {
   ]);
 
   frequencyPicker = new FormGroup({
+    startDateControl: new FormControl(this.today, Validators.required),
     timeControl: new FormControl('08:00', Validators.required),
     frequencyControl: new FormControl(Frequency.weekly, Validators.required),
     dayOfWeekControl: new FormControl(this.today.getDay()),
