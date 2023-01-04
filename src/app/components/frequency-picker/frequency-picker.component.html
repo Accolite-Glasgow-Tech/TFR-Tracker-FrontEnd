@@ -14,8 +14,6 @@
       ></mat-datepicker-toggle>
       <mat-datepicker #startDate></mat-datepicker>
     </mat-form-field>
-  </div>
-  <div>
     <mat-form-field appearance="outline">
       <mat-label>Schedule at</mat-label>
       <input matInput type="time" step="300" formControlName="timeControl" />
@@ -26,7 +24,7 @@
     <mat-slide-toggle formControlName="reccuringControl"></mat-slide-toggle>
   </div>
   <div *ngIf="frequencyPicker.get('reccuringControl')!.value">
-    <div class="flexContainer mid">
+    <div>
       <mat-form-field>
         <mat-label>Repeat</mat-label>
         <mat-select
@@ -50,7 +48,10 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div *ngIf="frequency.value === frequencyEnum.weekly">
+    <div
+      class="flexContainer mid"
+      *ngIf="frequency.value === frequencyEnum.weekly"
+    >
       <mat-chip-listbox multiple>
         <mat-chip-option
           #chip
@@ -103,9 +104,9 @@
         <mat-error> Value of day should be between 1 and 28</mat-error>
       </mat-form-field>
     </div>
-    =========================== <br /><br />
+    <!-- =========================== <br /><br />
     cron : {{ cron }}<br /><br />
-    ===========================<br /><br />
+    ===========================<br /><br /> -->
     <div>
       <mat-form-field appearance="fill">
         <mat-label>Expire at</mat-label>

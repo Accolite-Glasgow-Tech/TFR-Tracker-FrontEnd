@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
 
@@ -21,6 +21,8 @@ enum DayOfMonth {
   styleUrls: ['./frequency-picker.component.scss'],
 })
 export class FrequencyPickerComponent implements OnInit {
+  @Output() public getData = new EventEmitter<any>();
+
   frequencyEnum = Frequency;
   DayOfMonthEnum = DayOfMonth;
   today: Date = new Date();
@@ -114,9 +116,19 @@ export class FrequencyPickerComponent implements OnInit {
     ].join(' ');
   }
 
-  updateCron() {
-    this.cron = this.getCron().toString();
-  }
+  // updateCron() {
+  //   this.cron = this.getCron().toString();
+  // }
 
-  interval = setInterval(() => this.updateCron(), 100);
+  // interval = setInterval(() => this.updateCron(), 100);
+
+  getJSON(): void {
+    let data = { id: 2, name: 'hello' };
+    this.getData.emit({
+      startDate: this.frequencyPicker.get('startDateControl')!.value,
+      startTime: this.frequencyPicker.get('timeControl')!.value,
+      cron: this.getCron(),
+      expirationDate: this.frequencyPicker.get('expirationDateControl')!.value,
+    });
+  }
 }
