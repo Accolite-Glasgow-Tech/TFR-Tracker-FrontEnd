@@ -25,6 +25,7 @@ export class FrequencyPickerComponent implements OnInit {
   frequencyEnum = Frequency;
   DayOfMonthEnum = DayOfMonth;
   today: Date = new Date();
+  recurring: boolean = false;
 
   daysOfWeek: Map<number, String> = new Map([
     [0, 'Sunday'],

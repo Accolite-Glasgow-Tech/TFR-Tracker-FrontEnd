@@ -13,6 +13,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { FrequencyPickerComponent } from './components/frequency-picker/frequency-picker.component';
 
@@ -39,6 +41,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatChipsModule,
     MatButtonModule,
     MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSlideToggleModule,
     HttpClientModule,
   ],
   providers: [],
