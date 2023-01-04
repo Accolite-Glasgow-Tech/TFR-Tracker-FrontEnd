@@ -8,9 +8,8 @@ import { CoreMaterialModule } from './core-modules/core-material/core-material.m
 import { VendorsComponent } from './components/vendors/vendors.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsComponent } from './components/charts/charts.component';
-import { NgChartsModule } from 'ng2-charts'
+import { NgChartsModule } from 'ng2-charts';
 import { ChartsService } from './components/charts/charts.service';
-
 
 @NgModule({
   declarations: [AppComponent, VendorsComponent, ChartsComponent],
