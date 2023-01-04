@@ -25,7 +25,6 @@ export class FrequencyPickerComponent implements OnInit {
   frequencyEnum = Frequency;
   DayOfMonthEnum = DayOfMonth;
   today: Date = new Date();
-  recurring: boolean = false;
 
   daysOfWeek: Map<number, String> = new Map([
     [0, 'Sunday'],
@@ -40,10 +39,12 @@ export class FrequencyPickerComponent implements OnInit {
   frequencyPicker = new FormGroup({
     startDateControl: new FormControl(this.today, Validators.required),
     timeControl: new FormControl('08:00', Validators.required),
+    reccuringControl: new FormControl(false, Validators.required),
     frequencyControl: new FormControl(Frequency.weekly, Validators.required),
     dayOfWeekControl: new FormControl(this.today.getDay()),
     dayOfMonthControl: new FormControl(DayOfMonth.last),
     customDayofMonthControl: new FormControl(this.today.getDate()),
+    expirationDateControl: new FormControl<Date | null>(null),
   });
 
   selectedDays: Set<number> = new Set([this.today.getDay()]);

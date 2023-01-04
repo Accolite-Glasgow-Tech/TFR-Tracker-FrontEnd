@@ -23,12 +23,9 @@
   </div>
   <div>
     Is this a recurring event?
-    <mat-slide-toggle
-      [(ngModel)]="recurring"
-      [ngModelOptions]="{ standalone: true }"
-    ></mat-slide-toggle>
+    <mat-slide-toggle formControlName="reccuringControl"></mat-slide-toggle>
   </div>
-  <div *ngIf="recurring">
+  <div *ngIf="frequencyPicker.get('reccuringControl')!.value">
     <div class="flexContainer mid">
       <mat-form-field>
         <mat-label>Repeat</mat-label>
@@ -111,8 +108,21 @@
         <mat-error> Value of day should be between 1 and 28</mat-error>
       </mat-form-field>
     </div>
-    =========================== <br /><br />
-    cron : {{ cron }}<br /><br />
-    ===========================<br /><br />
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Expire at</mat-label>
+        <input
+          matInput
+          [matDatepicker]="expirationtDate"
+          formControlName="expirationDateControl"
+        />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="expirationtDate"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #expirationtDate></mat-datepicker>
+      </mat-form-field>
+    </div>
   </div>
 </form>
