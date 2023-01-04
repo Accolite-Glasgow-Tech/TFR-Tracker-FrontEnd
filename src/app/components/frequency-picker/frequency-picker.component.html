@@ -16,7 +16,16 @@
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Schedule at</mat-label>
-      <input matInput type="time" step="300" formControlName="timeControl" />
+      <div class="flexContainer mid">
+        <input
+          matInput
+          type="time"
+          step="300"
+          onfocus="this.showPicker()"
+          formControlName="timeControl"
+        />
+        <mat-icon>alarm</mat-icon>
+      </div>
     </mat-form-field>
   </div>
   <div>

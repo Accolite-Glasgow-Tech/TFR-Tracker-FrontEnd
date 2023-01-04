@@ -21,7 +21,7 @@ enum DayOfMonth {
   styleUrls: ['./frequency-picker.component.scss'],
 })
 export class FrequencyPickerComponent implements OnInit {
-  @Output() public getData = new EventEmitter<any>();
+  @Output() public getData = new EventEmitter();
 
   frequencyEnum = Frequency;
   DayOfMonthEnum = DayOfMonth;
