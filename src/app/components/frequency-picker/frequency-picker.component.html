@@ -51,12 +51,17 @@
       </mat-form-field>
     </div>
     <div *ngIf="frequency.value === frequencyEnum.weekly">
-      hello world
-      <!-- <mat-form-field >
-        <mat-label>Repeat on</mat-label>
-        <mat-chip-listbox>
-        </mat-chip-listbox>
-      </mat-form-field> -->
+      <mat-chip-listbox multiple>
+        <mat-chip-option
+          #chip
+          *ngFor="let day of [0, 1, 2, 3, 4, 5, 6]"
+          [value]="day"
+          [selected]="selectedDays.has(day)"
+          (click)="toggleSelection(chip)"
+        >
+          {{ daysOfWeek.get(day)!.slice(0, 1).toUpperCase() }}
+        </mat-chip-option>
+      </mat-chip-listbox>
     </div>
     <div *ngIf="frequency.value === frequencyEnum.monthly">
       <mat-form-field>
@@ -98,6 +103,9 @@
         <mat-error> Value of day should be between 1 and 28</mat-error>
       </mat-form-field>
     </div>
+    =========================== <br /><br />
+    cron : {{ cron }}<br /><br />
+    ===========================<br /><br />
     <div>
       <mat-form-field appearance="fill">
         <mat-label>Expire at</mat-label>

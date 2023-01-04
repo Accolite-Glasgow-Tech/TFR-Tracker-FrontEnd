@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { stringToKeyValue } from '@angular/flex-layout/extended/style/style-transforms';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatChip, MatChipListbox } from '@angular/material/chips';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatChip } from '@angular/material/chips';
 
 enum Frequency {
   daily = 'daily',
@@ -41,7 +40,6 @@ export class FrequencyPickerComponent implements OnInit {
     timeControl: new FormControl('08:00', Validators.required),
     reccuringControl: new FormControl(false, Validators.required),
     frequencyControl: new FormControl(Frequency.weekly, Validators.required),
-    dayOfWeekControl: new FormControl(this.today.getDay()),
     dayOfMonthControl: new FormControl(DayOfMonth.last),
     customDayofMonthControl: new FormControl(this.today.getDate()),
     expirationDateControl: new FormControl<Date | null>(null),
