@@ -1,25 +1,28 @@
-<div id="form" [formGroup]="schedulerForm">
+<form id="form" [formGroup]="schedulerForm">
   <label class="formLabel">Select TFR</label>
   <mat-form-field appearance="fill">
     <mat-label>Select TFR</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let tfr of tfrList" [value]="tfr.name"></mat-option>
+    <mat-select formControlName="tfr">
+      <mat-option *ngFor="let tfr of tfrList" [value]="tfr">
+        {{ tfr }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
   <label class="formLabel">Select Template</label>
   <mat-form-field appearance="fill">
     <mat-label>Select Template</mat-label>
-    <mat-select>
-      <mat-option>Alert</mat-option>
-      <mat-option>Report</mat-option>
+    <mat-select formControlName="type">
+      <mat-option *ngFor="let template of templates" [value]="template.value">
+        {{ template.viewValue }}</mat-option
+      >
     </mat-select>
   </mat-form-field>
 
   <app-frequency-picker></app-frequency-picker>
 
   <label class="formLabel">Who do you wish to send reports to?</label>
-  <mat-radio-group class="recipientsRadio">
+  <mat-radio-group class="recipientsRadio" formControlName="receiver">
     <mat-radio-button class="recipientsRadioButton" value="self"
       >Only me</mat-radio-button
     >
@@ -31,5 +34,7 @@
     >
   </mat-radio-group>
 
-  <button mat-raised-button color="primary">Schedule</button>
-</div>
+  <button type="submit" (click)="submit()" mat-raised-button color="primary">
+    Schedule
+  </button>
+</form>

@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReportsService } from 'src/app/services/reports.service';
 
+interface Template {
+  value: string;
+  viewValue: string;
+}
+
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
@@ -20,7 +25,12 @@ export class ReportsComponent implements OnInit {
 
   resourceId!: number;
 
-  tfrList: any;
+  tfrList: number[] = [1, 2, 3];
+
+  templates: Template[] = [
+    { value: 'Alert', viewValue: 'Alert' },
+    { value: 'Report', viewValue: 'Report' },
+  ];
 
   constructor(private reportsService: ReportsService) {}
 
@@ -28,21 +38,34 @@ export class ReportsComponent implements OnInit {
     this.resourceId = 1;
 
     this.schedulerForm = new FormGroup({
-      tfr: new FormControl('', [Validators.required]),
-      type: new FormControl('', [Validators.required]),
+      tfr: new FormControl('1', [Validators.required]),
+      type: new FormControl('Alert', [Validators.required]),
       frequency: new FormControl('', [Validators.required]),
       schedule: new FormControl('', [Validators.required]),
-      receiver: new FormControl('', [Validators.required]),
+      receiver: new FormControl('Self', [Validators.required]),
     });
 
     //this.tfrList = this.reportsService.getResourceTFRList(this.resourceId);
   }
 
   submit() {
-    this.schedulerObject.tfr = this.schedulerForm.get('tfr')?.value;
-    this.schedulerObject.type = this.schedulerForm.get('type')?.value;
-    this.schedulerObject.frequency = this.schedulerForm.get('frequency')?.value;
-    this.schedulerObject.schedule = this.schedulerForm.get('schedule')?.value;
-    this.schedulerObject.receiver = this.schedulerForm.get('receiver')?.value;
+    console.log(
+      (this.schedulerObject.tfr = this.schedulerForm.get('tfr')?.value)
+    );
+    console.log(
+      (this.schedulerObject.type = this.schedulerForm.get('type')?.value)
+    );
+    console.log(
+      (this.schedulerObject.frequency =
+        this.schedulerForm.get('frequency')?.value)
+    );
+    console.log(
+      (this.schedulerObject.schedule =
+        this.schedulerForm.get('schedule')?.value)
+    );
+    console.log(
+      (this.schedulerObject.receiver =
+        this.schedulerForm.get('receiver')?.value)
+    );
   }
 }
