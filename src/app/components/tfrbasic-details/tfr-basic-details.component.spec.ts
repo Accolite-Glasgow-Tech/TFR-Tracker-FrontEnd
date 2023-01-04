@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TFRBasicDetailsComponent } from './tfrbasic-details.component';
+import { TfrBasicDetailsComponent } from './tfr-basic-details.component';
 
 describe('TFRBasicDetailsComponent', () => {
-  let component: TFRBasicDetailsComponent;
-  let fixture: ComponentFixture<TFRBasicDetailsComponent>;
+  let component: TfrBasicDetailsComponent;
+  let fixture: ComponentFixture<TfrBasicDetailsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TFRBasicDetailsComponent ]
+      declarations: [ TfrBasicDetailsComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TFRBasicDetailsComponent);
+    fixture = TestBed.createComponent(TfrBasicDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

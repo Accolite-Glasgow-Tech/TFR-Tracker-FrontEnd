@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -16,14 +16,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 
-let modules = [
+const materialModules = [
   MatIconModule,
   MatButtonModule,
   MatSidenavModule,
   MatToolbarModule,
+  MatSelectModule,
+  FlexLayoutModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatSelectModule,
   MatFormFieldModule,
   MatInputModule,
   MatCardModule,
@@ -33,15 +34,16 @@ let modules = [
 @NgModule({
   declarations: [],
   imports: [
-    modules,
     BrowserModule,
     FormsModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
     CommonModule,
+    ReactiveFormsModule,
+    materialModules,
   ],
   exports: [
-    modules,
+    materialModules,
     FlexLayoutModule,
   ],
 })

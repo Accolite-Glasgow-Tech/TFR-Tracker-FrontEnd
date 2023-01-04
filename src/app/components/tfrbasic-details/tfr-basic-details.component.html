@@ -1,8 +1,6 @@
 <div>
   <br />
   <br />
-  <p *ngIf="editMode">Edit Mode</p>
-  <p *ngIf="!editMode">Creation Mode</p>
   <br />
   <form [formGroup]="tfrDetails">
     <p>
@@ -29,15 +27,15 @@
       </mat-form-field>
     </p>
     <br />
+    <app-vendors [vendors]="vendorList" (onSelected)="onVendorSelect($event)"></app-vendors>
+    <br />
     <p>
-      <button mat-raised-button [disabled]="tfrDetails.invalid" *ngIf="!editMode" color="primary"
-        (click)="createNewTFR()">Save</button>
-      <button mat-raised-button [disabled]="tfrDetails.invalid" *ngIf="editMode" color="primary"
-        (click)="updateTFR()">Save Updates</button>
+      <button mat-raised-button [disabled]="tfrDetails.invalid" color="primary"
+        (click)="updateTFR()">Save</button>
     </p>
-  
     <p>
-      <button mat-raised-button color="primary" (click)="switchMode(testProject)">Switch Mode</button>
+      <button mat-raised-button [disabled]="tfrDetails.invalid" color="primary"
+        (click)="next()">Next</button>
     </p>
   
   </form>

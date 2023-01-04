@@ -31,13 +31,27 @@ export interface Tracker {
   status: string;
 }
 
+export interface ProjectResourceType{
+  project_id: number,
+  resource_id: number,
+  role: string
+}
+
 export interface Vendor {
   id: number;
   name: string;
 }
 
-export interface ProjectResourceType{
-  project_id: number,
-  resource_id: number,
-  role: string
+export interface ProjectBasicDetails {
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  vendorId: number;
+  vendorSpecific: string;
+  status: string;
+}
+
+export interface VendorAttribute {
+  vendorId: number;
+  attributeName: string;
 }
