@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -37,8 +37,9 @@ export class StepperComponent implements OnInit {
   stepperOrientation: Observable<StepperOrientation>;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    @Inject(FormBuilder) private _formBuilder: FormBuilder,
     protected tfrManagementService: TfrManagementService,
+    @Inject(BreakpointObserver)
     protected breakpointObserver: BreakpointObserver,
     private snackBar: MatSnackBar
   ) {
