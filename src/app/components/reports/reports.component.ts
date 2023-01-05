@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReportsService } from 'src/app/services/reports.service';
+import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
 
 interface Template {
   value: string;
@@ -13,6 +14,9 @@ interface Template {
   styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
+  @ViewChild(FrequencyPickerComponent, { static: true })
+  frequencyPickerComponent!: FrequencyPickerComponent;
+
   schedulerObject = {
     tfr: '',
     type: '',
@@ -30,8 +34,8 @@ export class ReportsComponent implements OnInit {
   tfrList: any;
 
   templates: Template[] = [
-    { value: 'Alert', viewValue: 'Alert' },
-    { value: 'Report', viewValue: 'Report' },
+    { value: 'ALERT', viewValue: 'Alert' },
+    { value: 'REPORT', viewValue: 'Report' },
   ];
 
   constructor(private reportsService: ReportsService) {}
@@ -42,9 +46,8 @@ export class ReportsComponent implements OnInit {
     this.schedulerForm = new FormGroup({
       tfr: new FormControl(1, [Validators.required]),
       type: new FormControl('Alert', [Validators.required]),
-      frequency: new FormControl('', [Validators.required]),
-      schedule: new FormControl('', [Validators.required]),
       receiver: new FormControl('Self', [Validators.required]),
+      frequency: this.frequencyPickerComponent.createFormGroup(),
     });
 
     this.tfrList = this.reportsService.getResourceTFRList(this.resourceId);
@@ -53,22 +56,8 @@ export class ReportsComponent implements OnInit {
 
   submit() {
     console.log(
-      (this.schedulerObject.tfr = this.schedulerForm.get('tfr')?.value)
-    );
-    console.log(
-      (this.schedulerObject.type = this.schedulerForm.get('type')?.value)
-    );
-    console.log(
-      (this.schedulerObject.frequency =
-        this.schedulerForm.get('frequency')?.value)
-    );
-    console.log(
-      (this.schedulerObject.schedule =
-        this.schedulerForm.get('schedule')?.value)
-    );
-    console.log(
-      (this.schedulerObject.receiver =
-        this.schedulerForm.get('receiver')?.value)
+      this.schedulerForm.get('frequency')!.get('startDateControl')?.value,
+      this.frequencyPickerComponent.getCron()
     );
   }
 }

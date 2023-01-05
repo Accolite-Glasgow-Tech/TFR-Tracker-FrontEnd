@@ -9,9 +9,9 @@ export class ReportsService {
   constructor(private httpClient: HttpClient) {}
 
   getResourceTFRList(resourceId: number) {
-    return this.httpClient.get(
-      'localhost:8080/resources/' + resourceId + '/projects'
-    );
+    return this.httpClient
+      .get('http://localhost:8080/resources/' + resourceId + '/projects')
+      .subscribe();
   }
 
   createTask() {
