@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
 
@@ -21,8 +21,6 @@ enum DayOfMonth {
   styleUrls: ['./frequency-picker.component.scss'],
 })
 export class FrequencyPickerComponent implements OnInit {
-  @Output() public getData = new EventEmitter();
-
   frequencyEnum = Frequency;
   DayOfMonthEnum = DayOfMonth;
   today: Date = new Date();
@@ -37,15 +35,7 @@ export class FrequencyPickerComponent implements OnInit {
     [6, 'Saturday'],
   ]);
 
-  frequencyPicker = new FormGroup({
-    startDateControl: new FormControl(this.today, Validators.required),
-    timeControl: new FormControl('08:00', Validators.required),
-    reccuringControl: new FormControl(false, Validators.required),
-    frequencyControl: new FormControl(Frequency.weekly, Validators.required),
-    dayOfMonthControl: new FormControl(DayOfMonth.last),
-    customDayofMonthControl: new FormControl(this.today.getDate()),
-    expirationDateControl: new FormControl<Date | null>(null),
-  });
+  frequencyPicker!: FormGroup;
 
   selectedDays: Set<number> = new Set([this.today.getDay()]);
   firstSelection: Boolean = true;
@@ -54,6 +44,19 @@ export class FrequencyPickerComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  createFormGroup(): FormGroup {
+    this.frequencyPicker = new FormGroup({
+      startDateControl: new FormControl(this.today, Validators.required),
+      timeControl: new FormControl('08:00', Validators.required),
+      reccuringControl: new FormControl(false, Validators.required),
+      frequencyControl: new FormControl(Frequency.weekly, Validators.required),
+      dayOfMonthControl: new FormControl(DayOfMonth.last),
+      customDayofMonthControl: new FormControl(this.today.getDate()),
+      expirationDateControl: new FormControl<Date | null>(null),
+    });
+    return this.frequencyPicker;
+  }
 
   frequencyChange(): void {
     this.today = new Date();
@@ -121,14 +124,4 @@ export class FrequencyPickerComponent implements OnInit {
   // }
 
   // interval = setInterval(() => this.updateCron(), 100);
-
-  getJSON(): void {
-    let data = { id: 2, name: 'hello' };
-    this.getData.emit({
-      startDate: this.frequencyPicker.get('startDateControl')!.value,
-      startTime: this.frequencyPicker.get('timeControl')!.value,
-      cron: this.getCron(),
-      expirationDate: this.frequencyPicker.get('expirationDateControl')!.value,
-    });
-  }
 }
