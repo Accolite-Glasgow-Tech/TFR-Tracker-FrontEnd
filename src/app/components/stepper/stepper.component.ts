@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-stepper',
@@ -41,7 +42,8 @@ export class StepperComponent implements OnInit {
     protected tfrManagementService: TfrManagementService,
     @Inject(BreakpointObserver)
     protected breakpointObserver: BreakpointObserver,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 700px)')
@@ -80,11 +82,6 @@ export class StepperComponent implements OnInit {
           resource_id: 2,
           role: 'SOFTWARE DEVELOPER',
         },
-        {
-          project_id: 2,
-          resource_id: 3,
-          role: 'PRODUCT OWNER',
-        },
       ],
       isDeleted: false,
     };
@@ -102,11 +99,12 @@ export class StepperComponent implements OnInit {
   }
 
   redirect() {
-    this.showSnackBar('TFR submitted.', 'Done', 2000);
+    this.router.navigate(['/home']);
+    this.showSnackBar('TFR submitted.', 3000);
   }
 
-  showSnackBar(content: string, action: string, duration: number) {
-    this.snackBar.open(content, action, {
+  showSnackBar(content: string, duration: number) {
+    this.snackBar.open(content, 'OK', {
       duration: duration,
       verticalPosition: 'bottom',
       horizontalPosition: 'center', // Allowed values are 'start' | 'center' | 'end' | 'left' | 'right'

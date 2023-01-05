@@ -78,56 +78,55 @@ export class TfrCreationResourceComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    // this.resourceService
-    //   .getAllResources()
-    //   .subscribe((data: ResourceListType[]) => {
-    //     this.resources = data;
-    //     this.roles = this.resourceService.getAllRoles();
-
-    //   });
-
-    this.resources = this.resourceService.getAllResources();
-    this.roles = this.resourceService.getAllRoles();
-
     this.resourceFormGroup = new FormGroup({
       resource_email: new FormControl('', {
-        validators: [
-          autocompleteObjectValidator(this.resources),
-          Validators.required,
-        ],
+        validators: [Validators.required],
       }),
       role: new FormControl('', {
-        validators: [
-          autocompleteStringValidator(this.roles),
-          Validators.required,
-        ],
+        validators: [Validators.required],
       }),
     });
 
-    this.filteredRoleOption = this.resourceFormGroup.controls[
-      'role'
-    ].valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filterRole(value || ''))
-    );
+    this.resourceService
+      .getAllResources()
+      .subscribe((data: ResourceListType[]) => {
+        this.resources = data;
+        this.resourceFormGroup.controls['resource_email'].addValidators([
+          autocompleteObjectValidator(this.resources),
+        ]);
 
-    this.filteredResourceOption = this.resourceFormGroup.controls[
-      'resource_email'
-    ].valueChanges.pipe(
-      startWith(''),
-      map((value) => this._filterResource(value || ''))
-    );
+        this.filteredResourceOption = this.resourceFormGroup.controls[
+          'resource_email'
+        ].valueChanges.pipe(
+          startWith(''),
+          map((value) => this._filterResource(value || ''))
+        );
 
-    let temp: ProjectResource[] | undefined =
-      this.tfrManagementService.getProjectResources;
-    if (temp !== undefined) {
-      this.savedAllocatedResource = temp;
-      this.updateResourceList();
-      this.tfrManagementService.setProjectResourcesWithNames(
-        this.allocatedResources
+        let temp: ProjectResource[] | undefined =
+          this.tfrManagementService.getProjectResources;
+        if (temp !== undefined) {
+          this.savedAllocatedResource = temp;
+          this.updateResourceList();
+          this.tfrManagementService.setProjectResourcesWithNames(
+            this.allocatedResources
+          );
+          this.stepCompletedEmitter.emit(true);
+        }
+      });
+
+    this.resourceService.getAllRoles().subscribe((data: string[]) => {
+      this.roles = data;
+      this.resourceFormGroup.controls['role'].addValidators([
+        autocompleteStringValidator(this.roles),
+      ]);
+
+      this.filteredRoleOption = this.resourceFormGroup.controls[
+        'role'
+      ].valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filterRole(value || ''))
       );
-      this.stepCompletedEmitter.emit(true);
-    }
+    });
   }
 
   private _filterRole(value: string): string[] {
