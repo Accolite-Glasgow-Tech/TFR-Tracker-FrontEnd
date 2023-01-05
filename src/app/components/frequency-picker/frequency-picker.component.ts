@@ -35,7 +35,15 @@ export class FrequencyPickerComponent implements OnInit {
     [6, 'Saturday'],
   ]);
 
-  frequencyPicker!: FormGroup;
+  frequencyPicker = new FormGroup({
+    startDateControl: new FormControl(this.today, Validators.required),
+    timeControl: new FormControl('08:00', Validators.required),
+    recurringControl: new FormControl(false, Validators.required),
+    frequencyControl: new FormControl(Frequency.weekly, Validators.required),
+    dayOfMonthControl: new FormControl(DayOfMonth.last),
+    customDayofMonthControl: new FormControl(this.today.getDate()),
+    expirationDateControl: new FormControl<Date | null>(null),
+  });
 
   selectedDays: Set<number> = new Set([this.today.getDay()]);
   firstSelection: Boolean = true;
@@ -46,15 +54,6 @@ export class FrequencyPickerComponent implements OnInit {
   ngOnInit(): void {}
 
   createFormGroup(): FormGroup {
-    this.frequencyPicker = new FormGroup({
-      startDateControl: new FormControl(this.today, Validators.required),
-      timeControl: new FormControl('08:00', Validators.required),
-      recurringControl: new FormControl(false, Validators.required),
-      frequencyControl: new FormControl(Frequency.weekly, Validators.required),
-      dayOfMonthControl: new FormControl(DayOfMonth.last),
-      customDayofMonthControl: new FormControl(this.today.getDate()),
-      expirationDateControl: new FormControl<Date | null>(null),
-    });
     return this.frequencyPicker;
   }
 
