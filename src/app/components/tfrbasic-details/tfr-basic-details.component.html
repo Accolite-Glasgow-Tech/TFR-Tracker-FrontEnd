@@ -31,14 +31,15 @@
     (onAttributesUpdated)="onAttributesUpdated($event)"
     (attributesSelected)="onAttributesSelected($event)"></app-vendors>
     <br />
-    <p>
-      <button mat-raised-button [disabled]="tfrDetails.invalid || vendorAttributes.invalid" color="primary"
-        (click)="saveTFR()">Save</button>
-    </p>
-    <p>
-      <button mat-raised-button [disabled]="tfrDetails.invalid || vendorAttributes.invalid" color="primary"
-        (click)="next()">Next</button>
-    </p>
+    
+    <div class="buttonRow">
+        <button mat-raised-button [disabled]="tfrDetails.invalid || vendorAttributes.invalid" color="primary"
+          (click)="saveTFR()">Save</button>
+        <button mat-raised-button [disabled]="tfrDetails.invalid || vendorAttributes.invalid" color="primary"
+          (click)="next()">Next</button>
+    </div>
+    <br/>
+    <br/>
   
   </form>
 </div>
