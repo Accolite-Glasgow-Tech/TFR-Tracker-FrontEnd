@@ -19,15 +19,9 @@ export class TfrBasicDetailsComponent implements OnInit {
   vendorAttributes!: FormGroup;
   attributeNames: string[] = [];
   vendorSpecificData: string = '';
-
-  testProject: ProjectBasicDetails = {
-    name: 'Backend',
-    startDate: new Date('2022-12-28'),
-    endDate: new Date('2022-12-29'),
-    vendorId: 1,
-    vendorSpecific: '{"key":"value"}',
-    status: 'INPROGRESS',
-  };
+  editMode: Boolean = false;
+  projectToEdit!: ProjectBasicDetails;
+ 
 
   ngOnInit(): void {
     this.tfrDetails = new FormGroup({
@@ -36,15 +30,22 @@ export class TfrBasicDetailsComponent implements OnInit {
       endDate: new FormControl<Date | null>(null),
       vendorId: new FormControl('', [Validators.required]),
     });
+
+    // check whether project exists yet, and if so, pre-fill details and set to edit mode
+    if(this.tfrManager.getBasicDetails != undefined){
+      this.editMode = true;
+      // edit mode
+      console.log("edit mode");
+      this.projectToEdit = this.tfrManager.getBasicDetails;
+      // set form group details to existing details
+      this.setDetailsToExistingProject();
+    }
   }
 
-  openInEditMode(project: ProjectBasicDetails): void {
-    // TODO get project details from service
-    this.selectedProject = project;
-    // populate fields with info from provided project
-    this.tfrDetails.get('name')?.setValue(project.name);
-    this.tfrDetails.get('startDate')?.setValue(project.startDate);
-    this.tfrDetails.get('endDate')?.setValue(project.endDate);
+  setDetailsToExistingProject(){
+    this.tfrDetails.get('name')?.setValue(this.projectToEdit.name);
+    this.tfrDetails.get('startDate')?.setValue(this.projectToEdit.startDate);
+    this.tfrDetails.get('endDate')?.setValue(this.projectToEdit.endDate);
   }
 
   saveTFR() {
@@ -60,13 +61,12 @@ export class TfrBasicDetailsComponent implements OnInit {
     console.log(updatedProjectDetails)
 
     this.tfrManager.setBasicDetails(updatedProjectDetails);
+
   }
 
   onVendorSelect(vendor: Vendor) {
+    console.log(this.tfrDetails);
     this.tfrDetails.get('vendorId')?.setValue(vendor.id);
-    let specific = '{"name":"' + vendor.name + '"}';
-    this.tfrDetails.get('vendorSpecific')?.setValue(specific);
-    console.log(this.tfrDetails)
   }
 
   next(){

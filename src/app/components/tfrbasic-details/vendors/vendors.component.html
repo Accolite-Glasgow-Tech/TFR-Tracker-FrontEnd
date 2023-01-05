@@ -1,5 +1,5 @@
-<mat-form-field class="form-field" appearance="fill">
-  <mat-select>
+<mat-form-field class="form-field" appearance="fill" [formGroup]="vendorGroup">
+  <mat-select formControlName="name">
     <mat-option
       *ngFor="let vendor of vendors"
       [value]="vendor.name"

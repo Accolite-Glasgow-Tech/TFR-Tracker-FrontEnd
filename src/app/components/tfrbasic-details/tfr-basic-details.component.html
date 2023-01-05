@@ -29,7 +29,8 @@
     <br />
     <app-vendors (onSelected)="onVendorSelect($event)" 
     (onAttributesUpdated)="onAttributesUpdated($event)"
-    (attributesSelected)="onAttributesSelected($event)"></app-vendors>
+    (attributesSelected)="onAttributesSelected($event)"
+    [editMode]="editMode" [existingDetails]="projectToEdit"></app-vendors>
     <br />
     
     <div class="buttonRow">

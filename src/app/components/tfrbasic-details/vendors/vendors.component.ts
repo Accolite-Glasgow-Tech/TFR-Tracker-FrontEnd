@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { Vendor, VendorAttribute } from 'src/app/types/types';
+import { Vendor, VendorAttribute, ProjectBasicDetails } from 'src/app/types/types';
 import { ApiService } from 'src/app/services/api.service';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
@@ -12,15 +12,21 @@ import { debounce, interval } from 'rxjs';
 export class VendorsComponent implements OnInit {
   constructor(private api: ApiService){}
 
-  vendors!: Vendor[];
+  @Input() editMode!: Boolean;
+  @Input() existingDetails!: ProjectBasicDetails;
 
+  vendors!: Vendor[];
   attributes!: VendorAttribute[];
   attributeGroup!: FormGroup;
-  
+  vendorGroup!: FormGroup
 
   @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
 
   ngOnInit(){
+
+    this.vendorGroup = new FormGroup({
+      name: new FormControl(''),
+    })
 
     this.api.getVendorData().subscribe(
       (data) => {this.vendors = data;}
@@ -36,11 +42,37 @@ export class VendorsComponent implements OnInit {
     .subscribe(() => {
       this.onAttributesUpdated.emit(this.attributeGroup);
     });
+
+    if(this.editMode){
+      console.log("vendor edit mode");
+      // TODO fill in details of vendor and Attributes
+      // find vendor in list with existingDetails.vendorId and call select method
+      this.vendors.forEach((vendor)=> {
+        if(vendor.id == this.existingDetails.vendorId){
+          this.onSelectedVendor(vendor);
+        }
+      });
+      this.fillAttributesFromExisting();
+    }
+  }
+
+  fillAttributesFromExisting(){
+    // parse values from existingDetails.vendorSpecific
+    // use to set values of form array
+    var obj = JSON.parse(this.existingDetails.vendorSpecific);
+    let i = 0;
+    this.attributes.forEach((attribute)=>{
+      console.log(obj[attribute.attributeName]);
+      this.getAttributes().at(i).setValue(obj[attribute.attributeName]);
+      i += 1;
+    })
   }
 
   @Output() onSelected = new EventEmitter<Vendor>();
   @Output() attributesSelected = new EventEmitter<VendorAttribute[]>();
   onSelectedVendor(vendor: Vendor) {
+
+    this.vendorGroup.get('name')?.setValue(vendor.name);
 
     console.log(vendor);
     this.onSelected.emit(vendor);

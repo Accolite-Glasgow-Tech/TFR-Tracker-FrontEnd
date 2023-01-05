@@ -6,12 +6,14 @@ import {
   ProjectResource,
   AllocatedResourceType,
 } from '../../types/types';
+import { DummyData } from '../../types/dummy-attributes';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TfrManagementService {
-  public project!: Project | undefined;
+  public project: Project | undefined = DummyData.project;
+  
   public projectResourcesWithNames!: AllocatedResourceType[];
 
   constructor() {}
@@ -30,12 +32,15 @@ export class TfrManagementService {
 
   get getBasicDetails(): ProjectBasicDetails | undefined {
     if (this.project !== undefined) {
-      let projectBasicDetails!: ProjectBasicDetails;
-      projectBasicDetails.name = this.project.name;
-      projectBasicDetails.startDate = this.project.startDate;
-      projectBasicDetails.endDate = this.project.endDate;
-      projectBasicDetails.vendorId = this.project.vendorId;
-      projectBasicDetails.vendorSpecific = this.project.vendorSpecific;
+      let projectBasicDetails: ProjectBasicDetails = {
+        name: this.project.name,
+        startDate: this.project.startDate,
+        endDate: this.project.endDate,
+        vendorId: this.project.vendorId,
+        vendorSpecific: this.project.vendorSpecific,
+        status: this.project.status,
+      }
+      
       return projectBasicDetails;
     }
     return undefined;
