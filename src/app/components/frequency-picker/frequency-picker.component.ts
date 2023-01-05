@@ -49,7 +49,7 @@ export class FrequencyPickerComponent implements OnInit {
     this.frequencyPicker = new FormGroup({
       startDateControl: new FormControl(this.today, Validators.required),
       timeControl: new FormControl('08:00', Validators.required),
-      reccuringControl: new FormControl(false, Validators.required),
+      recurringControl: new FormControl(false, Validators.required),
       frequencyControl: new FormControl(Frequency.weekly, Validators.required),
       dayOfMonthControl: new FormControl(DayOfMonth.last),
       customDayofMonthControl: new FormControl(this.today.getDate()),
@@ -118,10 +118,4 @@ export class FrequencyPickerComponent implements OnInit {
       cronDayOfWeek,
     ].join(' ');
   }
-
-  // updateCron() {
-  //   this.cron = this.getCron().toString();
-  // }
-
-  // interval = setInterval(() => this.updateCron(), 100);
 }

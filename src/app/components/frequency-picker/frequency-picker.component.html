@@ -30,9 +30,9 @@
   </div>
   <div>
     Is this a recurring event?
-    <mat-slide-toggle formControlName="reccuringControl"></mat-slide-toggle>
+    <mat-slide-toggle formControlName="recurringControl"></mat-slide-toggle>
   </div>
-  <div *ngIf="frequencyPicker.get('reccuringControl')!.value">
+  <div *ngIf="frequencyPicker.get('recurringControl')!.value">
     <div>
       <mat-form-field>
         <mat-label>Repeat</mat-label>
@@ -113,9 +113,6 @@
         <mat-error> Value of day should be between 1 and 28</mat-error>
       </mat-form-field>
     </div>
-    <!-- =========================== <br /><br />
-    cron : {{ cron }}<br /><br />
-    ===========================<br /><br /> -->
     <div>
       <mat-form-field appearance="fill">
         <mat-label>Expire at</mat-label>
