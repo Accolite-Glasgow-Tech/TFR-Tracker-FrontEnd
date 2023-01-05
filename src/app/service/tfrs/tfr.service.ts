@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import {HttpClient} from "@angular/common/http"
 import { Observable, retry } from "rxjs";
-// import { PeriodicElement } from "src/app/components/tfrs.component";
 import { PeriodicElement } from "src/app/components/tfrs/tfrs.component";
 @Injectable({
     providedIn:'root'

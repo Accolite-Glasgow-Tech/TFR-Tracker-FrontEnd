@@ -27,6 +27,7 @@ import { ReportsComponent } from './components/reports/reports.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { UserComponent } from './components/user/user.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
     TfrComponent,
     SidenavComponent,
     ToolbarComponent,
+    UserComponent,
   ],
   imports: [
     BrowserModule,
