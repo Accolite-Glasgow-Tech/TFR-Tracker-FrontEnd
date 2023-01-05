@@ -64,6 +64,15 @@ export class StepperComponent implements OnInit {
         {
           id: 1,
           projectId: 2,
+          description: 'depasdiugfchsaugsdufyaloyment',
+          startDate: new Date('2022-12-12 09:00:00'),
+          deliveryDate: new Date('2022-12-16 23:59:59'),
+          acceptanceDate: new Date('2022-12-31 23:59:59'),
+          isDeleted: false,
+        },
+        {
+          id: 2,
+          projectId: 2,
           description: 'deployment',
           startDate: new Date('2022-12-12 09:00:00'),
           deliveryDate: new Date('2022-12-16 23:59:59'),

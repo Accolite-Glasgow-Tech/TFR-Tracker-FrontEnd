@@ -27,7 +27,7 @@
 </table>
 
 <table mat-table class="mat-elevation-z8 demo-table table-resource-mobile">
-  <tr>
+  <tr *ngIf="withDelete">
     <th></th>
     <th>Details</th>
     <th *ngIf="withDelete"></th>

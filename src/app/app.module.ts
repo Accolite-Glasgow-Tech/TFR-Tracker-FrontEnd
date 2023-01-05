@@ -20,6 +20,7 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ProjectSummaryComponent } from './components/project-summary/project-summary.component';
 import { ResourceTableComponent } from './components/resource-table/resource-table.component';
+import { MilestoneTableComponent } from './components/milestone-table/milestone-table.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ResourceTableComponent } from './components/resource-table/resource-tab
     ToolbarComponent,
     ProjectSummaryComponent,
     ResourceTableComponent,
+    MilestoneTableComponent,
   ],
   imports: [
     BrowserModule,
