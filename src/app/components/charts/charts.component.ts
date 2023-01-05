@@ -1,29 +1,29 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ChartOptions, Colors } from 'chart.js';
-import { ChartsService } from './charts.service';
-import { ApiService } from 'src/app/service/api.service';
-import { Observable } from 'rxjs';
+import { ChartOptions } from 'chart.js';
 import { IStatus } from 'src/app/Interface/Status.Interface';
+import { ChartsService } from './charts.service';
 
 @Component({
   selector: 'app-charts',
   templateUrl: './charts.component.html',
   styleUrls: ['./charts.component.scss'],
+  providers: [ChartsService],
 })
 export class ChartsComponent implements OnInit {
-  constructor(
-    private httpService: HttpClient,
-    private dataObj: ChartsService,
-    private service: ApiService
-  ) {}
+  constructor(private chartservice: ChartsService) {}
+
+  tfrstatusdata: IStatus[] = [];
+
+  public getTfrStatusData(): IStatus[] {
+    this.chartservice.readTfrStatusData().subscribe((response) => {
+      this.tfrstatusdata = response;
+    });
+    return this.tfrstatusdata;
+  }
 
   public pieChartOptions: ChartOptions<'pie'> = {
     responsive: true,
   };
-
-  pieChartLabels = ['AGREED', 'ARCHIVED', 'DELIVERED', 'DRAFT', 'INPROGRESS'];
 
   pieChartData: any = [
     {
@@ -32,24 +32,15 @@ export class ChartsComponent implements OnInit {
     },
   ];
 
-  // ngOnInit () {
-  //     this.httpService.get('../../assets/json/status.json', {responseType: 'json'}).subscribe(
-  //         data => {
-  //           console.log("tttttttttt ",data)
-  //            this.pieChartData=[{
-  //            data:[1, 0, 1,2,1],
-  //            backgroundColor: ['orange','Grey','red','green','yellow','blue']
-  //            }]
-  //         },
-  //         (err: HttpErrorResponse) => {
-  //             console.log (err.message);
-  //         }
-  //     );
-  // }
+  pieChartLabels: any[] = Object.keys(this.getTfrStatusData());
 
   ngOnInit() {
-    const data1: Observable<IStatus[]> = this.service.gettfrStatusData();
-    console.log('tttttttttt ', data1);
+    this.pieChartData = [
+      {
+        data: Object.values(this.getTfrStatusData()),
+        backgroundColor: ['orange', 'Grey', 'red', 'green', 'yellow', 'blue'],
+      },
+    ];
   }
 
   onChartClick(event: any) {
