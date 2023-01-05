@@ -1,0 +1,93 @@
+<div>
+  <div class="project-details">
+    <span> <strong>Project Name: </strong> {{ currentProject?.name }} </span>
+  </div>
+
+  <div class="project-details">
+    <span
+      ><strong>Start Date: </strong>
+      {{
+        currentProject?.startDate?.toLocaleString("en-GB", { timeZone: "UTC" })
+      }}</span
+    >
+  </div>
+
+  <div class="project-details">
+    <span>
+      <strong>End Date: </strong>
+      {{
+        currentProject?.endDate?.toLocaleString("en-GB", { timeZone: "UTC" })
+      }}
+    </span>
+  </div>
+
+  <div class="project-details">
+    <span> <strong>Version: </strong> {{ currentProject?.version }} </span>
+  </div>
+
+  <div class="project-details" id="vendor-div">
+    <strong>Vendor Details: </strong>
+    <div id="tab">
+      {{ cleanVendorDetails() }}
+      <div id="vendor-details"></div>
+    </div>
+  </div>
+
+  <div class="project-details">
+    <strong>Milestones: </strong>
+    <br />
+    <table mat-table class="mat-elevation-z8 demo-table">
+      <tr>
+        <th></th>
+        <th>Description</th>
+        <th>Start Date</th>
+        <th>Delivery Date</th>
+        <th>Acceptance Date</th>
+      </tr>
+      <tr
+        *ngFor="let milestone of currentProject?.milestones; let i = index"
+        class="data-row"
+      >
+        <td class="data-cell">{{ i + 1 }}</td>
+        <td class="data-cell">{{ milestone.description }}</td>
+        <td class="data-cell">
+          {{ milestone.startDate.toLocaleString("en-GB", { timeZone: "UTC" }) }}
+        </td>
+        <td class="data-cell">
+          {{
+            milestone.deliveryDate.toLocaleString("en-GB", { timeZone: "UTC" })
+          }}
+        </td>
+        <td class="data-cell">
+          {{
+            milestone.acceptanceDate.toLocaleString("en-GB", {
+              timeZone: "UTC"
+            })
+          }}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <br />
+
+  <div class="project-details">
+    <strong>Resources: </strong>
+    <br />
+    <table mat-table class="mat-elevation-z8 demo-table">
+      <tr>
+        <th></th>
+        <th>Resource Name</th>
+        <th>Role</th>
+      </tr>
+      <tr
+        *ngFor="let resource of resourcesWithNames; let i = index"
+        class="data-row"
+      >
+        <td class="data-cell">{{ i + 1 }}</td>
+        <td class="data-cell">{{ resource.resource_name }}</td>
+        <td class="data-cell">{{ resource.role }}</td>
+      </tr>
+    </table>
+  </div>
+</div>
