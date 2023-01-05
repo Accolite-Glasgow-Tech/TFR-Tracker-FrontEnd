@@ -15,24 +15,36 @@ export class ProjectSummaryComponent implements OnInit {
   ngOnInit(): void {}
 
   cleanVendorDetails() {
-    let vendorJSOn = JSON.parse(this.currentProject?.vendorSpecific || '');
-    let vendorDiv = document.getElementById('tab');
-    let vendorDetails = document.getElementById('vendor-details');
-    vendorDetails?.remove();
+    if (this.currentProject !== undefined) {
+      let vendorJSOn = JSON.parse(this.currentProject?.vendorSpecific || '');
+      let vendorDiv = document.getElementById('tab');
+      let vendorDetails = document.getElementById('vendor-details');
+      vendorDetails?.remove();
 
-    vendorDetails = document.createElement('div');
-    vendorDetails.setAttribute('id', 'vendor-details');
+      vendorDetails = document.createElement('table');
+      vendorDetails.setAttribute('mat-table', '');
+      vendorDetails.setAttribute('id', 'vendor-details');
+      vendorDetails.style.border = 'solid 1px black';
+      vendorDetails.style.borderCollapse = 'collapse';
 
-    Object.entries(vendorJSOn).forEach((entry) => {
-      const [key, value] = entry;
-      let attributeSpan = document.createElement('span');
-      let boldText = document.createElement('strong');
-      boldText.innerText = key + ': ';
-      attributeSpan.append(boldText);
-      attributeSpan.append(value as string);
-      vendorDetails?.append(attributeSpan);
-      vendorDetails?.append(document.createElement('br'));
-    });
-    vendorDiv?.append(vendorDetails);
+      Object.entries(vendorJSOn).forEach((entry) => {
+        const [key, value] = entry;
+        let row = document.createElement('tr');
+        let header = document.createElement('th');
+        header.style.border = 'solid 1px black';
+        header.style.padding = '5px';
+        let data = document.createElement('td');
+        data.style.border = 'solid 1px black';
+        data.style.padding = '5px';
+
+        header.textContent = key;
+        data.textContent = value as string;
+
+        row.appendChild(header);
+        row.appendChild(data);
+        vendorDetails?.appendChild(row);
+      });
+      vendorDiv?.appendChild(vendorDetails!);
+    }
   }
 }

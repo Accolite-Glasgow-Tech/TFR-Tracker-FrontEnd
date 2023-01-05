@@ -1,4 +1,8 @@
-<mat-stepper [linear]="isLinear" #stepper>
+<mat-stepper
+  [linear]="isLinear"
+  #stepper
+  [orientation]="(stepperOrientation | async)!"
+>
   <mat-step [stepControl]="tfrDetailsFormGroup">
     <form [formGroup]="tfrDetailsFormGroup">
       <ng-template matStepLabel>TFR Basic Details</ng-template>
@@ -47,6 +51,7 @@
     <!-- Resource Component Here -->
     <app-tfr-creation-resource
       (nextStepEmitter)="nextStep()"
+      (stepCompletedEmitter)="stepCompleted()"
     ></app-tfr-creation-resource>
     <!--  -->
   </mat-step>
@@ -64,7 +69,12 @@
         >
           Back
         </button>
-        <button class="navigation-btn" mat-raised-button color="success">
+        <button
+          class="navigation-btn"
+          mat-raised-button
+          color="success"
+          (click)="redirect()"
+        >
           Submit
         </button></span
       >

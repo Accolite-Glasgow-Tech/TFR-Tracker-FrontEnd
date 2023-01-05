@@ -1,5 +1,6 @@
 export interface ResourceListType {
   resource_name: string;
+  resource_email: string;
   resource_id: number;
   selected: boolean;
 }
@@ -8,6 +9,7 @@ export interface AllocatedResourceType {
   project_id: number;
   resource_id: number;
   resource_name: string;
+  resource_email: string;
   role: string;
 }
 

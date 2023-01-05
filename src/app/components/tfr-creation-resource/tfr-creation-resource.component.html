@@ -33,7 +33,7 @@
         type="text"
         required
         matInput
-        formControlName="resource_name"
+        formControlName="resource_email"
         [matAutocomplete]="auto1"
         id="resource"
         #resource
@@ -41,16 +41,16 @@
       <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
         <mat-option
           *ngFor="let filteredResource of filteredResourceOption | async"
-          [value]="filteredResource.resource_name"
+          [value]="filteredResource.resource_email"
         >
-          {{ filteredResource.resource_name }}
+          {{ filteredResource.resource_email }}
         </mat-option>
       </mat-autocomplete>
 
-      <mat-error *ngFor="let validation of validation_msgs.resource_name">
+      <mat-error *ngFor="let validation of validation_msgs.resource_email">
         <div
           *ngIf="
-            resourceFormGroup.get('resource_name')?.hasError(validation.type)
+            resourceFormGroup.get('resource_email')?.hasError(validation.type)
           "
         >
           {{ validation.message }}
@@ -102,7 +102,8 @@
     <table mat-table class="mat-elevation-z8 demo-table">
       <tr>
         <th></th>
-        <th>Resource Name</th>
+        <th>Name</th>
+        <th>Email</th>
         <th>Role</th>
         <th></th>
       </tr>
@@ -112,6 +113,7 @@
       >
         <td class="data-cell">{{ i + 1 }}</td>
         <td class="data-cell">{{ allocatedResource.resource_name }}</td>
+        <td class="data-cell">{{ allocatedResource.resource_email }}</td>
         <td class="data-cell">{{ allocatedResource.role }}</td>
         <button
           mat-icon-button

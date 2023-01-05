@@ -20,7 +20,7 @@ function autocompleteObjectValidator(
   validOptions: Array<ResourceListType>
 ): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
-    if (validOptions.find((e) => e.resource_name === control.value)) {
+    if (validOptions.find((e) => e.resource_email === control.value)) {
       return null; /* valid option selected */
     }
     return { invalidAutocompleteObject: { value: control.value } };
@@ -52,6 +52,7 @@ export class TfrCreationResourceComponent implements OnInit {
   savedAllocatedResource: ProjectResource[] = [];
   resourceListUpdated: boolean = false;
   @Output() nextStepEmitter = new EventEmitter<boolean>();
+  @Output() stepCompletedEmitter = new EventEmitter<boolean>();
 
   constructor(
     private resourceService: ResourceService,
@@ -59,11 +60,11 @@ export class TfrCreationResourceComponent implements OnInit {
   ) {}
 
   public validation_msgs = {
-    resource_name: [
+    resource_email: [
       {
         type: 'invalidAutocompleteObject',
         message:
-          'Resource name not recognized. Click one of the autocomplete options.',
+          'Resource email not recognized. Click one of the autocomplete options.',
       },
       { type: 'required', message: 'Resource is required.' },
     ],
@@ -77,11 +78,19 @@ export class TfrCreationResourceComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    // this.resourceService
+    //   .getAllResources()
+    //   .subscribe((data: ResourceListType[]) => {
+    //     this.resources = data;
+    //     this.roles = this.resourceService.getAllRoles();
+
+    //   });
+
     this.resources = this.resourceService.getAllResources();
     this.roles = this.resourceService.getAllRoles();
 
     this.resourceFormGroup = new FormGroup({
-      resource_name: new FormControl('', {
+      resource_email: new FormControl('', {
         validators: [
           autocompleteObjectValidator(this.resources),
           Validators.required,
@@ -103,7 +112,7 @@ export class TfrCreationResourceComponent implements OnInit {
     );
 
     this.filteredResourceOption = this.resourceFormGroup.controls[
-      'resource_name'
+      'resource_email'
     ].valueChanges.pipe(
       startWith(''),
       map((value) => this._filterResource(value || ''))
@@ -117,6 +126,7 @@ export class TfrCreationResourceComponent implements OnInit {
       this.tfrManagementService.setProjectResourcesWithNames(
         this.allocatedResources
       );
+      this.stepCompletedEmitter.emit(true);
     }
   }
 
@@ -132,21 +142,22 @@ export class TfrCreationResourceComponent implements OnInit {
     return this.resources
       .filter((resource) => !resource.selected)
       .filter((resource) =>
-        resource.resource_name.toLowerCase().includes(filterValue)
+        resource.resource_email.toLowerCase().includes(filterValue)
       );
   }
 
-  addResource(resource_name: string, role: string) {
+  addResource(resource_email: string, role: string) {
     this.resourceListUpdated = true;
     const index = this.resources.findIndex(
-      (resource) => resource.resource_name === resource_name
+      (resource) => resource.resource_email === resource_email
     );
     this.resources[index].selected = true;
 
     const allocatedResource: AllocatedResourceType = {
       project_id: this.projectId,
       resource_id: this.resources[index].resource_id,
-      resource_name: resource_name,
+      resource_name: this.resources[index].resource_name,
+      resource_email: resource_email,
       role: role,
     };
 
@@ -169,8 +180,8 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   resetFormGroup() {
-    this.resourceFormGroup.setValue({ resource_name: '', role: '' });
-    this.resourceFormGroup.controls['resource_name'].setErrors(null);
+    this.resourceFormGroup.setValue({ resource_email: '', role: '' });
+    this.resourceFormGroup.controls['resource_email'].setErrors(null);
     this.resourceFormGroup.controls['role'].setErrors(null);
   }
 
@@ -186,6 +197,7 @@ export class TfrCreationResourceComponent implements OnInit {
         project_id: resource.project_id,
         resource_id: resource.resource_id,
         resource_name: this.resources[indexOfResource].resource_name,
+        resource_email: this.resources[indexOfResource].resource_email,
         role: resource.role,
       };
 

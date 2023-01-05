@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreMaterialModule } from './core-modules/core-material/core-material.module';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { TfrCreationResourceComponent } from './components/tfr-creation-resource/tfr-creation-resource.component';
 
 import { HomeComponent } from './components/home/home.component';
@@ -41,6 +42,7 @@ import { ProjectSummaryComponent } from './components/project-summary/project-su
     CoreMaterialModule,
     ReactiveFormsModule,
     FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

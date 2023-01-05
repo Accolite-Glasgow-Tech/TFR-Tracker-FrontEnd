@@ -19,29 +19,3 @@
   justify-content: space-between;
   margin-top: 10px;
 }
-
-.mat-step-header .mat-step-icon-state-done,
-.mat-step-header .mat-step-icon-state-edit {
-  background-color: transparent !important;
-  color: green;
-  + .mat-step-label {
-    color: green !important;
-  }
-}
-
-.mat-step-header .mat-step-icon-selected {
-  // background-color: $primary;
-  background-color: transparent !important;
-  color: primary;
-  + .mat-step-label {
-    color: primary !important;
-  }
-}
-
-.mat-step-header .mat-step-label {
-  color: rgba(0, 0, 0, 0.54);
-}
-.mat-step-header .mat-step-icon {
-  color: rgba(0, 0, 0, 0.54);
-  background-color: transparent;
-}

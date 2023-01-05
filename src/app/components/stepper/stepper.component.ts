@@ -6,7 +6,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { StepperOrientation } from '@angular/material/stepper';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-stepper',
@@ -29,11 +34,18 @@ export class StepperComponent implements OnInit {
   });
   resourceSelectionValid: boolean = false;
   isLinear = true;
+  stepperOrientation: Observable<StepperOrientation>;
 
   constructor(
     private _formBuilder: FormBuilder,
-    protected tfrManagementService: TfrManagementService
-  ) {}
+    protected tfrManagementService: TfrManagementService,
+    protected breakpointObserver: BreakpointObserver,
+    private snackBar: MatSnackBar
+  ) {
+    this.stepperOrientation = breakpointObserver
+      .observe('(min-width: 700px)')
+      .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+  }
 
   ngOnInit(): void {
     this.tfrManagementService.project = {
@@ -82,5 +94,22 @@ export class StepperComponent implements OnInit {
     this.resourceSelectionValid = true;
     this.myStepper.next();
     this.myStepper.linear = true;
+  }
+
+  stepCompleted() {
+    this.resourceSelectionValid = true;
+  }
+
+  redirect() {
+    this.showSnackBar('TFR submitted.', 'Done', 2000);
+  }
+
+  showSnackBar(content: string, action: string, duration: number) {
+    this.snackBar.open(content, action, {
+      duration: duration,
+      verticalPosition: 'bottom',
+      horizontalPosition: 'center', // Allowed values are 'start' | 'center' | 'end' | 'left' | 'right'
+      panelClass: ['mat-toolbar', 'mat-primary'],
+    });
   }
 }
