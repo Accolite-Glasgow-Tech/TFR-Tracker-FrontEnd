@@ -94,6 +94,7 @@ export class TfrCreationResourceComponent implements OnInit {
         ],
       }),
     });
+
     this.filteredRoleOption = this.resourceFormGroup.controls[
       'role'
     ].valueChanges.pipe(
@@ -109,10 +110,13 @@ export class TfrCreationResourceComponent implements OnInit {
     );
 
     let temp: ProjectResource[] | undefined =
-      this.tfrManagementService.getProjectResources();
+      this.tfrManagementService.getProjectResources;
     if (temp !== undefined) {
       this.savedAllocatedResource = temp;
       this.updateResourceList();
+      this.tfrManagementService.setProjectResourcesWithNames(
+        this.allocatedResources
+      );
     }
   }
 
@@ -191,18 +195,11 @@ export class TfrCreationResourceComponent implements OnInit {
 
   triggerNextStep() {
     if (this.resourceListUpdated) {
-      const newArray = this.allocatedResources.map(
-        ({ resource_name, ...keepAttrs }) => keepAttrs
+      this.tfrManagementService.setProjectResourcesWithNames(
+        this.allocatedResources
       );
-
-      this.tfrManagementService.setProjectResources(newArray);
       this.resourceListUpdated = false;
     }
     this.nextStepEmitter.emit(true);
-  }
-
-  displayInfo(allocatedResource: AllocatedResourceType) {
-    console.log(allocatedResource.resource_name);
-    console.log(allocatedResource.role);
   }
 }

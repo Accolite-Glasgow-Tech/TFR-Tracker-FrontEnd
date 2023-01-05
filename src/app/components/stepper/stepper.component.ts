@@ -8,12 +8,6 @@ import {
 import { MatStepper } from '@angular/material/stepper';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 
-interface ResourceListType {
-  resource_name: string;
-  resource_id: string;
-  selected: boolean;
-}
-
 @Component({
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
@@ -21,6 +15,7 @@ interface ResourceListType {
 })
 export class StepperComponent implements OnInit {
   @ViewChild('stepper') private myStepper!: MatStepper;
+
   //@Input() private project!: Project;
 
   tfrDetailsFormGroup = this._formBuilder.group({
@@ -37,7 +32,7 @@ export class StepperComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private tfrManagementService: TfrManagementService
+    protected tfrManagementService: TfrManagementService
   ) {}
 
   ngOnInit(): void {
@@ -46,11 +41,21 @@ export class StepperComponent implements OnInit {
       name: 'Bank Project',
       vendorId: 1,
       startDate: new Date('December 25, 2021 00:00:00'),
-      endDate: new Date('December 25, 2022 00:00:00'),
-      vendorSpecific: '',
-      status: '',
-      version: '',
-      milestones: [],
+      endDate: new Date('December 31, 2022 00:00:00'),
+      vendorSpecific: '{"vendor":"Morgan Stanley","department":"finance"}',
+      status: 'DRAFT',
+      version: 'V1',
+      milestones: [
+        {
+          id: 1,
+          projectId: 2,
+          description: 'deployment',
+          startDate: new Date('2022-12-12 09:00:00'),
+          deliveryDate: new Date('2022-12-16 23:59:59'),
+          acceptanceDate: new Date('2022-12-31 23:59:59'),
+          isDeleted: false,
+        },
+      ],
       projectResources: [
         {
           project_id: 2,

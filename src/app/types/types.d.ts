@@ -48,7 +48,6 @@ export interface Milestone {
   deliveryDate: Date;
   acceptanceDate: Date;
   isDeleted: Boolean;
-  tracker: Tracker;
 }
 
 export interface Tracker {

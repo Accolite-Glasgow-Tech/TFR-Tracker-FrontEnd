@@ -109,7 +109,6 @@
       <tr
         *ngFor="let allocatedResource of allocatedResources; let i = index"
         class="data-row"
-        (click)="displayInfo(allocatedResource)"
       >
         <td class="data-cell">{{ i + 1 }}</td>
         <td class="data-cell">{{ allocatedResource.resource_name }}</td>

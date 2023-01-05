@@ -4,6 +4,7 @@ import {
   Project,
   ProjectBasicDetails,
   ProjectResource,
+  AllocatedResourceType,
 } from 'src/app/types/types';
 
 @Injectable({
@@ -11,6 +12,7 @@ import {
 })
 export class TfrManagementService {
   public project!: Project | undefined;
+  public projectResourcesWithNames!: AllocatedResourceType[];
 
   constructor() {}
 
@@ -18,7 +20,7 @@ export class TfrManagementService {
     console.log(this.project);
   }
 
-  getProject(): Project | undefined {
+  get getProject(): Project | undefined {
     return this.project;
   }
 
@@ -26,7 +28,7 @@ export class TfrManagementService {
     this.project = project;
   }
 
-  getBasicDetails(): ProjectBasicDetails | undefined {
+  get getBasicDetails(): ProjectBasicDetails | undefined {
     if (this.project !== undefined) {
       let projectBasicDetails!: ProjectBasicDetails;
       projectBasicDetails.name = this.project.name;
@@ -65,7 +67,7 @@ export class TfrManagementService {
     this.updateDatabase();
   }
 
-  getMilestones(): Milestone[] | undefined {
+  get getMilestones(): Milestone[] | undefined {
     return this.project?.milestones;
   }
 
@@ -76,14 +78,28 @@ export class TfrManagementService {
     }
   }
 
-  getProjectResources(): ProjectResource[] | undefined {
+  get getProjectResources(): ProjectResource[] | undefined {
     return this.project?.projectResources;
   }
 
   setProjectResources(projectResources: ProjectResource[]) {
+    //PUT request for /tfr/{id}/projectResource
     if (this.project !== undefined) {
       this.project.projectResources = projectResources;
-      this.updateDatabase();
     }
+  }
+
+  get getProjectResourcesWithNames(): AllocatedResourceType[] {
+    return this.projectResourcesWithNames;
+  }
+
+  setProjectResourcesWithNames(
+    projectResourcesWithNames: AllocatedResourceType[]
+  ) {
+    const newArray = projectResourcesWithNames.map(
+      ({ resource_name, ...keepAttrs }) => keepAttrs
+    );
+    this.projectResourcesWithNames = projectResourcesWithNames;
+    this.setProjectResources(newArray);
   }
 }
