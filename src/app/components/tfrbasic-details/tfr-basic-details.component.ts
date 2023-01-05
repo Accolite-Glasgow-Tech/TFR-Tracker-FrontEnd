@@ -16,6 +16,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   projectDetails!: ProjectBasicDetails;
   selectedProject!: ProjectBasicDetails;
   vendorList: Vendor[] = [{id: 1, name:'vendorA'}, {id: 2, name:'vendorB'}, {id: 3, name:'vendorC'}];
+  vendorAttributes!: FormGroup;
 
   testProject: ProjectBasicDetails = {
     name: 'Backend',
@@ -88,6 +89,10 @@ export class TfrBasicDetailsComponent implements OnInit {
 
   next(){
     this.nextStepEmitter.emit(true);
+  }
+
+  onAttributesUpdated(group: FormGroup){
+    this.vendorAttributes = group;
   }
 
 }

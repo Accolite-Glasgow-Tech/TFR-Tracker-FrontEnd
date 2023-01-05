@@ -1,21 +1,40 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { Vendor, VendorAttribute } from 'src/app/types/types';
 import { ApiService } from 'src/app/services/api.service';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { debounce, interval } from 'rxjs';
 
 @Component({
   selector: 'app-vendors',
   templateUrl: './vendors.component.html',
   styleUrls: ['./vendors.component.scss'],
 })
-export class VendorsComponent {
+export class VendorsComponent implements OnInit {
   constructor(private api: ApiService){}
 
   @Input() vendors: Vendor[] = [];
 
   attributes!: VendorAttribute[];
+  attributeGroup!: FormGroup;
+  
+
+  ngOnInit(){
+    this.attributeGroup = new FormGroup({
+      attributeValues: new FormArray([])
+    });
+    
+    this.getAttributes().valueChanges.pipe( 
+      debounce( () => interval(500) )
+      )
+    .subscribe(() => {
+      this.onAttributesUpdated.emit(this.attributeGroup);
+    });
+  }
 
   @Output() onSelected = new EventEmitter<Vendor>();
+  @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
   onSelectedVendor(vendor: Vendor) {
+
     console.log(vendor);
     this.onSelected.emit(vendor);
 
@@ -23,5 +42,15 @@ export class VendorsComponent {
       this.attributes = res;
     });
   
+    this.getAttributes().clear();
+    
+    //add a form control to form array for each attribute
+    this.attributes.forEach((res) => {
+      this.getAttributes().push( new FormControl('', [Validators.required]));
+    });
+  }
+
+  getAttributes(): FormArray {
+    return this.attributeGroup.controls["attributeValues"] as FormArray;
   }
 }

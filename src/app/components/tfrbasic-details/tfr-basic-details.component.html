@@ -27,14 +27,15 @@
       </mat-form-field>
     </p>
     <br />
-    <app-vendors [vendors]="vendorList" (onSelected)="onVendorSelect($event)"></app-vendors>
+    <app-vendors [vendors]="vendorList" (onSelected)="onVendorSelect($event)" 
+    (onAttributesUpdated)="onAttributesUpdated($event)"></app-vendors>
     <br />
     <p>
-      <button mat-raised-button [disabled]="tfrDetails.invalid" color="primary"
+      <button mat-raised-button [disabled]="tfrDetails.invalid || vendorAttributes.invalid" color="primary"
         (click)="updateTFR()">Save</button>
     </p>
     <p>
-      <button mat-raised-button [disabled]="tfrDetails.invalid" color="primary"
+      <button mat-raised-button [disabled]="tfrDetails.invalid || vendorAttributes.invalid" color="primary"
         (click)="next()">Next</button>
     </p>
   
