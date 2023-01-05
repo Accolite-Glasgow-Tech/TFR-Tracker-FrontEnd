@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { ProjectBasicDetails, Vendor, VendorAttribute } from 'src/app/types/types';
 
 @Component({
@@ -8,7 +9,7 @@ import { ProjectBasicDetails, Vendor, VendorAttribute } from 'src/app/types/type
   styleUrls: ['./tfr-basic-details.component.scss'],
 })
 export class TfrBasicDetailsComponent implements OnInit {
-  constructor() {}
+  constructor(private tfrManager: TfrManagementService) {}
 
   @Output() nextStepEmitter = new EventEmitter<boolean>();
 
@@ -16,8 +17,8 @@ export class TfrBasicDetailsComponent implements OnInit {
   projectDetails!: ProjectBasicDetails;
   selectedProject!: ProjectBasicDetails;
   vendorAttributes!: FormGroup;
-  attributeNames: String[] = [];
-  vendorSpecificData: String = '';
+  attributeNames: string[] = [];
+  vendorSpecificData: string = '';
 
   testProject: ProjectBasicDetails = {
     name: 'Backend',
@@ -48,7 +49,7 @@ export class TfrBasicDetailsComponent implements OnInit {
 
   saveTFR() {
     // take data from tfrDetails and combine with residual info from selected project id
-    let updatedProject = {
+    let updatedProjectDetails: ProjectBasicDetails = {
       name: this.tfrDetails.get('name')?.value,
       startDate: this.tfrDetails.get('startDate')?.value,
       endDate: this.tfrDetails.get('endDate')?.value,
@@ -56,8 +57,9 @@ export class TfrBasicDetailsComponent implements OnInit {
       vendorSpecific: this.vendorSpecificData,
       status: 'DRAFT',
     };
-    console.log(updatedProject)
-    // TODO call service to save project
+    console.log(updatedProjectDetails)
+
+    this.tfrManager.setBasicDetails(updatedProjectDetails);
   }
 
   onVendorSelect(vendor: Vendor) {
