@@ -42,7 +42,6 @@ function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
   styleUrls: ['./tfr-creation-resource.component.scss'],
 })
 export class TfrCreationResourceComponent implements OnInit {
-  projectId: number = 1;
   resourceFormGroup!: FormGroup;
   resources!: ResourceListType[];
   roles!: string[];
@@ -153,7 +152,7 @@ export class TfrCreationResourceComponent implements OnInit {
     this.resources[index].selected = true;
 
     const allocatedResource: AllocatedResourceType = {
-      project_id: this.projectId,
+      project_id: this.tfrManagementService.getProjectId as number,
       resource_id: this.resources[index].resource_id,
       resource_name: this.resources[index].resource_name,
       resource_email: resource_email,
@@ -209,6 +208,7 @@ export class TfrCreationResourceComponent implements OnInit {
       this.tfrManagementService.setProjectResourcesWithNames(
         this.allocatedResources
       );
+      this.tfrManagementService.updateProjectToResourceMapping();
       this.resourceListUpdated = false;
     }
     this.nextStepEmitter.emit(true);

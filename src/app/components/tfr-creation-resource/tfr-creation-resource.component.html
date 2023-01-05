@@ -26,75 +26,105 @@
     </div>
   </div>
   <br />
-  <form [formGroup]="resourceFormGroup">
-    <mat-form-field class="resource_selection" appearance="fill">
-      <mat-label>Resource</mat-label>
-      <input
-        type="text"
-        required
-        matInput
-        formControlName="resource_email"
-        [matAutocomplete]="auto1"
-        id="resource"
-        #resource
-      />
-      <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
-        <mat-option
-          *ngFor="let filteredResource of filteredResourceOption | async"
-          [value]="filteredResource.resource_email"
-        >
-          {{ filteredResource.resource_email }}
-        </mat-option>
-      </mat-autocomplete>
 
-      <mat-error *ngFor="let validation of validation_msgs.resource_email">
+  <form [formGroup]="resourceFormGroup">
+    <div class="form-group-div">
+      <div class="resource_selection">
+        <mat-form-field appearance="fill">
+          <mat-label>Resource</mat-label>
+          <input
+            type="text"
+            required
+            matInput
+            formControlName="resource_email"
+            [matAutocomplete]="auto1"
+            id="resource"
+            #resource
+          />
+          <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
+            <mat-option
+              *ngFor="let filteredResource of filteredResourceOption | async"
+              [value]="filteredResource.resource_email"
+            >
+              {{ filteredResource.resource_email }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
         <div
           *ngIf="
-            resourceFormGroup.get('resource_email')?.hasError(validation.type)
+            resourceFormGroup.controls['resource_email'].invalid &&
+            resourceFormGroup.controls['resource_email'].touched
           "
+          class="error-div-container"
         >
-          {{ validation.message }}
+          <ng-container
+            *ngFor="let validation of validation_msgs.resource_email"
+          >
+            <div
+              *ngIf="
+                resourceFormGroup
+                  .get('resource_email')
+                  ?.hasError(validation.type)
+              "
+              class="error-div"
+            >
+              {{ validation.message }}
+            </div>
+          </ng-container>
         </div>
-      </mat-error>
-    </mat-form-field>
+      </div>
 
-    <mat-form-field class="resource_selection" appearance="fill">
-      <mat-label>Role</mat-label>
-      <input
-        type="text"
-        required
-        matInput
-        formControlName="role"
-        [matAutocomplete]="auto2"
-        id="role"
-        #role
-      />
-      <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
-        <mat-option
-          *ngFor="let filteredRole of filteredRoleOption | async"
-          [value]="filteredRole"
+      <div class="resource_selection">
+        <mat-form-field appearance="fill">
+          <mat-label>Role</mat-label>
+          <input
+            type="text"
+            required
+            matInput
+            formControlName="role"
+            [matAutocomplete]="auto2"
+            id="role"
+            #role
+          />
+          <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
+            <mat-option
+              *ngFor="let filteredRole of filteredRoleOption | async"
+              [value]="filteredRole"
+            >
+              {{ filteredRole }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div
+          *ngIf="
+            resourceFormGroup.controls['role'].invalid &&
+            resourceFormGroup.controls['role'].touched
+          "
+          class="error-div-container"
         >
-          {{ filteredRole }}
-        </mat-option>
-      </mat-autocomplete>
-
-      <mat-error *ngFor="let validation of validation_msgs.role">
-        <div *ngIf="resourceFormGroup.get('role')?.hasError(validation.type)">
-          {{ validation.message }}
+          <ng-container *ngFor="let validation of validation_msgs.role">
+            <div
+              *ngIf="resourceFormGroup.get('role')?.hasError(validation.type)"
+              class="error-div"
+            >
+              {{ validation.message }}
+            </div>
+          </ng-container>
         </div>
-      </mat-error>
-    </mat-form-field>
+      </div>
 
-    <button
-      [disabled]="
-        !resourceFormGroup.valid || resource.value === '' || role.value === ''
-      "
-      (click)="addResource(resource.value, role.value)"
-      mat-raised-button
-      color="primary"
-    >
-      Add
-    </button>
+      <button
+        [disabled]="
+          !resourceFormGroup.valid || resource.value === '' || role.value === ''
+        "
+        (click)="addResource(resource.value, role.value)"
+        mat-raised-button
+        color="primary"
+      >
+        Add
+      </button>
+    </div>
   </form>
 
   <br />

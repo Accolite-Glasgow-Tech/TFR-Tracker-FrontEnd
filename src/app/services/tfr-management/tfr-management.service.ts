@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { baseURL } from 'src/app/constants/contants';
 import {
   Milestone,
   Project,
@@ -14,10 +16,16 @@ export class TfrManagementService {
   public project!: Project | undefined;
   public projectResourcesWithNames!: AllocatedResourceType[];
 
-  constructor() {}
+  updateProjectToResourceMappingURL = baseURL + '/resources/projects';
+
+  constructor(private http: HttpClient) {}
 
   updateDatabase() {
     console.log(this.project);
+  }
+
+  get getProjectId(): number | undefined {
+    return this.project?.id;
   }
 
   get getProject(): Project | undefined {
@@ -83,7 +91,6 @@ export class TfrManagementService {
   }
 
   setProjectResources(projectResources: ProjectResource[]) {
-    //PUT request for /tfr/{id}/projectResource
     if (this.project !== undefined) {
       this.project.projectResources = projectResources;
     }
@@ -97,9 +104,24 @@ export class TfrManagementService {
     projectResourcesWithNames: AllocatedResourceType[]
   ) {
     const newArray = projectResourcesWithNames.map(
-      ({ resource_name, ...keepAttrs }) => keepAttrs
+      ({ resource_name, resource_email, ...keepAttrs }) => keepAttrs
     );
     this.projectResourcesWithNames = projectResourcesWithNames;
+    console.log(newArray);
+
     this.setProjectResources(newArray);
+  }
+
+  updateProjectToResourceMapping() {
+    console.log(this.getProjectResources);
+
+    this.http
+      .put(
+        this.updateProjectToResourceMappingURL + '/' + this.getProjectId,
+        this.getProjectResources
+      )
+      .subscribe((response) => {
+        console.log(response);
+      });
   }
 }

@@ -11,8 +11,8 @@ import { StepperOrientation } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 
 @Component({
   selector: 'app-stepper',
@@ -34,7 +34,7 @@ export class StepperComponent implements OnInit {
     resourceName: ['', Validators.required],
   });
   resourceSelectionValid: boolean = false;
-  isLinear = true;
+  isLinear = false;
   stepperOrientation: Observable<StepperOrientation>;
 
   constructor(
@@ -42,7 +42,7 @@ export class StepperComponent implements OnInit {
     protected tfrManagementService: TfrManagementService,
     @Inject(BreakpointObserver)
     protected breakpointObserver: BreakpointObserver,
-    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService,
     private router: Router
   ) {
     this.stepperOrientation = breakpointObserver
@@ -75,12 +75,12 @@ export class StepperComponent implements OnInit {
         {
           project_id: 2,
           resource_id: 1,
-          role: 'SCRUM MASTER',
+          role: 'SCRUM_MASTER',
         },
         {
           project_id: 2,
           resource_id: 2,
-          role: 'SOFTWARE DEVELOPER',
+          role: 'SOFTWARE_DEVELOPER',
         },
       ],
       isDeleted: false,
@@ -100,15 +100,6 @@ export class StepperComponent implements OnInit {
 
   redirect() {
     this.router.navigate(['/home']);
-    this.showSnackBar('TFR submitted.', 3000);
-  }
-
-  showSnackBar(content: string, duration: number) {
-    this.snackBar.open(content, 'OK', {
-      duration: duration,
-      verticalPosition: 'bottom',
-      horizontalPosition: 'center', // Allowed values are 'start' | 'center' | 'end' | 'left' | 'right'
-      panelClass: ['mat-toolbar', 'mat-primary'],
-    });
+    this.snackBarService.showSnackBar('TFR submitted.', 3000);
   }
 }

@@ -1,15 +1,30 @@
-.resource_selection {
-  margin-left: 10px;
-  margin-right: 10px;
+.form-group-div {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: start;
+  width: 100%;
+}
+
+.error-div-container {
   margin-bottom: 10px;
-  padding: 1rem;
+}
+
+.error-div {
+  color: red;
+}
+
+.resource_selection {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: min-content;
+  margin-right: 10px;
 }
 
 #resource_div {
   padding: 10px;
   width: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 .navigation-btn {
@@ -23,8 +38,13 @@
   gap: 5px;
 }
 
+.demo-table {
+  width: 100%;
+}
+
 .data-cell {
   text-align: center;
+  word-break: break-all;
 }
 
 .data-row .data-cell {
