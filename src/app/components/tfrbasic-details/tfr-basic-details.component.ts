@@ -37,24 +37,6 @@ export class TfrBasicDetailsComponent implements OnInit {
     });
   }
 
-  createNewTFR(): void {
-    console.log('button clicked');
-
-    // take current values in tfrDetails form group
-    this.projectDetails = {
-      name: this.tfrDetails.get('name')?.value,
-      startDate: this.tfrDetails.get('startDate')?.value,
-      endDate: this.tfrDetails.get('endDate')?.value,
-      vendorId: 1,
-      vendorSpecific: '{"key":"value"}',
-      status: 'DRAFT',
-    };
-
-    console.log(this.projectDetails);
-
-    // TODO call service to update project
-  }
-
   openInEditMode(project: ProjectBasicDetails): void {
     // TODO get project details from service
     this.selectedProject = project;
@@ -64,21 +46,18 @@ export class TfrBasicDetailsComponent implements OnInit {
     this.tfrDetails.get('endDate')?.setValue(project.endDate);
   }
 
-  updateTFR() {
+  saveTFR() {
     // take data from tfrDetails and combine with residual info from selected project id
     let updatedProject = {
       name: this.tfrDetails.get('name')?.value,
       startDate: this.tfrDetails.get('startDate')?.value,
       endDate: this.tfrDetails.get('endDate')?.value,
-      // TODO get vendor details from vendor component
-      //vendorId: this.tfrDetails.get('vendorId')?.value,
-      //vendorSpecific: this.tfrDetails.get('vendorSpecific')?.value,
-      vendorId: 1,
-      vendorSpecific: '{"key":"value"}',
-      status: this.selectedProject.status,
+      vendorId: this.tfrDetails.get('vendorId')?.value,
+      vendorSpecific: this.vendorSpecificData,
+      status: 'DRAFT',
     };
-
-    // TODO call service to update project
+    console.log(updatedProject)
+    // TODO call service to save project
   }
 
   onVendorSelect(vendor: Vendor) {
@@ -118,7 +97,6 @@ export class TfrBasicDetailsComponent implements OnInit {
         i += 1;
       }
       this.vendorSpecificData = this.vendorSpecificData.concat('}');
-      console.log(this.vendorSpecificData);
     }
   }
 
