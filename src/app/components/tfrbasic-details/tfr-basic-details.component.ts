@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ProjectBasicDetails, Vendor } from 'src/app/types/types';
+import { ProjectBasicDetails, Vendor, VendorAttribute } from 'src/app/types/types';
 
 @Component({
   selector: 'app-tfr-basic-details',
@@ -16,6 +16,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   projectDetails!: ProjectBasicDetails;
   selectedProject!: ProjectBasicDetails;
   vendorAttributes!: FormGroup;
+  attributeNames: String[] = [];
 
   testProject: ProjectBasicDetails = {
     name: 'Backend',
@@ -88,6 +89,13 @@ export class TfrBasicDetailsComponent implements OnInit {
 
   next(){
     this.nextStepEmitter.emit(true);
+  }
+
+  onAttributesSelected(attributes: VendorAttribute[]){
+    this.attributeNames = [];
+    attributes.forEach((att)=> {
+      this.attributeNames.push(att.attributeName)
+    });
   }
 
   onAttributesUpdated(group: FormGroup){

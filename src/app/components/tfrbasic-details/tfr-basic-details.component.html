@@ -28,7 +28,8 @@
     </p>
     <br />
     <app-vendors (onSelected)="onVendorSelect($event)" 
-    (onAttributesUpdated)="onAttributesUpdated($event)"></app-vendors>
+    (onAttributesUpdated)="onAttributesUpdated($event)"
+    (attributesSelected)="onAttributesSelected($event)"></app-vendors>
     <br />
     <p>
       <button mat-raised-button [disabled]="tfrDetails.invalid || vendorAttributes.invalid" color="primary"

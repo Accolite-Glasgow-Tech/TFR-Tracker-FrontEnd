@@ -18,6 +18,8 @@ export class VendorsComponent implements OnInit {
   attributeGroup!: FormGroup;
   
 
+  @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
+
   ngOnInit(){
 
     this.api.getVendorData().subscribe(
@@ -37,7 +39,7 @@ export class VendorsComponent implements OnInit {
   }
 
   @Output() onSelected = new EventEmitter<Vendor>();
-  @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
+  @Output() attributesSelected = new EventEmitter<VendorAttribute[]>();
   onSelectedVendor(vendor: Vendor) {
 
     console.log(vendor);
@@ -46,6 +48,8 @@ export class VendorsComponent implements OnInit {
     this.api.getVendorAttributes(vendor.id).subscribe((res) => {
       this.attributes = res;
     });
+
+    this.attributesSelected.emit(this.attributes);
   
     this.getAttributes().clear();
     
