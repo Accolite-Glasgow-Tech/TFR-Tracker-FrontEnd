@@ -66,6 +66,7 @@
           #chip
           *ngFor="let day of [0, 1, 2, 3, 4, 5, 6]"
           [value]="day"
+          [selectable]="false"
           [selected]="selectedDays.has(day)"
           (click)="toggleSelection(chip)"
         >
