@@ -19,6 +19,7 @@ export class TfrManagementService {
   constructor() {}
 
   updateDatabase() {
+    console.log("api called");
     console.log(this.project);
   }
 
@@ -47,29 +48,48 @@ export class TfrManagementService {
   }
 
   setBasicDetails(projectBasicDetails: ProjectBasicDetails) {
-    if (this.project === undefined) {
-      this.project = {
-        id: -1,
-        name: projectBasicDetails.name,
-        vendorId: projectBasicDetails.vendorId,
-        startDate: projectBasicDetails.startDate,
-        endDate: projectBasicDetails.endDate,
-        vendorSpecific: projectBasicDetails.vendorSpecific,
-        status: 'DRAFT',
-        version: '0',
-        milestones: [],
-        projectResources: [],
-        isDeleted: false,
-      };
-    } else {
-      this.project.name = projectBasicDetails.name;
-      this.project.startDate = projectBasicDetails.startDate;
-      this.project.endDate = projectBasicDetails.endDate;
-      this.project.vendorId = projectBasicDetails.vendorId;
-      this.project.vendorSpecific = projectBasicDetails.vendorSpecific;
-    }
+    if(!this.compareBasicDetails(projectBasicDetails))
+    {
+      if (this.project === undefined) {
+        this.project = {
+          id: -1,
+          name: projectBasicDetails.name,
+          vendorId: projectBasicDetails.vendorId,
+          startDate: projectBasicDetails.startDate,
+          endDate: projectBasicDetails.endDate,
+          vendorSpecific: projectBasicDetails.vendorSpecific,
+          status: 'DRAFT',
+          version: '0',
+          milestones: [],
+          projectResources: [],
+          isDeleted: false,
+        };
+      } else {
+        this.project.name = projectBasicDetails.name;
+        this.project.startDate = projectBasicDetails.startDate;
+        this.project.endDate = projectBasicDetails.endDate;
+        this.project.vendorId = projectBasicDetails.vendorId;
+        this.project.vendorSpecific = projectBasicDetails.vendorSpecific;
+      }
 
-    this.updateDatabase();
+      this.updateDatabase();
+    }
+  }
+
+  compareBasicDetails(newDetails: ProjectBasicDetails): Boolean{
+    var currentDetails = this.getBasicDetails;
+    if(currentDetails == undefined){
+      return false;
+    }
+    if(currentDetails.name != newDetails.name
+      || currentDetails.startDate != newDetails.startDate
+      || currentDetails.endDate != newDetails.endDate
+      || currentDetails.status != newDetails.status
+      || currentDetails.vendorId != newDetails.vendorId
+      || currentDetails.vendorSpecific != newDetails.vendorSpecific){
+        return false;
+    }
+    return true;
   }
 
   get getMilestones(): Milestone[] | undefined {

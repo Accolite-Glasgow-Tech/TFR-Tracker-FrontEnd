@@ -56,9 +56,8 @@ export class TfrBasicDetailsComponent implements OnInit {
       endDate: this.tfrDetails.get('endDate')?.value,
       vendorId: this.tfrDetails.get('vendorId')?.value,
       vendorSpecific: this.vendorSpecificData,
-      status: 'DRAFT',
+      status: this.editMode ? this.projectToEdit.status : 'DRAFT',
     };
-    console.log(updatedProjectDetails)
 
     this.tfrManager.setBasicDetails(updatedProjectDetails);
 
