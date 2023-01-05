@@ -12,13 +12,18 @@ import { debounce, interval } from 'rxjs';
 export class VendorsComponent implements OnInit {
   constructor(private api: ApiService){}
 
-  @Input() vendors: Vendor[] = [];
+  vendors!: Vendor[];
 
   attributes!: VendorAttribute[];
   attributeGroup!: FormGroup;
   
 
   ngOnInit(){
+
+    this.api.getVendorData().subscribe(
+      (data) => {this.vendors = data;}
+    );
+    
     this.attributeGroup = new FormGroup({
       attributeValues: new FormArray([])
     });

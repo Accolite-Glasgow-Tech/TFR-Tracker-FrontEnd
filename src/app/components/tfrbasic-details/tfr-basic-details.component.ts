@@ -15,7 +15,6 @@ export class TfrBasicDetailsComponent implements OnInit {
   tfrDetails!: FormGroup;
   projectDetails!: ProjectBasicDetails;
   selectedProject!: ProjectBasicDetails;
-  vendorList: Vendor[] = [{id: 1, name:'vendorA'}, {id: 2, name:'vendorB'}, {id: 3, name:'vendorC'}];
   vendorAttributes!: FormGroup;
 
   testProject: ProjectBasicDetails = {

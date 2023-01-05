@@ -1,14 +1,14 @@
 [
   {
-    "id": 101,
-    "name": "vend1"
+    "id": 1,
+    "name": "vendorA"
   },
   {
-    "id": 102,
-    "name": "vend2"
+    "id": 2,
+    "name": "vendorB"
   },
   {
-    "id": 103,
-    "name": "vend3"
+    "id": 3,
+    "name": "vendorC"
   }
 ]
