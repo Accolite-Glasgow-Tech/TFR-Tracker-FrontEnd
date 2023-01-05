@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProjectBasicDetails, Vendor, VendorAttribute } from 'src/app/types/types';
 
 @Component({
@@ -17,6 +17,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   selectedProject!: ProjectBasicDetails;
   vendorAttributes!: FormGroup;
   attributeNames: String[] = [];
+  vendorSpecificData: String = '';
 
   testProject: ProjectBasicDetails = {
     name: 'Backend',
@@ -33,7 +34,6 @@ export class TfrBasicDetailsComponent implements OnInit {
       startDate: new FormControl<Date | null>(null),
       endDate: new FormControl<Date | null>(null),
       vendorId: new FormControl('', [Validators.required]),
-      vendorSpecific: new FormControl('', [Validators.required]),
     });
   }
 
@@ -52,10 +52,11 @@ export class TfrBasicDetailsComponent implements OnInit {
 
     console.log(this.projectDetails);
 
-    // call service to update project
+    // TODO call service to update project
   }
 
   openInEditMode(project: ProjectBasicDetails): void {
+    // TODO get project details from service
     this.selectedProject = project;
     // populate fields with info from provided project
     this.tfrDetails.get('name')?.setValue(project.name);
@@ -77,7 +78,7 @@ export class TfrBasicDetailsComponent implements OnInit {
       status: this.selectedProject.status,
     };
 
-    //this.tfrService.addOrUpdateProject(updatedProject);
+    // TODO call service to update project
   }
 
   onVendorSelect(vendor: Vendor) {
@@ -100,6 +101,28 @@ export class TfrBasicDetailsComponent implements OnInit {
 
   onAttributesUpdated(group: FormGroup){
     this.vendorAttributes = group;
+    this.updateVendorSpecific();
   }
 
+  updateVendorSpecific(){
+    // convert the form group info to string data and assign to vendorSpecificData string
+    if(this.vendorAttributes.valid){
+      this.vendorSpecificData = "{";
+      let i = 0;
+      while(i < this.attributeNames.length){
+        if(i > 0){
+          this.vendorSpecificData = this.vendorSpecificData.concat(', ');
+        }
+        this.vendorSpecificData = this.vendorSpecificData.concat('"' + this.attributeNames[i] + '": "' + 
+        this.getAttributesArray().controls[i].value + '"');
+        i += 1;
+      }
+      this.vendorSpecificData = this.vendorSpecificData.concat('}');
+      console.log(this.vendorSpecificData);
+    }
+  }
+
+  getAttributesArray(){
+    return this.vendorAttributes.controls['attributeValues'] as FormArray;
+  }
 }
