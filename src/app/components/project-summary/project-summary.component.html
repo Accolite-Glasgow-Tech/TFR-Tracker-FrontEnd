@@ -76,22 +76,10 @@
   <div class="project-details">
     <strong>Resources: </strong>
     <br />
-    <table mat-table class="mat-elevation-z8 demo-table">
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-      </tr>
-      <tr
-        *ngFor="let resource of resourcesWithNames; let i = index"
-        class="data-row"
-      >
-        <td class="data-cell">{{ i + 1 }}</td>
-        <td class="data-cell">{{ resource.resource_name }}</td>
-        <td class="data-cell">{{ resource.resource_email }}</td>
-        <td class="data-cell">{{ resource.role }}</td>
-      </tr>
-    </table>
+    <app-resource-table
+      [resourcesWithNames]="resourcesWithNames"
+      [withDelete]="false"
+    >
+    </app-resource-table>
   </div>
 </div>

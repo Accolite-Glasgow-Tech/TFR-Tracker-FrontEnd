@@ -19,6 +19,7 @@ import { TfrComponent } from './components/tfr/tfr.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ProjectSummaryComponent } from './components/project-summary/project-summary.component';
+import { ResourceTableComponent } from './components/resource-table/resource-table.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ProjectSummaryComponent } from './components/project-summary/project-su
     SidenavComponent,
     ToolbarComponent,
     ProjectSummaryComponent,
+    ResourceTableComponent,
   ],
   imports: [
     BrowserModule,

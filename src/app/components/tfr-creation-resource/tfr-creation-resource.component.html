@@ -128,31 +128,13 @@
   </form>
 
   <br />
+
   <ng-container *ngIf="allocatedResources.length !== 0">
-    <table mat-table class="mat-elevation-z8 demo-table">
-      <tr>
-        <th></th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th></th>
-      </tr>
-      <tr
-        *ngFor="let allocatedResource of allocatedResources; let i = index"
-        class="data-row"
-      >
-        <td class="data-cell">{{ i + 1 }}</td>
-        <td class="data-cell">{{ allocatedResource.resource_name }}</td>
-        <td class="data-cell">{{ allocatedResource.resource_email }}</td>
-        <td class="data-cell">{{ allocatedResource.role }}</td>
-        <button
-          mat-icon-button
-          color="warn"
-          (click)="removeResource(allocatedResource.resource_id)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      </tr>
-    </table>
+    <app-resource-table
+      [resourcesWithNames]="allocatedResources"
+      [withDelete]="true"
+      (removeResourceEmitter)="removeResource($event)"
+    >
+    </app-resource-table>
   </ng-container>
 </div>
