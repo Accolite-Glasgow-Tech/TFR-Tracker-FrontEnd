@@ -25,7 +25,7 @@ export class FrequencyPickerComponent implements OnInit {
   DayOfMonthEnum = DayOfMonth;
   today: Date = new Date();
 
-  daysOfWeek: Map<number, String> = new Map([
+  daysOfWeek: Map<number, string> = new Map([
     [0, 'Sunday'],
     [1, 'Monday'],
     [2, 'Tuesday'],
@@ -47,7 +47,6 @@ export class FrequencyPickerComponent implements OnInit {
 
   selectedDays: Set<number> = new Set([this.today.getDay()]);
   firstSelection: Boolean = true;
-  cron: string = '';
 
   constructor() {}
 
@@ -75,7 +74,7 @@ export class FrequencyPickerComponent implements OnInit {
     }
   }
 
-  getCron(): String {
+  getCron(): string {
     const cronSecond: number = 0;
     const [cronHour, cronMinute] = this.frequencyPicker
       .get('timeControl')!
