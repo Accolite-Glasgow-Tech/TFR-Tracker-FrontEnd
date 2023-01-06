@@ -1,6 +1,6 @@
 <form [formGroup]="frequencyPicker">
   <div>
-    <mat-form-field appearance="fill">
+    <mat-form-field class="margined" appearance="outline">
       <mat-label>Schedule for</mat-label>
       <input
         matInput
@@ -14,7 +14,7 @@
       ></mat-datepicker-toggle>
       <mat-datepicker #startDate></mat-datepicker>
     </mat-form-field>
-    <mat-form-field appearance="outline">
+    <mat-form-field class="margined" appearance="outline">
       <mat-label>Schedule at</mat-label>
       <div class="flexContainer mid">
         <input
@@ -28,13 +28,16 @@
       </div>
     </mat-form-field>
   </div>
-  <div>
+  <div class="margined">
     Is this a recurring event?
-    <mat-slide-toggle formControlName="recurringControl"></mat-slide-toggle>
+    <mat-slide-toggle
+      [color]="'primary'"
+      formControlName="recurringControl"
+    ></mat-slide-toggle>
   </div>
   <div *ngIf="frequencyPicker.get('recurringControl')!.value">
     <div>
-      <mat-form-field>
+      <mat-form-field class="margined" appearance="outline">
         <mat-label>Repeat</mat-label>
         <mat-select
           #frequency
@@ -58,11 +61,12 @@
       </mat-form-field>
     </div>
     <div
-      class="flexContainer mid"
+      class="flexContainer mid margined"
       *ngIf="frequency.value === frequencyEnum.weekly"
     >
       <mat-chip-listbox multiple>
         <mat-chip-option
+          class="margined"
           #chip
           *ngFor="let day of [0, 1, 2, 3, 4, 5, 6]"
           [value]="day"
@@ -75,13 +79,14 @@
       </mat-chip-listbox>
     </div>
     <div *ngIf="frequency.value === frequencyEnum.monthly">
-      <mat-form-field>
+      <mat-form-field class="margined" appearance="outline">
         <mat-select
           #dayOfMonth
           formControlName="dayOfMonthControl"
           disableRipple
         >
           <mat-option
+            class="margined"
             *ngFor="
               let day of [
                 DayOfMonthEnum.first,
@@ -101,7 +106,11 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field *ngIf="dayOfMonth.value === DayOfMonthEnum.custom">
+      <mat-form-field
+        class="margined"
+        *ngIf="dayOfMonth.value === DayOfMonthEnum.custom"
+        appearance="outline"
+      >
         <input
           matInput
           type="number"
@@ -115,7 +124,7 @@
       </mat-form-field>
     </div>
     <div>
-      <mat-form-field appearance="fill">
+      <mat-form-field class="margined" appearance="outline">
         <mat-label>Expire at</mat-label>
         <input
           matInput
