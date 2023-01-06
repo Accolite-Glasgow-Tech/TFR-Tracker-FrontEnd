@@ -1,3 +1,8 @@
+.data-header {
+  padding-top: 15px;
+  padding-bottom: 5px;
+}
+
 .data-cell {
   text-align: center;
 }
@@ -9,21 +14,12 @@
 .data-cell,
 .data-cell-mobile {
   padding-left: 15px;
-  padding-top: 5px;
-  padding-bottom: 10px;
   text-align: center;
   word-break: break-all;
+}
+
+.data-cell-mobile {
   font-size: 12px;
-}
-
-.data-row .data-cell {
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
-  cursor: pointer;
-}
-
-.data-row:hover .data-cell {
-  color: blue;
 }
 
 .data-cell-div-container-mobile {

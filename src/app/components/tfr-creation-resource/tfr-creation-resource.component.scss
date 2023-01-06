@@ -6,12 +6,15 @@
   width: 100%;
 }
 
-.error-div-container {
-  margin-bottom: 10px;
+.form-field {
+  height: 70px;
+}
+.add-btn {
+  height: 50px;
 }
 
-.error-div {
-  color: red;
+.small-font {
+  font-size: 12px;
 }
 
 .resource_selection {
@@ -20,6 +23,14 @@
   flex-wrap: wrap;
   width: min-content;
   margin-right: 10px;
+}
+
+.error-div-container {
+  margin-bottom: 10px;
+}
+
+.error-div {
+  color: red;
 }
 
 #resource_div {

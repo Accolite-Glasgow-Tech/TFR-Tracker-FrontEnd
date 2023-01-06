@@ -24,20 +24,22 @@ export class ProjectSummaryComponent implements OnInit {
       vendorDetails = document.createElement('table');
       vendorDetails.setAttribute('mat-table', '');
       vendorDetails.setAttribute('id', 'vendor-details');
-      vendorDetails.style.border = 'solid 1px black';
       vendorDetails.style.borderCollapse = 'collapse';
 
-      Object.entries(vendorJSOn).forEach((entry) => {
+      Object.entries(vendorJSOn).forEach((entry, index) => {
         const [key, value] = entry;
         let row = document.createElement('tr');
         let header = document.createElement('th');
-        header.style.border = 'solid 1px black';
-        header.style.padding = '5px';
         let data = document.createElement('td');
-        data.style.border = 'solid 1px black';
+        // if (index !== 0) {
+        //   header.style.borderTop = 'solid 1px #D3D3D3';
+        //   data.style.borderTop = 'solid 1px #D3D3D3';
+        // }
+        header.style.padding = '5px';
+        // data.style.borderLeft = 'solid 1px #D3D3D3';
         data.style.padding = '5px';
 
-        header.textContent = key;
+        header.textContent = key + ':';
         data.textContent = value as string;
 
         row.appendChild(header);

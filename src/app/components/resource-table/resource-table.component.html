@@ -1,10 +1,10 @@
 <table mat-table class="mat-elevation-z8 demo-table table-resource-laptop">
   <tr>
-    <th></th>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Role</th>
-    <th *ngIf="withDelete"></th>
+    <th class="data-header"></th>
+    <th class="data-header">Name</th>
+    <th class="data-header">Email</th>
+    <th class="data-header">Role</th>
+    <th class="data-header" *ngIf="withDelete"></th>
   </tr>
   <tr
     *ngFor="let resource of resourcesWithNames; let i = index"

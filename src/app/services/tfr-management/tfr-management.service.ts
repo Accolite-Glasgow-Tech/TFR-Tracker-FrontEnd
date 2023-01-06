@@ -8,6 +8,7 @@ import {
   ProjectResource,
   AllocatedResourceType,
 } from 'src/app/types/types';
+import { ResourceService } from '../resource/resource.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,10 @@ export class TfrManagementService {
 
   updateProjectToResourceMappingURL = baseURL + '/resources/projects';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private resourceService: ResourceService
+  ) {}
 
   updateDatabase() {
     console.log(this.project);
@@ -104,17 +108,18 @@ export class TfrManagementService {
     projectResourcesWithNames: AllocatedResourceType[]
   ) {
     const newArray = projectResourcesWithNames.map(
-      ({ resource_name, resource_email, ...keepAttrs }) => keepAttrs
+      ({ resource_name, resource_email, ...keepAttrs }) => {
+        keepAttrs.role = this.resourceService.getAssociatedEnumRole(
+          keepAttrs.role
+        );
+        return keepAttrs;
+      }
     );
     this.projectResourcesWithNames = projectResourcesWithNames;
-    console.log(newArray);
-
     this.setProjectResources(newArray);
   }
 
   updateProjectToResourceMapping() {
-    console.log(this.getProjectResources);
-
     this.http
       .put(
         this.updateProjectToResourceMappingURL + '/' + this.getProjectId,

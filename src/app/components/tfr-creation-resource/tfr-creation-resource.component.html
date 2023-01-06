@@ -30,8 +30,8 @@
   <form [formGroup]="resourceFormGroup">
     <div class="form-group-div">
       <div class="resource_selection">
-        <mat-form-field appearance="fill">
-          <mat-label>Resource</mat-label>
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label class="small-font">Resource</mat-label>
           <input
             type="text"
             required
@@ -40,11 +40,13 @@
             [matAutocomplete]="auto1"
             id="resource"
             #resource
+            class="small-font"
           />
           <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
             <mat-option
               *ngFor="let filteredResource of filteredResourceOption | async"
               [value]="filteredResource.resource_email"
+              class="small-font"
             >
               {{ filteredResource.resource_email }}
             </mat-option>
@@ -76,8 +78,8 @@
       </div>
 
       <div class="resource_selection">
-        <mat-form-field appearance="fill">
-          <mat-label>Role</mat-label>
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label class="small-font">Role</mat-label>
           <input
             type="text"
             required
@@ -86,11 +88,13 @@
             [matAutocomplete]="auto2"
             id="role"
             #role
+            class="small-font"
           />
           <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
             <mat-option
               *ngFor="let filteredRole of filteredRoleOption | async"
               [value]="filteredRole"
+              class="small-font"
             >
               {{ filteredRole }}
             </mat-option>
@@ -120,6 +124,7 @@
         "
         (click)="addResource(resource.value, role.value)"
         mat-raised-button
+        class="add-btn"
         color="primary"
       >
         Add

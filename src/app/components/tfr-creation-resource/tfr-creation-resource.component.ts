@@ -86,6 +86,20 @@ export class TfrCreationResourceComponent implements OnInit {
       }),
     });
 
+    this.resourceService.getAllRoles().subscribe((data: string[]) => {
+      this.roles = this.resourceService.convertRoleEnum(data);
+      this.resourceFormGroup.controls['role'].addValidators([
+        autocompleteStringValidator(this.roles),
+      ]);
+
+      this.filteredRoleOption = this.resourceFormGroup.controls[
+        'role'
+      ].valueChanges.pipe(
+        startWith(''),
+        map((value) => this._filterRole(value || ''))
+      );
+    });
+
     this.resourceService
       .getAllResources()
       .subscribe((data: ResourceListType[]) => {
@@ -112,20 +126,6 @@ export class TfrCreationResourceComponent implements OnInit {
           this.stepCompletedEmitter.emit(true);
         }
       });
-
-    this.resourceService.getAllRoles().subscribe((data: string[]) => {
-      this.roles = data;
-      this.resourceFormGroup.controls['role'].addValidators([
-        autocompleteStringValidator(this.roles),
-      ]);
-
-      this.filteredRoleOption = this.resourceFormGroup.controls[
-        'role'
-      ].valueChanges.pipe(
-        startWith(''),
-        map((value) => this._filterRole(value || ''))
-      );
-    });
   }
 
   private _filterRole(value: string): string[] {
@@ -196,7 +196,7 @@ export class TfrCreationResourceComponent implements OnInit {
         resource_id: resource.resource_id,
         resource_name: this.resources[indexOfResource].resource_name,
         resource_email: this.resources[indexOfResource].resource_email,
-        role: resource.role,
+        role: this.resourceService.getAssociatedCleanRole(resource.role),
       };
 
       this.allocatedResources.push(allocatedResource);
