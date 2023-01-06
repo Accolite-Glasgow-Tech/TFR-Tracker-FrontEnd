@@ -13,13 +13,12 @@ import { DummyData } from '../../types/dummy-data';
 })
 export class TfrManagementService {
   public project: Project | undefined = DummyData.project;
-  
+
   public projectResourcesWithNames!: AllocatedResourceType[];
 
   constructor() {}
 
   updateDatabase() {
-    console.log("api called");
     console.log(this.project);
   }
 
@@ -40,16 +39,15 @@ export class TfrManagementService {
         vendorId: this.project.vendorId,
         vendorSpecific: this.project.vendorSpecific,
         status: this.project.status,
-      }
-      
+      };
+
       return projectBasicDetails;
     }
     return undefined;
   }
 
   setBasicDetails(projectBasicDetails: ProjectBasicDetails) {
-    if(!this.compareBasicDetails(projectBasicDetails))
-    {
+    if (!this.compareBasicDetails(projectBasicDetails)) {
       if (this.project === undefined) {
         this.project = {
           id: -1,
@@ -76,18 +74,20 @@ export class TfrManagementService {
     }
   }
 
-  compareBasicDetails(newDetails: ProjectBasicDetails): Boolean{
+  compareBasicDetails(newDetails: ProjectBasicDetails): Boolean {
     var currentDetails = this.getBasicDetails;
-    if(currentDetails == undefined){
+    if (currentDetails == undefined) {
       return false;
     }
-    if(currentDetails.name != newDetails.name
-      || currentDetails.startDate != newDetails.startDate
-      || currentDetails.endDate != newDetails.endDate
-      || currentDetails.status != newDetails.status
-      || currentDetails.vendorId != newDetails.vendorId
-      || currentDetails.vendorSpecific != newDetails.vendorSpecific){
-        return false;
+    if (
+      currentDetails.name != newDetails.name ||
+      currentDetails.startDate != newDetails.startDate ||
+      currentDetails.endDate != newDetails.endDate ||
+      currentDetails.status != newDetails.status ||
+      currentDetails.vendorId != newDetails.vendorId ||
+      currentDetails.vendorSpecific != newDetails.vendorSpecific
+    ) {
+      return false;
     }
     return true;
   }

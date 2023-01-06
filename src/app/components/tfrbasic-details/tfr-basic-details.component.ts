@@ -1,7 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { ProjectBasicDetails, Vendor, VendorAttribute } from 'src/app/types/types';
+import {
+  ProjectBasicDetails,
+  Vendor,
+  VendorAttribute,
+} from 'src/app/types/types';
 
 @Component({
   selector: 'app-tfr-basic-details',
@@ -21,7 +25,6 @@ export class TfrBasicDetailsComponent implements OnInit {
   vendorSpecificData: string = '';
   editMode: Boolean = false;
   projectToEdit!: ProjectBasicDetails;
- 
 
   ngOnInit(): void {
     this.tfrDetails = new FormGroup({
@@ -32,26 +35,25 @@ export class TfrBasicDetailsComponent implements OnInit {
     });
 
     // check whether project exists yet, and if so, pre-fill details and set to edit mode
-    if(this.tfrManager.getBasicDetails != undefined){
+    if (this.tfrManager.getBasicDetails != undefined) {
       this.editMode = true;
       // edit mode
-      console.log("edit mode");
+      console.log('edit mode');
       this.projectToEdit = this.tfrManager.getBasicDetails;
       // set form group details to existing details
       this.setDetailsToExistingProject();
     }
   }
 
-  isFormValid(){
-    if (this.vendorAttributes == undefined){
+  isFormValid() {
+    if (this.vendorAttributes == undefined) {
       return false;
-    }
-    else {
-      return (this.vendorAttributes.valid && this.tfrDetails.valid);
+    } else {
+      return this.vendorAttributes.valid && this.tfrDetails.valid;
     }
   }
 
-  setDetailsToExistingProject(){
+  setDetailsToExistingProject() {
     this.tfrDetails.get('name')?.setValue(this.projectToEdit.name);
     this.tfrDetails.get('startDate')?.setValue(this.projectToEdit.startDate);
     this.tfrDetails.get('endDate')?.setValue(this.projectToEdit.endDate);
@@ -69,7 +71,6 @@ export class TfrBasicDetailsComponent implements OnInit {
     };
 
     this.tfrManager.setBasicDetails(updatedProjectDetails);
-
   }
 
   onVendorSelect(vendor: Vendor) {
@@ -77,41 +78,46 @@ export class TfrBasicDetailsComponent implements OnInit {
     this.tfrDetails.get('vendorId')?.setValue(vendor.id);
   }
 
-  next(){
+  next() {
     this.saveTFR();
     this.nextStepEmitter.emit(true);
   }
 
-  onAttributesSelected(attributes: VendorAttribute[]){
+  onAttributesSelected(attributes: VendorAttribute[]) {
     this.attributeNames = [];
-    attributes.forEach((att)=> {
-      this.attributeNames.push(att.attributeName)
+    attributes.forEach((att) => {
+      this.attributeNames.push(att.attributeName);
     });
   }
 
-  onAttributesUpdated(group: FormGroup){
+  onAttributesUpdated(group: FormGroup) {
     this.vendorAttributes = group;
     this.updateVendorSpecific();
   }
 
-  updateVendorSpecific(){
+  updateVendorSpecific() {
     // convert the form group info to string data and assign to vendorSpecificData string
-    if(this.vendorAttributes.valid){
-      this.vendorSpecificData = "{";
+    if (this.vendorAttributes.valid) {
+      this.vendorSpecificData = '{';
       let i = 0;
-      while(i < this.attributeNames.length){
-        if(i > 0){
+      while (i < this.attributeNames.length) {
+        if (i > 0) {
           this.vendorSpecificData = this.vendorSpecificData.concat(', ');
         }
-        this.vendorSpecificData = this.vendorSpecificData.concat('"' + this.attributeNames[i] + '": "' + 
-        this.getAttributesArray().controls[i].value + '"');
+        this.vendorSpecificData = this.vendorSpecificData.concat(
+          '"' +
+            this.attributeNames[i] +
+            '": "' +
+            this.getAttributesArray().controls[i].value +
+            '"'
+        );
         i += 1;
       }
       this.vendorSpecificData = this.vendorSpecificData.concat('}');
     }
   }
 
-  getAttributesArray(){
+  getAttributesArray() {
     return this.vendorAttributes.controls['attributeValues'] as FormArray;
   }
 }

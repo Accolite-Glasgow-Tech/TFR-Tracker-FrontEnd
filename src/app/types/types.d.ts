@@ -1,4 +1,3 @@
-
 export interface Project {
   id: number;
   name: string;
@@ -12,7 +11,6 @@ export interface Project {
   projectResources: ProjectResource[];
   isDeleted: Boolean;
 }
-​
 export interface Milestone {
   id: number;
   projectId: number;
@@ -22,7 +20,6 @@ export interface Milestone {
   acceptanceDate: Date;
   isDeleted: Boolean;
 }
-​
 export interface Tracker {
   milestoneId: number;
   projectId: number;
@@ -56,7 +53,6 @@ export interface ResourceListType {
   resource_id: number;
   selected: boolean;
 }
-​
 export interface AllocatedResourceType {
   project_id: number;
   resource_id: number;
@@ -64,7 +60,6 @@ export interface AllocatedResourceType {
   resource_email: string;
   role: string;
 }
-​
 export interface ProjectResource {
   project_id: number;
   resource_id: number;
