@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { of, Observable } from 'rxjs';
 import { Vendor, VendorAttribute } from '../types/types';
-import { DummyData } from '../types/dummy-attributes';
+import { DummyData } from '../types/dummy-data';
 
 @Injectable({
   providedIn: 'root',

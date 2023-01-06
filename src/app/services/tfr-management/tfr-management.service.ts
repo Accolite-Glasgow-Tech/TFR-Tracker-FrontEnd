@@ -6,7 +6,7 @@ import {
   ProjectResource,
   AllocatedResourceType,
 } from '../../types/types';
-import { DummyData } from '../../types/dummy-attributes';
+import { DummyData } from '../../types/dummy-data';
 
 @Injectable({
   providedIn: 'root',
