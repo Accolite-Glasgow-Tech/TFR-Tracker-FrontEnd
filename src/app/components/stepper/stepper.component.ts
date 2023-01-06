@@ -49,41 +49,41 @@ export class StepperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.tfrManagementService.project = {
-      id: 2,
-      name: 'Bank Project',
-      vendorId: 1,
-      startDate: new Date('December 25, 2021 00:00:00'),
-      endDate: new Date('December 31, 2022 00:00:00'),
-      vendorSpecific:
-        '{"Department":"Finance", "Cost Center":"Private Banking", "City":"Glasgow", "Manager":"Jake Lam"}',
-      status: 'DRAFT',
-      version: 1,
-      milestones: [
-        {
-          id: 1,
-          projectId: 2,
-          description: 'deployment',
-          startDate: new Date('2022-12-12 09:00:00'),
-          deliveryDate: new Date('2022-12-16 23:59:59'),
-          acceptanceDate: new Date('2022-12-31 23:59:59'),
-          isDeleted: false,
-        },
-      ],
-      projectResources: [
-        {
-          project_id: 2,
-          resource_id: 1,
-          role: 'SCRUM_MASTER',
-        },
-        {
-          project_id: 2,
-          resource_id: 2,
-          role: 'SOFTWARE_DEVELOPER',
-        },
-      ],
-      isDeleted: false,
-    };
+    // this.tfrManagementService.project = {
+    //   id: 2,
+    //   name: 'Bank Project',
+    //   vendorId: 1,
+    //   startDate: new Date('December 25, 2021 00:00:00'),
+    //   endDate: new Date('December 31, 2022 00:00:00'),
+    //   vendorSpecific:
+    //     '{"Department":"Finance", "Cost Center":"Private Banking", "City":"Glasgow", "Manager":"Jake Lam"}',
+    //   status: 'DRAFT',
+    //   version: 1,
+    //   milestones: [
+    //     {
+    //       id: 1,
+    //       projectId: 2,
+    //       description: 'deployment',
+    //       startDate: new Date('2022-12-12 09:00:00'),
+    //       deliveryDate: new Date('2022-12-16 23:59:59'),
+    //       acceptanceDate: new Date('2022-12-31 23:59:59'),
+    //       isDeleted: false,
+    //     },
+    //   ],
+    //   projectResources: [
+    //     {
+    //       project_id: 2,
+    //       resource_id: 1,
+    //       role: 'SCRUM_MASTER',
+    //     },
+    //     {
+    //       project_id: 2,
+    //       resource_id: 2,
+    //       role: 'SOFTWARE_DEVELOPER',
+    //     },
+    //   ],
+    //   isDeleted: false,
+    // };
   }
 
   nextStep() {

@@ -1,2 +1,14 @@
-<p>tfr works!</p>
-<div *ngIf="TfrId">id={{ TfrId }}</div>
+<div id="header">
+  <span id="title"
+    ><h2>{{ tfrManagementService.getProjectName }}</h2></span
+  >
+  <span>
+    <button mat-raised-button color="primary" (click)="redirectToEditTfr()">
+      Edit
+    </button></span
+  >
+</div>
+<app-project-summary
+  [currentProject]="tfrManagementService.getProject"
+  [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"
+></app-project-summary>

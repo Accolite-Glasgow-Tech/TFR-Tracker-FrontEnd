@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { APPCONSTANTS } from 'src/app/shared/app.constants';
 import {
   Milestone,
@@ -7,6 +8,7 @@ import {
   ProjectBasicDetails,
   ProjectResource,
   AllocatedResourceType,
+  ResourceListType,
 } from '../../types/types';
 import { ResourceService } from '../resource/resource.service';
 
@@ -35,6 +37,10 @@ export class TfrManagementService {
 
   get getProjectId(): number | undefined {
     return this.project?.id;
+  }
+
+  get getProjectName(): string | undefined {
+    return this.project?.name;
   }
 
   get getProject(): Project | undefined {
@@ -128,6 +134,24 @@ export class TfrManagementService {
     }
   }
 
+  convertToProjectResourcesWithNames(resourcesDetails: ResourceListType[]) {
+    this.projectResourcesWithNames = [];
+    resourcesDetails.forEach((resourceDetails) => {
+      let projectResource: ProjectResource =
+        this.project?.projectResources.find(
+          (resource) => resource.resource_id === resourceDetails.resource_id
+        )!;
+      let allocatedResource: AllocatedResourceType = {
+        project_id: projectResource.project_id,
+        resource_id: resourceDetails.resource_id,
+        resource_name: resourceDetails.resource_name,
+        resource_email: resourceDetails.resource_email,
+        role: projectResource.role,
+      };
+      this.projectResourcesWithNames.push(allocatedResource);
+    });
+  }
+
   get getProjectResourcesWithNames(): AllocatedResourceType[] {
     return this.projectResourcesWithNames;
   }
@@ -155,6 +179,61 @@ export class TfrManagementService {
       )
       .subscribe((response) => {
         console.log(response);
+      });
+  }
+
+  getProjectFromDatabaseByProjectId(project_id: Number) {
+    console.log(
+      'fetched project with project id ' + project_id + ' from database'
+    );
+
+    this.project = {
+      id: 1,
+      name: 'Bank Project',
+      vendorId: 1,
+      startDate: new Date('December 25, 2021 00:00:00'),
+      endDate: new Date('December 31, 2022 00:00:00'),
+      vendorSpecific:
+        '{"Department":"Finance", "Cost Center":"Private Banking", "City":"Glasgow", "Manager":"Jake Lam"}',
+      status: 'DRAFT',
+      version: 1,
+      milestones: [
+        {
+          id: 1,
+          projectId: 2,
+          description: 'deployment',
+          startDate: new Date('2022-12-12 09:00:00'),
+          deliveryDate: new Date('2022-12-16 23:59:59'),
+          acceptanceDate: new Date('2022-12-31 23:59:59'),
+          isDeleted: false,
+        },
+      ],
+      projectResources: [
+        {
+          project_id: 1,
+          resource_id: 1,
+          role: 'SCRUM_MASTER',
+        },
+        {
+          project_id: 1,
+          resource_id: 2,
+          role: 'SOFTWARE_DEVELOPER',
+        },
+      ],
+      isDeleted: false,
+    };
+  }
+
+  getResourcesNamesByProjectIdFromDatabase(project_id: Number) {
+    this.http
+      .get<ResourceListType[]>(
+        APPCONSTANTS.APICONSTANTS.BASE_URL +
+          '/resources/projects/' +
+          project_id +
+          '/names'
+      )
+      .subscribe((data: ResourceListType[]) => {
+        this.convertToProjectResourcesWithNames(data);
       });
   }
 }
