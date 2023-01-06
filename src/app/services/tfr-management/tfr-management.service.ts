@@ -17,8 +17,14 @@ export class TfrManagementService {
 
   constructor() {}
 
-  updateDatabase() {
+  updateBasicDetails() {
+    // http POST request '/projects' 
+    // set projectId with return value of request
     console.log(this.project);
+  }
+
+  updateDatabase(){
+
   }
 
   get getProject(): Project | undefined {
@@ -49,7 +55,7 @@ export class TfrManagementService {
     if (!this.compareBasicDetails(projectBasicDetails)) {
       if (this.project === undefined) {
         this.project = {
-          id: -1,
+          id: NaN,
           name: projectBasicDetails.name,
           vendorId: projectBasicDetails.vendorId,
           startDate: projectBasicDetails.startDate,
@@ -69,7 +75,7 @@ export class TfrManagementService {
         this.project.vendorSpecific = projectBasicDetails.vendorSpecific;
       }
 
-      this.updateDatabase();
+      this.updateBasicDetails();
     }
   }
 
