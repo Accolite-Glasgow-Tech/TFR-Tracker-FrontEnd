@@ -63,22 +63,20 @@ export class ReportsComponent implements OnInit {
     this.taskObject.task.project_id = this.schedulerForm.get('tfr')?.value;
     this.taskObject.task.task_type = this.schedulerForm.get('type')?.value;
 
-    let taskDate = this.schedulerForm
-      .get('frequency')
-      ?.get('startDateControl')?.value;
-
-    console.log('taskdate: ', taskDate.getDate);
-
-    taskDate.setTime(
-      this.schedulerForm.get('frequency')?.get('timeControl')?.value
-    );
-
-    console.log(taskDate.toString());
+    let taskDate: Date = this.schedulerForm
+      .get('frequency')!
+      .get('startDateControl')!.value;
+    const [hour, minute] = this.schedulerForm
+      .get('frequency')!
+      .get('timeControl')!
+      .value!.split(':');
+    taskDate.setHours(hour, minute, 0, 0);
+    console.log('taskdate: ', taskDate.toJSON());
 
     this.taskObject.task.execute_at = taskDate.toJSON();
 
     if (
-      this.schedulerForm.get('frequency')?.get('recurringControl')?.value ===
+      this.schedulerForm.get('frequency')!.get('recurringControl')!.value ===
       true
     ) {
       this.taskObject.task.recurring = true;
@@ -87,11 +85,11 @@ export class ReportsComponent implements OnInit {
 
     this.taskObject.task.by_email = true;
 
-    if (this.schedulerForm.get('receiver')?.value === 'self') {
+    if (this.schedulerForm.get('receiver')!.value === 'self') {
       this.taskObject.resource_emails.push(this.resourceEmail);
       this.taskObject.task.cron = null;
     } else if (
-      this.schedulerForm.get('receiver')?.value === 'allProjectResources'
+      this.schedulerForm.get('receiver')!.value === 'allProjectResources'
     ) {
       this.getResourcesByTFR(
         (this.taskObject.task.project_id = this.schedulerForm.get('tfr')?.value)
@@ -102,6 +100,8 @@ export class ReportsComponent implements OnInit {
     }
 
     console.log('logging taskObject', this.taskObject);
+
+    this.createTask(this.taskObject);
   }
 
   getResourceTFRList(resourceId: number) {
@@ -121,6 +121,10 @@ export class ReportsComponent implements OnInit {
   }
 
   createTask(taskObject: any) {
-    this.httpClient.post('localhost:8080/tasks', taskObject);
+    console.log(
+      this.httpClient
+        .post('http://localhost:8080/tasks', taskObject)
+        .subscribe()
+    );
   }
 }
