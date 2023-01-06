@@ -16,6 +16,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   constructor(private tfrManager: TfrManagementService) {}
 
   @Output() nextStepEmitter = new EventEmitter<boolean>();
+  @Output() stepCompletedEmitter = new EventEmitter<boolean>();
 
   tfrDetails!: FormGroup;
   projectDetails!: ProjectBasicDetails;
@@ -37,6 +38,7 @@ export class TfrBasicDetailsComponent implements OnInit {
     // check whether project exists yet, and if so, pre-fill details and set to edit mode
     if (this.tfrManager.getBasicDetails != undefined) {
       this.editMode = true;
+      this.stepCompletedEmitter.emit(true);
       // edit mode
       console.log('edit mode');
       this.projectToEdit = this.tfrManager.getBasicDetails;
@@ -81,6 +83,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   next() {
     this.saveTFR();
     this.nextStepEmitter.emit(true);
+    this.stepCompletedEmitter.emit(true);
   }
 
   onAttributesSelected(attributes: VendorAttribute[]) {
