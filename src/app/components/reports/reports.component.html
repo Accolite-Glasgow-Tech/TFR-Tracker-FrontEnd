@@ -48,7 +48,13 @@
     </mat-radio-button>
   </mat-radio-group>
 
-  <button class="btn-submit" type="submit" mat-raised-button color="primary">
+  <button
+    class="btn-submit"
+    type="submit"
+    [disabled]="!schedulerForm.valid"
+    mat-raised-button
+    color="primary"
+  >
     Schedule
   </button>
 </form>
