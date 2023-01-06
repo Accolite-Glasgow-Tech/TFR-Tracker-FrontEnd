@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { baseURL } from 'src/app/constants/contants';
+import { APPCONSTANTS } from 'src/app/shared/app.constants';
 import {
   Milestone,
   Project,
@@ -16,7 +16,8 @@ import { ResourceService } from '../resource/resource.service';
 export class TfrManagementService {
   public project!: Project | undefined;
 
-  updateProjectToResourceMappingURL = baseURL + '/resources/projects';
+  updateProjectToResourceMappingURL =
+    APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/projects';
   public projectResourcesWithNames!: AllocatedResourceType[];
 
   constructor(

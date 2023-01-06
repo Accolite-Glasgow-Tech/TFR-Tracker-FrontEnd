@@ -1,15 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { baseURL } from 'src/app/constants/contants';
+import { APPCONSTANTS } from 'src/app/shared/app.constants';
 import { ResourceListType } from 'src/app/types/types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ResourceService {
-  abrigedResourceListURL = baseURL + '/resources/names';
-  resourceRoleURL = baseURL + '/resources/roles';
+  abrigedResourceListURL =
+    APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/names';
+  resourceRoleURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/roles';
   roleHashMap = new Map();
 
   constructor(private http: HttpClient) {}

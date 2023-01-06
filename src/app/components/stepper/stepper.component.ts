@@ -30,11 +30,9 @@ export class StepperComponent implements OnInit {
   milestoneFormGroup = this._formBuilder.group({
     milestoneName: ['', Validators.required],
   });
-  resourceFormGroup = this._formBuilder.group({
-    resourceName: ['', Validators.required],
-  });
-  resourceSelectionValid: boolean = false;
-  isLinear = false;
+
+  stepsValid: boolean[] = [false, false, false];
+  isLinear = true;
   stepperOrientation: Observable<StepperOrientation>;
 
   constructor(
@@ -57,7 +55,8 @@ export class StepperComponent implements OnInit {
       vendorId: 1,
       startDate: new Date('December 25, 2021 00:00:00'),
       endDate: new Date('December 31, 2022 00:00:00'),
-      vendorSpecific: '{"vendor":"Morgan Stanley","department":"finance"}',
+      vendorSpecific:
+        '{"Department":"Finance", "Cost Center":"Private Banking", "City":"Glasgow", "Manager":"Jake Lam"}',
       status: 'DRAFT',
       version: 1,
       milestones: [
@@ -89,13 +88,14 @@ export class StepperComponent implements OnInit {
 
   nextStep() {
     this.myStepper.linear = false;
-    this.resourceSelectionValid = true;
     this.myStepper.next();
     this.myStepper.linear = true;
   }
 
-  stepCompleted() {
-    this.resourceSelectionValid = true;
+  stepCompleted(stepNumber: number, completed: boolean) {
+    if (stepNumber >= 0) {
+      this.stepsValid[stepNumber] = completed;
+    }
   }
 
   redirect() {

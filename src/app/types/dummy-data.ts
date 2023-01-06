@@ -14,21 +14,21 @@ class dummy {
   ];
 }
 
-let testProject: Project = {
-  id: 1,
-  name: 'Test Project',
-  vendorId: 3,
-  startDate: new Date('2023-01-01'),
-  endDate: new Date('2023-02-01'),
-  status: 'INPROGRESS',
-  version: 1,
-  vendorSpecific: `{"Cost Center": "Test Centre", "Department ID":"1"}`,
-  milestones: [],
-  projectResources: [],
-  isDeleted: false,
-};
+// let testProject: Project = {
+//   id: 1,
+//   name: 'Test Project',
+//   vendorId: 3,
+//   startDate: new Date('2023-01-01'),
+//   endDate: new Date('2023-02-01'),
+//   status: 'INPROGRESS',
+//   version: 1,
+//   vendorSpecific: `{"Cost Center": "Test Centre", "Department ID":"1"}`,
+//   milestones: [],
+//   projectResources: [],
+//   isDeleted: false,
+// };
 
 export class DummyData {
   static readonly dummy = new dummy();
-  static project: Project = testProject;
+  // static project: Project = testProject;
 }

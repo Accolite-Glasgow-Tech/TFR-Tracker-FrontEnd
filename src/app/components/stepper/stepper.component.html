@@ -3,19 +3,11 @@
   #stepper
   [orientation]="(stepperOrientation | async)!"
 >
-  <mat-step [stepControl]="tfrDetailsFormGroup">
-    <form [formGroup]="tfrDetailsFormGroup">
-      <ng-template matStepLabel>TFR Basic Details</ng-template>
-      <!-- TFR Basic Details Component Here -->
-      <mat-form-field appearance="fill">
-        <mat-label>TFR Name</mat-label>
-        <input matInput formControlName="tfrName" required />
-      </mat-form-field>
-      <div>
-        <button mat-raised-button color="primary" matStepperNext>Next</button>
-      </div>
-      <!--  -->
-    </form>
+  <mat-step [completed]="stepsValid[0]" label="TFR Basic Details">
+    <app-tfr-basic-details
+      (nextStepEmitter)="nextStep()"
+      (stepCompletedEmitter)="stepCompleted(0, $event)"
+    ></app-tfr-basic-details>
   </mat-step>
 
   <mat-step [stepControl]="milestoneFormGroup" label="Milestones">
@@ -47,11 +39,11 @@
     </form>
   </mat-step>
 
-  <mat-step [completed]="resourceSelectionValid" label="Resources">
+  <mat-step [completed]="stepsValid[2]" label="Resources">
     <!-- Resource Component Here -->
     <app-tfr-creation-resource
       (nextStepEmitter)="nextStep()"
-      (stepCompletedEmitter)="stepCompleted()"
+      (stepCompletedEmitter)="stepCompleted(2, $event)"
     ></app-tfr-creation-resource>
     <!--  -->
   </mat-step>

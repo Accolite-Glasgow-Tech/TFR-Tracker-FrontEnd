@@ -211,6 +211,7 @@ export class TfrCreationResourceComponent implements OnInit {
       this.tfrManagementService.updateProjectToResourceMapping();
       this.resourceListUpdated = false;
     }
+    this.stepCompletedEmitter.emit(true);
     this.nextStepEmitter.emit(true);
   }
 }
