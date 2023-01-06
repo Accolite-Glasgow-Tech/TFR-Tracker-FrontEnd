@@ -6,13 +6,12 @@ import {
   ProjectResource,
   AllocatedResourceType,
 } from '../../types/types';
-import { DummyData } from '../../types/dummy-data';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TfrManagementService {
-  public project: Project | undefined = DummyData.project;
+  public project!: Project | undefined;
 
   public projectResourcesWithNames!: AllocatedResourceType[];
 
