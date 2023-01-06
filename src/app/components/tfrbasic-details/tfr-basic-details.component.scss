@@ -1,16 +1,22 @@
-.small-text{
+.small-text {
   font-size: smaller;
 }
 
-.form-field{
+.form-field {
   width: 35%;
 }
 
-.buttonRow{
-  width: 35%;
+.basic-details-div {
+  margin: 1rem;
+}
+
+.intro-div {
+  width: 100%;
   display: flex;
-  justify-content:space-around;
-  flex-direction: row;
-  margin: auto;
+  justify-content: space-between;
+  gap: 5px;
 }
 
+.navigation-btn {
+  margin: 5px;
+}

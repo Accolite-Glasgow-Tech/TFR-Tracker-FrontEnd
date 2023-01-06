@@ -1,46 +1,75 @@
-<div>
-  <br />
-  <br />
-  <br />
+<div class="basic-details-div">
+  <div class="intro-div">
+    <label>Fill in the basic details for this project.</label>
+    <div>
+      <button
+        mat-raised-button
+        [disabled]="!isFormValid()"
+        class="navigation-btn"
+        color="primary"
+        (click)="saveTFR()"
+      >
+        Save
+      </button>
+      <button
+        mat-raised-button
+        [disabled]="!isFormValid()"
+        class="navigation-btn"
+        color="primary"
+        (click)="next()"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+
   <form [formGroup]="tfrDetails">
     <p>
       <mat-form-field class="form-field" appearance="fill">
         <mat-label>Name</mat-label>
-        <input matInput formControlName="name">
-        <mat-error *ngIf="tfrDetails.get('name')?.invalid">Invalid name</mat-error>
+        <input matInput formControlName="name" />
+        <mat-error *ngIf="tfrDetails.get('name')?.invalid"
+          >Invalid name</mat-error
+        >
       </mat-form-field>
     </p>
-  
+
     <p>
       <mat-form-field class="form-field" appearance="fill">
         <mat-label>Enter a date range</mat-label>
         <mat-date-range-input [rangePicker]="picker">
-          <input class="small-text" matStartDate formControlName="startDate" placeholder="Start date">
-          <input class="small-text" matEndDate formControlName="endDate" placeholder="End date">
+          <input
+            class="small-text"
+            matStartDate
+            formControlName="startDate"
+            placeholder="Start date"
+          />
+          <input
+            class="small-text"
+            matEndDate
+            formControlName="endDate"
+            placeholder="End date"
+          />
         </mat-date-range-input>
         <mat-hint class="small-text">MM/DD/YYYY – MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
-  
-        <mat-error *ngIf="tfrDetails.get('endDate')?.invalid">Invalid start date</mat-error>
-        <mat-error *ngIf="tfrDetails.get('startDate')?.invalid">Invalid end date</mat-error>
+
+        <mat-error *ngIf="tfrDetails.get('endDate')?.invalid"
+          >Invalid start date</mat-error
+        >
+        <mat-error *ngIf="tfrDetails.get('startDate')?.invalid"
+          >Invalid end date</mat-error
+        >
       </mat-form-field>
     </p>
     <br />
-    <app-vendors (onSelected)="onVendorSelect($event)" 
-    (onAttributesUpdated)="onAttributesUpdated($event)"
-    (attributesSelected)="onAttributesSelected($event)"
-    [editMode]="editMode" [existingDetails]="projectToEdit"></app-vendors>
-    <br />
-    
-    <div class="buttonRow">
-        <button mat-raised-button [disabled]="!isFormValid()" color="primary"
-          (click)="saveTFR()">Save</button>
-        <button mat-raised-button [disabled]="!isFormValid()" color="primary"
-          (click)="next()">Next</button>
-    </div>
-    <br/>
-    <br/>
-  
+    <app-vendors
+      (onSelected)="onVendorSelect($event)"
+      (onAttributesUpdated)="onAttributesUpdated($event)"
+      (attributesSelected)="onAttributesSelected($event)"
+      [editMode]="editMode"
+      [existingDetails]="projectToEdit"
+    ></app-vendors>
   </form>
 </div>
