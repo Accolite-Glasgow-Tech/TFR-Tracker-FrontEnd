@@ -78,6 +78,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   next(){
+    this.saveTFR();
     this.nextStepEmitter.emit(true);
   }
 
