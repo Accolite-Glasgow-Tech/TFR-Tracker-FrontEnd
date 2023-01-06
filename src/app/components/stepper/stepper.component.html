@@ -1,0 +1,87 @@
+<mat-stepper
+  [linear]="isLinear"
+  #stepper
+  [orientation]="(stepperOrientation | async)!"
+>
+  <mat-step [stepControl]="tfrDetailsFormGroup">
+    <form [formGroup]="tfrDetailsFormGroup">
+      <ng-template matStepLabel>TFR Basic Details</ng-template>
+      <!-- TFR Basic Details Component Here -->
+      <mat-form-field appearance="fill">
+        <mat-label>TFR Name</mat-label>
+        <input matInput formControlName="tfrName" required />
+      </mat-form-field>
+      <div>
+        <button mat-raised-button color="primary" matStepperNext>Next</button>
+      </div>
+      <!--  -->
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="milestoneFormGroup" label="Milestones">
+    <form [formGroup]="milestoneFormGroup">
+      <!-- Milestone Component Here -->
+      <mat-form-field appearance="fill">
+        <mat-label>Milestone Name</mat-label>
+        <input matInput formControlName="milestoneName" required />
+      </mat-form-field>
+      <div>
+        <button
+          mat-raised-button
+          color="primary"
+          class="navigation-btn"
+          matStepperPrevious
+        >
+          Back
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          class="navigation-btn"
+          matStepperNext
+        >
+          Next
+        </button>
+      </div>
+      <!--  -->
+    </form>
+  </mat-step>
+
+  <mat-step [completed]="resourceSelectionValid" label="Resources">
+    <!-- Resource Component Here -->
+    <app-tfr-creation-resource
+      (nextStepEmitter)="nextStep()"
+      (stepCompletedEmitter)="stepCompleted()"
+    ></app-tfr-creation-resource>
+    <!--  -->
+  </mat-step>
+
+  <mat-step id="last-step">
+    <ng-template matStepLabel>Summary</ng-template>
+    <div id="header">
+      <span id="title"><h2>Summary</h2></span>
+      <span id="buttons">
+        <button
+          mat-raised-button
+          class="navigation-btn"
+          color="primary"
+          matStepperPrevious
+        >
+          Back
+        </button>
+        <button
+          class="navigation-btn success-btn"
+          mat-raised-button
+          color="success"
+          (click)="redirect()"
+        >
+          Submit
+        </button></span
+      >
+    </div>
+    <app-project-summary
+      [currentProject]="tfrManagementService.getProject"
+      [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"
+    ></app-project-summary>
+  </mat-step>
+</mat-stepper>

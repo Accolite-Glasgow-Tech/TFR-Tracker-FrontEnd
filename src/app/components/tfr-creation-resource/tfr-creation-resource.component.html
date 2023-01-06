@@ -1,0 +1,145 @@
+<div id="resource_div">
+  <div id="intro_div">
+    <label
+      >Add the resources and assign their respective roles for this
+      project</label
+    >
+    <div>
+      <button
+        mat-raised-button
+        class="navigation-btn"
+        color="primary"
+        matStepperPrevious
+      >
+        Back
+      </button>
+      <button
+        mat-raised-button
+        class="navigation-btn"
+        color="primary"
+        [disabled]="allocatedResources.length === 0"
+        (click)="triggerNextStep()"
+        matStepperNext
+      >
+        Next
+      </button>
+    </div>
+  </div>
+  <br />
+
+  <form [formGroup]="resourceFormGroup">
+    <div class="form-group-div">
+      <div class="resource_selection">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label class="small-font">Resource</mat-label>
+          <input
+            type="text"
+            required
+            matInput
+            formControlName="resource_email"
+            [matAutocomplete]="auto1"
+            id="resource"
+            #resource
+            class="small-font"
+          />
+          <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
+            <mat-option
+              *ngFor="let filteredResource of filteredResourceOption | async"
+              [value]="filteredResource.resource_email"
+              class="small-font"
+            >
+              {{ filteredResource.resource_email }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <div
+          *ngIf="
+            resourceFormGroup.controls['resource_email'].invalid &&
+            resourceFormGroup.controls['resource_email'].touched
+          "
+          class="error-div-container"
+        >
+          <ng-container
+            *ngFor="let validation of validation_msgs.resource_email"
+          >
+            <div
+              *ngIf="
+                resourceFormGroup
+                  .get('resource_email')
+                  ?.hasError(validation.type)
+              "
+              class="error-div"
+            >
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="resource_selection">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label class="small-font">Role</mat-label>
+          <input
+            type="text"
+            required
+            matInput
+            formControlName="role"
+            [matAutocomplete]="auto2"
+            id="role"
+            #role
+            class="small-font"
+          />
+          <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
+            <mat-option
+              *ngFor="let filteredRole of filteredRoleOption | async"
+              [value]="filteredRole"
+              class="small-font"
+            >
+              {{ filteredRole }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div
+          *ngIf="
+            resourceFormGroup.controls['role'].invalid &&
+            resourceFormGroup.controls['role'].touched
+          "
+          class="error-div-container"
+        >
+          <ng-container *ngFor="let validation of validation_msgs.role">
+            <div
+              *ngIf="resourceFormGroup.get('role')?.hasError(validation.type)"
+              class="error-div"
+            >
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <button
+        [disabled]="
+          !resourceFormGroup.valid || resource.value === '' || role.value === ''
+        "
+        (click)="addResource(resource.value, role.value)"
+        mat-raised-button
+        class="add-btn"
+        color="primary"
+      >
+        Add
+      </button>
+    </div>
+  </form>
+
+  <br />
+
+  <ng-container *ngIf="allocatedResources.length !== 0">
+    <app-resource-table
+      [resourcesWithNames]="allocatedResources"
+      [withDelete]="true"
+      (removeResourceEmitter)="removeResource($event)"
+    >
+    </app-resource-table>
+  </ng-container>
+</div>

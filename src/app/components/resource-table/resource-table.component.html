@@ -1,0 +1,60 @@
+<table mat-table class="mat-elevation-z8 demo-table table-resource-laptop">
+  <tr>
+    <th class="data-header"></th>
+    <th class="data-header">Name</th>
+    <th class="data-header">Email</th>
+    <th class="data-header">Role</th>
+    <th class="data-header" *ngIf="withDelete"></th>
+  </tr>
+  <tr
+    *ngFor="let resource of resourcesWithNames; let i = index"
+    class="data-row"
+  >
+    <td class="data-cell">{{ i + 1 }}</td>
+    <td class="data-cell">{{ resource.resource_name }}</td>
+    <td class="data-cell">{{ resource.resource_email }}</td>
+    <td class="data-cell">{{ resource.role }}</td>
+    <td *ngIf="withDelete">
+      <button
+        mat-icon-button
+        color="warn"
+        (click)="removeResource(resource.resource_id)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </tr>
+</table>
+
+<table mat-table class="mat-elevation-z8 demo-table table-resource-mobile">
+  <tr *ngIf="withDelete">
+    <th></th>
+    <th>Details</th>
+    <th *ngIf="withDelete"></th>
+  </tr>
+  <tr *ngFor="let resource of resourcesWithNames; let i = index">
+    <td class="data-cell-mobile">{{ i + 1 }}</td>
+    <td class="data-cell-mobile">
+      <div class="data-cell-div-container-mobile">
+        <div class="data-cell-div-mobile">
+          <strong>Name: </strong>{{ resource.resource_name }}
+        </div>
+        <div class="data-cell-div-mobile">
+          <strong>Email: </strong>{{ resource.resource_email }}
+        </div>
+        <div class="data-cell-div-mobile">
+          <strong>Role: </strong>{{ resource.role }}
+        </div>
+      </div>
+    </td>
+    <td *ngIf="withDelete">
+      <button
+        mat-icon-button
+        color="warn"
+        (click)="removeResource(resource.resource_id)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </tr>
+</table>

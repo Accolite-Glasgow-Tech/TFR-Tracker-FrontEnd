@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { baseURL } from 'src/app/constants/contants';
 import {
   Milestone,
   Project,
@@ -6,6 +8,7 @@ import {
   ProjectResource,
   AllocatedResourceType,
 } from '../../types/types';
+import { ResourceService } from '../resource/resource.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,18 +16,24 @@ import {
 export class TfrManagementService {
   public project!: Project | undefined;
 
+  updateProjectToResourceMappingURL = baseURL + '/resources/projects';
   public projectResourcesWithNames!: AllocatedResourceType[];
 
-  constructor() {}
+  constructor(
+    private http: HttpClient,
+    private resourceService: ResourceService
+  ) {}
 
   updateBasicDetails() {
-    // http POST request '/projects' 
+    // http POST request '/projects'
     // set projectId with return value of request
     console.log(this.project);
   }
 
-  updateDatabase(){
+  updateDatabase() {}
 
+  get getProjectId(): number | undefined {
+    return this.project?.id;
   }
 
   get getProject(): Project | undefined {
@@ -113,7 +122,6 @@ export class TfrManagementService {
   }
 
   setProjectResources(projectResources: ProjectResource[]) {
-    //PUT request for /tfr/{id}/projectResource
     if (this.project !== undefined) {
       this.project.projectResources = projectResources;
     }
@@ -127,9 +135,25 @@ export class TfrManagementService {
     projectResourcesWithNames: AllocatedResourceType[]
   ) {
     const newArray = projectResourcesWithNames.map(
-      ({ resource_name, ...keepAttrs }) => keepAttrs
+      ({ resource_name, resource_email, ...keepAttrs }) => {
+        keepAttrs.role = this.resourceService.getAssociatedEnumRole(
+          keepAttrs.role
+        );
+        return keepAttrs;
+      }
     );
     this.projectResourcesWithNames = projectResourcesWithNames;
     this.setProjectResources(newArray);
+  }
+
+  updateProjectToResourceMapping() {
+    this.http
+      .put(
+        this.updateProjectToResourceMappingURL + '/' + this.getProjectId,
+        this.getProjectResources
+      )
+      .subscribe((response) => {
+        console.log(response);
+      });
   }
 }

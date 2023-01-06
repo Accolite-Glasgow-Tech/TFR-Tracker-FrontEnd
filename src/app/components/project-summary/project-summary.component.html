@@ -1,0 +1,56 @@
+<div>
+  <div class="project-details">
+    <span> <strong>Project Name: </strong> {{ currentProject?.name }} </span>
+  </div>
+
+  <div class="project-details">
+    <span
+      ><strong>Start Date: </strong>
+      {{
+        currentProject?.startDate?.toLocaleString("en-GB", { timeZone: "UTC" })
+      }}</span
+    >
+  </div>
+
+  <div class="project-details">
+    <span>
+      <strong>End Date: </strong>
+      {{
+        currentProject?.endDate?.toLocaleString("en-GB", { timeZone: "UTC" })
+      }}
+    </span>
+  </div>
+
+  <div class="project-details">
+    <span> <strong>Version: </strong> {{ currentProject?.version }} </span>
+  </div>
+
+  <div class="project-details" id="vendor-div">
+    <strong>Vendor Details: </strong>
+    <div id="tab">
+      {{ cleanVendorDetails() }}
+      <!-- <div id="vendor-details"></div> -->
+      <table mat-table id="vendor-details"></table>
+    </div>
+  </div>
+
+  <div class="project-details">
+    <strong>Milestones: </strong>
+    <br />
+    <app-milestone-table
+      [milestones]="currentProject?.milestones!"
+    ></app-milestone-table>
+  </div>
+
+  <br />
+
+  <div class="project-details">
+    <strong>Resources: </strong>
+    <br />
+    <app-resource-table
+      [resourcesWithNames]="resourcesWithNames"
+      [withDelete]="false"
+    >
+    </app-resource-table>
+  </div>
+</div>
