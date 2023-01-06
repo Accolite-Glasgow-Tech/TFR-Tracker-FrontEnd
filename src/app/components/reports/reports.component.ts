@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
 import { HttpClient } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 interface Template {
   value: string;
@@ -16,18 +17,6 @@ interface Template {
 export class ReportsComponent implements OnInit {
   @ViewChild(FrequencyPickerComponent, { static: true })
   frequencyPickerComponent!: FrequencyPickerComponent;
-
-  taskObject = {
-    task: {
-      project_id: 0,
-      task_type: 'ALERT',
-      execute_at: '',
-      recurring: false,
-      cron: null as string | null,
-      by_email: true,
-    },
-    resource_emails: [] as string[],
-  };
 
   schedulerForm!: FormGroup;
   resourceId!: number;
@@ -47,7 +36,7 @@ export class ReportsComponent implements OnInit {
     this.resourceEmail = 'johnbowers@accolitedigital.com';
 
     this.schedulerForm = new FormGroup({
-      tfr: new FormControl([Validators.required]),
+      tfr: new FormControl(null, [Validators.required]),
       type: new FormControl('ALERT', [Validators.required]),
       receiver: new FormControl('self', [Validators.required]),
       frequency: this.frequencyPickerComponent.createFormGroup(),
@@ -56,52 +45,63 @@ export class ReportsComponent implements OnInit {
     this.getResourceTFRList(this.resourceId);
   }
 
-  async submit() {
-    this.taskObject.task.project_id = this.schedulerForm.get('tfr')?.value;
-    this.taskObject.task.task_type = this.schedulerForm.get('type')?.value;
+  async onSubmit() {
+    let taskObject = {
+      task: {
+        project_id: 0,
+        task_type: 'ALERT',
+        execute_at: '',
+        recurring: false,
+        cron: null as string | null,
+        by_email: true,
+      },
+      resource_emails: [] as string[],
+    };
+    if (this.schedulerForm.valid) {
+      console.log('Is this valid? :', this.schedulerForm.get('tfr')?.value);
 
-    let taskDate: Date = this.schedulerForm
-      .get('frequency')!
-      .get('startDateControl')!.value;
-    const [hour, minute] = this.schedulerForm
-      .get('frequency')!
-      .get('timeControl')!
-      .value!.split(':');
-    taskDate.setHours(hour, minute, 0, 0);
-    console.log('taskdate: ', taskDate.toJSON());
+      taskObject.task.project_id = this.schedulerForm.get('tfr')?.value;
+      taskObject.task.task_type = this.schedulerForm.get('type')?.value;
 
-    this.taskObject.task.execute_at = taskDate.toJSON();
+      let taskDate: Date = this.schedulerForm
+        .get('frequency')!
+        .get('startDateControl')!.value;
+      const [hour, minute] = this.schedulerForm
+        .get('frequency')!
+        .get('timeControl')!
+        .value!.split(':');
+      taskDate.setHours(hour, minute, 0, 0);
+      console.log('taskdate: ', taskDate.toJSON());
 
-    if (this.schedulerForm.get('frequency')!.get('recurringControl')!.value) {
-      this.taskObject.task.recurring = true;
-      this.taskObject.task.cron = this.frequencyPickerComponent.getCron();
+      taskObject.task.execute_at = taskDate.toJSON();
+
+      if (this.schedulerForm.get('frequency')!.get('recurringControl')!.value) {
+        taskObject.task.recurring = true;
+        taskObject.task.cron = this.frequencyPickerComponent.getCron();
+      }
+
+      taskObject.task.by_email = true;
+
+      if (this.schedulerForm.get('receiver')!.value === 'self') {
+        taskObject.resource_emails.push(this.resourceEmail);
+        taskObject.task.cron = null;
+      } else if (
+        this.schedulerForm.get('receiver')!.value === 'allProjectResources'
+      ) {
+        this.resourceList = await this.getResourcesByTFR(
+          (taskObject.task.project_id = this.schedulerForm.get('tfr')?.value)
+        );
+        this.resourceList = await lastValueFrom(this.resourceList);
+
+        this.resourceList.forEach((element: { email: string }) => {
+          taskObject.resource_emails.push(element.email);
+        });
+      }
+
+      console.log('logging taskObject', taskObject);
+
+      this.createTask(taskObject);
     }
-
-    this.taskObject.task.by_email = true;
-
-    // problems
-    await this.getResourcesByTFR(
-      (this.taskObject.task.project_id = this.schedulerForm.get('tfr')?.value)
-    );
-    console.log(this.resourceList);
-
-    if (this.schedulerForm.get('receiver')!.value === 'self') {
-      this.taskObject.resource_emails.push(this.resourceEmail);
-      this.taskObject.task.cron = null;
-    } else if (
-      this.schedulerForm.get('receiver')!.value === 'allProjectResources'
-    ) {
-      this.getResourcesByTFR(
-        (this.taskObject.task.project_id = this.schedulerForm.get('tfr')?.value)
-      );
-      this.resourceList.forEach((element: { email: string }) => {
-        this.taskObject.resource_emails.push(element.email);
-      });
-    }
-
-    console.log('logging taskObject', this.taskObject);
-
-    // this.createTask(this.taskObject);
   }
 
   getResourceTFRList(resourceId: number) {
@@ -113,21 +113,14 @@ export class ReportsComponent implements OnInit {
   }
 
   async getResourcesByTFR(tfrId: number) {
-    console.log('start');
-    await this.httpClient
+    return this.httpClient
       .get(`http://localhost:8080/search/resource/project/${tfrId}`)
-      .subscribe((response) => {
-        console.log('response is ', response);
-        this.resourceList = response;
-      });
-    console.log('end');
+      .pipe();
   }
 
   createTask(taskObject: any) {
-    console.log(
-      this.httpClient
-        .post('http://localhost:8080/tasks', taskObject)
-        .subscribe()
-    );
+    this.httpClient
+      .post('http://localhost:8080/tasks', taskObject)
+      .subscribe((response) => console.log(response));
   }
 }

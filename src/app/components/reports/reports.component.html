@@ -1,4 +1,4 @@
-<form id="form" [formGroup]="schedulerForm">
+<form id="form" [formGroup]="schedulerForm" (ngSubmit)="onSubmit()">
   <label class="formLabel">Select TFR</label>
   <mat-form-field class="mat-selector" appearance="fill">
     <mat-label>Select TFR</mat-label>
@@ -37,13 +37,7 @@
     >
   </mat-radio-group>
 
-  <button
-    class="btn-submit"
-    type="submit"
-    (click)="submit()"
-    mat-raised-button
-    color="primary"
-  >
+  <button class="btn-submit" type="submit" mat-raised-button color="primary">
     Schedule
   </button>
 </form>
