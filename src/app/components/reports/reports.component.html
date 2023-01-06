@@ -24,17 +24,28 @@
   <label class="formLabel">Who do you wish to send reports to?</label>
   <mat-radio-group class="recipientsRadio" formControlName="receiver">
     <mat-radio-button
-      [checked]="true"
       class="recipientsRadioButton"
-      value="self"
-      >Only me</mat-radio-button
+      [color]="'primary'"
+      [value]="recieverOptionsEnum.self"
+      [checked]="true"
     >
-    <mat-radio-button class="recipientsRadioButton" value="allProjectResources"
-      >All project contacts</mat-radio-button
+      {{ recieverOptionsEnum.self }}
+    </mat-radio-button>
+    <mat-radio-button
+      class="recipientsRadioButton"
+      [color]="'primary'"
+      [value]="recieverOptionsEnum.allProjectResources"
     >
-    <mat-radio-button class="recipientsRadioButton" value="custom"
-      >Custom</mat-radio-button
+      {{ recieverOptionsEnum.allProjectResources }}
+    </mat-radio-button>
+    <mat-radio-button
+      class="recipientsRadioButton"
+      [color]="'primary'"
+      [value]="recieverOptionsEnum.custom"
+      [disabled]="true"
     >
+      {{ recieverOptionsEnum.custom }}
+    </mat-radio-button>
   </mat-radio-group>
 
   <button class="btn-submit" type="submit" mat-raised-button color="primary">
