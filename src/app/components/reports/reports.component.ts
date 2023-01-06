@@ -47,19 +47,16 @@ export class ReportsComponent implements OnInit {
     this.resourceEmail = 'johnbowers@accolitedigital.com';
 
     this.schedulerForm = new FormGroup({
-      tfr: new FormControl(1, [Validators.required]),
+      tfr: new FormControl([Validators.required]),
       type: new FormControl('ALERT', [Validators.required]),
       receiver: new FormControl('self', [Validators.required]),
       frequency: this.frequencyPickerComponent.createFormGroup(),
     });
 
     this.getResourceTFRList(this.resourceId);
-    this.getResourcesByTFR(
-      (this.taskObject.task.project_id = this.schedulerForm.get('tfr')?.value)
-    );
   }
 
-  submit() {
+  async submit() {
     this.taskObject.task.project_id = this.schedulerForm.get('tfr')?.value;
     this.taskObject.task.task_type = this.schedulerForm.get('type')?.value;
 
@@ -75,15 +72,18 @@ export class ReportsComponent implements OnInit {
 
     this.taskObject.task.execute_at = taskDate.toJSON();
 
-    if (
-      this.schedulerForm.get('frequency')!.get('recurringControl')!.value ===
-      true
-    ) {
+    if (this.schedulerForm.get('frequency')!.get('recurringControl')!.value) {
       this.taskObject.task.recurring = true;
       this.taskObject.task.cron = this.frequencyPickerComponent.getCron();
     }
 
     this.taskObject.task.by_email = true;
+
+    // problems
+    await this.getResourcesByTFR(
+      (this.taskObject.task.project_id = this.schedulerForm.get('tfr')?.value)
+    );
+    console.log(this.resourceList);
 
     if (this.schedulerForm.get('receiver')!.value === 'self') {
       this.taskObject.resource_emails.push(this.resourceEmail);
@@ -101,7 +101,7 @@ export class ReportsComponent implements OnInit {
 
     console.log('logging taskObject', this.taskObject);
 
-    this.createTask(this.taskObject);
+    // this.createTask(this.taskObject);
   }
 
   getResourceTFRList(resourceId: number) {
@@ -112,12 +112,15 @@ export class ReportsComponent implements OnInit {
       });
   }
 
-  getResourcesByTFR(tfrId: number) {
-    this.httpClient
+  async getResourcesByTFR(tfrId: number) {
+    console.log('start');
+    await this.httpClient
       .get(`http://localhost:8080/search/resource/project/${tfrId}`)
       .subscribe((response) => {
+        console.log('response is ', response);
         this.resourceList = response;
       });
+    console.log('end');
   }
 
   createTask(taskObject: any) {
