@@ -6,7 +6,7 @@ export interface Project {
   startDate: Date;
   endDate: Date;
   status: string;
-  version: string;
+  version: number;
   vendorSpecific: string;
   milestones: Milestone[];
   projectResources: ProjectResource[];

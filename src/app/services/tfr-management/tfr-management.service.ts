@@ -59,7 +59,7 @@ export class TfrManagementService {
           endDate: projectBasicDetails.endDate,
           vendorSpecific: projectBasicDetails.vendorSpecific,
           status: 'DRAFT',
-          version: '0',
+          version: 0,
           milestones: [],
           projectResources: [],
           isDeleted: false,

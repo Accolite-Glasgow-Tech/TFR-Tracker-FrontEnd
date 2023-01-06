@@ -21,7 +21,7 @@ let testProject: Project  = {
     startDate: new Date('2023-01-01'),
     endDate: new Date('2023-02-01'),
     status: 'INPROGRESS',
-    version: '1',
+    version: 1,
     vendorSpecific: `{"Cost Center": "Test Centre", "Department ID":"1"}`,
     milestones: [],
     projectResources: [],
