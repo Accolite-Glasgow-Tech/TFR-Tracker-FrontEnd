@@ -34,9 +34,9 @@
     <br />
     
     <div class="buttonRow">
-        <button mat-raised-button [disabled]="tfrDetails.invalid || vendorAttributes.invalid" color="primary"
+        <button mat-raised-button [disabled]="!isFormValid()" color="primary"
           (click)="saveTFR()">Save</button>
-        <button mat-raised-button [disabled]="tfrDetails.invalid || vendorAttributes.invalid" color="primary"
+        <button mat-raised-button [disabled]="!isFormValid()" color="primary"
           (click)="next()">Next</button>
     </div>
     <br/>

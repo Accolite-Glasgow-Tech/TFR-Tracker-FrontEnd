@@ -42,6 +42,15 @@ export class TfrBasicDetailsComponent implements OnInit {
     }
   }
 
+  isFormValid(){
+    if (this.vendorAttributes == undefined){
+      return false;
+    }
+    else {
+      return (this.vendorAttributes.valid && this.tfrDetails.valid);
+    }
+  }
+
   setDetailsToExistingProject(){
     this.tfrDetails.get('name')?.setValue(this.projectToEdit.name);
     this.tfrDetails.get('startDate')?.setValue(this.projectToEdit.startDate);
