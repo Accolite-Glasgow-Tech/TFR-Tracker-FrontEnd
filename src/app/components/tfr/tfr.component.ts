@@ -7,6 +7,7 @@ import { ResourceListType } from 'src/app/types/types';
   selector: 'app-tfr',
   templateUrl: './tfr.component.html',
   styleUrls: ['./tfr.component.scss'],
+  providers: [TfrManagementService],
 })
 export class TfrComponent implements OnInit {
   TfrId!: Number;
@@ -31,10 +32,12 @@ export class TfrComponent implements OnInit {
     //TODO. Add an API call to the backend to fetch the Project Object with
     //the tfr id here.
     this.tfrManagementService.getProjectFromDatabaseByProjectId(this.TfrId);
-    this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
-      this.TfrId
-    );
+    // this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
+    //   this.TfrId
+    // );
   }
 
-  redirectToEditTfr() {}
+  redirectToEditTfr() {
+    this.router.navigate(['/tfr/' + this.TfrId + '/edit']);
+  }
 }

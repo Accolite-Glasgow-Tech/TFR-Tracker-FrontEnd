@@ -16,7 +16,7 @@ export class ProjectSummaryComponent implements OnInit {
 
   cleanVendorDetails() {
     if (this.currentProject !== undefined) {
-      let vendorJSOn = JSON.parse(this.currentProject?.vendorSpecific || '');
+      let vendorJSOn = JSON.parse(this.currentProject?.vendor_specific || '');
       let vendorDiv = document.getElementById('tab');
       let vendorDetails = document.getElementById('vendor-details');
       vendorDetails?.remove();

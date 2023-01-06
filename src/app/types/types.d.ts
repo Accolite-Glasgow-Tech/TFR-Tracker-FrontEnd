@@ -1,31 +1,40 @@
 export interface Project {
   id: number;
   name: string;
-  vendorId: number;
-  startDate: Date;
-  endDate: Date;
+  vendor_id: number;
+  start_date: Date;
+  end_date: Date;
   status: string;
   version: number;
-  vendorSpecific: string;
+  vendor_specific: string;
+  is_deleted: Boolean;
+  created_by: number;
+  modified_by: number;
+  created_at: Date;
+  modified_at: Date;
   milestones: Milestone[];
-  projectResources: ProjectResource[];
-  isDeleted: Boolean;
+  project_resources: ProjectResource[];
 }
 export interface Milestone {
   id: number;
-  projectId: number;
+  project_id: number;
   description: string;
-  startDate: Date;
-  deliveryDate: Date;
-  acceptanceDate: Date;
-  isDeleted: Boolean;
+  start_date: Date;
+  delivery_date: Date;
+  acceptance_date: Date;
+  is_deleted: Boolean;
+  tracker: Tracker;
 }
 export interface Tracker {
-  milestoneId: number;
-  projectId: number;
-  startDate: Date;
-  endDate: Date;
+  milestone_id: number;
+  project_id: number;
+  start_date: Date;
+  end_date: Date;
   status: string;
+  created_by: number;
+  modified_by: number;
+  created_at: Date;
+  modified_at: Date;
 }
 
 export interface Vendor {
@@ -35,15 +44,15 @@ export interface Vendor {
 
 export interface ProjectBasicDetails {
   name: string;
-  startDate: Date;
-  endDate: Date;
-  vendorId: number;
-  vendorSpecific: string;
+  start_date: Date;
+  end_date: Date;
+  vendor_id: number;
+  vendor_specific: string;
   status: string;
 }
 
 export interface VendorAttribute {
-  vendorId: number;
+  vendor_id: number;
   attributeName: string;
 }
 

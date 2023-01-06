@@ -1,14 +1,22 @@
 [
   {
     "id": 1,
-    "name": "vendorA"
+    "name": "JP Morgan"
   },
   {
     "id": 2,
-    "name": "vendorB"
+    "name": "Morgan Stanley"
   },
   {
     "id": 3,
-    "name": "vendorC"
+    "name": "HSBC"
+  },
+  {
+    "id": 4,
+    "name": "BOA"
+  },
+  {
+    "id": 5,
+    "name": "Santander"
   }
 ]

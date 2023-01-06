@@ -11,18 +11,17 @@ import { StepperOrientation } from '@angular/material/stepper';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 
 @Component({
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
   styleUrls: ['./stepper.component.scss'],
+  providers: [TfrManagementService],
 })
 export class StepperComponent implements OnInit {
   @ViewChild('stepper') private myStepper!: MatStepper;
-
-  //@Input() private project!: Project;
 
   tfrDetailsFormGroup = this._formBuilder.group({
     tfrName: ['', Validators.required],
@@ -41,7 +40,8 @@ export class StepperComponent implements OnInit {
     @Inject(BreakpointObserver)
     protected breakpointObserver: BreakpointObserver,
     private snackBarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.stepperOrientation = breakpointObserver
       .observe('(min-width: 700px)')
@@ -49,41 +49,58 @@ export class StepperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.tfrManagementService.project = {
-    //   id: 2,
-    //   name: 'Bank Project',
-    //   vendorId: 1,
-    //   startDate: new Date('December 25, 2021 00:00:00'),
-    //   endDate: new Date('December 31, 2022 00:00:00'),
-    //   vendorSpecific:
-    //     '{"Department":"Finance", "Cost Center":"Private Banking", "City":"Glasgow", "Manager":"Jake Lam"}',
-    //   status: 'DRAFT',
-    //   version: 1,
-    //   milestones: [
-    //     {
-    //       id: 1,
-    //       projectId: 2,
-    //       description: 'deployment',
-    //       startDate: new Date('2022-12-12 09:00:00'),
-    //       deliveryDate: new Date('2022-12-16 23:59:59'),
-    //       acceptanceDate: new Date('2022-12-31 23:59:59'),
-    //       isDeleted: false,
-    //     },
-    //   ],
-    //   projectResources: [
-    //     {
-    //       project_id: 2,
-    //       resource_id: 1,
-    //       role: 'SCRUM_MASTER',
-    //     },
-    //     {
-    //       project_id: 2,
-    //       resource_id: 2,
-    //       role: 'SOFTWARE_DEVELOPER',
-    //     },
-    //   ],
-    //   isDeleted: false,
-    // };
+    let tfrId = Number(this.route.snapshot.paramMap.get('id'));
+    // this.tfrManagementService.getProjectFromDatabaseByProjectId(tfrId);
+    this.tfrManagementService.project = {
+      id: 1,
+      name: 'Bank Project',
+      vendor_id: 1,
+      start_date: new Date('December 25, 2021 00:00:00'),
+      end_date: new Date('December 31, 2022 00:00:00'),
+      vendor_specific:
+        '{"Department":"Finance", "Cost Center":"Private Banking", "City":"Glasgow", "Manager":"Jake Lam"}',
+      status: 'DRAFT',
+      version: 1,
+      milestones: [
+        {
+          id: 1,
+          project_id: 2,
+          description: 'deployment',
+          start_date: new Date('2022-12-12 09:00:00'),
+          delivery_date: new Date('2022-12-16 23:59:59'),
+          acceptance_date: new Date('2022-12-31 23:59:59'),
+          is_deleted: false,
+          tracker: {
+            milestone_id: 1,
+            project_id: 1,
+            start_date: new Date('2022-12-12T09:00:00.000+00:00'),
+            end_date: new Date('2022-12-16T23:59:59.000+00:00'),
+            status: 'PROGRESS',
+            created_by: 1,
+            modified_by: 2,
+            created_at: new Date('2022-12-01T09:00:00.000+00:00'),
+            modified_at: new Date('2022-12-01T10:00:00.000+00:00'),
+          },
+        },
+      ],
+      project_resources: [
+        {
+          project_id: 1,
+          resource_id: 1,
+          role: 'SCRUM_MASTER',
+        },
+        {
+          project_id: 1,
+          resource_id: 2,
+          role: 'SOFTWARE_DEVELOPER',
+        },
+      ],
+      is_deleted: false,
+      created_by: 1,
+      modified_by: 2,
+      created_at: new Date('2022-12-01T08:00:00.000+00:00'),
+      modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
+    };
   }
 
   nextStep() {
@@ -99,7 +116,7 @@ export class StepperComponent implements OnInit {
   }
 
   redirect() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/tfrs']);
     this.snackBarService.showSnackBar('TFR submitted.', 3000);
   }
 }

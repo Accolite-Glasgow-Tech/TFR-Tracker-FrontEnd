@@ -4,6 +4,7 @@ import { HomeComponent } from './components/home/home.component';
 import { MilestonesComponent } from './components/milestones/milestones.component';
 import { PermissionsComponent } from './components/permissions/permissions.component';
 import { ReportsComponent } from './components/reports/reports.component';
+import { StepperComponent } from './components/stepper/stepper.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { TFRRoute } from './TFRRoute';
@@ -26,6 +27,10 @@ export class RoutesService {
     {
       path: 'tfr/:id',
       component: TfrComponent,
+    },
+    {
+      path: 'tfr/:id/edit',
+      component: StepperComponent,
     },
     {
       path: 'tfr',

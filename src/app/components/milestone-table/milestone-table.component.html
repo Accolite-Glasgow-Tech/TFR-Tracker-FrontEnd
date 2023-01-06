@@ -10,14 +10,14 @@
     <td class="data-cell">{{ i + 1 }}</td>
     <td class="data-cell">{{ milestone.description }}</td>
     <td class="data-cell">
-      {{ milestone.startDate.toLocaleString("en-GB", { timeZone: "UTC" }) }}
+      {{ milestone.start_date.toLocaleString("en-GB", { timeZone: "UTC" }) }}
     </td>
     <td class="data-cell">
-      {{ milestone.deliveryDate.toLocaleString("en-GB", { timeZone: "UTC" }) }}
+      {{ milestone.delivery_date.toLocaleString("en-GB", { timeZone: "UTC" }) }}
     </td>
     <td class="data-cell">
       {{
-        milestone.acceptanceDate.toLocaleString("en-GB", {
+        milestone.acceptance_date.toLocaleString("en-GB", {
           timeZone: "UTC"
         })
       }}
@@ -36,19 +36,19 @@
         <div class="data-cell-div-mobile">
           <strong>Start Date: </strong
           >{{
-            milestone.startDate.toLocaleString("en-GB", { timeZone: "UTC" })
+            milestone.start_date.toLocaleString("en-GB", { timeZone: "UTC" })
           }}
         </div>
         <div class="data-cell-div-mobile">
           <strong>Delivery Date: </strong
           >{{
-            milestone.deliveryDate.toLocaleString("en-GB", { timeZone: "UTC" })
+            milestone.delivery_date.toLocaleString("en-GB", { timeZone: "UTC" })
           }}
         </div>
         <div class="data-cell-div-mobile">
           <strong>Acceptance Date: </strong
           >{{
-            milestone.acceptanceDate.toLocaleString("en-GB", {
+            milestone.acceptance_date.toLocaleString("en-GB", {
               timeZone: "UTC"
             })
           }}

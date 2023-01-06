@@ -17,11 +17,11 @@ export class ApiService {
     return of(this.Vendors);
   }
 
-  getVendorAttributes(vendorId: number): Observable<VendorAttribute[]> {
+  getVendorAttributes(vendor_id: number): Observable<VendorAttribute[]> {
     let attributes: VendorAttribute[] = [];
 
     DummyData.dummy.attributes.forEach((attribute) => {
-      if (attribute.vendorId == vendorId) {
+      if (attribute.vendor_id == vendor_id) {
         attributes.push(attribute);
       }
     });

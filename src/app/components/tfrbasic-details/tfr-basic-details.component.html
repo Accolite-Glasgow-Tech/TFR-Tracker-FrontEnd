@@ -41,13 +41,13 @@
           <input
             class="small-text"
             matStartDate
-            formControlName="startDate"
+            formControlName="start_date"
             placeholder="Start date"
           />
           <input
             class="small-text"
             matEndDate
-            formControlName="endDate"
+            formControlName="end_date"
             placeholder="End date"
           />
         </mat-date-range-input>
@@ -55,10 +55,10 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
 
-        <mat-error *ngIf="tfrDetails.get('endDate')?.invalid"
+        <mat-error *ngIf="tfrDetails.get('end_date')?.invalid"
           >Invalid start date</mat-error
         >
-        <mat-error *ngIf="tfrDetails.get('startDate')?.invalid"
+        <mat-error *ngIf="tfrDetails.get('start_date')?.invalid"
           >Invalid end date</mat-error
         >
       </mat-form-field>

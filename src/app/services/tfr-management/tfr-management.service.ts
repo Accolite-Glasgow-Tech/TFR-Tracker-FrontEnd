@@ -29,7 +29,7 @@ export class TfrManagementService {
 
   updateBasicDetails() {
     // http POST request '/projects'
-    // set projectId with return value of request
+    // set project_id with return value of request
     console.log(this.project);
   }
 
@@ -55,10 +55,10 @@ export class TfrManagementService {
     if (this.project !== undefined) {
       let projectBasicDetails: ProjectBasicDetails = {
         name: this.project.name,
-        startDate: this.project.startDate,
-        endDate: this.project.endDate,
-        vendorId: this.project.vendorId,
-        vendorSpecific: this.project.vendorSpecific,
+        start_date: this.project.start_date,
+        end_date: this.project.end_date,
+        vendor_id: this.project.vendor_id,
+        vendor_specific: this.project.vendor_specific,
         status: this.project.status,
       };
 
@@ -73,22 +73,26 @@ export class TfrManagementService {
         this.project = {
           id: NaN,
           name: projectBasicDetails.name,
-          vendorId: projectBasicDetails.vendorId,
-          startDate: projectBasicDetails.startDate,
-          endDate: projectBasicDetails.endDate,
-          vendorSpecific: projectBasicDetails.vendorSpecific,
+          vendor_id: projectBasicDetails.vendor_id,
+          start_date: projectBasicDetails.start_date,
+          end_date: projectBasicDetails.end_date,
+          vendor_specific: projectBasicDetails.vendor_specific,
           status: 'DRAFT',
           version: 0,
           milestones: [],
-          projectResources: [],
-          isDeleted: false,
+          project_resources: [],
+          is_deleted: false,
+          created_by: NaN,
+          modified_by: NaN,
+          created_at: new Date('2022-12-05T10:00:00.000+00:00'),
+          modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
         };
       } else {
         this.project.name = projectBasicDetails.name;
-        this.project.startDate = projectBasicDetails.startDate;
-        this.project.endDate = projectBasicDetails.endDate;
-        this.project.vendorId = projectBasicDetails.vendorId;
-        this.project.vendorSpecific = projectBasicDetails.vendorSpecific;
+        this.project.start_date = projectBasicDetails.start_date;
+        this.project.end_date = projectBasicDetails.end_date;
+        this.project.vendor_id = projectBasicDetails.vendor_id;
+        this.project.vendor_specific = projectBasicDetails.vendor_specific;
       }
 
       this.updateBasicDetails();
@@ -102,11 +106,11 @@ export class TfrManagementService {
     }
     if (
       currentDetails.name != newDetails.name ||
-      currentDetails.startDate != newDetails.startDate ||
-      currentDetails.endDate != newDetails.endDate ||
+      currentDetails.start_date != newDetails.start_date ||
+      currentDetails.end_date != newDetails.end_date ||
       currentDetails.status != newDetails.status ||
-      currentDetails.vendorId != newDetails.vendorId ||
-      currentDetails.vendorSpecific != newDetails.vendorSpecific
+      currentDetails.vendor_id != newDetails.vendor_id ||
+      currentDetails.vendor_specific != newDetails.vendor_specific
     ) {
       return false;
     }
@@ -125,12 +129,12 @@ export class TfrManagementService {
   }
 
   get getProjectResources(): ProjectResource[] | undefined {
-    return this.project?.projectResources;
+    return this.project?.project_resources;
   }
 
-  setProjectResources(projectResources: ProjectResource[]) {
+  setProjectResources(project_resources: ProjectResource[]) {
     if (this.project !== undefined) {
-      this.project.projectResources = projectResources;
+      this.project.project_resources = project_resources;
     }
   }
 
@@ -138,7 +142,7 @@ export class TfrManagementService {
     this.projectResourcesWithNames = [];
     resourcesDetails.forEach((resourceDetails) => {
       let projectResource: ProjectResource =
-        this.project?.projectResources.find(
+        this.project?.project_resources.find(
           (resource) => resource.resource_id === resourceDetails.resource_id
         )!;
       let allocatedResource: AllocatedResourceType = {
@@ -186,42 +190,75 @@ export class TfrManagementService {
     console.log(
       'fetched project with project id ' + project_id + ' from database'
     );
+    this.http
+      .get<Project>(
+        APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/' + project_id
+      )
+      .subscribe((data: Project) => {
+        this.project = data;
+        this.project.vendor_specific = this.project?.vendor_specific
+          .replace(/\\/g, '')
+          .replace('"', '')
+          .replace(/"([^"]*)$/, '$1');
+        this.project.project_resources.forEach(
+          (project_resource: ProjectResource) => {
+            project_resource.role = project_resource.role.replace(/_/g, ' ');
+          }
+        );
+        this.getResourcesNamesByProjectIdFromDatabase(this.project.id);
+        console.log('Here');
+      });
 
-    this.project = {
-      id: 1,
-      name: 'Bank Project',
-      vendorId: 1,
-      startDate: new Date('December 25, 2021 00:00:00'),
-      endDate: new Date('December 31, 2022 00:00:00'),
-      vendorSpecific:
-        '{"Department":"Finance", "Cost Center":"Private Banking", "City":"Glasgow", "Manager":"Jake Lam"}',
-      status: 'DRAFT',
-      version: 1,
-      milestones: [
-        {
-          id: 1,
-          projectId: 2,
-          description: 'deployment',
-          startDate: new Date('2022-12-12 09:00:00'),
-          deliveryDate: new Date('2022-12-16 23:59:59'),
-          acceptanceDate: new Date('2022-12-31 23:59:59'),
-          isDeleted: false,
-        },
-      ],
-      projectResources: [
-        {
-          project_id: 1,
-          resource_id: 1,
-          role: 'SCRUM_MASTER',
-        },
-        {
-          project_id: 1,
-          resource_id: 2,
-          role: 'SOFTWARE_DEVELOPER',
-        },
-      ],
-      isDeleted: false,
-    };
+    // this.project = {
+    //   id: 1,
+    //   name: 'Bank Project',
+    //   vendor_id: 1,
+    //   start_date: new Date('December 25, 2021 00:00:00'),
+    //   end_date: new Date('December 31, 2022 00:00:00'),
+    //   vendor_specific:
+    //     '{"Department":"Finance", "Cost Center":"Private Banking", "City":"Glasgow", "Manager":"Jake Lam"}',
+    //   status: 'DRAFT',
+    //   version: 1,
+    //   milestones: [
+    //     {
+    //       id: 1,
+    //       project_id: 2,
+    //       description: 'deployment',
+    //       start_date: new Date('2022-12-12 09:00:00'),
+    //       delivery_date: new Date('2022-12-16 23:59:59'),
+    //       acceptance_date: new Date('2022-12-31 23:59:59'),
+    //       is_deleted: false,
+    //       tracker: {
+    //         milestone_id: 1,
+    //         project_id: 1,
+    //         start_date: new Date('2022-12-12T09:00:00.000+00:00'),
+    //         end_date: new Date('2022-12-16T23:59:59.000+00:00'),
+    //         status: 'PROGRESS',
+    //         created_by: 1,
+    //         modified_by: 2,
+    //         created_at: new Date('2022-12-01T09:00:00.000+00:00'),
+    //         modified_at: new Date('2022-12-01T10:00:00.000+00:00'),
+    //       },
+    //     },
+    //   ],
+    //   project_resources: [
+    //     {
+    //       project_id: 1,
+    //       resource_id: 1,
+    //       role: 'SCRUM_MASTER',
+    //     },
+    //     {
+    //       project_id: 1,
+    //       resource_id: 2,
+    //       role: 'SOFTWARE_DEVELOPER',
+    //     },
+    //   ],
+    //   is_deleted: false,
+    //   created_by: 1,
+    //   modified_by: 2,
+    //   created_at: new Date('2022-12-01T08:00:00.000+00:00'),
+    //   modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
+    // };
   }
 
   getResourcesNamesByProjectIdFromDatabase(project_id: Number) {
