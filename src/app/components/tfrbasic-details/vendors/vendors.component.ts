@@ -63,9 +63,12 @@ export class VendorsComponent implements OnInit {
     // use to set values of form array
     var obj = JSON.parse(this.existingDetails.vendor_specific);
     let i = 0;
+    console.log(this.attributes[0].attribute_name);
+    console.log(obj);
+
     this.attributes.forEach((attribute) => {
-      console.log(obj[attribute.attributeName]);
-      this.getAttributes().at(i).setValue(obj[attribute.attributeName]);
+      console.log(obj[attribute.attribute_name]);
+      this.getAttributes().at(i).setValue(obj[attribute.attribute_name]);
       i += 1;
     });
   }

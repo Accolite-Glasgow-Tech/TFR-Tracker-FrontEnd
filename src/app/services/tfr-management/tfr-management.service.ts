@@ -186,79 +186,26 @@ export class TfrManagementService {
       });
   }
 
-  getProjectFromDatabaseByProjectId(project_id: Number) {
-    console.log(
-      'fetched project with project id ' + project_id + ' from database'
+  getFromDatabase(project_id: Number): Observable<Project> {
+    return this.http.get<Project>(
+      APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/' + project_id
     );
-    this.http
-      .get<Project>(
-        APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/' + project_id
-      )
-      .subscribe((data: Project) => {
-        this.project = data;
-        this.project.vendor_specific = this.project?.vendor_specific
-          .replace(/\\/g, '')
-          .replace('"', '')
-          .replace(/"([^"]*)$/, '$1');
-        this.project.project_resources.forEach(
-          (project_resource: ProjectResource) => {
-            project_resource.role = project_resource.role.replace(/_/g, ' ');
-          }
-        );
-        this.getResourcesNamesByProjectIdFromDatabase(this.project.id);
-        console.log('Here');
-      });
+  }
 
-    // this.project = {
-    //   id: 1,
-    //   name: 'Bank Project',
-    //   vendor_id: 1,
-    //   start_date: new Date('December 25, 2021 00:00:00'),
-    //   end_date: new Date('December 31, 2022 00:00:00'),
-    //   vendor_specific:
-    //     '{"Department":"Finance", "Cost Center":"Private Banking", "City":"Glasgow", "Manager":"Jake Lam"}',
-    //   status: 'DRAFT',
-    //   version: 1,
-    //   milestones: [
-    //     {
-    //       id: 1,
-    //       project_id: 2,
-    //       description: 'deployment',
-    //       start_date: new Date('2022-12-12 09:00:00'),
-    //       delivery_date: new Date('2022-12-16 23:59:59'),
-    //       acceptance_date: new Date('2022-12-31 23:59:59'),
-    //       is_deleted: false,
-    //       tracker: {
-    //         milestone_id: 1,
-    //         project_id: 1,
-    //         start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-    //         end_date: new Date('2022-12-16T23:59:59.000+00:00'),
-    //         status: 'PROGRESS',
-    //         created_by: 1,
-    //         modified_by: 2,
-    //         created_at: new Date('2022-12-01T09:00:00.000+00:00'),
-    //         modified_at: new Date('2022-12-01T10:00:00.000+00:00'),
-    //       },
-    //     },
-    //   ],
-    //   project_resources: [
-    //     {
-    //       project_id: 1,
-    //       resource_id: 1,
-    //       role: 'SCRUM_MASTER',
-    //     },
-    //     {
-    //       project_id: 1,
-    //       resource_id: 2,
-    //       role: 'SOFTWARE_DEVELOPER',
-    //     },
-    //   ],
-    //   is_deleted: false,
-    //   created_by: 1,
-    //   modified_by: 2,
-    //   created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-    //   modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-    // };
+  cleanProjectObject() {
+    if (this.project !== undefined) {
+      this.project.vendor_specific = this.project.vendor_specific
+        .replace(/\\/g, '')
+        .replace('"', '')
+        .replace(/"([^"]*)$/, '$1');
+      this.project?.project_resources.forEach(
+        (project_resource: ProjectResource) => {
+          project_resource.role = project_resource.role.replace(/_/g, ' ');
+        }
+      );
+      this.getResourcesNamesByProjectIdFromDatabase(Number(this.project.id));
+      console.log('Here');
+    }
   }
 
   getResourcesNamesByProjectIdFromDatabase(project_id: Number) {

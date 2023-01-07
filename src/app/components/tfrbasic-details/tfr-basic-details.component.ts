@@ -91,7 +91,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   onAttributesSelected(attributes: VendorAttribute[]) {
     this.attributeNames = [];
     attributes.forEach((att) => {
-      this.attributeNames.push(att.attributeName);
+      this.attributeNames.push(att.attribute_name);
     });
   }
 

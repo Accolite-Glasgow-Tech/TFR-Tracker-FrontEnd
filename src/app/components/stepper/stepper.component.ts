@@ -49,58 +49,10 @@ export class StepperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let tfrId = Number(this.route.snapshot.paramMap.get('id'));
-    // this.tfrManagementService.getProjectFromDatabaseByProjectId(tfrId);
-    this.tfrManagementService.project = {
-      id: 1,
-      name: 'Bank Project',
-      vendor_id: 1,
-      start_date: new Date('December 25, 2021 00:00:00'),
-      end_date: new Date('December 31, 2022 00:00:00'),
-      vendor_specific:
-        '{"Department":"Finance", "Cost Center":"Private Banking", "City":"Glasgow", "Manager":"Jake Lam"}',
-      status: 'DRAFT',
-      version: 1,
-      milestones: [
-        {
-          id: 1,
-          project_id: 2,
-          description: 'deployment',
-          start_date: new Date('2022-12-12 09:00:00'),
-          delivery_date: new Date('2022-12-16 23:59:59'),
-          acceptance_date: new Date('2022-12-31 23:59:59'),
-          is_deleted: false,
-          tracker: {
-            milestone_id: 1,
-            project_id: 1,
-            start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-            end_date: new Date('2022-12-16T23:59:59.000+00:00'),
-            status: 'PROGRESS',
-            created_by: 1,
-            modified_by: 2,
-            created_at: new Date('2022-12-01T09:00:00.000+00:00'),
-            modified_at: new Date('2022-12-01T10:00:00.000+00:00'),
-          },
-        },
-      ],
-      project_resources: [
-        {
-          project_id: 1,
-          resource_id: 1,
-          role: 'SCRUM_MASTER',
-        },
-        {
-          project_id: 1,
-          resource_id: 2,
-          role: 'SOFTWARE_DEVELOPER',
-        },
-      ],
-      is_deleted: false,
-      created_by: 1,
-      modified_by: 2,
-      created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-      modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-    };
+    this.route.data.subscribe(({ project }) => {
+      this.tfrManagementService.project = project;
+      this.tfrManagementService.cleanProjectObject();
+    });
   }
 
   nextStep() {

@@ -53,7 +53,8 @@ export interface ProjectBasicDetails {
 
 export interface VendorAttribute {
   vendor_id: number;
-  attributeName: string;
+  attribute_name: string;
+  is_deleted: boolean;
 }
 
 export interface ResourceListType {

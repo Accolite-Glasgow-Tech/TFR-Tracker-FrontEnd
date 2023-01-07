@@ -7,6 +7,7 @@ import { ReportsComponent } from './components/reports/reports.component';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
+import { ProjectResolverService } from './services/project-resolver/project-resolver.service';
 import { TFRRoute } from './TFRRoute';
 
 @Injectable({
@@ -27,10 +28,16 @@ export class RoutesService {
     {
       path: 'tfr/:id',
       component: TfrComponent,
+      resolve: {
+        project: ProjectResolverService,
+      },
     },
     {
       path: 'tfr/:id/edit',
       component: StepperComponent,
+      resolve: {
+        project: ProjectResolverService,
+      },
     },
     {
       path: 'tfr',
