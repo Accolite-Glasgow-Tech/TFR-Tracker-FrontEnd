@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+import { Console } from 'console';
 
 interface Template {
   value: string;
@@ -26,7 +27,6 @@ export class ReportsComponent implements OnInit {
 
   resource!: any;
   tfrList: any;
-  resourceList: any;
 
   templates: Template[] = [
     { value: 'ALERT', viewValue: 'Alert' },
@@ -54,6 +54,8 @@ export class ReportsComponent implements OnInit {
       receiver: new FormControl(RecieverOptions.self, [Validators.required]),
       frequency: this.frequencyPickerComponent.createFormGroup(),
     });
+
+    this.tfrList = this.getResourceTFRList(this.resource.id);
   }
 
   async onSubmit() {
@@ -76,18 +78,14 @@ export class ReportsComponent implements OnInit {
     const cron = recurring ? this.frequencyPickerComponent.getCron() : null;
 
     const by_email = true;
-    let resources: Array<any> = [];
+    let resources: any = [];
 
     switch (this.schedulerForm.get('receiver')!.value) {
       case RecieverOptions.self:
         resources = [this.resource];
         break;
       case RecieverOptions.allProjectResources:
-        let resourceList: any = await this.getResourcesByTFR(project_id);
-        resourceList = await lastValueFrom(this.resourceList);
-        resourceList.forEach((element: any) => {
-          resources.push(element);
-        });
+        resources = await lastValueFrom(this.getResourcesByTFR(project_id));
         break;
       case RecieverOptions.custom:
         break;
@@ -114,13 +112,10 @@ export class ReportsComponent implements OnInit {
       });
   }
 
-  async getResourcesByTFR(tfrId: number | null) {
-    if (tfrId !== null) {
-      return this.httpClient
-        .get(`http://localhost:8080/search/resource/project/${tfrId}`)
-        .pipe();
-    }
-    return null;
+  getResourcesByTFR(tfrId: number | null) {
+    return this.httpClient
+      .get(`http://localhost:8080/search/resource/project/${tfrId}`)
+      .pipe();
   }
 
   createTask(taskObject: any) {
