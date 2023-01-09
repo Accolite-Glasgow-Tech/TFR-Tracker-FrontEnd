@@ -24,8 +24,7 @@ export class ReportsComponent implements OnInit {
   @ViewChild(FrequencyPickerComponent, { static: true })
   frequencyPickerComponent!: FrequencyPickerComponent;
 
-  resourceId!: number;
-  resourceEmail!: string;
+  resource!: any;
   tfrList: any;
   resourceList: any;
 
@@ -46,8 +45,14 @@ export class ReportsComponent implements OnInit {
   constructor(private httpClient: HttpClient) {}
 
   ngOnInit(): void {
-    this.resourceId = 1;
-    this.resourceEmail = 'johnbowers@accolitedigital.com';
+    this.resource = {
+      id: 1,
+      first_name: 'John',
+      last_name: 'Bowers',
+      type: 'STAFF',
+      email: 'johnbowers@accolitedigital.com',
+      is_deleted: false,
+    };
   }
 
   async onSubmit() {
@@ -70,17 +75,17 @@ export class ReportsComponent implements OnInit {
     const cron = recurring ? this.frequencyPickerComponent.getCron() : null;
 
     const by_email = true;
-    let resource_ids: Array<number> = [];
+    let resources: Array<any> = [];
 
     switch (this.schedulerForm.get('receiver')!.value) {
       case RecieverOptions.self:
-        resource_ids = [this.resourceId];
+        resources = [this.resource];
         break;
       case RecieverOptions.allProjectResources:
         let resourceList: any = await this.getResourcesByTFR(project_id);
         resourceList = await lastValueFrom(this.resourceList);
-        resourceList.forEach((element: { id: number }) => {
-          resource_ids.push(element.id);
+        resourceList.forEach((element: any) => {
+          resources.push(element);
         });
         break;
       case RecieverOptions.custom:
@@ -96,7 +101,7 @@ export class ReportsComponent implements OnInit {
         cron: cron,
         by_email: by_email,
       },
-      resource_emails: resource_ids,
+      resource_emails: resources,
     });
   }
 
