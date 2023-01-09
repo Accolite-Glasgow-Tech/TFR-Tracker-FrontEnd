@@ -22,10 +22,14 @@
 }
 
 .floating-btn-div {
-  display: flex;
-  justify-content: end;
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  top: 0;
-  right: 0;
+  position: fixed;
+  top: 25%;
+  right: 5%;
+}
+
+@media screen and (max-width: 800px) {
+  .floating-btn-div {
+    top: 15%;
+    right: 5%;
+  }
 }

@@ -20,6 +20,8 @@ export class TfrManagementService {
 
   updateProjectToResourceMappingURL =
     APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/projects';
+  // projectURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/' + project_id;
+  projectURL = 'assets/json/project.json';
   public projectResourcesWithNames!: AllocatedResourceType[];
 
   constructor(
@@ -41,6 +43,18 @@ export class TfrManagementService {
 
   get getProjectName(): string | undefined {
     return this.project?.name;
+  }
+
+  get getMilestones(): Milestone[] | undefined {
+    return this.project?.milestones;
+  }
+
+  get getProjectResourcesWithNames(): AllocatedResourceType[] {
+    return this.projectResourcesWithNames;
+  }
+
+  get getProjectResources(): ProjectResource[] | undefined {
+    return this.project?.project_resources;
   }
 
   get getProject(): Project | undefined {
@@ -117,10 +131,6 @@ export class TfrManagementService {
     return true;
   }
 
-  get getMilestones(): Milestone[] | undefined {
-    return this.project?.milestones;
-  }
-
   setMilestones(milestones: Milestone[]) {
     if (this.project !== undefined) {
       this.project.milestones = milestones;
@@ -128,36 +138,10 @@ export class TfrManagementService {
     }
   }
 
-  get getProjectResources(): ProjectResource[] | undefined {
-    return this.project?.project_resources;
-  }
-
   setProjectResources(project_resources: ProjectResource[]) {
     if (this.project !== undefined) {
       this.project.project_resources = project_resources;
     }
-  }
-
-  convertToProjectResourcesWithNames(resourcesDetails: ResourceListType[]) {
-    this.projectResourcesWithNames = [];
-    resourcesDetails.forEach((resourceDetails) => {
-      let projectResource: ProjectResource =
-        this.project?.project_resources.find(
-          (resource) => resource.resource_id === resourceDetails.resource_id
-        )!;
-      let allocatedResource: AllocatedResourceType = {
-        project_id: projectResource.project_id,
-        resource_id: resourceDetails.resource_id,
-        resource_name: resourceDetails.resource_name,
-        resource_email: resourceDetails.resource_email,
-        role: projectResource.role,
-      };
-      this.projectResourcesWithNames.push(allocatedResource);
-    });
-  }
-
-  get getProjectResourcesWithNames(): AllocatedResourceType[] {
-    return this.projectResourcesWithNames;
   }
 
   setProjectResourcesWithNames(
@@ -175,6 +159,9 @@ export class TfrManagementService {
     this.setProjectResources(newArray);
   }
 
+  /*
+    pushes the changes to the resources for this project to the database
+  */
   updateProjectToResourceMapping() {
     this.http
       .put(
@@ -187,11 +174,13 @@ export class TfrManagementService {
   }
 
   getFromDatabase(project_id: Number): Observable<Project> {
-    return this.http.get<Project>(
-      APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/' + project_id
-    );
+    return this.http.get<Project>(this.projectURL);
   }
 
+  /*
+    The vendor details contains a lot of / and _ and the role
+    contains _ which can only be removed from the frontend.
+  */
   cleanProjectObject() {
     if (this.project !== undefined) {
       this.project.vendor_specific = this.project.vendor_specific
@@ -199,25 +188,37 @@ export class TfrManagementService {
         .replace('"', '')
         .replace(/"([^"]*)$/, '$1');
 
-      this.project?.project_resources.forEach(
-        (project_resource: ProjectResource) => {
-          project_resource.role = project_resource.role.replace(/_/g, ' ');
-        }
-      );
+      // this.project?.project_resources.forEach(
+      //   (project_resource: ProjectResource) => {
+      //     project_resource.role = project_resource.role.replace(/_/g, ' ');
+      //   }
+      // );
+      console.log(this.project.project_resources);
+
       this.getResourcesNamesByProjectIdFromDatabase(Number(this.project.id));
     }
   }
 
+  /*
+    Returns more details information about the resources associated with the project.
+    Each object contains the current project_id, the resource's id, name, email, role.
+  */
   getResourcesNamesByProjectIdFromDatabase(project_id: Number) {
     this.http
-      .get<ResourceListType[]>(
+      .get<AllocatedResourceType[]>(
         APPCONSTANTS.APICONSTANTS.BASE_URL +
           '/resources/projects/' +
           project_id +
           '/names'
       )
-      .subscribe((data: ResourceListType[]) => {
-        this.convertToProjectResourcesWithNames(data);
+      .subscribe((data: AllocatedResourceType[]) => {
+        this.projectResourcesWithNames = data;
+        this.projectResourcesWithNames.forEach(
+          (project_resourceWithName: AllocatedResourceType) => {
+            project_resourceWithName.role =
+              project_resourceWithName.role.replace(/_/g, ' ');
+          }
+        );
       });
   }
 }

@@ -23,15 +23,33 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 export class StepperComponent implements OnInit {
   @ViewChild('stepper') private myStepper!: MatStepper;
 
-  tfrDetailsFormGroup = this._formBuilder.group({
-    tfrName: ['', Validators.required],
-  });
+  /*
+    Will be removed once Laura's component is placed in the stepper
+  */
   milestoneFormGroup = this._formBuilder.group({
     milestoneName: ['', Validators.required],
   });
 
+  /*
+    The size of this array is proportional to the number of steps in the stepper (excluding the 
+    last summary step).
+
+    This array holds whether a step has been completed. For e.g:
+    At index 0 with a value of false indicates that the step 1 has not been completed.
+  */
   stepsValid: boolean[] = [false, false, false];
+
+  /*
+    controls whether the user can move to another step without completing its current step.
+    
+    A value of true forces the user to complete its current step before moving to the next.
+  */
   isLinear = false;
+
+  /*
+    Listens to screen size changes. When the screen is small, the orientation of the stepper 
+    will be vertical. A horizontal stepper will appear on a large screen.
+  */
   stepperOrientation: Observable<StepperOrientation>;
 
   constructor(
@@ -43,30 +61,57 @@ export class StepperComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
+    /*
+      Listener for the screen size.
+      Below 800px, the stepper is vertical.
+      Above 800px, the stepper is horizontal.
+    */
     this.stepperOrientation = breakpointObserver
-      .observe('(min-width: 700px)')
+      .observe('(min-width: 800px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
   }
 
   ngOnInit(): void {
+    /*
+      The data that will be rendered in the screen is pre-fetched before the component
+      is loaded. This component has a resolver (refer to /services/project-resolver) that 
+      fetches the project to be displayed.
+    */
     this.route.data.subscribe(({ project }) => {
       this.tfrManagementService.project = project;
       this.tfrManagementService.cleanProjectObject();
     });
   }
 
+  /*
+    Programmatically moves to the next step. 
+
+    To be able to programmatically move to the next step, the stepper should NOT be 
+    linear. The stepper is momentarily made not linear.
+  */
   nextStep() {
     this.myStepper.linear = false;
     this.myStepper.next();
     this.myStepper.linear = true;
   }
 
+  /*
+    When each step gets notified by its child component that the step has been completed through
+    an emitter, this method should be called with the stepNumber (first index at 0) and 
+    TRUE (step completed).
+  */
   stepCompleted(stepNumber: number, completed: boolean) {
     if (stepNumber >= 0) {
       this.stepsValid[stepNumber] = completed;
     }
   }
 
+  /*
+    After submitting the whole project, this method handles the redirection to the URL where all
+    the TFRs are displayed. 
+    
+    A small confirmation pop-up msg (aka a snack bar) is displayed at the bottom of the screen for 3000ms.
+  */
   redirect() {
     this.router.navigate(['/tfrs']);
     this.snackBarService.showSnackBar('TFR submitted.', 3000);

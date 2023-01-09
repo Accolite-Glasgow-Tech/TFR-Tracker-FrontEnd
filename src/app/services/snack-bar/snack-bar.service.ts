@@ -4,14 +4,25 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Injectable({
   providedIn: 'root',
 })
+
+/*
+  snack bar re-usable component
+
+  appears at the bottom of the screen
+*/
 export class SnackBarService {
   constructor(private snackBar: MatSnackBar) {}
 
+  /*
+    Input parameters:
+    - content: Information to be displayed in snackbar.
+    - duration: How long should the snackbar be displayed for.
+  */
   showSnackBar(content: string, duration: number) {
     this.snackBar.open(content, 'OK', {
       duration: duration,
       verticalPosition: 'bottom',
-      horizontalPosition: 'center', // Allowed values are 'start' | 'center' | 'end' | 'left' | 'right'
+      horizontalPosition: 'center',
     });
   }
 }

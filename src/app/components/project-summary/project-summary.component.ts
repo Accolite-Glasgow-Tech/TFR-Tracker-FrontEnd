@@ -14,6 +14,14 @@ export class ProjectSummaryComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /*
+    The vendor details are dynamic. Each vendor has different set of attributes.
+    Vendor A can have Department, Super Department values.
+    Vendor B can have Cost Center, Department values.
+    
+    This function dynamically creates the vendor details in the DOM based on the attributes of the 
+    specific vendor.
+  */
   cleanVendorDetails() {
     if (this.currentProject !== undefined) {
       let vendorJSOn = JSON.parse(this.currentProject?.vendor_specific || '');
@@ -27,11 +35,6 @@ export class ProjectSummaryComponent implements OnInit {
       Object.entries(vendorJSOn).forEach((entry, index) => {
         const [key, value] = entry;
         let row = document.createElement('div');
-        // row.style.paddingTop = index === 0 ? '0px' : '10px';
-        // row.style.paddingBottom =
-        //   row.style.paddingRight =
-        //   row.style.paddingLeft =
-        //     '10px';
         row.style.paddingLeft = '16px';
         row.style.paddingTop = index === 0 ? '0px' : '10px';
         row.style.paddingBottom = row.style.paddingRight = '10px';
