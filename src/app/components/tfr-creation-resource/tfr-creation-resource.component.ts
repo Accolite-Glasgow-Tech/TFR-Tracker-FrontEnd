@@ -15,6 +15,8 @@ import {
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+import { MatDialog } from '@angular/material/dialog';
+import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
 /*
   Custom validator for the auto complete functionality of the 
@@ -61,7 +63,8 @@ function autoCompleteRoleValidator(validOptions: Array<string>): ValidatorFn {
 export class TfrCreationResourceComponent implements OnInit {
   constructor(
     private resourceService: ResourceService,
-    private tfrManagementService: TfrManagementService
+    private tfrManagementService: TfrManagementService,
+    private matDialog: MatDialog
   ) {}
 
   resourceFormGroup!: FormGroup;
@@ -339,15 +342,42 @@ export class TfrCreationResourceComponent implements OnInit {
     });
   }
 
+  /*
+    Move onto the next step of the stepper
+  */
   triggerNextStep() {
     if (this.resourceListUpdated) {
-      this.tfrManagementService.setProjectResourcesWithNames(
-        this.allocatedResources
-      );
-      this.tfrManagementService.updateProjectToResourceMapping();
-      this.resourceListUpdated = false;
+      this.showDialog();
+    } else {
+      this.stepCompletedEmitter.emit(true);
+      this.nextStepEmitter.emit(true);
     }
-    this.stepCompletedEmitter.emit(true);
-    this.nextStepEmitter.emit(true);
+  }
+
+  /*
+    Asks the user whether he wants to save the changes to database
+  */
+  showDialog() {
+    let dialogRef = this.matDialog.open(TfrCreationDialogComponent);
+    dialogRef.afterClosed().subscribe((result: string) => {
+      if (result === 'true') {
+        this.saveToDatabase();
+      } else {
+        this.tfrManagementService.setProjectResourcesWithNames(
+          this.allocatedResources
+        );
+        this.resourceListUpdated = false;
+      }
+      this.stepCompletedEmitter.emit(true);
+      this.nextStepEmitter.emit(true);
+    });
+  }
+
+  saveToDatabase() {
+    this.tfrManagementService.setProjectResourcesWithNames(
+      this.allocatedResources
+    );
+    this.tfrManagementService.updateProjectToResourceMapping();
+    this.resourceListUpdated = false;
   }
 }

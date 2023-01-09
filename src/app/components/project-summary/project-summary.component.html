@@ -11,9 +11,11 @@
         <span
           ><strong>Start Date: </strong>
           {{
-            currentProject?.start_date?.toLocaleString("en-GB", {
-              timeZone: "UTC"
-            })
+            this.resourceService.prettyPrintDate(
+              currentProject?.start_date?.toLocaleString("en-GB", {
+                timeZone: "UTC"
+              })!
+            )
           }}</span
         >
       </div>
@@ -22,9 +24,11 @@
         <span>
           <strong>End Date: </strong>
           {{
-            currentProject?.end_date?.toLocaleString("en-GB", {
-              timeZone: "UTC"
-            })
+            this.resourceService.prettyPrintDate(
+              currentProject?.end_date?.toLocaleString("en-GB", {
+                timeZone: "UTC"
+              })!
+            )
           }}
         </span>
       </div>

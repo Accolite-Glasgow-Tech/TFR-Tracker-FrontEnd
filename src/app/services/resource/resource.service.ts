@@ -68,4 +68,17 @@ export class ResourceService {
   getAssociatedCleanRole(role: string): string {
     return this.roleHashMap.get(role);
   }
+
+  /*
+    Convert the date obtained from Database to better display
+    format
+
+    YYYY-MM-DD, HH:MM
+  */
+  prettyPrintDate(dateTime: string): string {
+    let time = dateTime.substring(11, 16);
+    let date = dateTime.substring(0, 10);
+
+    return date + ', ' + time;
+  }
 }

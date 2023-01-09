@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ResourceService } from 'src/app/services/resource/resource.service';
 import { Milestone } from 'src/app/types/types';
 
 @Component({
@@ -8,4 +9,6 @@ import { Milestone } from 'src/app/types/types';
 })
 export class MilestoneTableComponent {
   @Input() milestones!: Milestone[];
+
+  constructor(protected resourceService: ResourceService) {}
 }

@@ -56,6 +56,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     MatAutocompleteModule,
     MatTableModule,
     MatSnackBarModule,
+    MatDialogModule,
   ],
   exports: [
     materialModules,

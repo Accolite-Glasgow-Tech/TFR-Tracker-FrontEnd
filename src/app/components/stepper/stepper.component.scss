@@ -1,10 +1,19 @@
-.top-btn-div {
-  display: flex;
-  justify-content: flex-end;
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  top: 0;
-  right: 0;
+.floating-btn-div {
+  position: fixed;
+  top: 25%;
+  right: 5%;
+}
+
+@media screen and (max-width: 800px) {
+  .floating-btn-div {
+    top: 50%;
+    right: 5%;
+  }
+  button {
+    width: 2%;
+    height: 2%;
+    font-size: smaller;
+  }
 }
 
 .navigation-btn {

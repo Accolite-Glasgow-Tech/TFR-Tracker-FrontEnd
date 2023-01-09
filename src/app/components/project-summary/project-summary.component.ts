@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ResourceService } from 'src/app/services/resource/resource.service';
 import { AllocatedResourceType, Project } from 'src/app/types/types';
 
 @Component({
@@ -7,7 +8,7 @@ import { AllocatedResourceType, Project } from 'src/app/types/types';
   styleUrls: ['./project-summary.component.scss'],
 })
 export class ProjectSummaryComponent implements OnInit {
-  constructor() {}
+  constructor(protected resourceService: ResourceService) {}
 
   @Input() currentProject!: Project | undefined;
   @Input() resourcesWithNames!: AllocatedResourceType[];
@@ -24,7 +25,7 @@ export class ProjectSummaryComponent implements OnInit {
   */
   cleanVendorDetails() {
     if (this.currentProject !== undefined) {
-      let vendorJSOn = JSON.parse(this.currentProject?.vendor_specific || '');
+      let vendorJSON = JSON.parse(this.currentProject?.vendor_specific || '');
       let vendorDiv = document.getElementById('vendor-div');
       let vendorDetails = document.getElementById('vendor-details');
       vendorDetails?.remove();
@@ -32,7 +33,7 @@ export class ProjectSummaryComponent implements OnInit {
       vendorDetails = document.createElement('div');
       vendorDetails.setAttribute('id', 'vendor-details');
 
-      Object.entries(vendorJSOn).forEach((entry, index) => {
+      Object.entries(vendorJSON).forEach((entry, index) => {
         const [key, value] = entry;
         let row = document.createElement('div');
         row.style.paddingLeft = '16px';

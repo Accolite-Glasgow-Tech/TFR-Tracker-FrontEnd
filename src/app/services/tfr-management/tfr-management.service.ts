@@ -11,6 +11,7 @@ import {
   ResourceListType,
 } from '../../types/types';
 import { ResourceService } from '../resource/resource.service';
+import { SnackBarService } from '../snack-bar/snack-bar.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,8 @@ export class TfrManagementService {
 
   constructor(
     private http: HttpClient,
-    private resourceService: ResourceService
+    private resourceService: ResourceService,
+    private snackBarService: SnackBarService
   ) {}
 
   updateBasicDetails() {
@@ -169,7 +171,7 @@ export class TfrManagementService {
         this.getProjectResources
       )
       .subscribe((response) => {
-        console.log(response);
+        this.snackBarService.showSnackBar('Updates saved to database', 2000);
       });
   }
 

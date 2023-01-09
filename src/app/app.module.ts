@@ -22,6 +22,7 @@ import { VendorsComponent } from './components/tfrbasic-details/vendors/vendors.
 import { ProjectSummaryComponent } from './components/project-summary/project-summary.component';
 import { ResourceTableComponent } from './components/resource-table/resource-table.component';
 import { MilestoneTableComponent } from './components/milestone-table/milestone-table.component';
+import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { MilestoneTableComponent } from './components/milestone-table/milestone-
     ProjectSummaryComponent,
     ResourceTableComponent,
     MilestoneTableComponent,
+    TfrCreationDialogComponent,
   ],
   imports: [
     BrowserModule,
