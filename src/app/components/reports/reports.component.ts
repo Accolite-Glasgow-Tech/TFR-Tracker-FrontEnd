@@ -34,13 +34,7 @@ export class ReportsComponent implements OnInit {
   ];
 
   recieverOptionsEnum = RecieverOptions;
-
-  schedulerForm = new FormGroup({
-    tfr: new FormControl<number | null>(null, [Validators.required]),
-    type: new FormControl('ALERT', [Validators.required]),
-    receiver: new FormControl(RecieverOptions.self, [Validators.required]),
-    frequency: this.frequencyPickerComponent.createFormGroup(),
-  });
+  schedulerForm!: FormGroup;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -53,6 +47,13 @@ export class ReportsComponent implements OnInit {
       email: 'johnbowers@accolitedigital.com',
       is_deleted: false,
     };
+
+    this.schedulerForm = new FormGroup({
+      tfr: new FormControl<number | null>(null, [Validators.required]),
+      type: new FormControl('ALERT', [Validators.required]),
+      receiver: new FormControl(RecieverOptions.self, [Validators.required]),
+      frequency: this.frequencyPickerComponent.createFormGroup(),
+    });
   }
 
   async onSubmit() {
