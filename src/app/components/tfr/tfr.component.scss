@@ -1,13 +1,14 @@
-#title {
+.title {
   display: flex;
   justify-content: center;
-  margin: auto;
 }
 
-#header {
+.top-btn-div {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 1rem;
-  margin-right: 1rem;
+  justify-content: end;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  right: 0;
+  padding: 10px;
 }

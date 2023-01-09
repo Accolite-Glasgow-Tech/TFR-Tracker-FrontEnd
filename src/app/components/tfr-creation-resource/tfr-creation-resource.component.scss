@@ -48,3 +48,12 @@
   justify-content: space-between;
   gap: 5px;
 }
+
+.floating-btn-div {
+  display: flex;
+  justify-content: end;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  right: 0;
+}

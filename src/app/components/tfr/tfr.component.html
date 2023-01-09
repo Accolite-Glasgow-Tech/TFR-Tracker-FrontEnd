@@ -1,13 +1,18 @@
-<div id="header">
-  <span id="title"
-    ><h2>{{ tfrManagementService.getProjectName }}</h2></span
+<div class="top-btn-div">
+  <button
+    mat-raised-button
+    class="edit-btn"
+    color="primary"
+    (click)="redirectToEditTfr()"
   >
-  <span>
-    <button mat-raised-button color="primary" (click)="redirectToEditTfr()">
-      Edit
-    </button></span
-  >
+    <mat-icon>edit</mat-icon>
+    Edit
+  </button>
 </div>
+<div class="title">
+  <h2>{{ tfrManagementService.getProjectName }}</h2>
+</div>
+
 <app-project-summary
   [currentProject]="tfrManagementService.getProject"
   [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"

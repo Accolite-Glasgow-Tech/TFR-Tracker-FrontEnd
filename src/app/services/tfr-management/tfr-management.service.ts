@@ -198,13 +198,13 @@ export class TfrManagementService {
         .replace(/\\/g, '')
         .replace('"', '')
         .replace(/"([^"]*)$/, '$1');
+
       this.project?.project_resources.forEach(
         (project_resource: ProjectResource) => {
           project_resource.role = project_resource.role.replace(/_/g, ' ');
         }
       );
       this.getResourcesNamesByProjectIdFromDatabase(Number(this.project.id));
-      console.log('Here');
     }
   }
 

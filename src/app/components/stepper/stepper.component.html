@@ -50,27 +50,25 @@
 
   <mat-step id="last-step">
     <ng-template matStepLabel>Summary</ng-template>
-    <div id="header">
-      <span id="title"><h2>Summary</h2></span>
-      <span id="buttons">
-        <button
-          mat-raised-button
-          class="navigation-btn"
-          color="primary"
-          matStepperPrevious
-        >
-          Back
-        </button>
-        <button
-          class="navigation-btn success-btn"
-          mat-raised-button
-          color="success"
-          (click)="redirect()"
-        >
-          Submit
-        </button></span
+    <div class="top-btn-div">
+      <button
+        mat-raised-button
+        class="navigation-btn"
+        color="primary"
+        matStepperPrevious
       >
+        Back
+      </button>
+      <button
+        class="navigation-btn success-btn"
+        mat-raised-button
+        color="success"
+        (click)="redirect()"
+      >
+        Submit
+      </button>
     </div>
+    <div id="title"><h2>Summary</h2></div>
     <app-project-summary
       [currentProject]="tfrManagementService.getProject"
       [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"

@@ -31,7 +31,7 @@ export class StepperComponent implements OnInit {
   });
 
   stepsValid: boolean[] = [false, false, false];
-  isLinear = true;
+  isLinear = false;
   stepperOrientation: Observable<StepperOrientation>;
 
   constructor(

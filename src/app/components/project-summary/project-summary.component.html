@@ -1,36 +1,44 @@
 <div>
-  <div class="project-details">
-    <span> <strong>Project Name: </strong> {{ currentProject?.name }} </span>
-  </div>
+  <div class="row">
+    <div class="LHS-details column">
+      <div class="project-details">
+        <span>
+          <strong>Project Name: </strong> {{ currentProject?.name }}
+        </span>
+      </div>
 
-  <div class="project-details">
-    <span
-      ><strong>Start Date: </strong>
-      {{
-        currentProject?.start_date?.toLocaleString("en-GB", { timeZone: "UTC" })
-      }}</span
-    >
-  </div>
+      <div class="project-details">
+        <span
+          ><strong>Start Date: </strong>
+          {{
+            currentProject?.start_date?.toLocaleString("en-GB", {
+              timeZone: "UTC"
+            })
+          }}</span
+        >
+      </div>
 
-  <div class="project-details">
-    <span>
-      <strong>End Date: </strong>
-      {{
-        currentProject?.end_date?.toLocaleString("en-GB", { timeZone: "UTC" })
-      }}
-    </span>
-  </div>
+      <div class="project-details">
+        <span>
+          <strong>End Date: </strong>
+          {{
+            currentProject?.end_date?.toLocaleString("en-GB", {
+              timeZone: "UTC"
+            })
+          }}
+        </span>
+      </div>
 
-  <div class="project-details">
-    <span> <strong>Version: </strong> {{ currentProject?.version }} </span>
-  </div>
+      <div class="project-details">
+        <span> <strong>Version: </strong> {{ currentProject?.version }} </span>
+      </div>
+    </div>
 
-  <div class="project-details" id="vendor-div">
-    <strong>Vendor Details: </strong>
-    <div id="tab">
-      {{ cleanVendorDetails() }}
-      <!-- <div id="vendor-details"></div> -->
-      <table mat-table id="vendor-details"></table>
+    <div class="project-details column" id="vendor-div">
+      <div id="tab">
+        {{ cleanVendorDetails() }}
+      </div>
+      <div id="vendor-details"></div>
     </div>
   </div>
 

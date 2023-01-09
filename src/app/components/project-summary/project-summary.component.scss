@@ -1,11 +1,39 @@
-#tab {
-  padding-top: 10px;
-  padding-left: 5em;
+.row {
+  display: flex;
+}
+.column {
+  flex: 50%;
+  padding: 16px;
+}
+
+.LHS-details .project-details:first-child {
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+.LHS-details .project-details:last-child {
+  padding-bottom: 0px;
+  margin-bottom: 0px;
 }
 
 .project-details {
-  width: 100%;
-  margin: 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
+}
+
+#vendor-div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+//When screen becomes smaller
+@media all and (max-width: 800px) {
+  .row {
+    flex-direction: column;
+  }
+  .column {
+    flex: 100%;
+  }
 }

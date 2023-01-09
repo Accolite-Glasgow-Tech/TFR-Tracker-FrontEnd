@@ -20,8 +20,6 @@ export class TfrComponent implements OnInit {
 
   ngOnInit() {
     this.TfrId = Number(this.route.snapshot.paramMap.get('id'));
-    console.log(this.TfrId);
-
     if (!Number.isInteger(this.TfrId)) {
       this.router.navigate(['/home']);
     } else {

@@ -17,33 +17,30 @@ export class ProjectSummaryComponent implements OnInit {
   cleanVendorDetails() {
     if (this.currentProject !== undefined) {
       let vendorJSOn = JSON.parse(this.currentProject?.vendor_specific || '');
-      let vendorDiv = document.getElementById('tab');
+      let vendorDiv = document.getElementById('vendor-div');
       let vendorDetails = document.getElementById('vendor-details');
       vendorDetails?.remove();
 
-      vendorDetails = document.createElement('table');
-      vendorDetails.setAttribute('mat-table', '');
+      vendorDetails = document.createElement('div');
       vendorDetails.setAttribute('id', 'vendor-details');
-      vendorDetails.style.borderCollapse = 'collapse';
 
       Object.entries(vendorJSOn).forEach((entry, index) => {
         const [key, value] = entry;
-        let row = document.createElement('tr');
-        let header = document.createElement('th');
-        let data = document.createElement('td');
-        // if (index !== 0) {
-        //   header.style.borderTop = 'solid 1px #D3D3D3';
-        //   data.style.borderTop = 'solid 1px #D3D3D3';
-        // }
-        header.style.padding = '5px';
-        // data.style.borderLeft = 'solid 1px #D3D3D3';
-        data.style.padding = '5px';
-
-        header.textContent = key + ':';
-        data.textContent = value as string;
-
-        row.appendChild(header);
-        row.appendChild(data);
+        let row = document.createElement('div');
+        // row.style.paddingTop = index === 0 ? '0px' : '10px';
+        // row.style.paddingBottom =
+        //   row.style.paddingRight =
+        //   row.style.paddingLeft =
+        //     '10px';
+        row.style.paddingLeft = '16px';
+        row.style.paddingTop = index === 0 ? '0px' : '10px';
+        row.style.paddingBottom = row.style.paddingRight = '10px';
+        let boldText = document.createElement('strong');
+        let textValue = document.createElement('span');
+        boldText.innerText = key + ': ';
+        textValue.innerText = value as string;
+        row.appendChild(boldText);
+        row.appendChild(textValue);
         vendorDetails?.appendChild(row);
       });
       vendorDiv?.appendChild(vendorDetails!);

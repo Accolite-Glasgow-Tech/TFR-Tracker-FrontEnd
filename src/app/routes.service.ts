@@ -26,15 +26,15 @@ export class RoutesService {
       component: TfrsComponent,
     },
     {
-      path: 'tfr/:id',
-      component: TfrComponent,
+      path: 'tfr/:id/edit',
+      component: StepperComponent,
       resolve: {
         project: ProjectResolverService,
       },
     },
     {
-      path: 'tfr/:id/edit',
-      component: StepperComponent,
+      path: 'tfr/:id',
+      component: TfrComponent,
       resolve: {
         project: ProjectResolverService,
       },
