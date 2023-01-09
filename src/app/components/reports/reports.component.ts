@@ -48,23 +48,9 @@ export class ReportsComponent implements OnInit {
   ngOnInit(): void {
     this.resourceId = 1;
     this.resourceEmail = 'johnbowers@accolitedigital.com';
-
-    // this.getResourceTFRList(this.resourceId);
   }
 
   async onSubmit() {
-    // let taskObject = {
-    //   task: {
-    //     project_id: 0,
-    //     task_type: 'ALERT',
-    //     execute_at: '',
-    //     recurring: false,
-    //     cron: null as string | null,
-    //     by_email: true,
-    //   },
-    //   resource_emails: [] as string[],
-    // };
-
     const project_id = this.schedulerForm.get('tfr')!.value;
     const task_type = 'REPORT';
 
@@ -84,17 +70,17 @@ export class ReportsComponent implements OnInit {
     const cron = recurring ? this.frequencyPickerComponent.getCron() : null;
 
     const by_email = true;
-    let resource_emails: Array<string> = [];
+    let resource_ids: Array<number> = [];
 
     switch (this.schedulerForm.get('receiver')!.value) {
       case RecieverOptions.self:
-        resource_emails = [this.resourceEmail];
+        resource_ids = [this.resourceId];
         break;
       case RecieverOptions.allProjectResources:
         let resourceList: any = await this.getResourcesByTFR(project_id);
         resourceList = await lastValueFrom(this.resourceList);
-        resourceList.forEach((element: { email: string }) => {
-          resource_emails.push(element.email);
+        resourceList.forEach((element: { id: number }) => {
+          resource_ids.push(element.id);
         });
         break;
       case RecieverOptions.custom:
@@ -110,7 +96,7 @@ export class ReportsComponent implements OnInit {
         cron: cron,
         by_email: by_email,
       },
-      resource_emails: resource_emails,
+      resource_emails: resource_ids,
     });
   }
 
@@ -128,6 +114,7 @@ export class ReportsComponent implements OnInit {
         .get(`http://localhost:8080/search/resource/project/${tfrId}`)
         .pipe();
     }
+    return null;
   }
 
   createTask(taskObject: any) {
