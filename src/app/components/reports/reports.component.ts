@@ -101,7 +101,7 @@ export class ReportsComponent implements OnInit {
         cron: cron,
         by_email: by_email,
       },
-      resource_emails: resources,
+      resources: resources,
     });
   }
 
