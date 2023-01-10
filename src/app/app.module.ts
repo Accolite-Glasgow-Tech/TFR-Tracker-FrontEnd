@@ -5,14 +5,13 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreMaterialModule } from './core-modules/core-material/core-material.module';
 import { StepperComponent } from './components/stepper/stepper.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { TfrCreationResourceComponent } from './components/tfr-creation-resource/tfr-creation-resource.component';
 
 import { HomeComponent } from './components/home/home.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { MilestonesComponent } from './components/milestones/milestones.component';
 import { AlertsComponent } from './components/alerts/alerts.component';
+import { FrequencyPickerComponent } from './components/frequency-picker/frequency-picker.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
@@ -23,6 +22,10 @@ import { ProjectSummaryComponent } from './components/project-summary/project-su
 import { ResourceTableComponent } from './components/resource-table/resource-table.component';
 import { MilestoneTableComponent } from './components/milestone-table/milestone-table.component';
 import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -37,6 +40,8 @@ import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr
     TfrComponent,
     SidenavComponent,
     ToolbarComponent,
+    FrequencyPickerComponent,
+    ReportsComponent,
     TfrBasicDetailsComponent,
     VendorsComponent,
     ProjectSummaryComponent,
@@ -49,8 +54,8 @@ import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr
     AppRoutingModule,
     BrowserAnimationsModule,
     CoreMaterialModule,
-    ReactiveFormsModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
   ],
   providers: [],
