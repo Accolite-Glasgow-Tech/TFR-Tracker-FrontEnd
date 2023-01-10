@@ -6,7 +6,7 @@
   "end_date": "2022-12-31T23:59:59.000+00:00",
   "status": "INPROGRESS",
   "version": 1,
-  "vendor_specific": "\"{\\\"vendor\\\":\\\"Morgan Stanley\\\",\\\"Department\\\":\\\"Finance\\\",\\\"ED/MD\\\":\\\"Julia Lee\\\"}\"",
+  "vendor_specific": "\"{\\\"Department\\\":\\\"Finance\\\",\\\"ED/MD\\\":\\\"Julia Lee\\\"}\"",
   "is_deleted": false,
   "created_by": 1,
   "modified_by": 2,

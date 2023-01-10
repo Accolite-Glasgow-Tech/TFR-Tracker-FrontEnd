@@ -9,7 +9,9 @@ import {
   ProjectResource,
   AllocatedResourceType,
   ResourceListType,
+  Vendor,
 } from '../../types/types';
+import { ApiService } from '../api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
 
@@ -26,11 +28,13 @@ export class TfrManagementService {
   statusUpdateURL = 'assets/json/projectStatusUpdate.json';
   public projectResourcesWithNames!: AllocatedResourceType[];
   vendorSpecificObject!: Object;
+  vendorName: string = '';
 
   constructor(
     private http: HttpClient,
     private resourceService: ResourceService,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
+    private apiService: ApiService
   ) {}
 
   updateBasicDetails() {
@@ -69,8 +73,15 @@ export class TfrManagementService {
     return this.vendorSpecificObject;
   }
 
+  get getVendorName(): string {
+    return this.vendorName;
+  }
+
   setVendorSpecificObject(vendorSpecificObject: string) {
-    this.vendorSpecificObject = JSON.parse(JSON.parse(vendorSpecificObject));
+    while (typeof vendorSpecificObject === 'string') {
+      vendorSpecificObject = JSON.parse(vendorSpecificObject);
+    }
+    this.vendorSpecificObject = vendorSpecificObject;
   }
 
   setProject(project: Project) {
@@ -120,9 +131,18 @@ export class TfrManagementService {
         this.project.vendor_id = projectBasicDetails.vendor_id;
         this.project.vendor_specific = projectBasicDetails.vendor_specific;
       }
-
+      this.setVendorName(projectBasicDetails.vendor_id);
+      this.setVendorSpecificObject(projectBasicDetails.vendor_specific);
       this.updateBasicDetails();
     }
+  }
+
+  setVendorName(vendor_id: number) {
+    this.apiService.getVendorData().subscribe((result: Vendor[]) => {
+      this.vendorName = result.find(
+        (vendor: Vendor) => vendor.id === vendor_id
+      )!.name;
+    });
   }
 
   compareBasicDetails(newDetails: ProjectBasicDetails): Boolean {

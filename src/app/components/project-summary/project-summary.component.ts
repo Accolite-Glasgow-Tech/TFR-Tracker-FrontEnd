@@ -17,6 +17,7 @@ export class ProjectSummaryComponent implements OnInit {
   @Input() currentProject!: Project | undefined;
   @Input() resourcesWithNames!: AllocatedResourceType[];
   @Input() vendorSpecificObject!: any;
+  @Input() vendorName!: string;
 
   ngOnInit(): void {}
 

@@ -70,12 +70,16 @@ export class ResourceService {
   }
 
   prettyPrintDate(dateTime: Date): string {
-    let dateTimeString: string = dateTime.toLocaleString('en-GB', {
-      timeZone: 'UTC',
-    });
-    let time = dateTimeString.substring(11, 16);
-    let date = dateTimeString.substring(0, 10);
+    if (dateTime) {
+      let dateTimeString: string = dateTime.toLocaleString('en-GB', {
+        timeZone: 'UTC',
+      });
+      let time = dateTimeString.substring(11, 16);
+      let date = dateTimeString.substring(0, 10);
 
-    return date + ', ' + time;
+      return date + ', ' + time;
+    }
+
+    return '';
   }
 }

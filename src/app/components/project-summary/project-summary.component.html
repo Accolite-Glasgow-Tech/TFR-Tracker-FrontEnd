@@ -29,6 +29,9 @@
     </div>
 
     <div class="column project-details" id="vendor-div">
+      <div class="project-details">
+        <span> <strong>Vendor: </strong> {{ vendorName }} </span>
+      </div>
       <div
         class="project-details"
         *ngFor="let vendor_attribute of this.vendorSpecificObject | keyvalue"
