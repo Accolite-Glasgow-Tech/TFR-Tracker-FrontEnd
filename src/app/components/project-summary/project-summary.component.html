@@ -1,0 +1,70 @@
+<div>
+  <div class="row">
+    <div class="LHS-details column">
+      <div class="project-details">
+        <span>
+          <strong>Project Name: </strong> {{ currentProject?.name }}
+        </span>
+      </div>
+
+      <div class="project-details">
+        <span
+          ><strong>Start Date: </strong>
+          {{
+            this.resourceService.prettyPrintDate(currentProject?.start_date!)
+          }}</span
+        >
+      </div>
+
+      <div class="project-details">
+        <span>
+          <strong>End Date: </strong>
+          {{ this.resourceService.prettyPrintDate(currentProject?.end_date!) }}
+        </span>
+      </div>
+
+      <div class="project-details">
+        <span> <strong>Version: </strong> {{ currentProject?.version }} </span>
+      </div>
+    </div>
+
+    <div class="column project-details" id="vendor-div">
+      <div class="project-details">
+        <span> <strong>Vendor: </strong> {{ vendorName }} </span>
+      </div>
+      <div
+        class="project-details"
+        *ngFor="let vendor_attribute of this.vendorSpecificObject | keyvalue"
+      >
+        <span>
+          <strong>{{ vendor_attribute.key }}: </strong>
+          {{ vendor_attribute.value }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-details">
+    <strong>Milestones: </strong>
+    <br />
+    <app-milestone-table
+      [milestones]="currentProject?.milestones!"
+    ></app-milestone-table>
+  </div>
+
+  <br />
+
+  <div class="project-details">
+    <strong>Resources: </strong>
+    <br />
+    <app-resource-table
+      [resourcesWithNames]="resourcesWithNames"
+      [withDelete]="false"
+    >
+    </app-resource-table>
+  </div>
+</div>
+<br />
+<br />
+<br />
+<br />

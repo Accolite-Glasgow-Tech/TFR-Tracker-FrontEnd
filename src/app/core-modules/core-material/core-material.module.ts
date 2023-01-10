@@ -12,12 +12,41 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTableModule } from '@angular/material/table';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+const materialModules = [
+  MatIconModule,
+  MatButtonModule,
+  MatSidenavModule,
+  MatToolbarModule,
+  MatSelectModule,
+  FlexLayoutModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatCardModule,
+  MatDialogModule,
+  MatRadioModule,
+  MatChipsModule,
+  MatSlideToggleModule,
+  MatAutocompleteModule,
+  MatStepperModule,
+  MatTableModule,
+  MatSnackBarModule,
+  MatDialogModule,
+];
 
 @NgModule({
   declarations: [],
@@ -27,33 +56,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FlexLayoutModule,
     BrowserAnimationsModule,
     CommonModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatRadioModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatChipsModule,
-    MatButtonModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSlideToggleModule,
+    ReactiveFormsModule,
   ],
-  exports: [
-    FlexLayoutModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatRadioModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatChipsModule,
-    MatButtonModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSlideToggleModule,
-  ],
+  exports: [materialModules, FlexLayoutModule, materialModules],
 })
 export class CoreMaterialModule {}
