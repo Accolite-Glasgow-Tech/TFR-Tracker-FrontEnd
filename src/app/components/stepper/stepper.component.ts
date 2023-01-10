@@ -45,6 +45,7 @@ export class StepperComponent implements OnInit {
     At index 0 with a value of false indicates that the step 1 has not been completed.
   */
   stepsValid: boolean[] = [false, false, false];
+  editMode: boolean = false;
 
   /*
     controls whether the user can move to another step without completing its current step.
@@ -100,6 +101,7 @@ export class StepperComponent implements OnInit {
         this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
           project.id
         );
+        this.tfrManagementService.setVendorName(project.id);
       }
     });
   }
@@ -109,10 +111,16 @@ export class StepperComponent implements OnInit {
 
     To be able to programmatically move to the next step, the stepper should NOT be 
     linear. The stepper is momentarily made not linear.
+    forward = true => Move to next step
+    forward = false => Move to previous step
   */
-  nextStep() {
+  nextStep(forward: boolean) {
     this.myStepper.linear = false;
-    this.myStepper.next();
+    if (forward) {
+      this.myStepper.next();
+    } else {
+      this.myStepper.previous();
+    }
     this.myStepper.linear = true;
   }
 
@@ -145,5 +153,12 @@ export class StepperComponent implements OnInit {
         );
       }
     });
+  }
+
+  /*  
+    In edit mode the submit button should not be present
+  */
+  setEditMode(editMode: boolean) {
+    this.editMode = editMode;
   }
 }
