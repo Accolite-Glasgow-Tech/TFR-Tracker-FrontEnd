@@ -7,19 +7,14 @@ import { IStatus } from 'src/app/Interface/Status.Interface';
   providedIn: 'root',
 })
 export class ChartsService {
-  //private StatusUrl = 'http://localhost:4200/projects/statusCount';
+  private TfrStatusUrl = 'http://localhost:4200/projects/statusCount';
 
   constructor(private http: HttpClient) {
     this.readTfrStatusData().subscribe((data) => {});
   }
 
-  // getStatusData(): Observable<any> {
-  //   return this.http.get(this.StatusUrl);
-  // }
-
-  tfrStatus: IStatus[] = require('../../../assets/json/status.json');
-  public readTfrStatusData(): Observable<IStatus[]> {
-    return of(this.tfrStatus);
+  public readTfrStatusData(): Observable<any> {
+    return this.http.get(this.TfrStatusUrl);
   }
   ngOnInit() {}
 }
