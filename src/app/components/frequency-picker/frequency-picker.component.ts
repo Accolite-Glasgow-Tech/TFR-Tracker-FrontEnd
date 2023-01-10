@@ -1,19 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
-
-enum Frequency {
-  daily = 'daily',
-  weekly = 'weekly',
-  monthly = 'monthly',
-}
-
-enum DayOfMonth {
-  first = 'First',
-  last = 'Last',
-  specificLast = 'SpecificLast',
-  custom = 'Custom',
-}
+import { Frequency, DayOfMonth, daysOfWeek } from 'src/app/utils';
 
 @Component({
   selector: 'app-frequency-picker',
@@ -24,25 +12,24 @@ export class FrequencyPickerComponent implements OnInit {
   frequencyEnum = Frequency;
   DayOfMonthEnum = DayOfMonth;
   today: Date = new Date();
+  daysOfWeek = daysOfWeek;
 
-  daysOfWeek: Map<number, string> = new Map([
-    [0, 'Sunday'],
-    [1, 'Monday'],
-    [2, 'Tuesday'],
-    [3, 'Wednesday'],
-    [4, 'Thursday'],
-    [5, 'Friday'],
-    [6, 'Saturday'],
-  ]);
+  @Input() startDate = this.today;
+  @Input() time = '08:00';
+  @Input() recurring = false;
+  @Input() frequency = Frequency.weekly;
+  @Input() dayOfMonth = DayOfMonth.last;
+  @Input() customDayofMonth = this.today.getDate();
+  @Input() expirationDate: Date | null = null;
 
   frequencyPicker = new FormGroup({
-    startDateControl: new FormControl(this.today, Validators.required),
-    timeControl: new FormControl('08:00', Validators.required),
-    recurringControl: new FormControl(false, Validators.required),
-    frequencyControl: new FormControl(Frequency.weekly, Validators.required),
-    dayOfMonthControl: new FormControl(DayOfMonth.last),
-    customDayofMonthControl: new FormControl(this.today.getDate()),
-    expirationDateControl: new FormControl<Date | null>(null),
+    startDateControl: new FormControl(this.startDate, Validators.required),
+    timeControl: new FormControl(this.time, Validators.required),
+    recurringControl: new FormControl(this.recurring, Validators.required),
+    frequencyControl: new FormControl(this.frequency, Validators.required),
+    dayOfMonthControl: new FormControl(this.dayOfMonth),
+    customDayofMonthControl: new FormControl(this.customDayofMonth),
+    expirationDateControl: new FormControl<Date | null>(this.expirationDate),
   });
 
   selectedDays: Set<number> = new Set([this.today.getDay()]);
