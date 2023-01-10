@@ -1,0 +1,40 @@
+.floating-btn-div {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+}
+
+.small-text {
+  font-size: smaller;
+}
+
+.form-field {
+  width: 70%;
+}
+
+.basic-details-div {
+  margin: 1rem;
+}
+
+.intro-div {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.navigation-btn {
+  margin: 5px;
+}
+
+@media screen and (max-width: 800px) {
+  button {
+    width: 2%;
+    height: 2%;
+    font-size: smaller;
+  }
+
+  .form-field {
+    width: 100%;
+  }
+}
