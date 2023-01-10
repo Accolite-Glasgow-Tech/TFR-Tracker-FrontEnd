@@ -23,7 +23,9 @@ export class TfrManagementService {
     APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/projects';
   // projectURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/' + project_id;
   projectURL = 'assets/json/project.json';
+  statusUpdateURL = 'assets/json/projectStatusUpdate.json';
   public projectResourcesWithNames!: AllocatedResourceType[];
+  vendorSpecificObject!: Object;
 
   constructor(
     private http: HttpClient,
@@ -61,6 +63,14 @@ export class TfrManagementService {
 
   get getProject(): Project | undefined {
     return this.project;
+  }
+
+  get getVendorSpecificObject(): any {
+    return this.vendorSpecificObject;
+  }
+
+  setVendorSpecificObject(vendorSpecificObject: string) {
+    this.vendorSpecificObject = JSON.parse(JSON.parse(vendorSpecificObject));
   }
 
   setProject(project: Project) {
@@ -180,28 +190,6 @@ export class TfrManagementService {
   }
 
   /*
-    The vendor details contains a lot of / and _ and the role
-    contains _ which can only be removed from the frontend.
-  */
-  cleanProjectObject() {
-    if (this.project !== undefined) {
-      this.project.vendor_specific = this.project.vendor_specific
-        .replace(/\\/g, '')
-        .replace('"', '')
-        .replace(/"([^"]*)$/, '$1');
-
-      // this.project?.project_resources.forEach(
-      //   (project_resource: ProjectResource) => {
-      //     project_resource.role = project_resource.role.replace(/_/g, ' ');
-      //   }
-      // );
-      console.log(this.project.project_resources);
-
-      this.getResourcesNamesByProjectIdFromDatabase(Number(this.project.id));
-    }
-  }
-
-  /*
     Returns more details information about the resources associated with the project.
     Each object contains the current project_id, the resource's id, name, email, role.
   */
@@ -222,5 +210,13 @@ export class TfrManagementService {
           }
         );
       });
+  }
+
+  updateStatusToDatabase(): Observable<boolean> {
+    /* 
+      When API is ready, need to make a put request to the database
+      to update the status.
+    */
+    return this.http.get<boolean>(this.statusUpdateURL);
   }
 }

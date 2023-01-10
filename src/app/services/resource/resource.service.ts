@@ -69,15 +69,12 @@ export class ResourceService {
     return this.roleHashMap.get(role);
   }
 
-  /*
-    Convert the date obtained from Database to better display
-    format
-
-    YYYY-MM-DD, HH:MM
-  */
-  prettyPrintDate(dateTime: string): string {
-    let time = dateTime.substring(11, 16);
-    let date = dateTime.substring(0, 10);
+  prettyPrintDate(dateTime: Date): string {
+    let dateTimeString: string = dateTime.toLocaleString('en-GB', {
+      timeZone: 'UTC',
+    });
+    let time = dateTimeString.substring(11, 16);
+    let date = dateTimeString.substring(0, 10);
 
     return date + ', ' + time;
   }

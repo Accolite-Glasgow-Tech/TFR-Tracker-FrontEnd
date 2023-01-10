@@ -91,8 +91,16 @@ export class StepperComponent implements OnInit {
       fetches the project to be displayed.
     */
     this.route.data.subscribe(({ project }) => {
-      this.tfrManagementService.project = project;
-      this.tfrManagementService.cleanProjectObject();
+      if (project) {
+        this.tfrManagementService.setVendorSpecificObject(
+          project.vendor_specific
+        );
+
+        this.tfrManagementService.project = project;
+        this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
+          project.id
+        );
+      }
     });
   }
 
@@ -126,7 +134,16 @@ export class StepperComponent implements OnInit {
     A small confirmation pop-up msg (aka a snack bar) is displayed at the bottom of the screen for 3000ms.
   */
   redirect() {
-    this.router.navigate(['/tfrs']);
-    this.snackBarService.showSnackBar('TFR submitted.', 3000);
+    this.tfrManagementService.updateStatusToDatabase().subscribe((response) => {
+      if (response) {
+        this.router.navigate(['/tfrs']);
+        this.snackBarService.showSnackBar('TFR submitted.', 3000);
+      } else {
+        this.snackBarService.showSnackBar(
+          'TFR not submitted. Error occured',
+          5000
+        );
+      }
+    });
   }
 }

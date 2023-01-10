@@ -61,10 +61,8 @@ export class VendorsComponent implements OnInit {
   fillAttributesFromExisting() {
     // parse values from existingDetails.vendor_specific
     // use to set values of form array
-    var obj = JSON.parse(this.existingDetails.vendor_specific);
+    var obj = JSON.parse(JSON.parse(this.existingDetails.vendor_specific));
     let i = 0;
-    console.log(this.attributes[0].attribute_name);
-    console.log(obj);
 
     this.attributes.forEach((attribute) => {
       console.log(obj[attribute.attribute_name]);

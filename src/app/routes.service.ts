@@ -26,6 +26,10 @@ export class RoutesService {
       component: TfrsComponent,
     },
     {
+      path: 'tfr/create',
+      component: StepperComponent,
+    },
+    {
       path: 'tfr/:id/edit',
       component: StepperComponent,
       resolve: {

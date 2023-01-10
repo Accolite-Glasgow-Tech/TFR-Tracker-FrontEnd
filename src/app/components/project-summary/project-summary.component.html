@@ -11,11 +11,7 @@
         <span
           ><strong>Start Date: </strong>
           {{
-            this.resourceService.prettyPrintDate(
-              currentProject?.start_date?.toLocaleString("en-GB", {
-                timeZone: "UTC"
-              })!
-            )
+            this.resourceService.prettyPrintDate(currentProject?.start_date!)
           }}</span
         >
       </div>
@@ -23,13 +19,7 @@
       <div class="project-details">
         <span>
           <strong>End Date: </strong>
-          {{
-            this.resourceService.prettyPrintDate(
-              currentProject?.end_date?.toLocaleString("en-GB", {
-                timeZone: "UTC"
-              })!
-            )
-          }}
+          {{ this.resourceService.prettyPrintDate(currentProject?.end_date!) }}
         </span>
       </div>
 
@@ -38,11 +28,16 @@
       </div>
     </div>
 
-    <div class="project-details column" id="vendor-div">
-      <div id="tab">
-        {{ cleanVendorDetails() }}
+    <div class="column project-details" id="vendor-div">
+      <div
+        class="project-details"
+        *ngFor="let vendor_attribute of this.vendorSpecificObject | keyvalue"
+      >
+        <span>
+          <strong>{{ vendor_attribute.key }}: </strong>
+          {{ vendor_attribute.value }}
+        </span>
       </div>
-      <div id="vendor-details"></div>
     </div>
   </div>
 

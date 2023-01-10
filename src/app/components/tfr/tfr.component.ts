@@ -38,8 +38,15 @@ export class TfrComponent implements OnInit {
         fetches the project to be displayed.
       */
       this.route.data.subscribe(({ project }) => {
-        this.tfrManagementService.project = project;
-        this.tfrManagementService.cleanProjectObject();
+        if (project) {
+          this.tfrManagementService.setVendorSpecificObject(
+            project.vendor_specific
+          );
+          this.tfrManagementService.project = project;
+          this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
+            project.id
+          );
+        }
       });
     }
   }
