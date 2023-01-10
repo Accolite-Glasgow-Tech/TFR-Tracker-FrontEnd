@@ -35,8 +35,38 @@
         <a mat-button routerLink="/contact">Reports</a>
       </div>
     </mat-sidenav>
-    <!-- <mat-sidenav-content fxFlexFill> TFR Details </mat-sidenav-content> -->
-    <app-charts></app-charts>
-    <!-- <mat-sidenav-content fxFlexFill></mat-sidenav-content>> -->
-  </mat-sidenav-container>
+    <mat-sidenav-content fxFlexFill>
+    <div class="flex-container">
+      <!-- <div class="flex-child magenta">
+        <app-charts></app-charts> 
+      </div>
+      <div class="flex-child green">
+        <app-widget-vendor-location></app-widget-vendor-location>
+      </div>
+      <div class="flex-child green">
+        <app-widget-vendor-project-count></app-widget-vendor-project-count>
+      </div>
+    </div>
+  </mat-sidenav-content> -->
+  <!-- <div class="example-button-row">
+    <button mat-raised-button color="accent" (click)="TFRStatusChart()">TFRStatusChart</button>
+    <button mat-raised-button color="accent" (click)="VendorProjectCountChart()">VendorProjectCountChart</button>
+    <button mat-raised-button color="accent" (click)="VendorLocationChart()">VendorLocationChart</button>
+    <button mat-raised-button color="accent"(click)="remove()">Remove</button>
+  </div>
+  <div class="container">
+    <ngx-gridster
+      [options]="gridsterOptions"
+      [draggableOptions]="{ handlerClass: 'panel-heading' }"
+      (optionsChange)="optionsChange($event)"
+    >
+      <ngx-gridster-item *ngFor="let widget of widgets; index as i">
+        <div class="widget">
+          <button class="btn">{{ i }}</button>
+        </div>
+      </ngx-gridster-item>
+    </ngx-gridster>
+  </div> -->
+  
+  <!-- </mat-sidenav-container> -->
 </div>

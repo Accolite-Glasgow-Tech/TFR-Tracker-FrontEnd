@@ -14,13 +14,6 @@ export class ChartsComponent implements OnInit {
 
   tfrstatusdata: IStatus[] = [];
 
-  public getTfrStatusData(): IStatus[] {
-    this.chartservice.readTfrStatusData().subscribe((response) => {
-      this.tfrstatusdata = response;
-    });
-    return this.tfrstatusdata;
-  }
-
   public pieChartOptions: ChartOptions<'pie'> = {
     responsive: true,
   };
@@ -31,16 +24,26 @@ export class ChartsComponent implements OnInit {
       data: [],
     },
   ];
-
-  pieChartLabels: any[] = Object.keys(this.getTfrStatusData());
-
+  pieChartLabels: any[] = [];
   ngOnInit() {
-    this.pieChartData = [
-      {
-        data: Object.values(this.getTfrStatusData()),
-        backgroundColor: ['orange', 'Grey', 'red', 'green', 'yellow', 'blue'],
-      },
-    ];
+
+    this.chartservice.readTfrStatusData().subscribe((response) => {
+      this.tfrstatusdata = response;
+      (this.pieChartLabels = Object.keys(response)),
+        (this.pieChartData = [
+          {
+            data: Object.values(response),
+            backgroundColor: [
+              'orange',
+              'Grey',
+              'red',
+              'green',
+              'yellow',
+              'blue',
+            ],
+          },
+        ]);
+    });
   }
 
   onChartClick(event: any) {
