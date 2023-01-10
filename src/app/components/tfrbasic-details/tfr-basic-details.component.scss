@@ -1,9 +1,15 @@
+.floating-btn-div {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+}
+
 .small-text {
   font-size: smaller;
 }
 
 .form-field {
-  width: 50%;
+  width: 70%;
 }
 
 .basic-details-div {
@@ -19,12 +25,6 @@
 
 .navigation-btn {
   margin: 5px;
-}
-
-.floating-btn-div {
-  position: fixed;
-  bottom: 5%;
-  right: 5%;
 }
 
 @media screen and (max-width: 800px) {

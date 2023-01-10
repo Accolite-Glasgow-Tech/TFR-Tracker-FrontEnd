@@ -1,24 +1,3 @@
-<div class="floating-btn-div">
-  <button
-    mat-raised-button
-    [disabled]="!isFormValid()"
-    class="navigation-btn"
-    color="primary"
-    (click)="saveTFR()"
-  >
-    Save
-  </button>
-  <button
-    mat-raised-button
-    [disabled]="!isFormValid()"
-    class="navigation-btn"
-    color="primary"
-    (click)="next()"
-  >
-    Next
-  </button>
-</div>
-
 <div class="basic-details-div">
   <div class="intro-div">
     <label>Fill in the basic details for this project.</label>
@@ -37,7 +16,7 @@
 
     <p>
       <mat-form-field class="form-field" appearance="fill">
-        <mat-label>Enter a date range</mat-label>
+        <mat-label>Start and End date of project</mat-label>
         <mat-date-range-input [rangePicker]="picker">
           <input
             class="small-text"
@@ -74,5 +53,27 @@
     ></app-vendors>
   </form>
 </div>
+
+<div class="floating-btn-div">
+  <button
+    mat-raised-button
+    [disabled]="!isFormValid()"
+    class="navigation-btn"
+    color="primary"
+    (click)="saveTFR()"
+  >
+    Save
+  </button>
+  <button
+    mat-raised-button
+    [disabled]="!isFormValid()"
+    class="navigation-btn"
+    color="primary"
+    (click)="next()"
+  >
+    Next
+  </button>
+</div>
+
 <br />
 <br />

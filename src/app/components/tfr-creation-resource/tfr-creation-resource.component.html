@@ -1,38 +1,9 @@
 <div id="resource_div">
   <div id="intro_div">
     <label
-      >Add the resources and assign their respective roles for this
+      >Add the resources and assign their respective roles for the
       project</label
     >
-    <div class="floating-btn-div">
-      <button
-        mat-raised-button
-        class="navigation-btn"
-        color="primary"
-        matStepperPrevious
-      >
-        Back
-      </button>
-      <button
-        mat-raised-button
-        [disabled]="!resourceListUpdated"
-        class="navigation-btn"
-        color="primary"
-        (click)="saveToDatabase()"
-      >
-        Save
-      </button>
-      <button
-        mat-raised-button
-        class="navigation-btn"
-        color="primary"
-        [disabled]="allocatedResources.length === 0"
-        (click)="triggerNextStep()"
-        matStepperNext
-      >
-        Next
-      </button>
-    </div>
   </div>
   <br />
 
@@ -151,6 +122,36 @@
     >
     </app-resource-table>
   </ng-container>
+</div>
+
+<div class="floating-btn-div">
+  <button
+    mat-raised-button
+    class="navigation-btn"
+    color="primary"
+    matStepperPrevious
+  >
+    Back
+  </button>
+  <button
+    mat-raised-button
+    [disabled]="!resourceListUpdated"
+    class="navigation-btn"
+    color="primary"
+    (click)="saveToDatabase()"
+  >
+    Save
+  </button>
+  <button
+    mat-raised-button
+    class="navigation-btn"
+    color="primary"
+    [disabled]="allocatedResources.length === 0"
+    (click)="triggerNextStep()"
+    matStepperNext
+  >
+    Next
+  </button>
 </div>
 
 <br />

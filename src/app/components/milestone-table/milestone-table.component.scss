@@ -5,8 +5,6 @@
 .data-cell,
 .data-cell-mobile {
   padding-left: 15px;
-  padding-top: 5px;
-  padding-bottom: 10px;
   text-align: center;
   word-break: break-all;
 }
@@ -17,6 +15,7 @@
 
 .data-cell-div-container-mobile {
   text-align: center;
+  margin: 10px;
 }
 
 .data-cell-div-mobile {

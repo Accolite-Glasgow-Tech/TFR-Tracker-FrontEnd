@@ -49,6 +49,12 @@
 
   <mat-step id="last-step" state="summary-icon">
     <ng-template matStepLabel>{{ (this.stepLabels | async)![3] }}</ng-template>
+
+    <div id="title"><h2>Summary</h2></div>
+    <app-project-summary
+      [currentProject]="tfrManagementService.getProject"
+      [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"
+    ></app-project-summary>
     <div class="floating-btn-div">
       <button
         mat-raised-button
@@ -67,11 +73,6 @@
         Submit
       </button>
     </div>
-    <div id="title"><h2>Summary</h2></div>
-    <app-project-summary
-      [currentProject]="tfrManagementService.getProject"
-      [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"
-    ></app-project-summary>
   </mat-step>
 
   <ng-template matStepperIcon="basic-details-icon">

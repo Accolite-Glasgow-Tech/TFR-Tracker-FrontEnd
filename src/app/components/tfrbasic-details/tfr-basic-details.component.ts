@@ -106,8 +106,6 @@ export class TfrBasicDetailsComponent implements OnInit {
       this.vendor_specificData = '{';
       let i = 0;
       while (i < this.attributeNames.length) {
-        console.log(this.attributeNames[i]);
-
         if (i > 0) {
           this.vendor_specificData = this.vendor_specificData.concat(', ');
         }
