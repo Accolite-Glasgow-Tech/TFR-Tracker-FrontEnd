@@ -83,6 +83,11 @@ export class ReportsComponent implements OnInit {
         break;
     }
 
+    let expiration_date: Date = this.schedulerForm
+      .get('frequency')!
+      .get('expirationDateControl')!.value;
+    expiration_date.setHours(23, 59, 59, 0);
+
     this.createTask({
       task: {
         project_id: project_id,
@@ -91,6 +96,7 @@ export class ReportsComponent implements OnInit {
         recurring: recurring,
         cron: cron,
         by_email: by_email,
+        expiration_date: expiration_date,
       },
       resources: resources,
     });
