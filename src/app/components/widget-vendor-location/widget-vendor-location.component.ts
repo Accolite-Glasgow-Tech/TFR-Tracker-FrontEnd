@@ -6,36 +6,36 @@ import { WidgetVendorLocationService } from './widget-vendor-location.service';
   templateUrl: './widget-vendor-location.component.html',
   styleUrls: ['./widget-vendor-location.component.scss'],
   providers: [WidgetVendorLocationService],
-
 })
 export class WidgetVendorLocationComponent {
-    constructor(private widgetVendorLocationService: WidgetVendorLocationService) {}
-    
-    tfrLocationCountdata= [];
+  constructor(
+    private widgetVendorLocationService: WidgetVendorLocationService
+  ) {}
 
-    public getTfrLocationCountData() {
-      // this.widgetVendorLocationService.readTfrLocationCountData().subscribe((response) => {
-      //   this.tfrLocationCountdata = response;
-      // });
-      console.log(this.tfrLocationCountdata)
-      return this.tfrLocationCountdata;
-    }
-  
-    chart: any;
+  tfrLocationCountdata = [];
 
-    chartOptions = {
-      title:{
-        text: "Number of projects locationWise"
+  public getTfrLocationCountData() {
+    console.log(this.tfrLocationCountdata);
+    return this.tfrLocationCountdata;
+  }
+
+  chart: any;
+
+  chartOptions = {
+    title: {
+      text: 'Number of projects locationWise',
+    },
+    size: 5,
+    animationEnabled: true,
+    axisY: {
+      includeZero: true,
+    },
+    data: [
+      {
+        type: 'bar',
+        indexLabel: '{y}',
+        dataPoints: this.getTfrLocationCountData(),
       },
-      size:5,
-      animationEnabled: true,
-      axisY: {
-        includeZero: true,
-      },
-      data: [{
-        type: "bar",
-        indexLabel: "{y}",
-        dataPoints:  this.getTfrLocationCountData(),
-      }]
-    }	
-  }                              
+    ],
+  };
+}

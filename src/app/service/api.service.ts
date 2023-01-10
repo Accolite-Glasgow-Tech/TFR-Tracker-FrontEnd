@@ -7,7 +7,7 @@ import { IStatus } from '../Interface/Status.Interface';
   providedIn: 'root',
 })
 export class ApiService {
-  private vendorURL = 'http://localhost:4200/vendors';
+  private vendorURL = 'http://localhost:8080/vendors';
 
   constructor(private http: HttpClient) {
     this.getVendorData().subscribe((data) => {});

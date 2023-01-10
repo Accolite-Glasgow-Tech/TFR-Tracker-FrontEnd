@@ -1,34 +1,68 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreMaterialModule } from './core-modules/core-material/core-material.module';
-import { VendorsComponent } from './components/vendors/vendors.component';
+
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsComponent } from './components/charts/charts.component';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartsService } from './components/charts/charts.service';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { WidgetVendorLocationComponent } from './components/widget-vendor-location/widget-vendor-location.component';
 import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
 import { WidgetVendorLocationService } from './components/widget-vendor-location/widget-vendor-location.service';
-import { FormsModule } from '@angular/forms';
 import { GridsterModule } from 'angular2gridster';
 import { WidgetVendorProjectCountComponent } from './components/widget-vendor-project-count/widget-vendor-project-count.component';
 import { WidgetVendorProjectCountService } from './components/widget-vendor-project-count/widget-vendor-project-count.service';
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
+import { StepperComponent } from './components/stepper/stepper.component';
+import { TfrCreationResourceComponent } from './components/tfr-creation-resource/tfr-creation-resource.component';
+
+import { HomeComponent } from './components/home/home.component';
+import { TfrsComponent } from './components/tfrs/tfrs.component';
+import { MilestonesComponent } from './components/milestones/milestones.component';
+import { AlertsComponent } from './components/alerts/alerts.component';
+import { FrequencyPickerComponent } from './components/frequency-picker/frequency-picker.component';
+import { ReportsComponent } from './components/reports/reports.component';
+import { TfrComponent } from './components/tfr/tfr.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { TfrBasicDetailsComponent } from './components/tfrbasic-details/tfr-basic-details.component';
+import { VendorsComponent } from './components/tfrbasic-details/vendors/vendors.component';
+import { ProjectSummaryComponent } from './components/project-summary/project-summary.component';
+import { ResourceTableComponent } from './components/resource-table/resource-table.component';
+import { MilestoneTableComponent } from './components/milestone-table/milestone-table.component';
+import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+
 @NgModule({
   declarations: [
     AppComponent,
-    VendorsComponent,
     ChartsComponent,
     ToolbarComponent,
     WidgetVendorLocationComponent,
     CanvasJSChart,
     WidgetVendorProjectCountComponent,
+    StepperComponent,
+    TfrCreationResourceComponent,
+    HomeComponent,
+    TfrsComponent,
+    MilestonesComponent,
+    AlertsComponent,
+    ReportsComponent,
+    TfrComponent,
+    SidenavComponent,
+    FrequencyPickerComponent,
+    TfrBasicDetailsComponent,
+    VendorsComponent,
+    ProjectSummaryComponent,
+    ResourceTableComponent,
+    MilestoneTableComponent,
+    TfrCreationDialogComponent,
   ],
   providers: [ChartsService, WidgetVendorLocationService, WidgetVendorProjectCountService],
   bootstrap: [AppComponent],
@@ -41,8 +75,9 @@ var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
     NgChartsModule,
     FormsModule,
     GridsterModule.forRoot(),
-    GridsterModule
-  ],
+    GridsterModule,
+    ReactiveFormsModule 
+   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })
 export class AppModule {}

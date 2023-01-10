@@ -3,13 +3,13 @@ import { RoutesService } from './routes.service';
 import { IGridsterOptions, GridsterComponent } from 'angular2gridster';
 import { ChartsComponent } from './components/charts/charts.component';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent { @ViewChild(GridsterComponent) gridster!: GridsterComponent;
+export class AppComponent {
+  @ViewChild(GridsterComponent) gridster!: GridsterComponent;
 
   widgets: any[] = [{}];
 
@@ -19,10 +19,10 @@ export class AppComponent { @ViewChild(GridsterComponent) gridster!: GridsterCom
     direction: 'vertical',
     dragAndDrop: false,
     resizable: false,
-    useCSSTransforms: false
+    useCSSTransforms: false,
   };
 
-  getLaneCount():number {
+  getLaneCount(): number {
     if (this.widgets.length > 6) {
       return 4;
     }
