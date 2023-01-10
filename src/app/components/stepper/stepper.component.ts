@@ -13,12 +13,19 @@ import { map } from 'rxjs/operators';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
   styleUrls: ['./stepper.component.scss'],
-  providers: [TfrManagementService],
+  providers: [
+    TfrManagementService,
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false },
+    },
+  ],
 })
 export class StepperComponent implements OnInit {
   @ViewChild('stepper') private myStepper!: MatStepper;
@@ -50,7 +57,7 @@ export class StepperComponent implements OnInit {
     Listens to screen size changes. When the screen is small, the orientation of the stepper 
     will be vertical. A horizontal stepper will appear on a large screen.
   */
-  stepperOrientation: Observable<StepperOrientation>;
+  stepLabels: Observable<string[]>;
 
   constructor(
     @Inject(FormBuilder) private _formBuilder: FormBuilder,
@@ -66,9 +73,15 @@ export class StepperComponent implements OnInit {
       Below 800px, the stepper is vertical.
       Above 800px, the stepper is horizontal.
     */
-    this.stepperOrientation = breakpointObserver
+    this.stepLabels = breakpointObserver
       .observe('(min-width: 800px)')
-      .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+      .pipe(
+        map(({ matches }) =>
+          matches
+            ? ['TFR Basic Details', 'Milestones', 'Resources', 'Summary']
+            : ['', '', '', '']
+        )
+      );
   }
 
   ngOnInit(): void {

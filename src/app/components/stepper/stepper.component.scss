@@ -1,14 +1,10 @@
 .floating-btn-div {
   position: fixed;
-  top: 25%;
+  bottom: 5%;
   right: 5%;
 }
 
 @media screen and (max-width: 800px) {
-  .floating-btn-div {
-    top: 50%;
-    right: 5%;
-  }
   button {
     width: 2%;
     height: 2%;

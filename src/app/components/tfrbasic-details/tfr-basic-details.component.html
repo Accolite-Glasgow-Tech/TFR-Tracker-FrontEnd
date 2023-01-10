@@ -1,28 +1,29 @@
+<div class="floating-btn-div">
+  <button
+    mat-raised-button
+    [disabled]="!isFormValid()"
+    class="navigation-btn"
+    color="primary"
+    (click)="saveTFR()"
+  >
+    Save
+  </button>
+  <button
+    mat-raised-button
+    [disabled]="!isFormValid()"
+    class="navigation-btn"
+    color="primary"
+    (click)="next()"
+  >
+    Next
+  </button>
+</div>
+
 <div class="basic-details-div">
   <div class="intro-div">
     <label>Fill in the basic details for this project.</label>
-    <div class="floating-btn-div">
-      <button
-        mat-raised-button
-        [disabled]="!isFormValid()"
-        class="navigation-btn"
-        color="primary"
-        (click)="saveTFR()"
-      >
-        Save
-      </button>
-      <button
-        mat-raised-button
-        [disabled]="!isFormValid()"
-        class="navigation-btn"
-        color="primary"
-        (click)="next()"
-      >
-        Next
-      </button>
-    </div>
   </div>
-
+  <br />
   <form [formGroup]="tfrDetails">
     <p>
       <mat-form-field class="form-field" appearance="fill">
@@ -73,3 +74,5 @@
     ></app-vendors>
   </form>
 </div>
+<br />
+<br />

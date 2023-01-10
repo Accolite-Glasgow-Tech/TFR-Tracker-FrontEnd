@@ -39,8 +39,6 @@ const materialModules = [
   MatDialogModule,
 ];
 
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-
 @NgModule({
   declarations: [],
   imports: [
@@ -69,12 +67,6 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     MatChipsModule,
     MatAutocompleteModule,
     MatSnackBarModule,
-  ],
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { displayDefaultIndicatorType: false },
-    },
   ],
 })
 export class CoreMaterialModule {}
