@@ -1,3 +1,8 @@
+interface Template {
+  value: string;
+  viewValue: string;
+}
+
 export enum Frequency {
   daily = 'daily',
   weekly = 'weekly',
@@ -11,6 +16,12 @@ export enum DayOfMonth {
   custom = 'Custom',
 }
 
+export enum RecieverOptions {
+  self = 'Only me',
+  allProjectResources = 'All project contacts',
+  custom = 'Custom',
+}
+
 export const daysOfWeek: Map<number, string> = new Map([
   [0, 'Sunday'],
   [1, 'Monday'],
@@ -20,3 +31,5 @@ export const daysOfWeek: Map<number, string> = new Map([
   [5, 'Friday'],
   [6, 'Saturday'],
 ]);
+
+export const templates: Template[] = [{ value: 'REPORT', viewValue: 'Report' }];

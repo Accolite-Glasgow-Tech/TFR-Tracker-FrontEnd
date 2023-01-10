@@ -21,8 +21,8 @@
 
   <app-frequency-picker></app-frequency-picker>
 
-  <label class="formLabel">Who do you wish to send reports to?</label>
-  <mat-radio-group class="recipientsRadio" formControlName="receiver">
+  <label class="formLabel">{{ receiverLabelText }}</label>
+  <mat-radio-group class="recipientsRadioGroup" formControlName="receiver">
     <mat-radio-button
       class="recipientsRadioButton"
       [color]="'primary'"

@@ -1,20 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-import { Console } from 'console';
-
-interface Template {
-  value: string;
-  viewValue: string;
-}
-
-enum RecieverOptions {
-  self = 'Only me',
-  allProjectResources = 'All project contacts',
-  custom = 'Custom',
-}
+import { RecieverOptions, templates } from 'src/app/utils';
 
 @Component({
   selector: 'app-reports',
@@ -25,14 +14,17 @@ export class ReportsComponent implements OnInit {
   @ViewChild(FrequencyPickerComponent, { static: true })
   frequencyPickerComponent!: FrequencyPickerComponent;
 
+  @Input() tfrList: any;
+  @Input() template = templates[0].value;
+  @Input() recieverOption = RecieverOptions.self;
+
+  templates = templates;
   resource!: any;
-  tfrList: any;
-
-  templates: Template[] = [
-    { value: 'ALERT', viewValue: 'Alert' },
-    { value: 'REPORT', viewValue: 'Report' },
-  ];
-
+  selectTfrLabelText: string = 'Select TFR';
+  selectTemplateLabelText: string = 'Select Template';
+  submitButtonText: string = 'Schedule';
+  receiverLabelText: string = 'Who do you wish to send reports to?';
+  schedulerFormTfr: number | null = null;
   recieverOptionsEnum = RecieverOptions;
   schedulerForm!: FormGroup;
 
@@ -49,9 +41,9 @@ export class ReportsComponent implements OnInit {
     };
 
     this.schedulerForm = new FormGroup({
-      tfr: new FormControl<number | null>(null, [Validators.required]),
-      type: new FormControl('ALERT', [Validators.required]),
-      receiver: new FormControl(RecieverOptions.self, [Validators.required]),
+      tfr: new FormControl<number | null>(this.tfrList, [Validators.required]),
+      type: new FormControl(this.template, [Validators.required]),
+      receiver: new FormControl(this.recieverOption, [Validators.required]),
       frequency: this.frequencyPickerComponent.createFormGroup(),
     });
 

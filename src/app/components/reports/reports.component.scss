@@ -1,3 +1,10 @@
+@media (max-width: 800) {
+  .recipientsRadioGroup {
+    display: block;
+    align-content: center;
+  }
+}
+
 #form {
   display: flex;
   flex-direction: column;
@@ -8,12 +15,8 @@
   padding-bottom: 1rem;
 }
 
-.recipientsRadio {
-}
-
 .recipientsRadioButton {
   padding-right: 1rem;
-  padding-bottom: 2rem;
 }
 
 .btn-submit {
