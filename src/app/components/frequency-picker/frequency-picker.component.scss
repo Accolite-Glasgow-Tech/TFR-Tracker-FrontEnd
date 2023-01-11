@@ -2,11 +2,18 @@
   display: flex;
 }
 
-.mid {
-  align-items: center;
-  justify-content: center;
+.margined {
+  margin: 1vw;
 }
 
-.margined {
-  margin: 10px;
+.fixed-width-full {
+  width: 40vw;
+}
+
+.fixed-width-half {
+  width: 19vw;
+}
+
+.justified-left {
+  justify-content: left;
 }
