@@ -1,41 +1,4 @@
 <div style="height: 100vh">
-  <mat-toolbar color="primary">
-    <div fxShow="true" fxHide.gt-sm="true">
-      <button mat-icon-button (click)="sidenav.toggle()">
-        <mat-icon>menu</mat-icon>
-      </button>
-    </div>
-
-    <a mat-button class="acc-tfr" routerLink="/">
-      <span>TFR Managment</span>
-    </a>
-    <span class="example-spacer"></span>
-    <div fxShow="true" fxHide.lt-md="true">
-      <a mat-button routerLink="/about-us">Home</a>
-      <a mat-button routerLink="/prices">TFR Details</a>
-      <a mat-button routerLink="/start-page">Invoice </a>
-      <a mat-button routerLink="/offer">Alerts</a>
-      <a mat-button routerLink="/contact">Reports</a>
-    </div>
-  </mat-toolbar>
-  <mat-sidenav-container fxFlexFill class="example-container">
-    <mat-sidenav
-      color="primary"
-      #sidenav
-      fxLayout="column"
-      mode="over"
-      opened="false"
-      fxHide.gt-sm="true"
-    >
-      <div fxLayout="column">
-        <a mat-button routerLink="/about-us">Home</a>
-        <a mat-button routerLink="/prices">TFR Details</a>
-        <a mat-button routerLink="/start-page">Invoice </a>
-        <a mat-button routerLink="/offer">Alerts</a>
-        <a mat-button routerLink="/contact">Reports</a>
-      </div>
-    </mat-sidenav>
-    <mat-sidenav-content fxFlexFill>
-      <div class="flex-container"></div> </mat-sidenav-content
-  ></mat-sidenav-container>
+  <app-toolbar></app-toolbar>
+  <app-sidenav></app-sidenav>
 </div>
