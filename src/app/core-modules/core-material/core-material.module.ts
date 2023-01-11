@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
-
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
@@ -53,11 +52,16 @@ const materialModules = [
   imports: [
     BrowserModule,
     FormsModule,
-    FlexLayoutModule,
+    BrowserAnimationsModule,
+    CommonModule,
+    materialModules,
+  ],
+  exports: [
+    materialModules,
     BrowserAnimationsModule,
     CommonModule,
     ReactiveFormsModule,
+    FlexLayoutModule,
   ],
-  exports: [materialModules, FlexLayoutModule, materialModules],
 })
 export class CoreMaterialModule {}

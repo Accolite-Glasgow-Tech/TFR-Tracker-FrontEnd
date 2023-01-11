@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +22,11 @@
     "@angular/platform-browser": "^15.0.4",
     "@angular/platform-browser-dynamic": "^15.0.4",
     "@angular/router": "^15.0.4",
+    "angular-gridster2": "^15.0.0",
+    "angular2gridster": "^6.0.4",
+    "canvasjs": "^1.8.3",
+    "chart.js": "^3.9.1",
+    "ng2-charts": "^4.1.1",
     "rxjs": "~7.5.0",
     "symbol-observable": "^4.0.0",
     "tslib": "^2.3.0",
