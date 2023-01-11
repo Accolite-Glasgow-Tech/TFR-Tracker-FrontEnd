@@ -129,7 +129,7 @@
     mat-raised-button
     class="navigation-btn"
     color="primary"
-    (click)="triggerStep(false)"
+    matStepperPrevious
   >
     Back
   </button>
@@ -147,7 +147,8 @@
     class="navigation-btn"
     color="primary"
     [disabled]="allocatedResources.length === 0"
-    (click)="triggerStep(true)"
+    (click)="triggerNextStep()"
+    matStepperNext
   >
     Next
   </button>

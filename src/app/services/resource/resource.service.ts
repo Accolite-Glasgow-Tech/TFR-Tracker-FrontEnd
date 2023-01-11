@@ -77,7 +77,7 @@ export class ResourceService {
       let time = dateTimeString.substring(11, 16);
       let date = dateTimeString.substring(0, 10);
 
-      return date + ' at ' + time;
+      return date + ', ' + time;
     }
 
     return '';

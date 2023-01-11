@@ -57,7 +57,7 @@
 <div class="floating-btn-div">
   <button
     mat-raised-button
-    [disabled]="!isFormDirty()"
+    [disabled]="!isFormValid()"
     class="navigation-btn"
     color="primary"
     (click)="saveTFR()"

@@ -1,7 +1,6 @@
-import { SidenavToggleService } from 'src/app/sidenav-toggle.service';
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { RoutesService } from 'src/app/routes.service';
+import { SidenavToggleService } from 'src/app/sidenav-toggle.service';
 
 @Component({
   selector: 'app-toolbar',

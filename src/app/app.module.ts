@@ -1,22 +1,9 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreMaterialModule } from './core-modules/core-material/core-material.module';
-
-import { HttpClientModule } from '@angular/common/http';
-import { ChartsComponent } from './components/charts/charts.component';
-import { NgChartsModule } from 'ng2-charts';
-import { ChartsService } from './components/charts/charts.service';
-import { WidgetVendorLocationComponent } from './components/widget-vendor-location/widget-vendor-location.component';
-import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
-import { WidgetVendorLocationService } from './components/widget-vendor-location/widget-vendor-location.service';
-import { GridsterModule } from 'angular2gridster';
-import { WidgetVendorProjectCountComponent } from './components/widget-vendor-project-count/widget-vendor-project-count.component';
-import { WidgetVendorProjectCountService } from './components/widget-vendor-project-count/widget-vendor-project-count.service';
-var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
-
 import { StepperComponent } from './components/stepper/stepper.component';
 import { TfrCreationResourceComponent } from './components/tfr-creation-resource/tfr-creation-resource.component';
 
@@ -38,15 +25,11 @@ import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ChartsComponent,
-    ToolbarComponent,
-    WidgetVendorLocationComponent,
-    CanvasJSChart,
-    WidgetVendorProjectCountComponent,
     StepperComponent,
     TfrCreationResourceComponent,
     HomeComponent,
@@ -56,7 +39,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReportsComponent,
     TfrComponent,
     SidenavComponent,
+    ToolbarComponent,
     FrequencyPickerComponent,
+    ReportsComponent,
     TfrBasicDetailsComponent,
     VendorsComponent,
     ProjectSummaryComponent,
@@ -64,20 +49,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MilestoneTableComponent,
     TfrCreationDialogComponent,
   ],
-  providers: [ChartsService, WidgetVendorLocationService, WidgetVendorProjectCountService],
-  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     CoreMaterialModule,
-    HttpClientModule,
-    NgChartsModule,
     FormsModule,
-    GridsterModule.forRoot(),
-    GridsterModule,
-    ReactiveFormsModule 
-   ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+    ReactiveFormsModule,
+    HttpClientModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

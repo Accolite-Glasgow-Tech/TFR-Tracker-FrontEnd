@@ -2,9 +2,8 @@
   <mat-step [completed]="stepsValid[0]" state="basic-details-icon">
     <ng-template matStepLabel>{{ (this.stepLabels | async)![0] }}</ng-template>
     <app-tfr-basic-details
-      (nextStepEmitter)="nextStep($event)"
+      (nextStepEmitter)="nextStep()"
       (stepCompletedEmitter)="stepCompleted(0, $event)"
-      (editModeEmitter)="setEditMode($event)"
     ></app-tfr-basic-details>
   </mat-step>
 
@@ -42,7 +41,7 @@
     <ng-template matStepLabel>{{ (this.stepLabels | async)![2] }}</ng-template>
     <!-- Resource Component Here -->
     <app-tfr-creation-resource
-      (nextStepEmitter)="nextStep($event)"
+      (nextStepEmitter)="nextStep()"
       (stepCompletedEmitter)="stepCompleted(2, $event)"
     ></app-tfr-creation-resource>
     <!--  -->
@@ -58,7 +57,6 @@
       [vendorSpecificObject]="tfrManagementService.getVendorSpecificObject"
       [vendorName]="tfrManagementService.getVendorName"
     ></app-project-summary>
-
     <div class="floating-btn-div">
       <button
         mat-raised-button
@@ -68,27 +66,13 @@
       >
         Back
       </button>
-
-      <!-- CREATE MODE buttons -->
       <button
         class="navigation-btn success-btn"
         mat-raised-button
         color="success"
-        (click)="redirect(true)"
-        *ngIf="!this.editMode"
+        (click)="redirect()"
       >
         Submit
-      </button>
-
-      <!-- EDIT MODE buttons -->
-      <button
-        class="navigation-btn success-btn"
-        mat-raised-button
-        color="success"
-        (click)="redirect(false)"
-        *ngIf="this.editMode"
-      >
-        Done
       </button>
     </div>
   </mat-step>
