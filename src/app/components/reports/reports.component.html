@@ -1,21 +1,17 @@
 <form id="form" [formGroup]="schedulerForm" (ngSubmit)="onSubmit()">
-  <label class="formLabel">Select TFR</label>
   <mat-form-field class="mat-selector" appearance="fill">
     <mat-label>Select TFR</mat-label>
     <mat-select formControlName="tfr">
-      <mat-option *ngFor="let tfr of tfrList" [value]="tfr.project_id">
-        {{ tfr.project_id }}
+      <mat-option *ngFor="let tfr of tfrList" [value]="tfr.id">
+        {{ tfr.name }}
       </mat-option>
     </mat-select>
   </mat-form-field>
 
-  <label class="formLabel">Select Template</label>
-  <mat-form-field class="mat-selector" appearance="fill">
+  <mat-form-field disabled class="mat-selector" appearance="fill">
     <mat-label>Select Template</mat-label>
     <mat-select formControlName="type">
-      <mat-option *ngFor="let template of templates" [value]="template.value">
-        {{ template.viewValue }}</mat-option
-      >
+      <mat-option [value]="template"> {{ template }}</mat-option>
     </mat-select>
   </mat-form-field>
 

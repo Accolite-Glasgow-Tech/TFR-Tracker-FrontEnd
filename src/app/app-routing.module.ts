@@ -10,8 +10,6 @@ import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { RoutesService } from './routes.service';
 
-const routes: Routes = [{ path: 'reports', component: ReportsComponent }];
-
 @NgModule({
   imports: [RouterModule.forRoot(RoutesService.RoutesList)],
   exports: [RouterModule],
