@@ -45,13 +45,14 @@ export class StepperComponent implements OnInit {
     At index 0 with a value of false indicates that the step 1 has not been completed.
   */
   stepsValid: boolean[] = [false, false, false];
+  editMode: boolean = false;
 
   /*
     controls whether the user can move to another step without completing its current step.
     
     A value of true forces the user to complete its current step before moving to the next.
   */
-  isLinear = false;
+  isLinear = true;
 
   /*
     Listens to screen size changes. When the screen is small, the orientation of the stepper 
@@ -100,6 +101,7 @@ export class StepperComponent implements OnInit {
         this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
           project.id
         );
+        this.tfrManagementService.setVendorName(project.id);
       }
     });
   }
@@ -109,10 +111,16 @@ export class StepperComponent implements OnInit {
 
     To be able to programmatically move to the next step, the stepper should NOT be 
     linear. The stepper is momentarily made not linear.
+    forward = true => Move to next step
+    forward = false => Move to previous step
   */
-  nextStep() {
+  nextStep(forward: boolean) {
     this.myStepper.linear = false;
-    this.myStepper.next();
+    if (forward) {
+      this.myStepper.next();
+    } else {
+      this.myStepper.previous();
+    }
     this.myStepper.linear = true;
   }
 
@@ -133,17 +141,31 @@ export class StepperComponent implements OnInit {
     
     A small confirmation pop-up msg (aka a snack bar) is displayed at the bottom of the screen for 3000ms.
   */
-  redirect() {
-    this.tfrManagementService.updateStatusToDatabase().subscribe((response) => {
-      if (response) {
-        this.router.navigate(['/tfrs']);
-        this.snackBarService.showSnackBar('TFR submitted.', 3000);
-      } else {
-        this.snackBarService.showSnackBar(
-          'TFR not submitted. Error occured',
-          5000
-        );
-      }
-    });
+  redirect(update: boolean) {
+    if (update) {
+      this.tfrManagementService
+        .updateStatusToDatabase()
+        .subscribe((response) => {
+          if (response) {
+            this.router.navigate(['/tfrs']);
+            this.snackBarService.showSnackBar('TFR submitted.', 3000);
+          } else {
+            this.snackBarService.showSnackBar(
+              'TFR not submitted. Error occured',
+              5000
+            );
+          }
+        });
+    } else {
+      this.router.navigate(['/tfrs']);
+      this.snackBarService.showSnackBar('TFR updated.', 3000);
+    }
+  }
+
+  /*  
+    In edit mode the submit button should not be present
+  */
+  setEditMode(editMode: boolean) {
+    this.editMode = editMode;
   }
 }
