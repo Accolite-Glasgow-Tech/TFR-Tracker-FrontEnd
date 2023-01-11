@@ -1,11 +1,13 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   ProjectBasicDetails,
   Vendor,
   VendorAttribute,
 } from 'src/app/types/types';
+import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
 @Component({
   selector: 'app-tfr-basic-details',
@@ -13,7 +15,10 @@ import {
   styleUrls: ['./tfr-basic-details.component.scss'],
 })
 export class TfrBasicDetailsComponent implements OnInit {
-  constructor(private tfrManager: TfrManagementService) {}
+  constructor(
+    private tfrManager: TfrManagementService,
+    private matDialog: MatDialog
+  ) {}
 
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
@@ -26,6 +31,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   vendor_specificData: string = '';
   editMode: Boolean = false;
   projectToEdit!: ProjectBasicDetails;
+  @Output() editModeEmitter = new EventEmitter<boolean>();
 
   ngOnInit(): void {
     console.log('Basic Details loaded');
@@ -41,6 +47,7 @@ export class TfrBasicDetailsComponent implements OnInit {
     if (this.tfrManager.getBasicDetails != undefined) {
       this.editMode = true;
       this.stepCompletedEmitter.emit(true);
+      this.editModeEmitter.emit(true);
       // edit mode
       console.log('edit mode');
       this.projectToEdit = this.tfrManager.getBasicDetails;
@@ -55,6 +62,13 @@ export class TfrBasicDetailsComponent implements OnInit {
     } else {
       return this.vendorAttributes.valid && this.tfrDetails.valid;
     }
+  }
+
+  isFormDirty() {
+    if (this.isFormValid()) {
+      return this.vendorAttributes.dirty || this.tfrDetails.dirty;
+    }
+    return false;
   }
 
   setDetailsToExistingProject() {
@@ -75,6 +89,10 @@ export class TfrBasicDetailsComponent implements OnInit {
     };
 
     this.tfrManager.setBasicDetails(updatedProjectDetails);
+    this.tfrDetails.markAsPristine();
+    this.vendorAttributes.markAsPristine();
+
+    /* Need to add API database call here to save to database */
   }
 
   onVendorSelect(vendor: Vendor) {
@@ -82,10 +100,54 @@ export class TfrBasicDetailsComponent implements OnInit {
     this.tfrDetails.get('vendor_id')?.setValue(vendor.id);
   }
 
+  /* 
+    Move onto the next step of the stepper
+  */
   next() {
-    this.saveTFR();
-    this.nextStepEmitter.emit(true);
-    this.stepCompletedEmitter.emit(true);
+    if (this.isFormDirty()) {
+      let dialogRef = this.matDialog.open(TfrCreationDialogComponent);
+      dialogRef.afterClosed().subscribe((result: string) => {
+        if (result === 'true') {
+          /* User wants to discard changes */
+          this.stepCompletedEmitter.emit(true);
+          this.nextStepEmitter.emit(true);
+          /* Resets the value of the input fields to the most recent state of the database */
+          this.resetInputFields();
+        }
+      });
+    } else {
+      this.stepCompletedEmitter.emit(true);
+      this.nextStepEmitter.emit(true);
+    }
+  }
+
+  /*
+    Resets the input fields to the most recent state of the database
+  */
+  resetInputFields() {
+    let previousStateBasicDetails: ProjectBasicDetails =
+      this.tfrManager.getBasicDetails!;
+    let previousStateVendor: Object = this.tfrManager.getVendorSpecificObject;
+    this.tfrDetails.get('name')?.setValue(previousStateBasicDetails.name);
+    this.tfrDetails
+      .get('start_date')
+      ?.setValue(previousStateBasicDetails.start_date);
+    this.tfrDetails
+      .get('end_date')
+      ?.setValue(previousStateBasicDetails.end_date);
+    this.tfrDetails
+      .get('vendor_id')
+      ?.setValue(previousStateBasicDetails.vendor_id);
+    let i = 0;
+    while (i < this.attributeNames.length) {
+      let attributeName = this.getAttributesArray().controls[i];
+      attributeName.setValue(
+        previousStateVendor[this.attributeNames[i] as keyof Object]
+      );
+      i++;
+    }
+    this.tfrDetails.markAsPristine();
+    this.vendorAttributes.markAsPristine();
   }
 
   onAttributesSelected(attributes: VendorAttribute[]) {

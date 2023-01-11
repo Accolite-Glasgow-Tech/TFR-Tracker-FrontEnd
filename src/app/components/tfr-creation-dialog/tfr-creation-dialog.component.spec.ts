@@ -8,9 +8,8 @@ describe('TfrCreationDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TfrCreationDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [TfrCreationDialogComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TfrCreationDialogComponent);
     component = fixture.componentInstance;
