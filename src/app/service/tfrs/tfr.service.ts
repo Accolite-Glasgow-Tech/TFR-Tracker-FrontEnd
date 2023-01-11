@@ -13,10 +13,6 @@ export class tfrService{
     url_get_Projects_By_Post='http://localhost:8080/search/project'
 
     url_All_Vendors='http://localhost:8080/search/vendors/all'
-
-    //url_Vendor_By_Id ='http://localhost:8080/search/vendors/'
-
-    // url_user_photo='https://jsonplaceholder.typicode.com/photos'
     
     constructor(public httpClient : HttpClient){
 

@@ -7,6 +7,8 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import { MatSort,Sort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { getDateString } from 'src/app/utils/util';
+import { dateFormat, statusList } from 'src/app/constant/constant';
 
 
 
@@ -38,10 +40,12 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   projectList:MatTableDataSource<PeriodicElement>=new MatTableDataSource(this.ELEMENT_DATA)
   selectedVendorName:any;
   vendors:any
-  statusList:any=['DRAFT','INPROGRESS','ARCHIVED','DELIVERED']
+  statusList=statusList
   selectedStatus:any
   startAfterDate:any=new FormControl();
   endBeforeDate:any=new FormControl();
+  pageSize=[3,5,10,15]
+  dateFormat = dateFormat
   
   
   @ViewChild(MatPaginator,{static: false}) paginator!: MatPaginator;
@@ -51,25 +55,19 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     setTimeout( () => {this.projectList.paginator = this.paginator;
                        this.projectList.sort =this.sort;
                       })
-    // this.projectList.paginator = this.paginator;
-    // this.projectList.sort = this.sort;
   }
 
   announceSortChange(sortState:Sort) {
-    // This example uses English messages. If your application supports
-    // multiple language, you would internationalize these strings.
-    // Furthermore, you can customize the message to add additional
-    // details about the values being sorted.
     if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+      this.liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {
-      this._liveAnnouncer.announce('Sorting cleared');
+      this.liveAnnouncer.announce('Sorting cleared');
     }
   }
 
   projectPostBody:any={};
 
-  constructor(private tfrService:tfrService,private _liveAnnouncer: LiveAnnouncer){
+  constructor(private tfrService:tfrService,private liveAnnouncer: LiveAnnouncer){
 
   }
 
@@ -82,7 +80,6 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     this.tfrService.getAllVendors().subscribe(
       (allVendors)=>{
         this.vendors=allVendors;
-        //console.log(allVendors)
       }
     )
   }
@@ -90,10 +87,10 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   getProjects():void{
     this.projectPostBody={}
     if(this.startAfterDate.value!=undefined){
-      this.projectPostBody["start_date_after"]=this.getDateString(this.startAfterDate)+" 00:00:00";
+      this.projectPostBody["start_date_after"]=getDateString(this.startAfterDate)+" 00:00:00";
     }
     if(this.endBeforeDate.value!=undefined){
-      this.projectPostBody["end_date_before"]=this.getDateString(this.endBeforeDate)+" 23:59:59"
+      this.projectPostBody["end_date_before"]=getDateString(this.endBeforeDate)+" 23:59:59"
     }
     if(this.selectedVendorName!=undefined){
       this.projectPostBody["vendor_name"]=this.selectedVendorName;
@@ -106,19 +103,5 @@ export class TfrsComponent implements OnInit, AfterViewInit {
          this.projectList.data = projects;
       }
     ) 
-  }
-
-  getDateString(date:any){
-    var year = date.value.getFullYear();
-    var month = date.value.getMonth()+1;
-    var day = date.value.getDate();
-    if(month>=1&&month<=9){
-      month="0"+month;
-    }
-    if(day>=1&&day<=9){
-      day="0"+day;
-    }
-    return year+'-'+month+'-'+day
-
   }
 }

@@ -19,7 +19,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Project Start After</mat-label>
         <input matInput [matDatepicker]="picker1" [formControl]="startAfterDate" >
-        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-hint>{{dateFormat}}</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
         <mat-datepicker #picker1></mat-datepicker>
       </mat-form-field>
@@ -27,7 +27,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Project End Before</mat-label>
         <input matInput [matDatepicker]="picker2" [formControl]="endBeforeDate">
-        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-hint>{{dateFormat}}</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
         <mat-datepicker #picker2></mat-datepicker>
       </mat-form-field>
@@ -35,7 +35,7 @@
         <div></div>
 
       <section>
-        <div class="example-button-row">
+        <div class="">
           <button mat-raised-button color="primary" (click)="getProjects()">Search</button>
         </div>
       </section>
@@ -43,38 +43,38 @@
 </div>
 
 
-<div class="example-container mat-table">
+<div class="tfrs-table-container mat-table">
 
 <table mat-table [dataSource]="projectList" matSort (matSortChange)="announceSortChange($event)"  class="mat-elevation-z8 mat-table">
     
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    <td mat-cell *matCellDef="let tfr"> {{tfr.name}} </td>
   </ng-container>
 
   <ng-container matColumnDef="start_date" >
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </th>
-    <td mat-cell *matCellDef="let element"> {{element.start_date.split('T')[0]}} </td>
+    <td mat-cell *matCellDef="let tfr"> {{tfr.start_date.split('T')[0]}} </td>
   </ng-container>
 
   <ng-container matColumnDef="end_date">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> End Date </th>
-    <td mat-cell *matCellDef="let element"> {{element.end_date.split('T')[0]}} </td>
+    <td mat-cell *matCellDef="let tfr"> {{tfr.end_date.split('T')[0]}} </td>
   </ng-container>
 
   <ng-container matColumnDef="status">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-    <td mat-cell *matCellDef="let element" [ngClass]="{'delivered':element.status=='DELIVERED',
-                                                      'inprogress':element.status=='INPROGRESS',
-                                                      'archived':element.status=='ARCHIVED',
-                                                      'draft':element.status=='DRAFT'}"> {{element.status}} </td>
+    <td mat-cell *matCellDef="let tfr" [ngClass]="{'delivered':tfr.status=='DELIVERED',
+                                                      'inprogress':tfr.status=='INPROGRESS',
+                                                      'archived':tfr.status=='ARCHIVED',
+                                                      'draft':tfr.status=='DRAFT'}"> {{tfr.status}} </td>
   </ng-container>
 
   
   <ng-container matColumnDef="link">
     <th mat-header-cell *matHeaderCellDef> action </th>
-    <td mat-cell *matCellDef="let element">  
-      <a routerLink="/tfr/{{element.id}}" routerLinkActive="active" ariaCurrentWhenActive="page">View Details </a>
+    <td mat-cell *matCellDef="let tfr">  
+      <a routerLink="/tfr/{{tfr.id}}" routerLinkActive="active" ariaCurrentWhenActive="page">View Details </a>
     </td>
   </ng-container>
 
@@ -83,8 +83,7 @@
 </table>
 
 
-
-  <mat-paginator [pageSizeOptions]="[3, 5, 10]"
+  <mat-paginator [pageSizeOptions]="pageSize"
                   showFirstLastButtons
                   aria-label="Select page">
   </mat-paginator>

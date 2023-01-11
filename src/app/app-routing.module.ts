@@ -7,6 +7,7 @@ import { PermissionsComponent } from './components/permissions/permissions.compo
 import { ReportsComponent } from './components/reports/reports.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { TfrComponent } from './components/tfr/tfr.component';
+import { UserComponent } from './components/user/user.component';
 import { RoutesService } from './routes.service';
 
 @NgModule({

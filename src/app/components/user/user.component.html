@@ -1,1 +1,69 @@
-<p>user works!</p>
+
+<div class="" [formGroup]="registerGroup" [hidden]="!registering">
+    <p>Register</p>
+    <div class="register-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="" formControlName="name" required>
+          <mat-error *ngIf="registerGroup.get('name').invalid">{{getUsernameErrorMessage()}}</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="register-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput placeholder="" formControlName="password" required type="password">
+          <mat-error *ngIf="registerGroup.get('password').invalid">{{getPasswordErrorMessage()}}</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="register-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Confirm password</mat-label>
+          <input matInput placeholder="" formControlName="confirmPassword" required type="password">
+          <div [hidden]="confirmPasswordValid()">
+            <mat-error style="font-size: 11px;">Password does not match</mat-error>
+          </div>
+        </mat-form-field>
+    </div>
+
+    <section>
+        <div class="">
+          <button [disabled]="registerGroup.invalid||!confirmPasswordValid()" mat-raised-button color="primary" (click)="register()">Register</button>
+          <button mat-raised-button color="primary" (click)="goLogin()">Go Login</button>
+        </div>
+    </section>
+    
+</div>
+
+
+<div class="" [formGroup]="logginGroup" [hidden]="!logging">
+    <p>Login</p>
+    <div class="register-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="" formControlName="name" required>
+        </mat-form-field>
+    </div>
+
+    <div class="register-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput placeholder="" formControlName="password" required type="password">
+        </mat-form-field>
+    </div>
+
+    <section>
+        <div class="">
+          <button [disabled]="logginGroup.invalid" mat-raised-button color="primary" (click)="login()">Login</button>
+          <button mat-raised-button color="primary" (click)="goRegister()">Go Register</button>
+        </div>
+    </section>
+    
+</div>
+
+
+
+
+
+

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { ViewChild} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatTableModule} from '@angular/material/table'
@@ -28,6 +28,7 @@ import { TfrComponent } from './components/tfr/tfr.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { UserComponent } from './components/user/user.component';
+import { TokenInterceptorService } from './interceptors/token-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -59,9 +60,12 @@ import { UserComponent } from './components/user/user.component';
     MatButtonModule,
     MatPaginatorModule,
     MatSortModule,
-
   ],
-  providers: [{provide: MatPaginatorIntl, useClass: MatPaginatorIntl}],
+  providers: [{provide: MatPaginatorIntl, useClass: MatPaginatorIntl},{
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptorService,
+    multi: true,
+  },],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
