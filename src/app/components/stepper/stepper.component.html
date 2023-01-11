@@ -59,8 +59,7 @@
       [vendorName]="tfrManagementService.getVendorName"
     ></app-project-summary>
 
-    <!-- EDIT MODE buttons -->
-    <div class="floating-btn-div" *ngIf="this.editMode">
+    <div class="floating-btn-div">
       <button
         mat-raised-button
         class="navigation-btn"
@@ -69,33 +68,27 @@
       >
         Back
       </button>
-      <button
-        class="navigation-btn success-btn"
-        mat-raised-button
-        color="success"
-        (click)="redirect(false)"
-      >
-        Done
-      </button>
-    </div>
 
-    <!-- CREATE MODE buttons -->
-    <div class="floating-btn-div" *ngIf="!this.editMode">
-      <button
-        mat-raised-button
-        class="navigation-btn"
-        color="primary"
-        matStepperPrevious
-      >
-        Back
-      </button>
+      <!-- CREATE MODE buttons -->
       <button
         class="navigation-btn success-btn"
         mat-raised-button
         color="success"
         (click)="redirect(true)"
+        *ngIf="!this.editMode"
       >
         Submit
+      </button>
+
+      <!-- EDIT MODE buttons -->
+      <button
+        class="navigation-btn success-btn"
+        mat-raised-button
+        color="success"
+        (click)="redirect(false)"
+        *ngIf="this.editMode"
+      >
+        Done
       </button>
     </div>
   </mat-step>
