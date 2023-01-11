@@ -3,7 +3,7 @@
 }
 .column {
   flex: 50%;
-  padding: 16px;
+  padding: 20px;
 }
 
 .LHS-details .project-details:first-child {
@@ -20,6 +20,10 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
+}
+.table-div {
+  padding-left: 30px;
+  padding-right: 30px;
 }
 
 #vendor-div {

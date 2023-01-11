@@ -219,7 +219,7 @@ export class TfrCreationResourceComponent implements OnInit {
             Since some resources have already been allocated, need to emit
             this to the parent component (aka stepper component).
           */
-          this.stepCompletedEmitter.emit(true);
+          // this.stepCompletedEmitter.emit(true);
         }
       });
   }
@@ -343,34 +343,54 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   /*
-    Move onto the next step of the stepper
+    Changes the step of the stepper
+    forward = true => Go to next step
+    forward = false => Go to previous step
   */
-  triggerNextStep() {
+  triggerStep(forward: boolean) {
     if (this.resourceListUpdated) {
-      this.showDialog();
+      this.showDialog(forward);
     } else {
-      this.stepCompletedEmitter.emit(true);
-      this.nextStepEmitter.emit(true);
+      this.nextStep(forward);
     }
   }
 
   /*
     Asks the user whether he wants to save the changes to database
+    forward = true => Go to next step
+    forward = false => Go to previous step
   */
-  showDialog() {
+  showDialog(forward: boolean) {
     let dialogRef = this.matDialog.open(TfrCreationDialogComponent);
     dialogRef.afterClosed().subscribe((result: string) => {
       if (result === 'true') {
-        this.saveToDatabase();
-      } else {
-        this.tfrManagementService.setProjectResourcesWithNames(
-          this.allocatedResources
-        );
-        this.resourceListUpdated = false;
+        /* User wants to discard changes */
+        this.nextStep(forward);
+
+        /* Reset the allocated resources to previous state in database*/
+        this.resetResources();
       }
-      this.stepCompletedEmitter.emit(true);
-      this.nextStepEmitter.emit(true);
     });
+  }
+
+  nextStep(forward: boolean) {
+    this.stepCompletedEmitter.emit(forward);
+    this.nextStepEmitter.emit(forward);
+  }
+
+  /* 
+    Reset the allocated resources to previous state in database
+  */
+  resetResources() {
+    this.allocatedResources =
+      this.tfrManagementService.getProjectResourcesWithNames;
+    this.allocatedResources.forEach((allocatedResource) => {
+      let indexOfResource = this.resources.findIndex(
+        (val) => val.resource_id === allocatedResource.resource_id
+      );
+      this.resources[indexOfResource].selected = true;
+    });
+    this.resourceListUpdated = false;
   }
 
   saveToDatabase() {
