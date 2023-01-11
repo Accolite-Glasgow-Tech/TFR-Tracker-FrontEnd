@@ -1,41 +1,5 @@
-$margin: 1vw;
-$full-width: 40vw;
-$half-width: calc(($full-width/2) - $margin);
-
-$margin-mobile: 1vw;
-$full-width-mobile: 40vw;
-$half-width-mobile: calc(($full-width/2) - $margin);
-
-@media only screen and (max-width: 600px) {
-  .margined {
-    margin: $margin-mobile !important;
-  }
-
-  .fixed-width-full {
-    width: $full-width-mobile !important;
-  }
-
-  .fixed-width-half {
-    width: $half-width-mobile !important;
-  }
-}
+@use "../reports/report-component-variables";
 
 .flexContainer {
   display: flex;
-}
-
-.margined {
-  margin: $margin;
-}
-
-.justified-left {
-  justify-content: left;
-}
-
-.fixed-width-full {
-  width: $full-width;
-}
-
-.fixed-width-half {
-  width: $half-width;
 }
