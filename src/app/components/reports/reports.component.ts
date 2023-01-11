@@ -95,7 +95,7 @@ export class ReportsComponent implements OnInit {
     let expiration_date: Date = this.schedulerForm
       .get('frequency')!
       .get('expirationDateControl')?.value;
-    if (expiration_date !== undefined) {
+    if (expiration_date !== null) {
       expiration_date.setHours(23, 59, 59, 0);
     }
 
