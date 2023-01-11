@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TfrCreationDialogComponent } from './tfr-creation-dialog.component';
 
-fdescribe('TfrCreationDialogComponent', () => {
+describe('TfrCreationDialogComponent', () => {
   let component: TfrCreationDialogComponent;
   let fixture: ComponentFixture<TfrCreationDialogComponent>;
 
