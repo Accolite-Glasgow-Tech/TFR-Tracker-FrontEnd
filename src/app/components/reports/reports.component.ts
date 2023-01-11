@@ -74,8 +74,8 @@ export class ReportsComponent implements OnInit {
     const recurring = this.schedulerForm
       .get('frequency')!
       .get('recurringControl')!.value;
-    const cron = recurring ? this.frequencyPickerComponent.getCron() : null;
 
+    const cron = recurring ? this.frequencyPickerComponent.getCron() : null;
     const by_email = true;
     let resources: Array<ResourceDTO> = [];
 
@@ -94,8 +94,10 @@ export class ReportsComponent implements OnInit {
 
     let expiration_date: Date = this.schedulerForm
       .get('frequency')!
-      .get('expirationDateControl')!.value;
-    expiration_date.setHours(23, 59, 59, 0);
+      .get('expirationDateControl')?.value;
+    if (expiration_date !== undefined) {
+      expiration_date.setHours(23, 59, 59, 0);
+    }
 
     this.createTask({
       task: {
