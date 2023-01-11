@@ -1,5 +1,9 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { Vendor, VendorAttribute, ProjectBasicDetails } from 'src/app/types/types';
+import {
+  Vendor,
+  VendorAttribute,
+  ProjectBasicDetails,
+} from 'src/app/types/types';
 import { ApiService } from 'src/app/services/api.service';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
@@ -10,7 +14,7 @@ import { debounce, interval } from 'rxjs';
   styleUrls: ['./vendors.component.scss'],
 })
 export class VendorsComponent implements OnInit {
-  constructor(private api: ApiService){}
+  constructor(private api: ApiService) {}
 
   @Input() editMode!: Boolean;
   @Input() existingDetails!: ProjectBasicDetails;
@@ -18,37 +22,35 @@ export class VendorsComponent implements OnInit {
   vendors!: Vendor[];
   attributes!: VendorAttribute[];
   attributeGroup!: FormGroup;
-  vendorGroup!: FormGroup
+  vendorGroup!: FormGroup;
 
   @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
 
-  ngOnInit(){
-
+  ngOnInit() {
     this.vendorGroup = new FormGroup({
       name: new FormControl(''),
-    })
+    });
 
-    this.api.getVendorData().subscribe(
-      (data) => {this.vendors = data;}
-    );
-    
+    this.api.getVendorData().subscribe((data) => {
+      this.vendors = data;
+    });
+
     this.attributeGroup = new FormGroup({
-      attributeValues: new FormArray([])
-    });
-    
-    this.getAttributes().valueChanges.pipe( 
-      debounce( () => interval(500) )
-      )
-    .subscribe(() => {
-      this.onAttributesUpdated.emit(this.attributeGroup);
+      attributeValues: new FormArray([]),
     });
 
-    if(this.editMode){
-      console.log("vendor edit mode");
+    this.getAttributes()
+      .valueChanges.pipe(debounce(() => interval(500)))
+      .subscribe(() => {
+        this.onAttributesUpdated.emit(this.attributeGroup);
+      });
+
+    if (this.editMode) {
+      console.log('vendor edit mode');
       // TODO fill in details of vendor and Attributes
-      // find vendor in list with existingDetails.vendorId and call select method
-      this.vendors.forEach((vendor)=> {
-        if(vendor.id == this.existingDetails.vendorId){
+      // find vendor in list with existingDetails.vendor_id and call select method
+      this.vendors.forEach((vendor) => {
+        if (vendor.id == this.existingDetails.vendor_id) {
           this.onSelectedVendor(vendor);
         }
       });
@@ -56,22 +58,22 @@ export class VendorsComponent implements OnInit {
     }
   }
 
-  fillAttributesFromExisting(){
-    // parse values from existingDetails.vendorSpecific
+  fillAttributesFromExisting() {
+    // parse values from existingDetails.vendor_specific
     // use to set values of form array
-    var obj = JSON.parse(this.existingDetails.vendorSpecific);
+    var obj = JSON.parse(JSON.parse(this.existingDetails.vendor_specific));
     let i = 0;
-    this.attributes.forEach((attribute)=>{
-      console.log(obj[attribute.attributeName]);
-      this.getAttributes().at(i).setValue(obj[attribute.attributeName]);
+
+    this.attributes.forEach((attribute) => {
+      console.log(obj[attribute.attribute_name]);
+      this.getAttributes().at(i).setValue(obj[attribute.attribute_name]);
       i += 1;
-    })
+    });
   }
 
   @Output() onSelected = new EventEmitter<Vendor>();
   @Output() attributesSelected = new EventEmitter<VendorAttribute[]>();
   onSelectedVendor(vendor: Vendor) {
-
     this.vendorGroup.get('name')?.setValue(vendor.name);
 
     console.log(vendor);
@@ -82,16 +84,16 @@ export class VendorsComponent implements OnInit {
     });
 
     this.attributesSelected.emit(this.attributes);
-  
+
     this.getAttributes().clear();
-    
+
     //add a form control to form array for each attribute
     this.attributes.forEach((res) => {
-      this.getAttributes().push( new FormControl('', [Validators.required]));
+      this.getAttributes().push(new FormControl('', [Validators.required]));
     });
   }
 
   getAttributes(): FormArray {
-    return this.attributeGroup.controls["attributeValues"] as FormArray;
+    return this.attributeGroup.controls['attributeValues'] as FormArray;
   }
 }

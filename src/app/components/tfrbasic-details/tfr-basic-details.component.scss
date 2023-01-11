@@ -1,16 +1,40 @@
-.small-text{
+.floating-btn-div {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+}
+
+.small-text {
   font-size: smaller;
 }
 
-.form-field{
-  width: 35%;
+.form-field {
+  width: 70%;
 }
 
-.buttonRow{
-  width: 35%;
+.basic-details-div {
+  margin: 1rem;
+}
+
+.intro-div {
+  width: 100%;
   display: flex;
-  justify-content:space-around;
-  flex-direction: row;
-  margin: auto;
+  justify-content: space-between;
+  gap: 5px;
 }
 
+.navigation-btn {
+  margin: 5px;
+}
+
+@media screen and (max-width: 800px) {
+  button {
+    width: 2%;
+    height: 2%;
+    font-size: smaller;
+  }
+
+  .form-field {
+    width: 100%;
+  }
+}

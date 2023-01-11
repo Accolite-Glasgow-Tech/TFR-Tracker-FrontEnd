@@ -1,0 +1,102 @@
+<mat-stepper [linear]="isLinear" #stepper [labelPosition]="'bottom'">
+  <mat-step [completed]="stepsValid[0]" state="basic-details-icon">
+    <ng-template matStepLabel>{{ (this.stepLabels | async)![0] }}</ng-template>
+    <app-tfr-basic-details
+      (nextStepEmitter)="nextStep()"
+      (stepCompletedEmitter)="stepCompleted(0, $event)"
+    ></app-tfr-basic-details>
+  </mat-step>
+
+  <mat-step [stepControl]="milestoneFormGroup" state="milestone-icon">
+    <ng-template matStepLabel>{{ (this.stepLabels | async)![1] }}</ng-template>
+    <form [formGroup]="milestoneFormGroup">
+      <!-- Milestone Component Here -->
+      <mat-form-field appearance="fill">
+        <mat-label>Milestone</mat-label>
+        <input matInput formControlName="milestoneName" required />
+      </mat-form-field>
+      <div>
+        <button
+          mat-raised-button
+          color="primary"
+          class="navigation-btn"
+          matStepperPrevious
+        >
+          Back
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          class="navigation-btn"
+          matStepperNext
+        >
+          Next
+        </button>
+      </div>
+      <!--  -->
+    </form>
+  </mat-step>
+
+  <mat-step [completed]="stepsValid[2]" state="resources-icon">
+    <ng-template matStepLabel>{{ (this.stepLabels | async)![2] }}</ng-template>
+    <!-- Resource Component Here -->
+    <app-tfr-creation-resource
+      (nextStepEmitter)="nextStep()"
+      (stepCompletedEmitter)="stepCompleted(2, $event)"
+    ></app-tfr-creation-resource>
+    <!--  -->
+  </mat-step>
+
+  <mat-step id="last-step" state="summary-icon">
+    <ng-template matStepLabel>{{ (this.stepLabels | async)![3] }}</ng-template>
+
+    <div id="title"><h2>Summary</h2></div>
+    <app-project-summary
+      [currentProject]="tfrManagementService.getProject"
+      [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"
+      [vendorSpecificObject]="tfrManagementService.getVendorSpecificObject"
+      [vendorName]="tfrManagementService.getVendorName"
+    ></app-project-summary>
+    <div class="floating-btn-div">
+      <button
+        mat-raised-button
+        class="navigation-btn"
+        color="primary"
+        matStepperPrevious
+      >
+        Back
+      </button>
+      <button
+        class="navigation-btn success-btn"
+        mat-raised-button
+        color="success"
+        (click)="redirect()"
+      >
+        Submit
+      </button>
+    </div>
+  </mat-step>
+
+  <ng-template matStepperIcon="basic-details-icon">
+    <mat-icon>folder</mat-icon>
+  </ng-template>
+
+  <ng-template matStepperIcon="milestone-icon">
+    <mat-icon>place</mat-icon>
+  </ng-template>
+
+  <ng-template matStepperIcon="resources-icon">
+    <mat-icon>people</mat-icon>
+  </ng-template>
+
+  <ng-template matStepperIcon="summary-icon">
+    <mat-icon>format_align_justify</mat-icon>
+  </ng-template>
+
+  <ng-template matStepperIcon="done">
+    <mat-icon
+      style="color: darkblue; background-color: greenyellow; border-radius: 50%"
+      >done_all</mat-icon
+    >
+  </ng-template>
+</mat-stepper>

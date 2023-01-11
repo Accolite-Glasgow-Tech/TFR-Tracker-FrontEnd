@@ -1,0 +1,143 @@
+<form [formGroup]="frequencyPicker">
+  <div>
+    <mat-form-field class="margined" appearance="outline">
+      <mat-label>Schedule for</mat-label>
+      <input
+        matInput
+        [matDatepicker]="startDate"
+        formControlName="startDateControl"
+      />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="startDate"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #startDate></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="margined" appearance="outline">
+      <mat-label>Schedule at</mat-label>
+      <div class="flexContainer mid">
+        <input
+          matInput
+          type="time"
+          step="300"
+          onfocus="this.showPicker()"
+          formControlName="timeControl"
+        />
+        <mat-icon>alarm</mat-icon>
+      </div>
+    </mat-form-field>
+  </div>
+  <div class="margined">
+    Is this a recurring event?
+    <mat-slide-toggle
+      [color]="'primary'"
+      formControlName="recurringControl"
+    ></mat-slide-toggle>
+  </div>
+  <div *ngIf="frequencyPicker.get('recurringControl')!.value">
+    <div>
+      <mat-form-field class="margined" appearance="outline">
+        <mat-label>Repeat</mat-label>
+        <mat-select
+          #frequency
+          formControlName="frequencyControl"
+          (selectionChange)="frequencyChange()"
+          disableRipple
+        >
+          <mat-option
+            *ngFor="
+              let frequency of [
+                frequencyEnum.daily,
+                frequencyEnum.weekly,
+                frequencyEnum.monthly
+              ]
+            "
+            [value]="frequency"
+          >
+            {{ frequency }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div
+      class="flexContainer mid margined"
+      *ngIf="frequency.value === frequencyEnum.weekly"
+    >
+      <mat-chip-listbox multiple>
+        <mat-chip-option
+          class="margined"
+          #chip
+          *ngFor="let day of [0, 1, 2, 3, 4, 5, 6]"
+          [value]="day"
+          [selectable]="false"
+          [selected]="selectedDays.has(day)"
+          (click)="toggleSelection(chip)"
+        >
+          {{ daysOfWeek.get(day)!.slice(0, 1).toUpperCase() }}
+        </mat-chip-option>
+      </mat-chip-listbox>
+    </div>
+    <div *ngIf="frequency.value === frequencyEnum.monthly">
+      <mat-form-field class="margined" appearance="outline">
+        <mat-select
+          #dayOfMonth
+          formControlName="dayOfMonthControl"
+          disableRipple
+        >
+          <mat-option
+            class="margined"
+            *ngFor="
+              let day of [
+                DayOfMonthEnum.first,
+                DayOfMonthEnum.last,
+                DayOfMonthEnum.specificLast,
+                DayOfMonthEnum.custom
+              ]
+            "
+            [value]="day"
+          >
+            {{
+              day === DayOfMonthEnum.specificLast
+                ? "Last " + daysOfWeek.get(today.getDay())
+                : day + " day"
+            }}
+            of month
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field
+        class="margined"
+        *ngIf="dayOfMonth.value === DayOfMonthEnum.custom"
+        appearance="outline"
+      >
+        <input
+          matInput
+          type="number"
+          id="quantity"
+          name="quantity"
+          min="1"
+          max="28"
+          formControlName="customDayofMonthControl"
+        />
+        <mat-error> Value of day should be between 1 and 28</mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="margined" appearance="outline">
+        <mat-label>Expire at</mat-label>
+        <input
+          matInput
+          [matDatepicker]="expirationtDate"
+          formControlName="expirationDateControl"
+        />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="expirationtDate"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #expirationtDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+</form>

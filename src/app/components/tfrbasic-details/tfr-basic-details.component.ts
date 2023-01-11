@@ -23,16 +23,18 @@ export class TfrBasicDetailsComponent implements OnInit {
   selectedProject!: ProjectBasicDetails;
   vendorAttributes!: FormGroup;
   attributeNames: string[] = [];
-  vendorSpecificData: string = '';
+  vendor_specificData: string = '';
   editMode: Boolean = false;
   projectToEdit!: ProjectBasicDetails;
 
   ngOnInit(): void {
+    console.log('Basic Details loaded');
+
     this.tfrDetails = new FormGroup({
       name: new FormControl('', [Validators.required]),
-      startDate: new FormControl<Date | null>(null),
-      endDate: new FormControl<Date | null>(null),
-      vendorId: new FormControl('', [Validators.required]),
+      start_date: new FormControl<Date | null>(null),
+      end_date: new FormControl<Date | null>(null),
+      vendor_id: new FormControl('', [Validators.required]),
     });
 
     // check whether project exists yet, and if so, pre-fill details and set to edit mode
@@ -57,18 +59,18 @@ export class TfrBasicDetailsComponent implements OnInit {
 
   setDetailsToExistingProject() {
     this.tfrDetails.get('name')?.setValue(this.projectToEdit.name);
-    this.tfrDetails.get('startDate')?.setValue(this.projectToEdit.startDate);
-    this.tfrDetails.get('endDate')?.setValue(this.projectToEdit.endDate);
+    this.tfrDetails.get('start_date')?.setValue(this.projectToEdit.start_date);
+    this.tfrDetails.get('end_date')?.setValue(this.projectToEdit.end_date);
   }
 
   saveTFR() {
     // take data from tfrDetails and combine with residual info from selected project id
     let updatedProjectDetails: ProjectBasicDetails = {
       name: this.tfrDetails.get('name')?.value,
-      startDate: this.tfrDetails.get('startDate')?.value,
-      endDate: this.tfrDetails.get('endDate')?.value,
-      vendorId: this.tfrDetails.get('vendorId')?.value,
-      vendorSpecific: this.vendorSpecificData,
+      start_date: this.tfrDetails.get('start_date')?.value,
+      end_date: this.tfrDetails.get('end_date')?.value,
+      vendor_id: this.tfrDetails.get('vendor_id')?.value,
+      vendor_specific: this.vendor_specificData,
       status: this.editMode ? this.projectToEdit.status : 'DRAFT',
     };
 
@@ -77,7 +79,7 @@ export class TfrBasicDetailsComponent implements OnInit {
 
   onVendorSelect(vendor: Vendor) {
     console.log(this.tfrDetails);
-    this.tfrDetails.get('vendorId')?.setValue(vendor.id);
+    this.tfrDetails.get('vendor_id')?.setValue(vendor.id);
   }
 
   next() {
@@ -89,25 +91,25 @@ export class TfrBasicDetailsComponent implements OnInit {
   onAttributesSelected(attributes: VendorAttribute[]) {
     this.attributeNames = [];
     attributes.forEach((att) => {
-      this.attributeNames.push(att.attributeName);
+      this.attributeNames.push(att.attribute_name);
     });
   }
 
   onAttributesUpdated(group: FormGroup) {
     this.vendorAttributes = group;
-    this.updateVendorSpecific();
+    this.updatevendor_specific();
   }
 
-  updateVendorSpecific() {
-    // convert the form group info to string data and assign to vendorSpecificData string
+  updatevendor_specific() {
+    // convert the form group info to string data and assign to vendor_specificData string
     if (this.vendorAttributes.valid) {
-      this.vendorSpecificData = '{';
+      this.vendor_specificData = '{';
       let i = 0;
       while (i < this.attributeNames.length) {
         if (i > 0) {
-          this.vendorSpecificData = this.vendorSpecificData.concat(', ');
+          this.vendor_specificData = this.vendor_specificData.concat(', ');
         }
-        this.vendorSpecificData = this.vendorSpecificData.concat(
+        this.vendor_specificData = this.vendor_specificData.concat(
           '"' +
             this.attributeNames[i] +
             '": "' +
@@ -116,7 +118,7 @@ export class TfrBasicDetailsComponent implements OnInit {
         );
         i += 1;
       }
-      this.vendorSpecificData = this.vendorSpecificData.concat('}');
+      this.vendor_specificData = this.vendor_specificData.concat('}');
     }
   }
 
