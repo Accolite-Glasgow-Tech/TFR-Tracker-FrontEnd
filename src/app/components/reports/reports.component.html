@@ -1,56 +1,76 @@
-<form id="form" [formGroup]="schedulerForm" (ngSubmit)="onSubmit()">
-  <mat-form-field class="mat-selector" appearance="fill">
-    <mat-label>Select TFR</mat-label>
-    <mat-select formControlName="tfr">
-      <mat-option *ngFor="let tfr of tfrList" [value]="tfr.id">
-        {{ tfr.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field disabled class="mat-selector" appearance="fill">
-    <mat-label>Select Template</mat-label>
-    <mat-select formControlName="type">
-      <mat-option [value]="template"> {{ template }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <app-frequency-picker></app-frequency-picker>
-
-  <label class="formLabel">{{ receiverLabelText }}</label>
-  <mat-radio-group class="recipientsRadioGroup" formControlName="receiver">
-    <mat-radio-button
-      class="recipientsRadioButton"
-      [color]="'primary'"
-      [value]="recieverOptionsEnum.self"
-      [checked]="true"
-    >
-      {{ recieverOptionsEnum.self }}
-    </mat-radio-button>
-    <mat-radio-button
-      class="recipientsRadioButton"
-      [color]="'primary'"
-      [value]="recieverOptionsEnum.allProjectResources"
-    >
-      {{ recieverOptionsEnum.allProjectResources }}
-    </mat-radio-button>
-    <mat-radio-button
-      class="recipientsRadioButton"
-      [color]="'primary'"
-      [value]="recieverOptionsEnum.custom"
-      [disabled]="true"
-    >
-      {{ recieverOptionsEnum.custom }}
-    </mat-radio-button>
-  </mat-radio-group>
-
-  <button
-    class="btn-submit"
-    type="submit"
-    [disabled]="!schedulerForm.valid"
-    mat-raised-button
-    color="primary"
+<div style="display: flex; justify-content: center">
+  <form
+    class="margined justified-left"
+    id="form"
+    [formGroup]="schedulerForm"
+    (ngSubmit)="onSubmit()"
   >
-    Schedule
-  </button>
-</form>
+    <div>
+      <mat-form-field
+        class="margined justified-left fixed-width-full"
+        appearance="outline"
+      >
+        <mat-label>Select TFR</mat-label>
+        <mat-select formControlName="tfr">
+          <mat-option *ngFor="let tfr of tfrList" [value]="tfr.id">
+            {{ tfr.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field
+        class="margined justified-left fixed-width-full"
+        appearance="outline"
+        ><mat-label>Select Template</mat-label>
+        <mat-select formControlName="type">
+          <mat-option [value]="template"> {{ template }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <app-frequency-picker></app-frequency-picker>
+    </div>
+    <div class="margined justified-left">
+      <label class="formLabel">{{ receiverLabelText }}</label>
+      <mat-radio-group class="recipientsRadioGroup" formControlName="receiver">
+        <mat-radio-button
+          class="margined justified-left"
+          [color]="'primary'"
+          [value]="recieverOptionsEnum.self"
+          [checked]="true"
+        >
+          {{ recieverOptionsEnum.self }}
+        </mat-radio-button>
+        <mat-radio-button
+          class="margined justified-left"
+          [color]="'primary'"
+          [value]="recieverOptionsEnum.allProjectResources"
+        >
+          {{ recieverOptionsEnum.allProjectResources }}
+        </mat-radio-button>
+        <mat-radio-button
+          class="margined justified-left"
+          [color]="'primary'"
+          [value]="recieverOptionsEnum.custom"
+          [disabled]="true"
+        >
+          {{ recieverOptionsEnum.custom }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div>
+      <button
+        class="margined justified-self-right fixed-width-half"
+        type="submit"
+        [disabled]="!schedulerForm.valid"
+        mat-raised-button
+        color="primary"
+      >
+        Schedule
+      </button>
+    </div>
+  </form>
+</div>

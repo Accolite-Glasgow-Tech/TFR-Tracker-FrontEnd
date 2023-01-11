@@ -1,28 +1,30 @@
 @media (max-width: 800) {
   .recipientsRadioGroup {
-    display: block;
-    align-content: center;
+    display: flex;
   }
 }
 
 #form {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-.formLabel {
-  padding-bottom: 1rem;
+.margined {
+  margin: 1vw;
 }
 
-.recipientsRadioButton {
-  padding-right: 1rem;
+.justified-left {
+  justify-content: left;
 }
 
-.btn-submit {
-  width: 20%;
+.fixed-width-full {
+  width: 40vw;
 }
 
-.mat-selector {
-  width: 40%;
+.fixed-width-half {
+  width: 20vw;
+}
+
+.justified-self-right {
+  justify-self: right;
 }
