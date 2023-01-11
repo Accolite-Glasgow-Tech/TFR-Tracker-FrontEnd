@@ -1,6 +1,6 @@
-<div style="display: flex; justify-content: center">
+<div class="flexContainer justified-center">
   <form
-    class="margined justified-left"
+    class="margined flexContainer"
     id="form"
     [formGroup]="schedulerForm"
     (ngSubmit)="onSubmit()"
@@ -61,16 +61,14 @@
       </mat-radio-group>
     </div>
 
-    <div>
-      <button
-        class="margined justified-self-right fixed-width-half"
-        type="submit"
-        [disabled]="!schedulerForm.valid"
-        mat-raised-button
-        color="primary"
-      >
-        Schedule
-      </button>
-    </div>
+    <button
+      class="submit"
+      type="submit"
+      [disabled]="!schedulerForm.valid"
+      mat-raised-button
+      color="primary"
+    >
+      Schedule
+    </button>
   </form>
 </div>

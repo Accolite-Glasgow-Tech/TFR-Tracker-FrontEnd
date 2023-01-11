@@ -1,6 +1,9 @@
 @use "./report-component-variables";
 
 #form {
-  display: flex;
   flex-direction: column;
+}
+
+.submit {
+  width: 100px;
 }

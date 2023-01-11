@@ -4,7 +4,7 @@ $half-width: ($full-width/2) - $margin;
 
 $margin-mobile: 1vw;
 $full-width-mobile: 90vw;
-$half-width-mobile: 90vw;
+$half-width-mobile: $full-width-mobile;
 
 @media only screen and (max-width: 800px) {
   .margined {
@@ -20,12 +20,12 @@ $half-width-mobile: 90vw;
   }
 }
 
-.margined {
-  margin: $margin;
+.flexContainer {
+  display: flex;
 }
 
-.justified-left {
-  justify-content: left;
+.margined {
+  margin: $margin;
 }
 
 .fixed-width-full {
@@ -36,6 +36,10 @@ $half-width-mobile: 90vw;
   width: $half-width;
 }
 
-.justified-self-right {
-  justify-self: right;
+.justified-left {
+  justify-content: left;
+}
+
+.justified-center {
+  justify-content: center;
 }
