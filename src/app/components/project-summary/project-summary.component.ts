@@ -19,7 +19,5 @@ export class ProjectSummaryComponent implements OnInit {
   @Input() vendorSpecificObject!: any;
   @Input() vendorName!: string;
 
-  ngOnInit(): void {
-    console.log(this.vendorName);
-  }
+  ngOnInit(): void {}
 }

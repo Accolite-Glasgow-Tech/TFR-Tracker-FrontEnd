@@ -141,18 +141,25 @@ export class StepperComponent implements OnInit {
     
     A small confirmation pop-up msg (aka a snack bar) is displayed at the bottom of the screen for 3000ms.
   */
-  redirect() {
-    this.tfrManagementService.updateStatusToDatabase().subscribe((response) => {
-      if (response) {
-        this.router.navigate(['/tfrs']);
-        this.snackBarService.showSnackBar('TFR submitted.', 3000);
-      } else {
-        this.snackBarService.showSnackBar(
-          'TFR not submitted. Error occured',
-          5000
-        );
-      }
-    });
+  redirect(update: boolean) {
+    if (update) {
+      this.tfrManagementService
+        .updateStatusToDatabase()
+        .subscribe((response) => {
+          if (response) {
+            this.router.navigate(['/tfrs']);
+            this.snackBarService.showSnackBar('TFR submitted.', 3000);
+          } else {
+            this.snackBarService.showSnackBar(
+              'TFR not submitted. Error occured',
+              5000
+            );
+          }
+        });
+    } else {
+      this.router.navigate(['/tfrs']);
+      this.snackBarService.showSnackBar('TFR updated.', 3000);
+    }
   }
 
   /*  
