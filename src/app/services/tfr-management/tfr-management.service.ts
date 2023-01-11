@@ -26,7 +26,7 @@ export class TfrManagementService {
   // projectURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/' + project_id;
   projectURL = 'assets/json/project.json';
   statusUpdateURL = 'assets/json/projectStatusUpdate.json';
-  public projectResourcesWithNames!: AllocatedResourceType[];
+  projectResourcesWithNames!: AllocatedResourceType[];
   vendorSpecificObject!: Object;
   vendorName: string = '';
 
@@ -187,7 +187,7 @@ export class TfrManagementService {
         return keepAttrs;
       }
     );
-    this.projectResourcesWithNames = projectResourcesWithNames;
+    this.projectResourcesWithNames = [...projectResourcesWithNames];
     this.setProjectResources(newArray);
   }
 
