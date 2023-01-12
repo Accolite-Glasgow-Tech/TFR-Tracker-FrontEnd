@@ -9,7 +9,7 @@ import { ResourceListType } from 'src/app/types/types';
 })
 export class ResourceService {
   detailedResourceListURL =
-    APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/names';
+    APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/all/tfr-creation-resource';
   rolesURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/roles';
   roleHashMap = new Map();
 

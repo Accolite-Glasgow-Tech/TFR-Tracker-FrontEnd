@@ -196,7 +196,7 @@ export class TfrManagementService {
   */
   updateProjectToResourceMapping() {
     this.http
-      .put(
+      .post(
         this.updateProjectToResourceMappingURL + '/' + this.getProjectId,
         this.getProjectResources
       )
@@ -219,7 +219,7 @@ export class TfrManagementService {
         APPCONSTANTS.APICONSTANTS.BASE_URL +
           '/resources/projects/' +
           project_id +
-          '/names'
+          '/detailed'
       )
       .subscribe((data: AllocatedResourceType[]) => {
         this.projectResourcesWithNames = data;
