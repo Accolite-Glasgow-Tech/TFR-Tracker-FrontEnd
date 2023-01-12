@@ -77,18 +77,18 @@
   "project_resources": [
     {
       "project_id": 1,
-      "resource_id": 3,
-      "role": "SOFTWARE_DEVELOPER"
-    },
-    {
-      "project_id": 1,
-      "resource_id": 4,
-      "role": "UX_UI_DESIGNER"
-    },
-    {
-      "project_id": 1,
       "resource_id": 1,
       "role": "SCRUM_MASTER"
+    },
+    {
+      "project_id": 1,
+      "resource_id": 2,
+      "role": "PROJECT_MANAGER"
+    },
+    {
+      "project_id": 1,
+      "resource_id": 3,
+      "role": "SOFTWARE_DEVELOPER"
     }
   ]
 }
