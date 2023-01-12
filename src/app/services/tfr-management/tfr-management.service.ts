@@ -23,8 +23,8 @@ export class TfrManagementService {
 
   updateProjectToResourceMappingURL =
     APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/projects';
-  // projectURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/' + project_id;
-  projectURL = 'assets/json/project.json';
+  projectURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/';
+  // projectURL = 'assets/json/project.json';
   statusUpdateURL = 'assets/json/projectStatusUpdate.json';
   projectResourcesWithNames!: AllocatedResourceType[];
   vendorSpecificObject!: Object;
@@ -36,12 +36,6 @@ export class TfrManagementService {
     private snackBarService: SnackBarService,
     private apiService: ApiService
   ) {}
-
-  updateBasicDetails() {
-    // http POST request '/projects'
-    // set project_id with return value of request
-    console.log(this.project);
-  }
 
   updateDatabase() {}
 
@@ -133,8 +127,19 @@ export class TfrManagementService {
       }
       this.setVendorName(projectBasicDetails.vendor_id);
       this.setVendorSpecificObject(projectBasicDetails.vendor_specific);
-      this.updateBasicDetails();
+      this.updateProjectToDatabase();
     }
+  }
+
+  updateProjectToDatabase() {
+    console.log(APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects');
+    console.log(this.project);
+
+    this.http
+      .put(APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects', this.project)
+      .subscribe((response) => {
+        this.snackBarService.showSnackBar('Updates saved to database', 2000);
+      });
   }
 
   setVendorName(vendor_id: number) {
@@ -206,7 +211,10 @@ export class TfrManagementService {
   }
 
   getFromDatabase(project_id: Number): Observable<Project> {
-    return this.http.get<Project>(this.projectURL);
+    console.log('Here');
+    console.log(this.projectURL + project_id);
+
+    return this.http.get<Project>(this.projectURL + project_id);
   }
 
   /*
