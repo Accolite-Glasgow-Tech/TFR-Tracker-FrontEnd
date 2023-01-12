@@ -1,12 +1,1 @@
-.flexContainer {
-  display: flex;
-}
-
-.mid {
-  align-items: center;
-  justify-content: center;
-}
-
-.margined {
-  margin: 10px;
-}
+@use "../reports/report-component-variables";

@@ -1,0 +1,45 @@
+$margin: 1vw;
+$full-width: 90vw;
+$half-width: calc(($full-width/2) - $margin);
+
+$margin-mobile: 1vw;
+$full-width-mobile: 90vw;
+$half-width-mobile: $full-width-mobile;
+
+@media only screen and (max-width: 800px) {
+  .margined {
+    margin: $margin-mobile !important;
+  }
+
+  .fixed-width-full {
+    width: $full-width-mobile !important;
+  }
+
+  .fixed-width-half {
+    width: $half-width-mobile !important;
+  }
+}
+
+.flexContainer {
+  display: flex;
+}
+
+.margined {
+  margin: $margin;
+}
+
+.fixed-width-full {
+  width: $full-width;
+}
+
+.fixed-width-half {
+  width: $half-width;
+}
+
+.justified-left {
+  justify-content: left;
+}
+
+.justified-center {
+  justify-content: center;
+}
