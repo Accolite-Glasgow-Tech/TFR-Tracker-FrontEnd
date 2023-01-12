@@ -1,2 +1,91 @@
-<!-- <app-stepper></app-stepper> -->
-List of tfrs
+<div>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Vendor</mat-label>
+        <mat-select [(ngModel)]="selectedVendorName">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let vendor of vendors" [value]="vendor.name">{{vendor.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="selectedStatus">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let status of statusList" [value]="status">{{status}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Project Start After</mat-label>
+        <input matInput [matDatepicker]="picker1" [formControl]="startAfterDate" >
+        <mat-hint>{{dateFormat}}</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Project End Before</mat-label>
+        <input matInput [matDatepicker]="picker2" [formControl]="endBeforeDate">
+        <mat-hint>{{dateFormat}}</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+
+        <div></div>
+
+      <section>
+        <div class="">
+          <button mat-raised-button color="primary" (click)="getProjects()">Search</button>
+        </div>
+      </section>
+    </div>
+</div>
+
+
+<div class="tfrs-table-container mat-table">
+
+<table mat-table [dataSource]="projectList" matSort (matSortChange)="announceSortChange($event)"  class="mat-elevation-z8 mat-table">
+    
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+    <td mat-cell *matCellDef="let tfr"> {{tfr.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="start_date" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </th>
+    <td mat-cell *matCellDef="let tfr"> {{tfr.start_date.split('T')[0]}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="end_date">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> End Date </th>
+    <td mat-cell *matCellDef="let tfr"> {{tfr.end_date.split('T')[0]}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+    <td mat-cell *matCellDef="let tfr" [ngClass]="{'delivered':tfr.status=='DELIVERED',
+                                                      'inprogress':tfr.status=='INPROGRESS',
+                                                      'archived':tfr.status=='ARCHIVED',
+                                                      'draft':tfr.status=='DRAFT'}"> {{tfr.status}} </td>
+  </ng-container>
+
+  
+  <ng-container matColumnDef="link">
+    <th mat-header-cell *matHeaderCellDef> action </th>
+    <td mat-cell *matCellDef="let tfr">  
+      <a routerLink="/tfr/{{tfr.id}}" routerLinkActive="active" ariaCurrentWhenActive="page">View Details </a>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+
+  <mat-paginator [pageSizeOptions]="pageSize"
+                  showFirstLastButtons
+                  aria-label="Select page">
+  </mat-paginator>
+  
+</div>

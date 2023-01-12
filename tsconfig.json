@@ -1,4 +1,6 @@
 {
+  "emitDecoratorMetadata": true,
+  "experimentalDecorators": true,
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",

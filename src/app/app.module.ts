@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreMaterialModule } from './core-modules/core-material/core-material.module';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ChartsComponent } from './components/charts/charts.component';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartsService } from './components/charts/charts.service';
@@ -29,6 +29,8 @@ import { ReportsComponent } from './components/reports/reports.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { UserComponent } from './components/user/user.component';
+import { TokenInterceptorService } from './interceptors/token-interceptor.service';
 import { TfrBasicDetailsComponent } from './components/tfrbasic-details/tfr-basic-details.component';
 import { VendorsComponent } from './components/tfrbasic-details/vendors/vendors.component';
 import { ProjectSummaryComponent } from './components/project-summary/project-summary.component';
@@ -37,6 +39,7 @@ import { MilestoneTableComponent } from './components/milestone-table/milestone-
 import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+// import { MatPaginatorIntl } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -56,6 +59,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReportsComponent,
     TfrComponent,
     SidenavComponent,
+    ToolbarComponent,
+    UserComponent,
     FrequencyPickerComponent,
     TfrBasicDetailsComponent,
     VendorsComponent,
@@ -64,7 +69,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MilestoneTableComponent,
     TfrCreationDialogComponent,
   ],
-  providers: [ChartsService, WidgetVendorLocationService, WidgetVendorProjectCountService],
+
+  providers: [ChartsService, WidgetVendorLocationService, WidgetVendorProjectCountService,{
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptorService,
+    multi: true,
+  },],
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
@@ -76,7 +86,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     GridsterModule.forRoot(),
     GridsterModule,
-    ReactiveFormsModule 
+    ReactiveFormsModule,
    ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })

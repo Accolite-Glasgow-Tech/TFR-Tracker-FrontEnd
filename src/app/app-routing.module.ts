@@ -8,9 +8,8 @@ import { FrequencyPickerComponent } from './components/frequency-picker/frequenc
 import { ReportsComponent } from './components/reports/reports.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { TfrComponent } from './components/tfr/tfr.component';
+import { UserComponent } from './components/user/user.component';
 import { RoutesService } from './routes.service';
-
-const routes: Routes = [{ path: 'reports', component: ReportsComponent }];
 
 @NgModule({
   imports: [RouterModule.forRoot(RoutesService.RoutesList)],

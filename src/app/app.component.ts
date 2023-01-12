@@ -10,6 +10,7 @@ import { ChartsComponent } from './components/charts/charts.component';
 })
 export class AppComponent {
   @ViewChild(GridsterComponent) gridster!: GridsterComponent;
+  title = 'TFR-Management';
 
   widgets: any[] = [{}];
 
