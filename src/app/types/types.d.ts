@@ -23,7 +23,7 @@ export interface Milestone {
   delivery_date: Date;
   acceptance_date: Date;
   is_deleted: Boolean;
-  tracker: Tracker;
+  tracker?: Tracker;
 }
 export interface Tracker {
   milestone_id: number;
