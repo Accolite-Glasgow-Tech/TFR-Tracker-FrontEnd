@@ -1,0 +1,33 @@
+.floating-btn-div {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+}
+
+@media screen and (max-width: 800px) {
+  button {
+    width: 2%;
+    height: 2%;
+    font-size: smaller;
+  }
+}
+
+.navigation-btn {
+  margin: 5px;
+}
+
+.mat-raised-button.mat-success {
+  color: #f0fff3;
+  background-color: green;
+}
+
+#title {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+}
+
+.navigation-btn.success-btn {
+  background-color: green;
+  color: white;
+}

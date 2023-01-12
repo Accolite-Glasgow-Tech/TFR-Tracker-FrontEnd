@@ -1,0 +1,47 @@
+<table class="mat-elevation-z8 demo-table table-resource-laptop">
+  <tr>
+    <th></th>
+    <th>Description</th>
+    <th>Start Date</th>
+    <th>Delivery Date</th>
+    <th>Acceptance Date</th>
+  </tr>
+  <tr *ngFor="let milestone of milestones; let i = index" class="data-row">
+    <td class="data-cell">{{ i + 1 }}</td>
+    <td class="data-cell">{{ milestone.description }}</td>
+    <td class="data-cell">
+      {{ this.resourceService.prettyPrintDate(milestone.start_date) }}
+    </td>
+    <td class="data-cell">
+      {{ this.resourceService.prettyPrintDate(milestone.delivery_date) }}
+    </td>
+    <td class="data-cell">
+      {{ this.resourceService.prettyPrintDate(milestone.acceptance_date) }}
+    </td>
+  </tr>
+</table>
+
+<table class="mat-elevation-z8 demo-table table-resource-mobile">
+  <tr *ngFor="let milestone of milestones; let i = index" class="data-row">
+    <td class="data-cell-mobile">{{ i + 1 }}</td>
+    <td class="data-cell-mobile">
+      <div class="data-cell-div-container-mobile">
+        <div class="data-cell-div-mobile">
+          <strong>Description: </strong>{{ milestone.description }}
+        </div>
+        <div class="data-cell-div-mobile">
+          <strong>Start Date: </strong
+          >{{ this.resourceService.prettyPrintDate(milestone.start_date) }}
+        </div>
+        <div class="data-cell-div-mobile">
+          <strong>Delivery Date: </strong
+          >{{ this.resourceService.prettyPrintDate(milestone.delivery_date) }}
+        </div>
+        <div class="data-cell-div-mobile">
+          <strong>Acceptance Date: </strong
+          >{{ this.resourceService.prettyPrintDate(milestone.acceptance_date) }}
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>

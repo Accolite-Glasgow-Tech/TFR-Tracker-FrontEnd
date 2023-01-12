@@ -4,9 +4,11 @@ import { HomeComponent } from './components/home/home.component';
 import { MilestonesComponent } from './components/milestones/milestones.component';
 import { PermissionsComponent } from './components/permissions/permissions.component';
 import { ReportsComponent } from './components/reports/reports.component';
+import { StepperComponent } from './components/stepper/stepper.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { UserComponent } from './components/user/user.component';
+import { ProjectResolverService } from './services/project-resolver/project-resolver.service';
 import { TFRRoute } from './TFRRoute';
 
 @Injectable({
@@ -25,8 +27,22 @@ export class RoutesService {
       component: TfrsComponent,
     },
     {
+      path: 'tfr/create',
+      component: StepperComponent,
+    },
+    {
+      path: 'tfr/:id/edit',
+      component: StepperComponent,
+      resolve: {
+        project: ProjectResolverService,
+      },
+    },
+    {
       path: 'tfr/:id',
       component: TfrComponent,
+      resolve: {
+        project: ProjectResolverService,
+      },
     },
     {
       path: 'tfr',

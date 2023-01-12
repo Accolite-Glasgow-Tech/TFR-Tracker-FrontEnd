@@ -80,7 +80,9 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     this.tfrService.getAllVendors().subscribe(
       (allVendors)=>{
         this.vendors=allVendors;
+        console.log(allVendors)
       }
+      
     )
   }
   

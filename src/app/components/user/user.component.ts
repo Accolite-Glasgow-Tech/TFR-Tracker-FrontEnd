@@ -92,6 +92,7 @@ export class UserComponent implements OnInit {
           alert('Failure, please try again')
         }
         if(info.status==true){
+          //console.log(info.token)
           sessionStorage.setItem('jwt_token',info.token)
         }else{
           sessionStorage.removeItem('jwt_token')
