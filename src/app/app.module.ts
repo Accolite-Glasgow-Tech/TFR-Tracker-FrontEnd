@@ -37,6 +37,7 @@ import { MilestoneTableComponent } from './components/milestone-table/milestone-
 import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChipComponent } from './components/chip/chip.component';
 
 
 @NgModule({
@@ -63,6 +64,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ResourceTableComponent,
     MilestoneTableComponent,
     TfrCreationDialogComponent,
+    ChipComponent,
   ],
   providers: [ChartsService, WidgetVendorLocationService, WidgetVendorProjectCountService],
   bootstrap: [AppComponent],
