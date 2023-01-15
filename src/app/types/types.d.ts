@@ -6,7 +6,7 @@ export interface Project {
   end_date: Date;
   status: string;
   version: number;
-  vendor_specific: string;
+  vendor_specific: { [key: string]: string };
   is_deleted: Boolean;
   created_by: number;
   modified_by: number;
@@ -47,7 +47,7 @@ export interface ProjectBasicDetails {
   start_date: Date;
   end_date: Date;
   vendor_id: number;
-  vendor_specific: string;
+  vendor_specific: { [key: string]: string };
   status: string;
 }
 

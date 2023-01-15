@@ -34,7 +34,10 @@
       </div>
       <div
         class="project-details"
-        *ngFor="let vendor_attribute of this.vendorSpecificObject | keyvalue"
+        *ngFor="
+          let vendor_attribute of this.currentProject?.vendor_specific
+            | keyvalue
+        "
       >
         <span>
           <strong>{{ vendor_attribute.key }}: </strong>

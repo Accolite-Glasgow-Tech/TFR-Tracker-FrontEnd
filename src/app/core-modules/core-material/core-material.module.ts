@@ -27,7 +27,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 
-
 const materialModules = [
   MatIconModule,
   MatButtonModule,
@@ -54,7 +53,6 @@ const materialModules = [
   MatSortModule,
 ];
 
-
 @NgModule({
   declarations: [],
   // providers: [{provide: MatPaginatorIntl, useClass: MatPaginatorIntl}],
@@ -72,8 +70,5 @@ const materialModules = [
     ReactiveFormsModule,
     FlexLayoutModule,
   ],
-  
-
-
 })
 export class CoreMaterialModule {}

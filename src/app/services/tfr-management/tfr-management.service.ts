@@ -23,11 +23,9 @@ export class TfrManagementService {
 
   updateProjectToResourceMappingURL =
     APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/projects';
-  projectURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/';
+  projectURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects';
   // projectURL = 'assets/json/project.json';
-  statusUpdateURL = 'assets/json/projectStatusUpdate.json';
   projectResourcesWithNames!: AllocatedResourceType[];
-  vendorSpecificObject!: Object;
   vendorName: string = '';
 
   constructor(
@@ -63,19 +61,8 @@ export class TfrManagementService {
     return this.project;
   }
 
-  get getVendorSpecificObject(): any {
-    return this.vendorSpecificObject;
-  }
-
   get getVendorName(): string {
     return this.vendorName;
-  }
-
-  setVendorSpecificObject(vendorSpecificObject: string) {
-    while (typeof vendorSpecificObject === 'string') {
-      vendorSpecificObject = JSON.parse(vendorSpecificObject);
-    }
-    this.vendorSpecificObject = vendorSpecificObject;
   }
 
   setProject(project: Project) {
@@ -113,33 +100,41 @@ export class TfrManagementService {
           milestones: [],
           project_resources: [],
           is_deleted: false,
-          created_by: NaN,
+          created_by: 1,
           modified_by: NaN,
           created_at: new Date('2022-12-05T10:00:00.000+00:00'),
           modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
         };
+        this.createProjectInDatabase();
       } else {
         this.project.name = projectBasicDetails.name;
         this.project.start_date = projectBasicDetails.start_date;
         this.project.end_date = projectBasicDetails.end_date;
         this.project.vendor_id = projectBasicDetails.vendor_id;
         this.project.vendor_specific = projectBasicDetails.vendor_specific;
+        this.updateProjectToDatabase();
       }
       this.setVendorName(projectBasicDetails.vendor_id);
-      this.setVendorSpecificObject(projectBasicDetails.vendor_specific);
-      this.updateProjectToDatabase();
+      // this.updateProjectToDatabase();
     }
   }
 
-  updateProjectToDatabase() {
-    console.log(APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects');
-    console.log(this.project);
+  createProjectInDatabase() {
+    this.http.post(this.projectURL, this.project).subscribe((response) => {
+      if (this.project) {
+        this.project.id = Number(response);
+        this.project.version++;
+      }
+    });
+  }
 
-    this.http
-      .put(APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects', this.project)
-      .subscribe((response) => {
-        this.snackBarService.showSnackBar('Updates saved to database', 2000);
-      });
+  updateProjectToDatabase() {
+    this.http.put(this.projectURL, this.project).subscribe((response) => {
+      if (this.project) {
+        this.project.version = Number(response);
+      }
+      this.snackBarService.showSnackBar('Updates saved to database', 2000);
+    });
   }
 
   setVendorName(vendor_id: number) {
@@ -206,15 +201,16 @@ export class TfrManagementService {
         this.getProjectResources
       )
       .subscribe((response) => {
+        if (this.project) {
+          this.project.version = Number(response);
+        }
         this.snackBarService.showSnackBar('Updates saved to database', 2000);
       });
   }
 
   getFromDatabase(project_id: Number): Observable<Project> {
-    console.log('Here');
-    console.log(this.projectURL + project_id);
-
-    return this.http.get<Project>(this.projectURL + project_id);
+    return this.http.get<Project>(this.projectURL + '/' + project_id);
+    // return this.http.get<Project>(this.projectURL);
   }
 
   /*
@@ -243,8 +239,11 @@ export class TfrManagementService {
   updateStatusToDatabase(): Observable<boolean> {
     /* 
       When API is ready, need to make a put request to the database
-      to update the status.
+      to update the status from DRAFT to AGREED.
     */
-    return this.http.get<boolean>(this.statusUpdateURL);
+    return this.http.put<boolean>(
+      this.projectURL + '/' + this.project?.id + '/status/AGREED',
+      null
+    );
   }
 }
