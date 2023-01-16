@@ -68,18 +68,4 @@ export class ResourceService {
   getAssociatedCleanRole(role: string): string {
     return this.roleHashMap.get(role);
   }
-
-  prettyPrintDate(dateTime: Date): string {
-    if (dateTime) {
-      let dateTimeString: string = dateTime.toLocaleString('en-GB', {
-        timeZone: 'UTC',
-      });
-      let time = dateTimeString.substring(11, 16);
-      let date = dateTimeString.substring(0, 10);
-
-      return date + ' at ' + time;
-    }
-
-    return '';
-  }
 }

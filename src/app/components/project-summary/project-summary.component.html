@@ -10,16 +10,14 @@
       <div class="project-details">
         <span
           ><strong>Start Date: </strong>
-          {{
-            this.resourceService.prettyPrintDate(currentProject?.start_date!)
-          }}</span
+          {{ currentProject?.start_date! | date : "short" }}</span
         >
       </div>
 
       <div class="project-details">
         <span>
           <strong>End Date: </strong>
-          {{ this.resourceService.prettyPrintDate(currentProject?.end_date!) }}
+          {{ currentProject?.end_date! | date : "short" }}
         </span>
       </div>
 
