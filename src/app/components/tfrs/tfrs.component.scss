@@ -1,0 +1,29 @@
+.tfrs-table-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 600px;
+} 
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+  min-width: 600px;
+}
+
+
+.delivered{
+  color: rgb(7, 247, 107);
+}
+
+.inprogress{
+  color: rgb(233, 28, 9);
+}
+
+.archived{
+  color: rgb(7, 247, 107);;
+}
+
+.draft{
+  color: black;
+}

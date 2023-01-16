@@ -93,15 +93,11 @@ export class StepperComponent implements OnInit {
     */
     this.route.data.subscribe(({ project }) => {
       if (project) {
-        this.tfrManagementService.setVendorSpecificObject(
-          project.vendor_specific
-        );
-
         this.tfrManagementService.project = project;
         this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
           project.id
         );
-        this.tfrManagementService.setVendorName(project.id);
+        this.tfrManagementService.setVendorName(project.vendor_id);
       }
     });
   }

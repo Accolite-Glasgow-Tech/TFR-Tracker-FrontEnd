@@ -7,6 +7,7 @@ import { ReportsComponent } from './components/reports/reports.component';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
+import { UserComponent } from './components/user/user.component';
 import { ProjectResolverService } from './services/project-resolver/project-resolver.service';
 import { TFRRoute } from './TFRRoute';
 
@@ -69,8 +70,15 @@ export class RoutesService {
     },
 
     {
+      path: 'login',
+      component: UserComponent,
+    },
+
+    {
       path: '**',
       redirectTo: 'home',
     },
+
+    
   ];
 }

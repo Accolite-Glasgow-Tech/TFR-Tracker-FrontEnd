@@ -23,6 +23,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 const materialModules = [
   MatIconModule,
@@ -45,10 +48,14 @@ const materialModules = [
   MatTableModule,
   MatSnackBarModule,
   MatDialogModule,
+  // MatPaginatorIntl,
+  MatPaginatorModule,
+  MatSortModule,
 ];
 
 @NgModule({
   declarations: [],
+  // providers: [{provide: MatPaginatorIntl, useClass: MatPaginatorIntl}],
   imports: [
     BrowserModule,
     FormsModule,
