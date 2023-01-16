@@ -8,7 +8,6 @@ import { TfrManagementService } from 'src/app/services/tfr-management/tfr-manage
   selector: 'app-milestones',
   templateUrl: './milestones.component.html',
   styleUrls: ['./milestones.component.scss'],
-  providers: [MilestoneManagerService, TfrManagementService],
 })
 export class MilestonesComponent implements OnInit {
   constructor(

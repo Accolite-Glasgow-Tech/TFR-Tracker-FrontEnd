@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Injectable, Output } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Milestone } from 'src/app/types/types';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { HttpClient } from '@angular/common/http';
