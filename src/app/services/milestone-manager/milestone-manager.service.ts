@@ -48,7 +48,12 @@ export class MilestoneManagerService {
     }
     return false;
   }
-
+  resetMilestones() {
+    this.milestones = this.projectManagerService.getMilestones
+      ? this.projectManagerService.getMilestones
+      : [];
+    this.broadcastUpdate();
+  }
   selectNewMilestone() {
     let idOfNew: number = this.generateIdOfNew();
     if (!this.projectManagerService.getProjectId)
