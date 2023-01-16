@@ -1,6 +1,9 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
+import { ElementRef, EventEmitter, Injectable, Output } from '@angular/core';
 import { Milestone } from 'src/app/types/types';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+import { HttpClient } from '@angular/common/http';
+import { APPCONSTANTS } from 'src/app/shared/app.constants';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +12,10 @@ export class MilestoneManagerService {
   milestones: Milestone[] = [];
   selected: Milestone | null = null;
   @Output() Update: EventEmitter<any> = new EventEmitter();
-  constructor(private projectManagerService: TfrManagementService) {}
+  constructor(
+    private projectManagerService: TfrManagementService,
+    private httpClient: HttpClient
+  ) {}
   getMilestones() {
     return this.milestones;
   }
@@ -59,8 +65,27 @@ export class MilestoneManagerService {
       };
     this.broadcastUpdate();
   }
-  submitMilestones() {
-    this.projectManagerService.setMilestones(this.milestones);
+  putMilestones(): Observable<{}> {
+    let putMilestoneUrl =
+      APPCONSTANTS.APICONSTANTS.BASE_URL +
+      '/projects/' +
+      this.projectManagerService.getProjectId +
+      '/milestone/';
+    return this.httpClient.put(putMilestoneUrl, this.getMilestonesForPut(), {
+      responseType: 'json',
+    });
+  }
+
+  private getMilestonesForPut() {
+    //milestones need to have negative temp id's stripped for sending to db.
+    let milestones = this.getMilestones();
+    return milestones.map((milestone) => {
+      if (milestone.id > 0) {
+        return milestone;
+      }
+      let { id, ...cleanedMilestone } = milestone;
+      return cleanedMilestone;
+    });
   }
 
   private add(milestoneToAdd: Milestone) {

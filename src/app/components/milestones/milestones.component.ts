@@ -57,6 +57,11 @@ export class MilestonesComponent implements OnInit {
       this.submittable = this.milestoneManagerService.submittable();
     },
   };
+  putObserver = {
+    next: (x: {}) => console.log('Successful put' + x),
+    error: (err: Error) => console.error('Observer got an error: ' + err),
+    complete: () => console.log('Observer got a complete notification'),
+  };
   ngOnInit(): void {
     this.milestoneManagerService.Update.subscribe(this.updateObserver);
   }
@@ -76,8 +81,12 @@ export class MilestonesComponent implements OnInit {
     deliveryDate: Date;
   } {
     if (this.selectedMilestone != null) {
-      let { description, acceptance_date, start_date, delivery_date } =
-        this.selectedMilestone;
+      let {
+        description,
+        acceptance_date: acceptance_date,
+        start_date: start_date,
+        delivery_date: delivery_date,
+      } = this.selectedMilestone;
       return {
         description,
         acceptanceDate: acceptance_date,
@@ -118,7 +127,6 @@ export class MilestonesComponent implements OnInit {
     this.milestoneManagerService.setSelected(milestone);
   }
   submitMilestones() {
-    this.milestoneManagerService.submitMilestones();
-    this.nextStepEmitter.emit(true);
+    this.milestoneManagerService.putMilestones().subscribe(this.putObserver);
   }
 }
