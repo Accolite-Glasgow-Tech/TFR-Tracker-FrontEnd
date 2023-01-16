@@ -58,12 +58,24 @@ export enum RecieverOptions {
   custom = 'Custom',
 }
 
-export const daysOfWeek: Map<number, string> = new Map([
-  [0, 'Sunday'],
-  [1, 'Monday'],
-  [2, 'Tuesday'],
-  [3, 'Wednesday'],
-  [4, 'Thursday'],
-  [5, 'Friday'],
-  [6, 'Saturday'],
-]);
+export const daysOfWeek: Array<string> = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
+export function range(start: number, end?: number) {
+  if (typeof start === 'number') {
+    if (end === undefined) {
+      return [...Array(start).keys()];
+    }
+    if (typeof end === 'number') {
+      return Array.from({ length: end - start }, (v, k) => k + start);
+    }
+  }
+  throw new Error('Unssported input(s)');
+}

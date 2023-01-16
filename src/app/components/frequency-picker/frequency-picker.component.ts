@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
-import { Frequency, DayOfMonth, daysOfWeek } from 'src/app/utils';
+import { Frequency, DayOfMonth, daysOfWeek, range } from 'src/app/utils';
 
 @Component({
   selector: 'app-frequency-picker',
@@ -13,6 +13,7 @@ export class FrequencyPickerComponent implements OnInit {
   DayOfMonthEnum = DayOfMonth;
   today: Date = new Date();
   daysOfWeek = daysOfWeek;
+  range = range;
 
   @Input() startDate = this.today;
   @Input() time = '08:00';

@@ -68,13 +68,13 @@
         <mat-chip-option
           class="margined"
           #chip
-          *ngFor="let day of [0, 1, 2, 3, 4, 5, 6]"
+          *ngFor="let day of range(daysOfWeek.length)"
           [value]="day"
           [selectable]="false"
           [selected]="selectedDays.has(day)"
           (click)="toggleSelection(chip)"
         >
-          {{ daysOfWeek.get(day)!.slice(0, 1).toUpperCase() }}
+          {{ daysOfWeek[day].slice(0, 1).toUpperCase() }}
         </mat-chip-option>
       </mat-chip-listbox>
     </div>
@@ -99,7 +99,7 @@
           >
             {{
               day === DayOfMonthEnum.specificLast
-                ? "Last " + daysOfWeek.get(today.getDay())
+                ? "Last " + daysOfWeek[today.getDay()]
                 : day + " day"
             }}
             of month
