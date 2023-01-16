@@ -39,8 +39,6 @@ import { MilestoneTableComponent } from './components/milestone-table/milestone-
 import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { MatPaginatorIntl } from '@angular/material/paginator';
-
 
 @NgModule({
   declarations: [
@@ -70,11 +68,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     TfrCreationDialogComponent,
   ],
 
-  providers: [ChartsService, WidgetVendorLocationService, WidgetVendorProjectCountService,{
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptorService,
-    multi: true,
-  },],
+  providers: [
+    ChartsService,
+    WidgetVendorLocationService,
+    WidgetVendorProjectCountService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
@@ -87,7 +90,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     GridsterModule.forRoot(),
     GridsterModule,
     ReactiveFormsModule,
-   ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}
