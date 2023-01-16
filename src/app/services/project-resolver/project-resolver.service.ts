@@ -19,10 +19,7 @@ import { TfrManagementService } from '../tfr-management/tfr-management.service';
 export class ProjectResolverService implements Resolve<Project> {
   constructor(private tfrManagementService: TfrManagementService) {}
 
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<Project> | Promise<Project> | Project {
+  resolve(route: ActivatedRouteSnapshot): Observable<Project> {
     return this.tfrManagementService.getFromDatabase(
       Number(route.paramMap.get('id'))
     );
