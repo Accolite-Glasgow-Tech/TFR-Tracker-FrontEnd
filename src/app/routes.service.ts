@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertsComponent } from './components/alerts/alerts.component';
 import { HomeComponent } from './components/home/home.component';
-import { MilestonesComponent } from './components/milestones/milestones.component';
 import { PermissionsComponent } from './components/permissions/permissions.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { StepperComponent } from './components/stepper/stepper.component';
@@ -49,26 +48,10 @@ export class RoutesService {
       component: TfrComponent,
     },
     {
-      label: 'Milestones',
-      path: 'milestones',
-      component: MilestonesComponent,
-    },
-    {
-      label: 'Alerts',
-      path: 'alerts',
-      component: AlertsComponent,
-    },
-    {
       label: 'Reports',
       path: 'reports',
       component: ReportsComponent,
     },
-    {
-      label: 'Permissions',
-      path: 'permissions',
-      component: PermissionsComponent,
-    },
-
     {
       path: 'login',
       component: UserComponent,
@@ -78,7 +61,5 @@ export class RoutesService {
       path: '**',
       redirectTo: 'home',
     },
-
-    
   ];
 }
