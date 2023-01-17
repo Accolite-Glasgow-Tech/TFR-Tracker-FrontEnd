@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   selector: 'app-milestones',
   templateUrl: './milestones.component.html',
   styleUrls: ['./milestones.component.scss'],
+  providers: [MilestoneManagerService],
 })
 export class MilestonesComponent implements OnInit {
   constructor(
@@ -70,13 +71,13 @@ export class MilestonesComponent implements OnInit {
   }
   putObserver = {
     next: (x: {}) => {
-      this.snackBar.open('Saved milestones to server!');
+      this.snackBar.open('Saved milestones to server!', '', {
+        duration: 3000,
+      });
       this.isPristine = true;
-      console.log(this.isPristine);
       this.update();
     },
     error: (err: Error) => console.error('Observer got an error: ' + err),
-    complete: () => console.log('Observer got a complete notification'),
   };
   ngOnInit(): void {
     this.milestoneManagerService.Update.subscribe(this.updateObserver);
@@ -164,5 +165,8 @@ export class MilestonesComponent implements OnInit {
   nextStep() {
     this.stepCompletedEmitter.emit(true);
     this.nextStepEmitter.emit(true);
+  }
+  previousStep() {
+    this.nextStepEmitter.emit(false);
   }
 }

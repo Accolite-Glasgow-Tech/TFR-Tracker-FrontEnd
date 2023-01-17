@@ -111,6 +111,15 @@
     type="button"
     mat-button
     [disabled]="!(submittable && !selectedMilestone)"
+    (click)="previousStep()"
+  >
+    back
+  </button>
+  <button
+    *ngIf="!selectedMilestone"
+    type="button"
+    mat-button
+    [disabled]="!(submittable && !selectedMilestone)"
     (click)="nextStep()"
   >
     next

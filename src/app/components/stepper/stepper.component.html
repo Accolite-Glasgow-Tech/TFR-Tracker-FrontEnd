@@ -10,9 +10,10 @@
 
   <mat-step [completed]="stepsValid[1]" state="milestone-icon">
     <ng-template matStepLabel>{{ (this.stepLabels | async)![1] }}</ng-template>
-    <app-milestones>
+    <app-milestones
       (nextStepEmitter)="nextStep($event)"
       (stepCompletedEmitter)="stepCompleted(1, $event)"
+    >
     </app-milestones>
   </mat-step>
 
