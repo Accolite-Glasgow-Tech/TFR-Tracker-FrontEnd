@@ -8,7 +8,6 @@ import { Observable, of } from 'rxjs';
 })
 export class WidgetVendorLocationService {
   private TfrLocationCountUrl = 'http://localhost:8080/tfrLocationCount';
-  datapoints: any;
 
   constructor(private http: HttpClient) {}
 

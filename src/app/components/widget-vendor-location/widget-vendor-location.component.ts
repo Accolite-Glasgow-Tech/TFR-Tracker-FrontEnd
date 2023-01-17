@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { delay, Observable, of } from 'rxjs';
 import { WidgetVendorLocationService } from './widget-vendor-location.service';
 
 @Component({
@@ -8,33 +9,33 @@ import { WidgetVendorLocationService } from './widget-vendor-location.service';
   providers: [WidgetVendorLocationService],
 })
 export class WidgetVendorLocationComponent {
+  dataPoints: any[] = [];
   constructor(
     private widgetVendorLocationService: WidgetVendorLocationService
-  ) {}
-
-  tfrLocationCountdata = [];
-
-  public getTfrLocationCountData() {
-    console.log(this.tfrLocationCountdata);
-    return this.tfrLocationCountdata;
+  ) {
+    this.widgetVendorLocationService
+      .readTfrLocationCountUrl()
+      .subscribe((response) => {
+        this.chartOptions.data[0].dataPoints = response;
+        this.dataPoints = response;
+      });
   }
 
   chart: any;
-
   chartOptions = {
     title: {
-      text: 'Number of projects locationWise',
     },
     size: 5,
     animationEnabled: true,
     axisY: {
       includeZero: true,
     },
+
     data: [
       {
         type: 'bar',
         indexLabel: '{y}',
-        dataPoints: this.getTfrLocationCountData(),
+        dataPoints: [],
       },
     ],
   };

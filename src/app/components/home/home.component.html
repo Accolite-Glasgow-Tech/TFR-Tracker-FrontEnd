@@ -1,1 +1,37 @@
-<p>home works!</p>
+
+  <div style="height: 100vh">
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  
+  
+  <mat-sidenav-container fxFlexFill >
+    <div class="container" >
+      <ngx-gridster 
+        [options]="gridsterOptions"
+        [draggableOptions]="{ handlerClass: 'panel-heading' }"
+        (optionsChange)="optionsChange($event)"
+      >
+        <ngx-gridster-item *ngFor="let widget of widgets; index as i" >
+          <div class="widget" >
+            <div class="header">
+              <h1>
+                <a class="headerText"> {{widget.componentName}}</a>
+                <button class="closeiconbutton" (click)="remove()">
+                  <i class="fa fa-close"></i>
+                </button>
+                <button class="geariconbtn"><i class="fa fa-gear"></i></button>
+              </h1>
+            </div>
+            <ndc-dynamic
+              [ndcDynamicComponent]="widget.componentType"
+            ></ndc-dynamic>
+          </div>
+         
+        </ngx-gridster-item>
+      </ngx-gridster>
+    </div>
+  </mat-sidenav-container>
+  </div>
+  

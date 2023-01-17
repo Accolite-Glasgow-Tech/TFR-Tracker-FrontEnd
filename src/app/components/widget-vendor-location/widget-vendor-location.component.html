@@ -1,3 +1,7 @@
-<div>
-    <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'400px'}"></canvasjs-chart>    
-</div> 
+<div class="widgetloc" *ngIf="dataPoints.length">
+    <canvasjs-chart
+      [options]="chartOptions"
+      [styles]="{ width: '90%', height: '90%' }"
+    ></canvasjs-chart>
+  </div>
+  
