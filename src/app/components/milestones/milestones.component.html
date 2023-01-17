@@ -35,6 +35,8 @@
         [matDatepicker]="picker"
         placeholder="Acceptance Date"
         class="datepicker"
+        [min]="getMinDate()"
+        [max]="getMaxDate()"
       />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
