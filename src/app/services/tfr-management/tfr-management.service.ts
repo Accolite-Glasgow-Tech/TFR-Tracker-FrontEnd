@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { catchError, Observable, throwError } from 'rxjs';
 import { APPCONSTANTS } from 'src/app/shared/app.constants';
 import {
   Milestone,
@@ -196,10 +197,7 @@ export class TfrManagementService {
   */
   updateProjectToResourceMapping() {
     this.http
-      .post(
-        this.updateProjectToResourceMappingURL + '/' + this.getProjectId,
-        this.getProjectResources
-      )
+      .post(this.updateProjectToResourceMappingURL, this.project)
       .subscribe((response) => {
         if (this.project) {
           this.project.version = Number(response);
