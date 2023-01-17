@@ -16,14 +16,18 @@ export class MilestoneManagerService {
     private projectManagerService: TfrManagementService,
     private httpClient: HttpClient
   ) {}
-  getMilestones() {
+  get getMilestones() {
     return this.milestones;
+  }
+  setMilestones(milestones: Milestone[] | undefined) {
+    this.milestones = milestones ? milestones : [];
+    this.broadcastUpdate();
   }
   setSelected(milestone: Milestone | null) {
     this.selected = milestone;
     this.broadcastUpdate();
   }
-  getSelected(): any {
+  get getSelected(): Milestone | null {
     return this.selected;
   }
 
@@ -43,7 +47,7 @@ export class MilestoneManagerService {
   }
 
   submittable() {
-    if (this.getMilestones().length >= 1) {
+    if (this.getMilestones.length >= 1) {
       return true;
     }
     return false;
@@ -54,13 +58,11 @@ export class MilestoneManagerService {
       : [];
     this.broadcastUpdate();
   }
-  selectNewMilestone() {
+  selectNewMilestone(projectId: number | undefined) {
     let idOfNew: number = this.generateIdOfNew();
-    if (!this.projectManagerService.getProjectId)
+    if (projectId != undefined) {
       this.selected = {
-        project_id: this.projectManagerService.getProjectId
-          ? this.projectManagerService.getProjectId
-          : NaN,
+        project_id: projectId,
         delivery_date: new Date(),
         acceptance_date: new Date(),
         start_date: new Date(),
@@ -68,22 +70,25 @@ export class MilestoneManagerService {
         id: idOfNew,
         is_deleted: false,
       };
+    } else {
+      throw new Error('bad project Id passed');
+    }
     this.broadcastUpdate();
   }
-  putMilestones(): Observable<{}> {
+  putMilestones(projectId: number | undefined): Observable<{}> {
     let putMilestoneUrl =
       APPCONSTANTS.APICONSTANTS.BASE_URL +
       '/projects/' +
-      this.projectManagerService.getProjectId +
-      '/milestone/';
-    return this.httpClient.put(putMilestoneUrl, this.getMilestonesForPut(), {
+      projectId +
+      '/milestone';
+    return this.httpClient.put(putMilestoneUrl, this.getMilestonesForPut, {
       responseType: 'json',
     });
   }
 
-  private getMilestonesForPut() {
+  private get getMilestonesForPut() {
     //milestones need to have negative temp id's stripped for sending to db.
-    let milestones = this.getMilestones();
+    let milestones = this.getMilestones;
     return milestones.map((milestone) => {
       if (milestone.id > 0) {
         return milestone;

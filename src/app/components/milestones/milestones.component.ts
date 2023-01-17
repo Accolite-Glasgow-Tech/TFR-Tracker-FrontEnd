@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MilestoneManagerService } from 'src/app/services/milestone-manager/milestone-manager.service';
 import { Milestone } from 'src/app/types/types';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-milestones',
@@ -12,14 +13,16 @@ import { TfrManagementService } from 'src/app/services/tfr-management/tfr-manage
 export class MilestonesComponent implements OnInit {
   constructor(
     private milestoneManagerService: MilestoneManagerService,
-    private projectManagerService: TfrManagementService
+    private projectManagerService: TfrManagementService,
+    private snackBar: MatSnackBar
   ) {
     this.tfrid = this.projectManagerService.getProjectId ?? NaN;
   }
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
+  isPristine: boolean = true;
   tfrid: number;
-  milestones: any[] = this.milestoneManagerService.getMilestones();
+  milestones: any[] = this.milestoneManagerService.getMilestones;
   selectedMilestone: Milestone | null = null;
   submittable: boolean = false;
   milestoneForm = new FormGroup({
@@ -50,21 +53,35 @@ export class MilestonesComponent implements OnInit {
   });
   updateObserver = {
     next: () => {
-      this.milestones = this.milestoneManagerService.getMilestones();
-      this.selectedMilestone = this.milestoneManagerService.getSelected();
+      this.milestones = this.milestoneManagerService.getMilestones;
+      this.selectedMilestone = this.milestoneManagerService.getSelected;
       this.milestoneForm.setValue(this.ConvertMilestoneToFormData());
-      this.submittable = this.milestoneManagerService.submittable();
+      this.submittable =
+        this.milestoneManagerService.submittable() && this.isPristine;
     },
   };
+
+  update() {
+    this.milestones = this.milestoneManagerService.getMilestones;
+    this.selectedMilestone = this.milestoneManagerService.getSelected;
+    this.milestoneForm.setValue(this.ConvertMilestoneToFormData());
+    this.submittable =
+      this.milestoneManagerService.submittable() && this.isPristine;
+  }
   putObserver = {
-    next: (x: {}) => console.log('Successful put' + x),
+    next: (x: {}) => {
+      this.snackBar.open('Saved milestones to server!');
+      this.isPristine = true;
+      console.log(this.isPristine);
+      this.update();
+    },
     error: (err: Error) => console.error('Observer got an error: ' + err),
     complete: () => console.log('Observer got a complete notification'),
   };
   ngOnInit(): void {
     this.milestoneManagerService.Update.subscribe(this.updateObserver);
   }
-  getFormMilestone(): Milestone | null {
+  get getFormMilestone(): Milestone | null {
     if (this.selectedMilestone != null) {
       return Object.assign(
         this.selectedMilestone,
@@ -101,14 +118,17 @@ export class MilestonesComponent implements OnInit {
     };
   }
 
-  getMinDate() {
+  get getMinDate() {
     return this.projectManagerService.getBasicDetails?.start_date;
   }
-  getMaxDate() {
+  get getMaxDate() {
     return this.projectManagerService.getBasicDetails?.end_date;
   }
   selectNew() {
-    this.milestoneManagerService.selectNewMilestone();
+    this.milestoneManagerService.selectNewMilestone(
+      this.projectManagerService.getProjectId
+    );
+    this.isPristine = false;
   }
   selectExisting(milestone: Milestone) {
     this.milestoneManagerService.setSelected(milestone);
@@ -117,7 +137,8 @@ export class MilestonesComponent implements OnInit {
     this.milestoneManagerService.setSelected(null);
   }
   saveSelected() {
-    this.milestoneManagerService.saveMilestone(this.getFormMilestone());
+    this.milestoneManagerService.saveMilestone(this.getFormMilestone);
+    this.isPristine = false;
   }
   removeMilestone(milestone: Milestone) {
     this.milestoneManagerService.updateToRemove(milestone);
@@ -126,6 +147,22 @@ export class MilestonesComponent implements OnInit {
     this.milestoneManagerService.setSelected(milestone);
   }
   submitMilestones() {
-    this.milestoneManagerService.putMilestones().subscribe(this.putObserver);
+    let projectId = this.projectManagerService.getProjectId;
+    this.milestoneManagerService
+      .putMilestones(projectId)
+      .subscribe(this.putObserver);
+    this.projectManagerService.setMilestones(
+      this.milestoneManagerService.getMilestones
+    );
+  }
+  resetMilestones() {
+    this.milestoneManagerService.setMilestones(
+      this.projectManagerService.getMilestones
+    );
+    this.isPristine = true;
+  }
+  nextStep() {
+    this.stepCompletedEmitter.emit(true);
+    this.nextStepEmitter.emit(true);
   }
 }

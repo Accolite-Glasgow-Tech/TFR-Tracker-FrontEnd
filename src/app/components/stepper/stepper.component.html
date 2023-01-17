@@ -8,7 +8,7 @@
     ></app-tfr-basic-details>
   </mat-step>
 
-  <mat-step [stepControl]="milestoneFormGroup" state="milestone-icon">
+  <mat-step [completed]="stepsValid[1]" state="milestone-icon">
     <ng-template matStepLabel>{{ (this.stepLabels | async)![1] }}</ng-template>
     <app-milestones>
       (nextStepEmitter)="nextStep($event)"
