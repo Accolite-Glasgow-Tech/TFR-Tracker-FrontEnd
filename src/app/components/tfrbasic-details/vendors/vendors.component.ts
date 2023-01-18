@@ -6,7 +6,7 @@ import {
 } from 'src/app/types/types';
 import { ApiService } from 'src/app/services/api.service';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounce, interval } from 'rxjs';
+import { debounce, first, interval } from 'rxjs';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 
 @Component({
@@ -67,13 +67,17 @@ export class VendorsComponent implements OnInit {
   }
 
   resetVendorControls() {
-    this.vendorGroup
-      .get('name')
-      ?.setValue(this.tfrManagementService.getVendorName);
-    let previousVendor: Vendor = this.vendors.find(
-      (vendor) => vendor.id === this.tfrManagementService.project?.vendor_id
-    )!;
-    this.onSelectedVendor(previousVendor);
+    if (
+      this.vendorGroup.value.name !== this.tfrManagementService.getVendorName
+    ) {
+      this.vendorGroup
+        .get('name')
+        ?.setValue(this.tfrManagementService.getVendorName);
+      let previousVendor: Vendor = this.vendors.find(
+        (vendor) => vendor.id === this.tfrManagementService.project?.vendor_id
+      )!;
+      this.onSelectedVendor(previousVendor);
+    }
     this.existingDetails = this.tfrManagementService.getBasicDetails!;
     this.fillAttributesFromExisting();
   }

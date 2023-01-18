@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { ResourceListType, Vendor } from 'src/app/types/types';
+import { Project, ResourceListType, Vendor } from 'src/app/types/types';
 
 @Component({
   selector: 'app-tfr',
@@ -13,6 +13,7 @@ import { ResourceListType, Vendor } from 'src/app/types/types';
 })
 export class TfrComponent implements OnInit {
   TfrId!: Number;
+  errorMessage: string = '';
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -39,13 +40,18 @@ export class TfrComponent implements OnInit {
         is loaded. This component has a resolver (refer to /services/project-resolver) that 
         fetches the project to be displayed.
       */
-      this.route.data.subscribe(({ project }) => {
-        if (project) {
+      this.route.data.subscribe((response) => {
+        let status: number = response['project']['status'];
+        let project: Project = response['project']['body'];
+
+        if (status === 200) {
           this.tfrManagementService.project = project;
           this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
             project.id
           );
           this.tfrManagementService.setVendorName(project.vendor_id);
+        } else {
+          this.tfrManagementService.apiError = true;
         }
       });
     }
