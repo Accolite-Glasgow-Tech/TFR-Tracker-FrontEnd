@@ -9,7 +9,7 @@ import { ResourceListType } from 'src/app/types/types';
 })
 export class ResourceService {
   detailedResourceListURL =
-    APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/names';
+    APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/all/tfr-creation-resource';
   rolesURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/roles';
   roleHashMap = new Map();
 
@@ -67,19 +67,5 @@ export class ResourceService {
   */
   getAssociatedCleanRole(role: string): string {
     return this.roleHashMap.get(role);
-  }
-
-  prettyPrintDate(dateTime: Date): string {
-    if (dateTime) {
-      let dateTimeString: string = dateTime.toLocaleString('en-GB', {
-        timeZone: 'UTC',
-      });
-      let time = dateTimeString.substring(11, 16);
-      let date = dateTimeString.substring(0, 10);
-
-      return date + ' at ' + time;
-    }
-
-    return '';
   }
 }

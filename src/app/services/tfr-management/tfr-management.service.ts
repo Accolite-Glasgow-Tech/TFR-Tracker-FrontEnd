@@ -1,6 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { catchError, Observable, of, throwError } from 'rxjs';
 import { APPCONSTANTS } from 'src/app/shared/app.constants';
 import {
   Milestone,
@@ -23,12 +28,11 @@ export class TfrManagementService {
 
   updateProjectToResourceMappingURL =
     APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/projects';
-  // projectURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/' + project_id;
-  projectURL = 'assets/json/project.json';
-  statusUpdateURL = 'assets/json/projectStatusUpdate.json';
+  projectURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects';
+  // projectURL = 'assets/json/project.json';
   projectResourcesWithNames!: AllocatedResourceType[];
-  vendorSpecificObject!: Object;
   vendorName: string = '';
+  apiError: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -36,12 +40,6 @@ export class TfrManagementService {
     private snackBarService: SnackBarService,
     private apiService: ApiService
   ) {}
-
-  updateBasicDetails() {
-    // http POST request '/projects'
-    // set project_id with return value of request
-    console.log(this.project);
-  }
 
   updateDatabase() {}
 
@@ -69,19 +67,8 @@ export class TfrManagementService {
     return this.project;
   }
 
-  get getVendorSpecificObject(): any {
-    return this.vendorSpecificObject;
-  }
-
   get getVendorName(): string {
     return this.vendorName;
-  }
-
-  setVendorSpecificObject(vendorSpecificObject: string) {
-    while (typeof vendorSpecificObject === 'string') {
-      vendorSpecificObject = JSON.parse(vendorSpecificObject);
-    }
-    this.vendorSpecificObject = vendorSpecificObject;
   }
 
   setProject(project: Project) {
@@ -119,22 +106,41 @@ export class TfrManagementService {
           milestones: [],
           project_resources: [],
           is_deleted: false,
-          created_by: NaN,
+          created_by: 1,
           modified_by: NaN,
           created_at: new Date('2022-12-05T10:00:00.000+00:00'),
           modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
         };
+        this.createProjectInDatabase();
       } else {
         this.project.name = projectBasicDetails.name;
         this.project.start_date = projectBasicDetails.start_date;
         this.project.end_date = projectBasicDetails.end_date;
         this.project.vendor_id = projectBasicDetails.vendor_id;
         this.project.vendor_specific = projectBasicDetails.vendor_specific;
+        this.updateProjectToDatabase();
       }
       this.setVendorName(projectBasicDetails.vendor_id);
-      this.setVendorSpecificObject(projectBasicDetails.vendor_specific);
-      this.updateBasicDetails();
+      // this.updateProjectToDatabase();
     }
+  }
+
+  createProjectInDatabase() {
+    this.http.post(this.projectURL, this.project).subscribe((response) => {
+      if (this.project) {
+        this.project.id = Number(response);
+        this.project.version++;
+      }
+    });
+  }
+
+  updateProjectToDatabase() {
+    this.http.put(this.projectURL, this.project).subscribe((response) => {
+      if (this.project) {
+        this.project.version = Number(response);
+      }
+      this.snackBarService.showSnackBar('Updates saved to database', 2000);
+    });
   }
 
   setVendorName(vendor_id: number) {
@@ -196,17 +202,26 @@ export class TfrManagementService {
   */
   updateProjectToResourceMapping() {
     this.http
-      .put(
-        this.updateProjectToResourceMappingURL + '/' + this.getProjectId,
-        this.getProjectResources
-      )
+      .post(this.updateProjectToResourceMappingURL, this.project)
       .subscribe((response) => {
+        if (this.project) {
+          this.project.version = Number(response);
+        }
         this.snackBarService.showSnackBar('Updates saved to database', 2000);
       });
   }
 
-  getFromDatabase(project_id: Number): Observable<Project> {
-    return this.http.get<Project>(this.projectURL);
+  getFromDatabase(project_id: Number) {
+    return this.http
+      .get<Project>(this.projectURL + '/' + project_id, {
+        observe: 'response',
+      })
+      .pipe(catchError((e) => of(`Formatted exception: ${e.error}`)));
+    // return this.http.get<Project>(this.projectURL);
+  }
+
+  handleError(error: HttpErrorResponse) {
+    return throwError(error.message || 'server error.');
   }
 
   /*
@@ -219,7 +234,7 @@ export class TfrManagementService {
         APPCONSTANTS.APICONSTANTS.BASE_URL +
           '/resources/projects/' +
           project_id +
-          '/names'
+          '/detailed'
       )
       .subscribe((data: AllocatedResourceType[]) => {
         this.projectResourcesWithNames = data;
@@ -235,8 +250,11 @@ export class TfrManagementService {
   updateStatusToDatabase(): Observable<boolean> {
     /* 
       When API is ready, need to make a put request to the database
-      to update the status.
+      to update the status from DRAFT to AGREED.
     */
-    return this.http.get<boolean>(this.statusUpdateURL);
+    return this.http.put<boolean>(
+      this.projectURL + '/' + this.project?.id + '/status/AGREED',
+      null
+    );
   }
 }

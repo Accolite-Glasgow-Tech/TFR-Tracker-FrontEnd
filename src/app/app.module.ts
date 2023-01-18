@@ -39,6 +39,7 @@ import { MilestoneTableComponent } from './components/milestone-table/milestone-
 import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 // import { MatPaginatorIntl } from '@angular/material/paginator';
 
 
@@ -68,6 +69,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ResourceTableComponent,
     MilestoneTableComponent,
     TfrCreationDialogComponent,
+    PageNotFoundComponent,
   ],
 
   providers: [ChartsService, WidgetVendorLocationService, WidgetVendorProjectCountService,{

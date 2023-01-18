@@ -14,6 +14,7 @@ import { TfrManagementService } from 'src/app/services/tfr-management/tfr-manage
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Project } from 'src/app/types/types';
 
 @Component({
   selector: 'app-stepper',
@@ -86,24 +87,39 @@ export class StepperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /*
-      The data that will be rendered in the screen is pre-fetched before the component
-      is loaded. This component has a resolver (refer to /services/project-resolver) that 
-      fetches the project to be displayed.
-    */
-    this.route.data.subscribe(({ project }) => {
-      if (project) {
-        this.tfrManagementService.setVendorSpecificObject(
-          project.vendor_specific
-        );
+    let tfrId = Number(this.route.snapshot.paramMap.get('id'));
 
-        this.tfrManagementService.project = project;
-        this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
-          project.id
-        );
-        this.tfrManagementService.setVendorName(project.id);
-      }
-    });
+    /*
+      Error validation for the path variable. 
+      The path variable (the project_id) is expected to be a number. 
+    */
+    if (!Number.isInteger(tfrId)) {
+      this.router.navigate(['/home']);
+    } else {
+      this.route.paramMap.subscribe((result) => {
+        tfrId = Number(result.get('id'));
+      });
+
+      /*
+        The data that will be rendered in the screen is pre-fetched before the component
+        is loaded. This component has a resolver (refer to /services/project-resolver) that 
+        fetches the project to be displayed.
+      */
+      this.route.data.subscribe((response) => {
+        let status: number = response['project']['status'];
+        let project: Project = response['project']['body'];
+
+        if (status === 200) {
+          this.tfrManagementService.project = project;
+          this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
+            project.id
+          );
+          this.tfrManagementService.setVendorName(project.vendor_id);
+        } else {
+          this.tfrManagementService.apiError = true;
+        }
+      });
+    }
   }
 
   /*
