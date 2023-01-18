@@ -7,26 +7,34 @@ import { WidgetVendorProjectCountService } from './widget-vendor-project-count.s
   styleUrls: ['./widget-vendor-project-count.component.scss'],
 })
 export class WidgetVendorProjectCountComponent {
-  vendorProjectCountdata: any =[];
+  dataPoints: any[] = [];
   constructor(
     private widgetVendorProjectCountservice: WidgetVendorProjectCountService
-  ) {}
+  ) {
+    this.widgetVendorProjectCountservice
+      .readVendorProjectCountUrlUrl()
+      .subscribe((response) => {
+        this.chartOptions.data[0].dataPoints = response;
+        this.dataPoints = response;
+      });
+  }
 
   chart: any;
-
   chartOptions = {
     title: {
-      text: 'Project Count VendorWise',
+      //  text: "Project Count VS Vendor"
     },
+    size: 5,
     animationEnabled: true,
     axisY: {
       includeZero: true,
     },
+
     data: [
       {
         type: 'bar',
         indexLabel: '{y}',
-        dataPoints: this.vendorProjectCountdata,
+        dataPoints: [],
       },
     ],
   };

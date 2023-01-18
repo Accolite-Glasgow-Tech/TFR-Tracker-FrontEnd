@@ -1,0 +1,20 @@
+
+<igx-list>
+  <mat-card style="background-color: hwb(0 98% 2%); color: rgb(0, 0, 0);">
+    <br/>
+    <igx-list-item
+      *ngFor="let projectDetails of ProjectDetails; index as i"
+      igxRipple
+      igxRippleTarget=".igx-list__item-content">
+      <span igxListLineTitle
+        ><b>{{ i + 1 }}. {{ projectDetails[0] }}</b> starts in
+      </span>
+      <br />
+      <span igxListLineSubTitle
+        ><strong>{{ projectDetails[1] }}</strong> days
+      </span>
+    </igx-list-item>
+    
+  </mat-card>
+</igx-list>
+

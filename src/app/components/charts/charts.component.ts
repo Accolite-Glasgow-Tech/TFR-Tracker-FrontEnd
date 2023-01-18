@@ -1,7 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { ChartOptions } from 'chart.js';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChartComponent, ChartOptions } from 'chart.js';
 import { IStatus } from 'src/app/Interface/Status.Interface';
 import { ChartsService } from './charts.service';
+
+import {
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart,
+} from 'ng-apexcharts';
 
 @Component({
   selector: 'app-charts',
@@ -11,9 +17,6 @@ import { ChartsService } from './charts.service';
 })
 export class ChartsComponent implements OnInit {
   constructor(private chartservice: ChartsService) {}
-
-  tfrstatusdata: IStatus[] = [];
-
   public pieChartOptions: ChartOptions<'pie'> = {
     responsive: true,
   };
@@ -26,20 +29,20 @@ export class ChartsComponent implements OnInit {
   ];
   pieChartLabels: any[] = [];
   ngOnInit() {
-
-    this.chartservice.readTfrStatusData().subscribe((response) => {
-      this.tfrstatusdata = response;
-      (this.pieChartLabels = Object.keys(response)),
+    this.chartservice.readTfrStatusData().subscribe((responsedata) => {
+      (this.pieChartLabels = Object.keys(JSON.parse(responsedata.response))),
         (this.pieChartData = [
           {
-            data: Object.values(response),
+            data: Object.values(JSON.parse(responsedata.response)),
             backgroundColor: [
               'orange',
-              'Grey',
+              'blue',
               'red',
               'green',
               'yellow',
-              'blue',
+              'gray',
+              'pink',
+              'brown',
             ],
           },
         ]);

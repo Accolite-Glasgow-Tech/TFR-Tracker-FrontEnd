@@ -37,10 +37,15 @@ import { ProjectSummaryComponent } from './components/project-summary/project-su
 import { ResourceTableComponent } from './components/resource-table/resource-table.component';
 import { MilestoneTableComponent } from './components/milestone-table/milestone-table.component';
 import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
+import { DynamicModule } from 'ng-dynamic-component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { 
+	IgxListModule,
+	IgxRippleModule
+ } from "igniteui-angular";
+import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
 // import { MatPaginatorIntl } from '@angular/material/paginator';
-
 
 @NgModule({
   declarations: [
@@ -68,13 +73,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ResourceTableComponent,
     MilestoneTableComponent,
     TfrCreationDialogComponent,
+    WidgetApproachingProjectsComponent,
   ],
 
-  providers: [ChartsService, WidgetVendorLocationService, WidgetVendorProjectCountService,{
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptorService,
-    multi: true,
-  },],
+  providers: [
+    ChartsService,
+    WidgetVendorLocationService,
+    WidgetVendorProjectCountService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
@@ -87,7 +98,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     GridsterModule.forRoot(),
     GridsterModule,
     ReactiveFormsModule,
-   ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+    DynamicModule,
+    IgxListModule,
+    IgxRippleModule,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}
