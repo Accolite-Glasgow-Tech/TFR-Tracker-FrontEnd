@@ -40,6 +40,7 @@ import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChipComponent } from './components/chip/chip.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { ChipComponent } from './components/chip/chip.component';
     MilestoneTableComponent,
     TfrCreationDialogComponent,
     ChipComponent,
+    PageNotFoundComponent,
   ],
 
   providers: [

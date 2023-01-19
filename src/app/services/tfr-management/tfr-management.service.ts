@@ -1,6 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { catchError, Observable, of, throwError } from 'rxjs';
 import { APPCONSTANTS } from 'src/app/shared/app.constants';
 import {
   Milestone,
@@ -27,6 +32,7 @@ export class TfrManagementService {
   // projectURL = 'assets/json/project.json';
   projectResourcesWithNames!: AllocatedResourceType[];
   vendorName: string = '';
+  apiError: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -196,10 +202,7 @@ export class TfrManagementService {
   */
   updateProjectToResourceMapping() {
     this.http
-      .post(
-        this.updateProjectToResourceMappingURL + '/' + this.getProjectId,
-        this.getProjectResources
-      )
+      .post(this.updateProjectToResourceMappingURL, this.project)
       .subscribe((response) => {
         if (this.project) {
           this.project.version = Number(response);
@@ -208,9 +211,17 @@ export class TfrManagementService {
       });
   }
 
-  getFromDatabase(project_id: Number): Observable<Project> {
-    return this.http.get<Project>(this.projectURL + '/' + project_id);
+  getFromDatabase(project_id: Number) {
+    return this.http
+      .get<Project>(this.projectURL + '/' + project_id, {
+        observe: 'response',
+      })
+      .pipe(catchError((e) => of(`Formatted exception: ${e.error}`)));
     // return this.http.get<Project>(this.projectURL);
+  }
+
+  handleError(error: HttpErrorResponse) {
+    return throwError(error.message || 'server error.');
   }
 
   /*
