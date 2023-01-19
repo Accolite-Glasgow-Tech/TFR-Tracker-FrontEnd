@@ -42,12 +42,10 @@ export class VendorsComponent implements OnInit {
     this.api.getVendorData().subscribe((data) => {
       this.vendors = data;
       if (this.editMode) {
-        console.log('vendor edit mode');
         // TODO fill in details of vendor and Attributes
         // find vendor in list with existingDetails.vendor_id and call select method
         this.vendors.forEach((vendor) => {
           if (vendor.id == this.existingDetails.vendor_id) {
-            console.log('vendor id found ' + vendor.id);
             this.onSelectedVendor(vendor);
           
           }
@@ -121,8 +119,6 @@ export class VendorsComponent implements OnInit {
         this.fillAttributesFromExisting();
       }
     });
-
-    
   }
 
   getAttributes(): FormArray {
