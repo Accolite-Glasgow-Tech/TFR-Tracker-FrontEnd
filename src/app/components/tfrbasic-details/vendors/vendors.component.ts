@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
+import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   ProjectBasicDetails,
   VendorAttributeDTO,
@@ -14,7 +15,10 @@ import {
   styleUrls: ['./vendors.component.scss'],
 })
 export class VendorsComponent implements OnInit {
-  constructor(private api: ApiService) {}
+  constructor(
+    private api: ApiService,
+    private tfrManagementService: TfrManagementService
+  ) {}
 
   @Input() editMode!: Boolean;
   @Input() existingDetails!: ProjectBasicDetails;
@@ -29,6 +33,10 @@ export class VendorsComponent implements OnInit {
   ngOnInit() {
     this.vendorGroup = new FormGroup({
       name: new FormControl(''),
+    });
+
+    this.api.vendorReset.subscribe((result) => {
+      this.resetVendorControls();
     });
 
     this.api.getVendorData().subscribe((data) => {
@@ -58,25 +66,41 @@ export class VendorsComponent implements OnInit {
     }
   }
 
+  resetVendorControls() {
+    if (
+      this.vendorGroup.value.name !== this.tfrManagementService.getVendorName
+    ) {
+      this.vendorGroup
+        .get('name')
+        ?.setValue(this.tfrManagementService.getVendorName);
+      let previousVendor: VendorDTO = this.vendors.find(
+        (vendor) => vendor.id === this.tfrManagementService.project?.vendor_id
+      )!;
+      this.onSelectedVendor(previousVendor);
+    }
+    this.existingDetails = this.tfrManagementService.getBasicDetails!;
+    this.fillAttributesFromExisting();
+  }
+
   fillAttributesFromExisting() {
     // parse values from existingDetails.vendor_specific
     // use to set values of form array
-    var obj = JSON.parse(JSON.parse(this.existingDetails.vendor_specific));
-    let i = 0;
 
-    this.attributes.forEach((attribute) => {
-      console.log(obj[attribute.attribute_name]);
-      this.getAttributes().at(i).setValue(obj[attribute.attribute_name]);
-      i += 1;
+    this.attributes.forEach((attribute, index) => {
+      this.getAttributes()
+        .at(index)
+        .setValue(
+          this.existingDetails.vendor_specific[attribute.attribute_name]
+        );
     });
   }
 
   @Output() onSelected = new EventEmitter<VendorDTO>();
   @Output() attributesSelected = new EventEmitter<VendorAttributeDTO[]>();
   onSelectedVendor(vendor: VendorDTO) {
+    this.getAttributes().reset();
     this.vendorGroup.get('name')?.setValue(vendor.name);
 
-    console.log(vendor);
     this.onSelected.emit(vendor);
 
     this.api.getVendorAttributes(vendor.id).subscribe((res) => {

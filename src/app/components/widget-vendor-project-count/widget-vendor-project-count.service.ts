@@ -6,6 +6,11 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root',
 })
 export class WidgetVendorProjectCountService {
+  private VendorProjectCountUrl = 'http://localhost:8080/VendorProjectCount';
+
   constructor(private http: HttpClient) {}
-  private TfrLocationCountUrl = 'http://localhost:8080/tfrLocationCount';
+
+  readVendorProjectCountUrlUrl(): Observable<any> {
+    return this.http.get(this.VendorProjectCountUrl);
+  }
 }

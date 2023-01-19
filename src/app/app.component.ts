@@ -2,6 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { RoutesService } from './routes.service';
 import { IGridsterOptions, GridsterComponent } from 'angular2gridster';
 import { ChartsComponent } from './components/charts/charts.component';
+import { WidgetVendorLocationComponent } from './components/widget-vendor-location/widget-vendor-location.component';
+import { WidgetVendorProjectCountComponent } from './components/widget-vendor-project-count/widget-vendor-project-count.component';
+
 
 @Component({
   selector: 'app-root',
@@ -9,64 +12,49 @@ import { ChartsComponent } from './components/charts/charts.component';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  @ViewChild(GridsterComponent) gridster!: GridsterComponent;
-  title = 'TFR-Management';
+//   @ViewChild(GridsterComponent) gridster!: GridsterComponent;
+//   // title = 'TFR-Management';
 
-  widgets: any[] = [{}];
+//   widgets: any[] = [{ componentType: WidgetVendorLocationComponent,componentName:"Client Location" },
+//     { componentType: WidgetVendorProjectCountComponent,componentName:"Our Clients" },
+//   ];
 
-  gridsterOptions: IGridsterOptions = {
-    lanes: this.getLaneCount(),
-    floating: true,
-    direction: 'vertical',
-    dragAndDrop: false,
-    resizable: false,
-    useCSSTransforms: false,
-  };
+//   gridsterOptions: IGridsterOptions = {
+//     lanes: this.getLaneCount(),
+//     floating: true,
+//     direction: 'vertical',
+//     dragAndDrop: false,
+//     resizable: false,
+//     useCSSTransforms: false,
+//   };
 
-  getLaneCount(): number {
-    if (this.widgets.length > 6) {
-      return 4;
-    }
+//   getLaneCount(): number {
+//     // if (this.widgets.length > 6) {
+//     //   return 4;
+//     // }
 
-    if (this.widgets.length > 4) {
-      return 3;
-    }
+//     // if (this.widgets.length > 4) {
+//     //   return 3;
+//     // }
 
-    if (this.widgets.length === 4) {
-      return 2;
-    }
+//     // if (this.widgets.length === 4) {
+//     //   return 2;
+//     // }
 
-    if (this.widgets.length < 4) {
-      return this.widgets.length;
-    }
-    return this.widgets.length;
-  }
+//     // if (this.widgets.length < 4) {
+//     //   return this.widgets.length;
+//     // }
+//     return 2;
+//   }
 
-  TFRStatusChart(): void {
-    this.widgets.push({});
-    console.log('Add: LaneCount', this.getLaneCount());
-    this.gridster.setOption('lanes', this.getLaneCount());
-  }
+//   remove(): void {
+//     this.widgets.pop();
+//     console.log('Remove: LaneCount', this.getLaneCount());
+//     this.gridster.setOption('lanes', this.getLaneCount());
+//   }
 
-  VendorProjectCountChart(): void {
-    this.widgets.push({});
-    console.log('Add: LaneCount', this.getLaneCount());
-    this.gridster.setOption('lanes', this.getLaneCount());
-  }
-
-  VendorLocationChart(): void {
-    this.widgets.push({});
-    console.log('Add: LaneCount', this.getLaneCount());
-    this.gridster.setOption('lanes', this.getLaneCount());
-  }
-
-  remove(): void {
-    this.widgets.pop();
-    console.log('Remove: LaneCount', this.getLaneCount());
-    this.gridster.setOption('lanes', this.getLaneCount());
-  }
-
-  optionsChange(options: IGridsterOptions) {
-    console.log('options change:', options.lanes);
-  }
+//   optionsChange(options: IGridsterOptions) {
+//     console.log('options change:', options.lanes);
+//   }
+// }
 }

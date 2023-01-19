@@ -1,0 +1,8 @@
+<mat-chip
+  removable="true"
+  selectable="true"
+  (removed)="remove($event)"
+  (click)="click($event)"
+  >{{ value.start_date | date : "shortDate" }}
+  <mat-icon matChipRemove>cancel</mat-icon>
+</mat-chip>

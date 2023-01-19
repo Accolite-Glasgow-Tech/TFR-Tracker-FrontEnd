@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { VendorDTO, VendorAttributeDTO } from '../shared/interfaces';
+import { VendorAttributeDTO, VendorDTO } from '../shared/interfaces';
+import { log } from '../shared/utils';
 import { DummyData } from '../types/dummy-data';
 
 @Injectable({
@@ -9,10 +10,16 @@ import { DummyData } from '../types/dummy-data';
 })
 export class ApiService {
   Vendors: VendorDTO[] = require('../../assets/json/vendors.json');
+  vendorReset = new EventEmitter<boolean>();
 
   constructor(private httpClient: HttpClient) {
-    console.log('Vendors ', this.Vendors);
+    log('Vendors ', this.Vendors);
   }
+
+  resetVendorDetails() {
+    this.vendorReset.emit(true);
+  }
+
   getVendorData(): Observable<VendorDTO[]> {
     return of(this.Vendors);
   }

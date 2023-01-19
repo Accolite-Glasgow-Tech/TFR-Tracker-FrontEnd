@@ -7,8 +7,6 @@ import { TFRLocationCountURL } from 'src/app/shared/constants';
   providedIn: 'root',
 })
 export class WidgetVendorLocationService {
-  datapoints: any;
-
   constructor(private http: HttpClient) {}
 
   readTfrLocationCountUrl(): Observable<any> {

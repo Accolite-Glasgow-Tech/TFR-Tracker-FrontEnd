@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ApiService } from 'src/app/services/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 
 import {
@@ -18,7 +19,8 @@ import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-
 export class TfrBasicDetailsComponent implements OnInit {
   constructor(
     private tfrManager: TfrManagementService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private apiService: ApiService
   ) {}
 
   @Output() nextStepEmitter = new EventEmitter<boolean>();
@@ -29,7 +31,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   selectedProject!: ProjectBasicDetails;
   vendorAttributes!: FormGroup;
   attributeNames: string[] = [];
-  vendor_specificData: string = '';
+  vendor_specificData: { [key: string]: string } = {};
   editMode: Boolean = false;
   projectToEdit!: ProjectBasicDetails;
   @Output() editModeEmitter = new EventEmitter<boolean>();
@@ -88,20 +90,18 @@ export class TfrBasicDetailsComponent implements OnInit {
       vendor_specific: this.vendor_specificData,
       status: this.editMode ? this.projectToEdit.status : 'DRAFT',
     };
-
+    console.log('saveTFR');
     this.tfrManager.setBasicDetails(updatedProjectDetails);
+    console.log(this.tfrManager.getBasicDetails);
     this.tfrDetails.markAsPristine();
     this.vendorAttributes.markAsPristine();
-
-    /* Need to add API database call here to save to database */
   }
 
   onVendorSelect(vendor: VendorDTO) {
-    console.log(this.tfrDetails);
     this.tfrDetails.get('vendor_id')?.setValue(vendor.id);
   }
 
-  /* 
+  /*
     Move onto the next step of the stepper
   */
   next() {
@@ -128,7 +128,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   resetInputFields() {
     let previousStateBasicDetails: ProjectBasicDetails =
       this.tfrManager.getBasicDetails!;
-    let previousStateVendor: Object = this.tfrManager.getVendorSpecificObject;
+
     this.tfrDetails.get('name')?.setValue(previousStateBasicDetails.name);
     this.tfrDetails
       .get('start_date')
@@ -139,14 +139,14 @@ export class TfrBasicDetailsComponent implements OnInit {
     this.tfrDetails
       .get('vendor_id')
       ?.setValue(previousStateBasicDetails.vendor_id);
-    let i = 0;
-    while (i < this.attributeNames.length) {
-      let attributeName = this.getAttributesArray().controls[i];
-      attributeName.setValue(
-        previousStateVendor[this.attributeNames[i] as keyof Object]
-      );
-      i++;
-    }
+
+    this.projectToEdit.vendor_id = previousStateBasicDetails.vendor_id;
+
+    /*
+      Trigger event to vendor component through the api.service
+    */
+    this.apiService.resetVendorDetails();
+
     this.tfrDetails.markAsPristine();
     this.vendorAttributes.markAsPristine();
   }
@@ -164,24 +164,15 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   updatevendor_specific() {
+    this.vendor_specificData = {};
     // convert the form group info to string data and assign to vendor_specificData string
     if (this.vendorAttributes.valid) {
-      this.vendor_specificData = '{';
       let i = 0;
       while (i < this.attributeNames.length) {
-        if (i > 0) {
-          this.vendor_specificData = this.vendor_specificData.concat(', ');
-        }
-        this.vendor_specificData = this.vendor_specificData.concat(
-          '"' +
-            this.attributeNames[i] +
-            '": "' +
-            this.getAttributesArray().controls[i].value +
-            '"'
-        );
-        i += 1;
+        this.vendor_specificData[this.attributeNames[i]] =
+          this.getAttributesArray().controls[i].value;
+        i++;
       }
-      this.vendor_specificData = this.vendor_specificData.concat('}');
     }
   }
 
