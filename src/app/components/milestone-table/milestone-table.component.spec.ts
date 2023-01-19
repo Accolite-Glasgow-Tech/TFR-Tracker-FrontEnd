@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ResourceService } from 'src/app/services/resource/resource.service';
 
 import { MilestoneTableComponent } from './milestone-table.component';
 
@@ -8,9 +9,14 @@ describe('MilestoneTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MilestoneTableComponent ]
-    })
-    .compileComponents();
+      declarations: [MilestoneTableComponent],
+      providers: [
+        {
+          provide: ResourceService,
+          useValue: jasmine.createSpyObj(['']),
+        },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MilestoneTableComponent);
     component = fixture.componentInstance;

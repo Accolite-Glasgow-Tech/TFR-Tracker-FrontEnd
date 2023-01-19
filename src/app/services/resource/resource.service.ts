@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { APPCONSTANTS } from 'src/app/shared/app.constants';
-import { ResourceListType } from 'src/app/types/types';
+import {
+  resourceRolesURL,
+  TFRCreationResourceURL,
+} from 'src/app/shared/constants';
+import { ResourceListType } from 'src/app/shared/interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ResourceService {
-  detailedResourceListURL =
-    APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/names';
-  rolesURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/roles';
   roleHashMap = new Map();
 
   constructor(private http: HttpClient) {}
@@ -22,7 +22,7 @@ export class ResourceService {
     selected with a boolean value of FALSE. 
   */
   getAllResources(): Observable<ResourceListType[]> {
-    return this.http.get<ResourceListType[]>(this.detailedResourceListURL);
+    return this.http.get<ResourceListType[]>(TFRCreationResourceURL);
   }
 
   /*
@@ -30,7 +30,7 @@ export class ResourceService {
     project.
   */
   getAllRoles(): Observable<string[]> {
-    return this.http.get<string[]>(this.rolesURL);
+    return this.http.get<string[]>(resourceRolesURL);
   }
 
   /*
@@ -67,19 +67,5 @@ export class ResourceService {
   */
   getAssociatedCleanRole(role: string): string {
     return this.roleHashMap.get(role);
-  }
-
-  prettyPrintDate(dateTime: Date): string {
-    if (dateTime) {
-      let dateTimeString: string = dateTime.toLocaleString('en-GB', {
-        timeZone: 'UTC',
-      });
-      let time = dateTimeString.substring(11, 16);
-      let date = dateTimeString.substring(0, 10);
-
-      return date + ' at ' + time;
-    }
-
-    return '';
   }
 }

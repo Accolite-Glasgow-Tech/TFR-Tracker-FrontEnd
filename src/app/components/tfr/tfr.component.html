@@ -1,21 +1,25 @@
-<div class="top-btn-div">
-  <button
-    mat-raised-button
-    class="edit-btn"
-    color="primary"
-    (click)="redirectToEditTfr()"
-  >
-    <mat-icon>edit</mat-icon>
-    Edit
-  </button>
-</div>
-<div class="title">
-  <h2>{{ tfrManagementService.getProjectName }}</h2>
-</div>
+<div *ngIf="!tfrManagementService.apiError">
+  <div class="top-btn-div">
+    <button
+      mat-raised-button
+      class="edit-btn"
+      color="primary"
+      (click)="redirectToEditTfr()"
+    >
+      <mat-icon>edit</mat-icon>
+      Edit
+    </button>
+  </div>
+  <div class="title">
+    <h2>{{ tfrManagementService.getProjectName }}</h2>
+  </div>
 
-<app-project-summary
-  [currentProject]="tfrManagementService.getProject"
-  [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"
-  [vendorSpecificObject]="tfrManagementService.getVendorSpecificObject"
-  [vendorName]="tfrManagementService.getVendorName"
-></app-project-summary>
+  <app-project-summary
+    [currentProject]="tfrManagementService.getProject"
+    [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"
+    [vendorName]="tfrManagementService.getVendorName"
+  ></app-project-summary>
+</div>
+<div *ngIf="tfrManagementService.apiError">
+  <app-page-not-found></app-page-not-found>
+</div>

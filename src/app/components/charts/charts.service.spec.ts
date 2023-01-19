@@ -13,4 +13,6 @@ describe('ChartsService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('true should be true',()=>{expect(true).toBe(true);});
 });

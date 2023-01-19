@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AlertsComponent } from './components/alerts/alerts.component';
 import { HomeComponent } from './components/home/home.component';
-import { MilestonesComponent } from './components/milestones/milestones.component';
 import { PermissionsComponent } from './components/permissions/permissions.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
+import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { UserComponent } from './components/user/user.component';
 import { ProjectResolverService } from './services/project-resolver/project-resolver.service';
 import { TFRRoute } from './TFRRoute';
@@ -49,22 +49,15 @@ export class RoutesService {
       component: TfrComponent,
     },
     {
-      label: 'Milestones',
-      path: 'milestones',
-      component: MilestonesComponent,
-    },
-    {
-      label: 'Alerts',
-      path: 'alerts',
-      component: AlertsComponent,
-    },
-    {
       label: 'Reports',
       path: 'reports',
       component: ReportsComponent,
     },
     {
-      label: 'Permissions',
+      path: 'schedules',
+      component: UserSchedulesComponent,
+    },
+    {
       path: 'permissions',
       component: PermissionsComponent,
     },
@@ -78,7 +71,5 @@ export class RoutesService {
       path: '**',
       redirectTo: 'home',
     },
-
-    
   ];
 }

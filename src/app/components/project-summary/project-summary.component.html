@@ -10,16 +10,14 @@
       <div class="project-details">
         <span
           ><strong>Start Date: </strong>
-          {{
-            this.resourceService.prettyPrintDate(currentProject?.start_date!)
-          }}</span
+          {{ currentProject?.start_date! | date : "short" }}</span
         >
       </div>
 
       <div class="project-details">
         <span>
           <strong>End Date: </strong>
-          {{ this.resourceService.prettyPrintDate(currentProject?.end_date!) }}
+          {{ currentProject?.end_date! | date : "short" }}
         </span>
       </div>
 
@@ -34,7 +32,10 @@
       </div>
       <div
         class="project-details"
-        *ngFor="let vendor_attribute of this.vendorSpecificObject | keyvalue"
+        *ngFor="
+          let vendor_attribute of this.currentProject?.vendor_specific
+            | keyvalue
+        "
       >
         <span>
           <strong>{{ vendor_attribute.key }}: </strong>
