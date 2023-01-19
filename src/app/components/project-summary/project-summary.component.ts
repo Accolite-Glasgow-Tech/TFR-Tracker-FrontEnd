@@ -8,16 +8,10 @@ import { AllocatedResourceType, Project } from 'src/app/types/types';
   templateUrl: './project-summary.component.html',
   styleUrls: ['./project-summary.component.scss'],
 })
-export class ProjectSummaryComponent implements OnInit {
-  constructor(
-    protected resourceService: ResourceService,
-    private apiService: ApiService
-  ) {}
+export class ProjectSummaryComponent {
+  constructor(protected resourceService: ResourceService) {}
 
   @Input() currentProject!: Project | undefined;
   @Input() resourcesWithNames!: AllocatedResourceType[];
-  @Input() vendorSpecificObject!: any;
   @Input() vendorName!: string;
-
-  ngOnInit(): void {}
 }

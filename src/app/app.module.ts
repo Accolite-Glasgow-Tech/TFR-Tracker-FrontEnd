@@ -40,11 +40,15 @@ import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr
 import { DynamicModule } from 'ng-dynamic-component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+<<<<<<< HEAD
 import { 
 	IgxListModule,
 	IgxRippleModule
  } from "igniteui-angular";
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
+=======
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+>>>>>>> d2fde6416501a1d90e49acd3d7aea9d6ef12766a
 // import { MatPaginatorIntl } from '@angular/material/paginator';
 
 @NgModule({
@@ -73,7 +77,11 @@ import { WidgetApproachingProjectsComponent } from './components/widget-approach
     ResourceTableComponent,
     MilestoneTableComponent,
     TfrCreationDialogComponent,
+<<<<<<< HEAD
     WidgetApproachingProjectsComponent,
+=======
+    PageNotFoundComponent,
+>>>>>>> d2fde6416501a1d90e49acd3d7aea9d6ef12766a
   ],
 
   providers: [
