@@ -1,9 +1,7 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from 'src/app/services/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project, ResourceListType, Vendor } from 'src/app/types/types';
+import { Project } from 'src/app/types/types';
 
 @Component({
   selector: 'app-tfr',
@@ -17,8 +15,7 @@ export class TfrComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    protected tfrManagementService: TfrManagementService,
-    private apiService: ApiService
+    protected tfrManagementService: TfrManagementService
   ) {}
 
   ngOnInit() {

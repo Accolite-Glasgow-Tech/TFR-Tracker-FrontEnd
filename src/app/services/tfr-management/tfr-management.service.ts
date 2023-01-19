@@ -1,19 +1,13 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { APPCONSTANTS } from 'src/app/shared/app.constants';
 import {
+  AllocatedResourceType,
   Milestone,
   Project,
   ProjectBasicDetails,
   ProjectResource,
-  AllocatedResourceType,
-  ResourceListType,
   Vendor,
 } from '../../types/types';
 import { ApiService } from '../api.service';
@@ -218,10 +212,6 @@ export class TfrManagementService {
       })
       .pipe(catchError((e) => of(`Formatted exception: ${e.error}`)));
     // return this.http.get<Project>(this.projectURL);
-  }
-
-  handleError(error: HttpErrorResponse) {
-    return throwError(error.message || 'server error.');
   }
 
   /*
