@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { user } from 'src/app/mock';
 import { getUserTasksURL } from 'src/app/shared/utils';
 import { TaskDTO } from 'src/app/shared/interfaces';
-
 @Component({
   selector: 'app-user-schedules',
   templateUrl: './user-schedules.component.html',
@@ -11,6 +10,7 @@ import { TaskDTO } from 'src/app/shared/interfaces';
 })
 export class UserSchedulesComponent {
   userTasks: TaskDTO[] = [];
+  JSON = JSON;
 
   constructor(private httpClient: HttpClient) {}
 
