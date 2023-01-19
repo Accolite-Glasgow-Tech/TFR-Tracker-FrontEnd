@@ -10,17 +10,17 @@
       [draggableOptions]="{ handlerClass: 'panel-heading' }"
       (optionsChange)="optionsChange($event)"
     >
-      <ngx-gridster-item  *ngFor="let widget of widgets; index as i">
-        <div style="height: 600px; width: 600px; margin: 10px; inline-size: auto;">
-        <mat-card class="widget" style="height: 100%; width: 100%; margin: 10px; inline-size: auto;"  >
-           <mat-card class="header">
-            <h1>
+    <ngx-gridster-item style="height: 600px; width: 600px;" *ngFor="let widget of widgets; index as i">
+      <div style="height: 600px; width:600px; position: relative; margin: 10px; inline-size: auto;  ">
+      <mat-card class="widget" style="height: 100%; width:100%; position: relative; margin: 10px; inline-size: auto;"  >
+         <mat-card class="header">
+          <h1>
               <a class="headerText"> {{ widget.componentName }}</a>
               <button class="closeiconbutton" (click)="remove()"><i class="fa fa-close"></i></button>
               <button class="geariconbtn"><i class="fa fa-gear"></i></button>
             </h1>
           </mat-card>
-          <div style="width: 80% ;height: 80%; margin: 10%;">
+          <div style="width: 80% ;height: 80%; position: relative; margin: 10%;  inline-size: auto; ">
           <ndc-dynamic 
             [ndcDynamicComponent]="widget.componentType"
           ></ndc-dynamic>

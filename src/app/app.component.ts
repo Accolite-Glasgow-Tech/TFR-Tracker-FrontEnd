@@ -12,49 +12,4 @@ import { WidgetVendorProjectCountComponent } from './components/widget-vendor-pr
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-//   @ViewChild(GridsterComponent) gridster!: GridsterComponent;
-//   // title = 'TFR-Management';
-
-//   widgets: any[] = [{ componentType: WidgetVendorLocationComponent,componentName:"Client Location" },
-//     { componentType: WidgetVendorProjectCountComponent,componentName:"Our Clients" },
-//   ];
-
-//   gridsterOptions: IGridsterOptions = {
-//     lanes: this.getLaneCount(),
-//     floating: true,
-//     direction: 'vertical',
-//     dragAndDrop: false,
-//     resizable: false,
-//     useCSSTransforms: false,
-//   };
-
-//   getLaneCount(): number {
-//     // if (this.widgets.length > 6) {
-//     //   return 4;
-//     // }
-
-//     // if (this.widgets.length > 4) {
-//     //   return 3;
-//     // }
-
-//     // if (this.widgets.length === 4) {
-//     //   return 2;
-//     // }
-
-//     // if (this.widgets.length < 4) {
-//     //   return this.widgets.length;
-//     // }
-//     return 2;
-//   }
-
-//   remove(): void {
-//     this.widgets.pop();
-//     console.log('Remove: LaneCount', this.getLaneCount());
-//     this.gridster.setOption('lanes', this.getLaneCount());
-//   }
-
-//   optionsChange(options: IGridsterOptions) {
-//     console.log('options change:', options.lanes);
-//   }
-// }
 }
