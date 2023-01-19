@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { AllocatedResourceType } from 'src/app/types/types';
+import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-resource-table',
@@ -11,7 +11,7 @@ export class ResourceTableComponent {
     This list of all the resources for this project contains:
       project_id, resource id, name, email and their role in the project 
   */
-  @Input() resourcesWithNames!: AllocatedResourceType[];
+  @Input() resourcesWithNames!: AllocatedResourceTypeDTO[];
 
   /*
     If the withDelete is TRUE, an additional column with a delete symbol will 

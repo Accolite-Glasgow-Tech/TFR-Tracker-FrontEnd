@@ -3,11 +3,12 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+
 import {
   ProjectBasicDetails,
-  Vendor,
-  VendorAttribute,
-} from 'src/app/types/types';
+  VendorAttributeDTO,
+  VendorDTO,
+} from 'src/app/shared/interfaces';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
 @Component({
@@ -89,17 +90,18 @@ export class TfrBasicDetailsComponent implements OnInit {
       vendor_specific: this.vendor_specificData,
       status: this.editMode ? this.projectToEdit.status : 'DRAFT',
     };
-
+    console.log('saveTFR');
     this.tfrManager.setBasicDetails(updatedProjectDetails);
+    console.log(this.tfrManager.getBasicDetails);
     this.tfrDetails.markAsPristine();
     this.vendorAttributes.markAsPristine();
   }
 
-  onVendorSelect(vendor: Vendor) {
+  onVendorSelect(vendor: VendorDTO) {
     this.tfrDetails.get('vendor_id')?.setValue(vendor.id);
   }
 
-  /* 
+  /*
     Move onto the next step of the stepper
   */
   next() {
@@ -141,7 +143,7 @@ export class TfrBasicDetailsComponent implements OnInit {
     this.projectToEdit.vendor_id = previousStateBasicDetails.vendor_id;
 
     /*
-      Trigger event to vendor component through the api.service 
+      Trigger event to vendor component through the api.service
     */
     this.apiService.resetVendorDetails();
 
@@ -149,7 +151,7 @@ export class TfrBasicDetailsComponent implements OnInit {
     this.vendorAttributes.markAsPristine();
   }
 
-  onAttributesSelected(attributes: VendorAttribute[]) {
+  onAttributesSelected(attributes: VendorAttributeDTO[]) {
     this.attributeNames = [];
     attributes.forEach((att) => {
       this.attributeNames.push(att.attribute_name);

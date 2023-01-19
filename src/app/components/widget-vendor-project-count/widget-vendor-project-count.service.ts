@@ -1,11 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { vendorProjectCountURL } from 'src/app/shared/constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WidgetVendorProjectCountService {
   constructor(private http: HttpClient) {}
-  private TfrLocationCountUrl = 'http://localhost:8080/tfrLocationCount';
+
+  readVendorProjectCountUrlUrl(): Observable<any> {
+    return this.http.get(vendorProjectCountURL);
+  }
 }

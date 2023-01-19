@@ -11,37 +11,14 @@
       ></app-tfr-basic-details>
     </mat-step>
 
-    <mat-step [stepControl]="milestoneFormGroup" state="milestone-icon">
-      <ng-template matStepLabel>{{
-        (this.stepLabels | async)![1]
-      }}</ng-template>
-      <form [formGroup]="milestoneFormGroup">
-        <!-- Milestone Component Here -->
-        <mat-form-field appearance="fill">
-          <mat-label>Milestone</mat-label>
-          <input matInput formControlName="milestoneName" required />
-        </mat-form-field>
-        <div>
-          <button
-            mat-raised-button
-            color="primary"
-            class="navigation-btn"
-            matStepperPrevious
-          >
-            Back
-          </button>
-          <button
-            mat-raised-button
-            color="primary"
-            class="navigation-btn"
-            matStepperNext
-          >
-            Next
-          </button>
-        </div>
-        <!--  -->
-      </form>
-    </mat-step>
+  <mat-step [completed]="stepsValid[1]" state="milestone-icon">
+    <ng-template matStepLabel>{{ (this.stepLabels | async)![1] }}</ng-template>
+    <app-milestones
+      (nextStepEmitter)="nextStep($event)"
+      (stepCompletedEmitter)="stepCompleted(1, $event)"
+    >
+    </app-milestones>
+  </mat-step>
 
     <mat-step [completed]="stepsValid[2]" state="resources-icon">
       <ng-template matStepLabel>{{

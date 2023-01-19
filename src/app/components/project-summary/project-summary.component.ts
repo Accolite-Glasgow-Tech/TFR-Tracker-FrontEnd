@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ResourceService } from 'src/app/services/resource/resource.service';
-import { ApiService } from 'src/app/services/api.service';
-import { AllocatedResourceType, Project } from 'src/app/types/types';
+import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
+import { Project } from 'src/app/types/types';
 
 @Component({
   selector: 'app-project-summary',
@@ -12,6 +12,6 @@ export class ProjectSummaryComponent {
   constructor(protected resourceService: ResourceService) {}
 
   @Input() currentProject!: Project | undefined;
-  @Input() resourcesWithNames!: AllocatedResourceType[];
+  @Input() resourcesWithNames!: AllocatedResourceTypeDTO[];
   @Input() vendorName!: string;
 }

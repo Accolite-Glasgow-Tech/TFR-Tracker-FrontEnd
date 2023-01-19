@@ -1,4 +1,4 @@
-<div>
+<mat-card >
   <canvas
     baseChart
     [type]="'pie'"
@@ -7,6 +7,8 @@
     [options]="pieChartOptions"
     [legend]="true"
     (chartClick)="onChartClick($event)"
+    style="background-color:  #1E0C0C;"
   >
   </canvas>
-</div>
+</mat-card>
+ 
