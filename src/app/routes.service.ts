@@ -54,12 +54,10 @@ export class RoutesService {
       component: ReportsComponent,
     },
     {
-      label: 'My Schedules',
       path: 'schedules',
       component: UserSchedulesComponent,
     },
     {
-      label: 'Permissions',
       path: 'permissions',
       component: PermissionsComponent,
     },

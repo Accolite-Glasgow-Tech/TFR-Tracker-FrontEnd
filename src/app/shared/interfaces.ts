@@ -81,15 +81,7 @@ export interface ProjectBasicDetails {
   start_date: Date;
   end_date: Date;
   vendor_id: number;
-  vendor_specific: string;
-  status: string;
-}
-export interface ProjectBasicDetails {
-  name: string;
-  start_date: Date;
-  end_date: Date;
-  vendor_id: number;
-  vendor_specific: string;
+  vendor_specific: { [key: string]: string };
   status: string;
 }
 

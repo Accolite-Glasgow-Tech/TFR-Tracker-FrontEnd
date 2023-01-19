@@ -6,18 +6,16 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { ResourceService } from 'src/app/services/resource/resource.service';
-import {
-  AllocatedResourceTypeDTO,
-  ProjectResourceDTO,
-} from 'src/app/shared/interfaces';
-
-import { ResourceListType } from 'src/app/shared/interfaces';
-
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { ResourceService } from 'src/app/services/resource/resource.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+import {
+  AllocatedResourceTypeDTO,
+  ProjectResourceDTO,
+  ResourceListType,
+} from 'src/app/shared/interfaces';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
 /*

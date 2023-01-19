@@ -1,9 +1,9 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
-import { Milestone } from 'src/app/types/types';
-import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { HttpClient } from '@angular/common/http';
-import { APPCONSTANTS } from 'src/app/shared/app.constants';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Observable } from 'rxjs';
+import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+import { getMilestonesURL } from 'src/app/shared/utils';
+import { Milestone } from 'src/app/types/types';
 
 @Injectable({
   providedIn: 'root',
@@ -76,14 +76,13 @@ export class MilestoneManagerService {
     this.broadcastUpdate();
   }
   putMilestones(projectId: number | undefined): Observable<{}> {
-    let putMilestoneUrl =
-      APPCONSTANTS.APICONSTANTS.BASE_URL +
-      '/projects/' +
-      projectId +
-      '/milestone';
-    return this.httpClient.put(putMilestoneUrl, this.getMilestonesForPut, {
-      responseType: 'json',
-    });
+    return this.httpClient.put(
+      getMilestonesURL(projectId!),
+      this.getMilestonesForPut,
+      {
+        responseType: 'json',
+      }
+    );
   }
 
   private get getMilestonesForPut() {

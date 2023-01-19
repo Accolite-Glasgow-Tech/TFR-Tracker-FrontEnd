@@ -12,3 +12,4 @@ export const loginURL = `${environment.backendURL}/login`;
 export const resourceRolesURL = `${environment.backendURL}/resources/roles`;
 export const resourceProjectsURL = `${environment.backendURL}/resources/projects`;
 export const TFRCreationResourceURL = `${environment.backendURL}/resources/all/tfr-creation-resource`;
+export const projectsURL = `${environment.backendURL}/projects`;
