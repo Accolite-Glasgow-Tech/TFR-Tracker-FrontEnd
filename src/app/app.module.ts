@@ -39,13 +39,13 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { UserComponent } from './components/user/user.component';
 import { TokenInterceptorService } from './interceptors/token-interceptor.service';
 
+import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IgxListModule, IgxRippleModule } from 'igniteui-angular';
 import { ChipComponent } from './components/chip/chip.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
-import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
