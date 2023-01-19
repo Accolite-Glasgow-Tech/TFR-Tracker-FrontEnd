@@ -10,13 +10,13 @@ import { TaskDTO } from 'src/app/shared/interfaces';
   styleUrls: ['./user-schedules.component.scss'],
 })
 export class UserSchedulesComponent {
-  userTasks: Array<TaskDTO> = [];
+  userTasks: TaskDTO[] = [];
 
   constructor(private httpClient: HttpClient) {}
 
   ngOnInit(): void {
     this.httpClient.get(getUserTasksURL(user.id!)).subscribe((response) => {
-      this.userTasks = <Array<TaskDTO>>response;
+      this.userTasks = <TaskDTO[]>response;
     });
   }
 }

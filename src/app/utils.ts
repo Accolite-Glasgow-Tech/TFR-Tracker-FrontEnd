@@ -19,7 +19,7 @@ export enum RecieverOptions {
   custom = 'Custom',
 }
 
-export const daysOfWeek: Array<string> = [
+export const daysOfWeek: string[] = [
   'Sunday',
   'Monday',
   'Tuesday',

@@ -24,7 +24,7 @@ export class ReportsComponent implements OnInit {
   @ViewChild(FrequencyPickerComponent, { static: true })
   frequencyPickerComponent!: FrequencyPickerComponent;
 
-  @Input() tfrList: Array<ProjectDTO> = [];
+  @Input() tfrList: ProjectDTO[] = [];
   @Input() template = 'Default Template';
   @Input() recieverOption = RecieverOptions.self;
 
@@ -74,14 +74,14 @@ export class ReportsComponent implements OnInit {
 
     const cron = recurring ? this.frequencyPickerComponent.getCron() : null;
     const by_email = true;
-    let resources: Array<ResourceDTO> = [];
+    let resources: ResourceDTO[] = [];
 
     switch (this.schedulerForm.get('receiver')!.value) {
       case RecieverOptions.self:
         resources = [this.resource];
         break;
       case RecieverOptions.allProjectResources:
-        resources = <Array<ResourceDTO>>(
+        resources = <ResourceDTO[]>(
           await lastValueFrom(this.getResourcesByTFR(project_id))
         );
         break;
@@ -112,7 +112,7 @@ export class ReportsComponent implements OnInit {
 
   getResourceTFRList(resourceId: number) {
     this.httpClient.get(allProjectsURL).subscribe((response) => {
-      this.tfrList = <Array<ProjectDTO>>response;
+      this.tfrList = <ProjectDTO[]>response;
     });
   }
 

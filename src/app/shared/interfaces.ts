@@ -36,7 +36,7 @@ export interface ResourceDTO {
 
 export interface TaskCreationDTO {
   task: TaskDTO;
-  resources: Array<ResourceDTO>;
+  resources: ResourceDTO[];
 }
 
 export interface TrackerDTO {
