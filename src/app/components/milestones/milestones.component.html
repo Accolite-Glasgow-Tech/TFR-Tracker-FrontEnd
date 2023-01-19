@@ -1,1 +1,127 @@
-<p>milestones works!</p>
+<div id="chips">
+  <mat-chip-list #chipList class="chiplist" *ngIf="!selectedMilestone">
+    <app-chip
+      *ngFor="let milestone of milestones"
+      [value]="milestone"
+      (removeEmitter)="removeMilestone($event)"
+      (selectEmitter)="selectMilestone($event)"
+    ></app-chip>
+    <mat-chip (click)="selectNew()">+</mat-chip>
+  </mat-chip-list>
+</div>
+<mat-form
+  [formGroup]="milestoneForm"
+  *ngIf="selectedMilestone"
+  appearance="fill"
+  class="full-width"
+>
+  <div class="inputdiv">
+    <mat-form-field class="description">
+      <textarea
+        matInput
+        placeholder="Milestone Description: "
+        type="text"
+        formControlName="description"
+      ></textarea>
+    </mat-form-field>
+  </div>
+  <div class="inputdiv">
+    <mat-form-field class="datepicker">
+      <mat-label>Acceptance Date</mat-label>
+
+      <input
+        formControlName="acceptanceDate"
+        matInput
+        [matDatepicker]="picker"
+        placeholder="Acceptance Date"
+        class="datepicker"
+        [min]="getMinDate"
+        [max]="getMaxDate"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="rangepicker">
+      <mat-label>Start date - Delivery Date</mat-label>
+      <mat-date-range-input
+        [rangePicker]="myRangePicker"
+        [min]="getMinDate"
+        [max]="getMaxDate"
+        required
+        class="rangepicker"
+      >
+        <input
+          matStartDate
+          formControlName="startDate"
+          placeholder="Start date"
+        />
+        <input
+          matEndDate
+          formControlName="deliveryDate"
+          placeholder="Delivery Date"
+        />
+      </mat-date-range-input>
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="myRangePicker"
+      ></mat-datepicker-toggle>
+      <mat-date-range-picker #myRangePicker></mat-date-range-picker>
+      <mat-error>Both dates must be within project timeframe</mat-error>
+    </mat-form-field>
+  </div>
+</mat-form>
+<div id="buttons">
+  <button
+    mat-button
+    type="button"
+    (click)="discardSelected()"
+    *ngIf="selectedMilestone"
+  >
+    discard
+  </button>
+  <button
+    *ngIf="selectedMilestone"
+    mat-button
+    type="button"
+    (click)="saveSelected()"
+    [disabled]="milestoneForm.invalid"
+  >
+    save milestone
+  </button>
+  <button
+    *ngIf="!selectedMilestone"
+    type="button"
+    mat-button
+    [disabled]="!!selectedMilestone"
+    (click)="submitMilestones()"
+  >
+    save milestones to server
+  </button>
+  <button
+    *ngIf="!selectedMilestone"
+    type="button"
+    mat-button
+    [disabled]="!!selectedMilestone"
+    (click)="resetMilestones()"
+  >
+    reset milestones
+  </button>
+  <button
+    *ngIf="!selectedMilestone"
+    type="button"
+    mat-button
+    [disabled]="!(submittable && !selectedMilestone)"
+    (click)="previousStep()"
+  >
+    back
+  </button>
+  <button
+    *ngIf="!selectedMilestone"
+    type="button"
+    mat-button
+    [disabled]="!(submittable && !selectedMilestone)"
+    (click)="nextStep()"
+  >
+    next
+  </button>
+</div>

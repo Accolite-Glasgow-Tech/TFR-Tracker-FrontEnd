@@ -39,9 +39,8 @@ import { MilestoneTableComponent } from './components/milestone-table/milestone-
 import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChipComponent } from './components/chip/chip.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-// import { MatPaginatorIntl } from '@angular/material/paginator';
-
 
 @NgModule({
   declarations: [
@@ -69,14 +68,20 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     ResourceTableComponent,
     MilestoneTableComponent,
     TfrCreationDialogComponent,
+    ChipComponent,
     PageNotFoundComponent,
   ],
 
-  providers: [ChartsService, WidgetVendorLocationService, WidgetVendorProjectCountService,{
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptorService,
-    multi: true,
-  },],
+  providers: [
+    ChartsService,
+    WidgetVendorLocationService,
+    WidgetVendorProjectCountService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
@@ -89,7 +94,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     GridsterModule.forRoot(),
     GridsterModule,
     ReactiveFormsModule,
-   ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}
