@@ -45,6 +45,7 @@ import { ChipComponent } from './components/chip/chip.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { WidgetApproachingProjectsComponent } from './components/widget-approach
     ChartsService,
     WidgetVendorLocationService,
     WidgetVendorProjectCountService,
+    DatePipe,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
