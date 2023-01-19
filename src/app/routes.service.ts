@@ -7,6 +7,7 @@ import { ReportsComponent } from './components/reports/reports.component';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
+import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { UserComponent } from './components/user/user.component';
 import { ProjectResolverService } from './services/project-resolver/project-resolver.service';
 import { TFRRoute } from './TFRRoute';
@@ -64,6 +65,11 @@ export class RoutesService {
       component: ReportsComponent,
     },
     {
+      label: 'My Schedules',
+      path: 'schedules',
+      component: UserSchedulesComponent,
+    },
+    {
       label: 'Permissions',
       path: 'permissions',
       component: PermissionsComponent,
@@ -78,7 +84,5 @@ export class RoutesService {
       path: '**',
       redirectTo: 'home',
     },
-
-    
   ];
 }

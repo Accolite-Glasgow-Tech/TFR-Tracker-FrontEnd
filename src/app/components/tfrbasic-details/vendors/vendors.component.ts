@@ -1,12 +1,12 @@
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import {
-  Vendor,
-  VendorAttribute,
-  ProjectBasicDetails,
-} from 'src/app/types/types';
-import { ApiService } from 'src/app/services/api.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
+import { ApiService } from 'src/app/services/api.service';
+import {
+  ProjectBasicDetails,
+  VendorAttributeDTO,
+  VendorDTO,
+} from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-vendors',
@@ -19,8 +19,8 @@ export class VendorsComponent implements OnInit {
   @Input() editMode!: Boolean;
   @Input() existingDetails!: ProjectBasicDetails;
 
-  vendors!: Vendor[];
-  attributes!: VendorAttribute[];
+  vendors!: VendorDTO[];
+  attributes!: VendorAttributeDTO[];
   attributeGroup!: FormGroup;
   vendorGroup!: FormGroup;
 
@@ -71,9 +71,9 @@ export class VendorsComponent implements OnInit {
     });
   }
 
-  @Output() onSelected = new EventEmitter<Vendor>();
-  @Output() attributesSelected = new EventEmitter<VendorAttribute[]>();
-  onSelectedVendor(vendor: Vendor) {
+  @Output() onSelected = new EventEmitter<VendorDTO>();
+  @Output() attributesSelected = new EventEmitter<VendorAttributeDTO[]>();
+  onSelectedVendor(vendor: VendorDTO) {
     this.vendorGroup.get('name')?.setValue(vendor.name);
 
     console.log(vendor);

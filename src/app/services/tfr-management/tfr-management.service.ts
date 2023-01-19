@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { APPCONSTANTS } from 'src/app/shared/app.constants';
+import { resourceProjectsURL } from 'src/app/shared/constants';
+import { getAllocatedResourcesURL, log } from 'src/app/shared/utils';
+import { Milestone, Project } from '../../types/types';
+
 import {
-  Milestone,
-  Project,
+  AllocatedResourceTypeDTO,
   ProjectBasicDetails,
-  ProjectResource,
-  AllocatedResourceType,
-  ResourceListType,
-  Vendor,
-} from '../../types/types';
+  ProjectResourceDTO,
+  VendorDTO,
+} from 'src/app/shared/interfaces';
 import { ApiService } from '../api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
@@ -21,12 +21,9 @@ import { SnackBarService } from '../snack-bar/snack-bar.service';
 export class TfrManagementService {
   public project!: Project | undefined;
 
-  updateProjectToResourceMappingURL =
-    APPCONSTANTS.APICONSTANTS.BASE_URL + '/resources/projects';
-  // projectURL = APPCONSTANTS.APICONSTANTS.BASE_URL + '/projects/' + project_id;
   projectURL = 'assets/json/project.json';
   statusUpdateURL = 'assets/json/projectStatusUpdate.json';
-  projectResourcesWithNames!: AllocatedResourceType[];
+  projectResourcesWithNames!: AllocatedResourceTypeDTO[];
   vendorSpecificObject!: Object;
   vendorName: string = '';
 
@@ -40,7 +37,7 @@ export class TfrManagementService {
   updateBasicDetails() {
     // http POST request '/projects'
     // set project_id with return value of request
-    console.log(this.project);
+    log(this.project);
   }
 
   updateDatabase() {}
@@ -57,11 +54,11 @@ export class TfrManagementService {
     return this.project?.milestones;
   }
 
-  get getProjectResourcesWithNames(): AllocatedResourceType[] {
+  get getProjectResourcesWithNames(): AllocatedResourceTypeDTO[] {
     return this.projectResourcesWithNames;
   }
 
-  get getProjectResources(): ProjectResource[] | undefined {
+  get getProjectResources(): ProjectResourceDTO[] | undefined {
     return this.project?.project_resources;
   }
 
@@ -138,9 +135,9 @@ export class TfrManagementService {
   }
 
   setVendorName(vendor_id: number) {
-    this.apiService.getVendorData().subscribe((result: Vendor[]) => {
+    this.apiService.getVendorData().subscribe((result: VendorDTO[]) => {
       this.vendorName = result.find(
-        (vendor: Vendor) => vendor.id === vendor_id
+        (vendor: VendorDTO) => vendor.id === vendor_id
       )!.name;
     });
   }
@@ -170,14 +167,14 @@ export class TfrManagementService {
     }
   }
 
-  setProjectResources(project_resources: ProjectResource[]) {
+  setProjectResources(project_resources: ProjectResourceDTO[]) {
     if (this.project !== undefined) {
       this.project.project_resources = project_resources;
     }
   }
 
   setProjectResourcesWithNames(
-    projectResourcesWithNames: AllocatedResourceType[]
+    projectResourcesWithNames: AllocatedResourceTypeDTO[]
   ) {
     const newArray = projectResourcesWithNames.map(
       ({ resource_name, resource_email, ...keepAttrs }) => {
@@ -197,7 +194,7 @@ export class TfrManagementService {
   updateProjectToResourceMapping() {
     this.http
       .put(
-        this.updateProjectToResourceMappingURL + '/' + this.getProjectId,
+        `${resourceProjectsURL}/${this.getProjectId}`,
         this.getProjectResources
       )
       .subscribe((response) => {
@@ -215,16 +212,11 @@ export class TfrManagementService {
   */
   getResourcesNamesByProjectIdFromDatabase(project_id: Number) {
     this.http
-      .get<AllocatedResourceType[]>(
-        APPCONSTANTS.APICONSTANTS.BASE_URL +
-          '/resources/projects/' +
-          project_id +
-          '/names'
-      )
-      .subscribe((data: AllocatedResourceType[]) => {
+      .get<AllocatedResourceTypeDTO[]>(getAllocatedResourcesURL(project_id))
+      .subscribe((data: AllocatedResourceTypeDTO[]) => {
         this.projectResourcesWithNames = data;
         this.projectResourcesWithNames.forEach(
-          (project_resourceWithName: AllocatedResourceType) => {
+          (project_resourceWithName: AllocatedResourceTypeDTO) => {
             project_resourceWithName.role =
               project_resourceWithName.role.replace(/_/g, ' ');
           }

@@ -1,21 +1,23 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ResourceService } from 'src/app/services/resource/resource.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
-  ResourceListType,
-  AllocatedResourceType,
-  ProjectResource,
-} from 'src/app/types/types';
-import {
+  AbstractControl,
   FormControl,
   FormGroup,
-  Validators,
   ValidatorFn,
-  AbstractControl,
+  Validators,
 } from '@angular/forms';
+import { ResourceService } from 'src/app/services/resource/resource.service';
+import {
+  AllocatedResourceTypeDTO,
+  ProjectResourceDTO,
+} from 'src/app/shared/interfaces';
+
+import { ResourceListType } from 'src/app/shared/interfaces';
+
+import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { MatDialog } from '@angular/material/dialog';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
 /*
@@ -72,8 +74,8 @@ export class TfrCreationResourceComponent implements OnInit {
   roles!: string[];
   filteredResourceOption!: Observable<ResourceListType[]>;
   filteredRoleOption!: Observable<string[]>;
-  allocatedResources: AllocatedResourceType[] = [];
-  savedAllocatedResource: ProjectResource[] = [];
+  allocatedResources: AllocatedResourceTypeDTO[] = [];
+  savedAllocatedResource: ProjectResourceDTO[] = [];
   resourceListUpdated: boolean = false;
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
@@ -184,7 +186,7 @@ export class TfrCreationResourceComponent implements OnInit {
           project_id, resource_id and the resource associated role for this 
           project
         */
-        let temp: ProjectResource[] | undefined =
+        let temp: ProjectResourceDTO[] | undefined =
           this.tfrManagementService.getProjectResources;
 
         /*
@@ -276,7 +278,7 @@ export class TfrCreationResourceComponent implements OnInit {
       Creating a combined object (of AllocatedResourceType) to store the 
       added resource with its corresponding details.
     */
-    const allocatedResource: AllocatedResourceType = {
+    const allocatedResource: AllocatedResourceTypeDTO = {
       project_id: this.tfrManagementService.getProjectId as number,
       resource_id: this.resources[index].resource_id,
       resource_name: this.resources[index].resource_name,
@@ -330,7 +332,7 @@ export class TfrCreationResourceComponent implements OnInit {
       );
 
       this.resources[indexOfResource].selected = true;
-      const allocatedResource: AllocatedResourceType = {
+      const allocatedResource: AllocatedResourceTypeDTO = {
         project_id: resource.project_id,
         resource_id: resource.resource_id,
         resource_name: this.resources[indexOfResource].resource_name,

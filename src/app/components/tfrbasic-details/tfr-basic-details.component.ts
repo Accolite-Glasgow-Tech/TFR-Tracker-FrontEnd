@@ -2,11 +2,12 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+
 import {
   ProjectBasicDetails,
-  Vendor,
-  VendorAttribute,
-} from 'src/app/types/types';
+  VendorAttributeDTO,
+  VendorDTO,
+} from 'src/app/shared/interfaces';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
 @Component({
@@ -95,7 +96,7 @@ export class TfrBasicDetailsComponent implements OnInit {
     /* Need to add API database call here to save to database */
   }
 
-  onVendorSelect(vendor: Vendor) {
+  onVendorSelect(vendor: VendorDTO) {
     console.log(this.tfrDetails);
     this.tfrDetails.get('vendor_id')?.setValue(vendor.id);
   }
@@ -150,7 +151,7 @@ export class TfrBasicDetailsComponent implements OnInit {
     this.vendorAttributes.markAsPristine();
   }
 
-  onAttributesSelected(attributes: VendorAttribute[]) {
+  onAttributesSelected(attributes: VendorAttributeDTO[]) {
     this.attributeNames = [];
     attributes.forEach((att) => {
       this.attributeNames.push(att.attribute_name);

@@ -39,6 +39,7 @@ import { MilestoneTableComponent } from './components/milestone-table/milestone-
 import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ResourceTableComponent,
     MilestoneTableComponent,
     TfrCreationDialogComponent,
+    UserSchedulesComponent,
   ],
 
   providers: [
