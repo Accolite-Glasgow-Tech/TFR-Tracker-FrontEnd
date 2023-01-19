@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { user } from 'src/app/mock';
 import { allProjectsURL, tasksURL } from 'src/app/shared/constants';
 import {
@@ -10,10 +10,15 @@ import {
   TaskCreationDTO,
 } from 'src/app/shared/interfaces';
 
-import { RecieverOptions } from 'src/app/utils';
 import { getResourcesByProjectIdURL, log } from 'src/app/shared/utils';
 
 import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
+
+enum RecieverOptions {
+  self = 'Only me',
+  allProjectResources = 'All project contacts',
+  custom = 'Custom',
+}
 
 @Component({
   selector: 'app-reports',
@@ -51,7 +56,9 @@ export class ReportsComponent implements OnInit {
 
     this.schedulerForm.get('type')!.disable();
 
-    this.getResourceTFRList(this.resource.id);
+    this.getResourceTFRList(this.resource.id).subscribe((response) => {
+      this.tfrList = response;
+    });
   }
 
   async onSubmit() {
@@ -110,10 +117,8 @@ export class ReportsComponent implements OnInit {
     });
   }
 
-  getResourceTFRList(resourceId: number) {
-    this.httpClient.get(allProjectsURL).subscribe((response) => {
-      this.tfrList = <ProjectDTO[]>response;
-    });
+  getResourceTFRList(resourceId: number): Observable<ProjectDTO[]> {
+    return this.httpClient.get<ProjectDTO[]>(allProjectsURL);
   }
 
   getResourcesByTFR(tfrId: number) {

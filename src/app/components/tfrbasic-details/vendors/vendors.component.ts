@@ -8,6 +8,7 @@ import {
   VendorAttributeDTO,
   VendorDTO,
 } from 'src/app/shared/interfaces';
+import { log } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-vendors',
@@ -54,7 +55,7 @@ export class VendorsComponent implements OnInit {
       });
 
     if (this.editMode) {
-      console.log('vendor edit mode');
+      log('vendor edit mode');
       // TODO fill in details of vendor and Attributes
       // find vendor in list with existingDetails.vendor_id and call select method
       this.vendors.forEach((vendor) => {

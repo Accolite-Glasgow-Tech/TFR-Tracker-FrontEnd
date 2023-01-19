@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
-import { IGridsterOptions, GridsterComponent } from 'angular2gridster';
+import { Component, ViewChild } from '@angular/core';
+import { GridsterComponent, IGridsterOptions } from 'angular2gridster';
 import { ChartsComponent } from '../charts/charts.component';
 import { WidgetApproachingProjectsComponent } from '../widget-approaching-projects/widget-approaching-projects.component';
 import { WidgetVendorLocationComponent } from '../widget-vendor-location/widget-vendor-location.component';
