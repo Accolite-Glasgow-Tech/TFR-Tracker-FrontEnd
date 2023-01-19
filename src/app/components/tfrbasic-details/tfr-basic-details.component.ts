@@ -98,7 +98,9 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   onVendorSelect(vendor: VendorDTO) {
+    console.log('vendor selected ' + vendor.name);
     this.tfrDetails.get('vendor_id')?.setValue(vendor.id);
+    this.tfrDetails.get('vendor_id')?.markAsDirty;
   }
 
   /*
