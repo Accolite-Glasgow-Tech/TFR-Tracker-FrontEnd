@@ -41,6 +41,7 @@ import { DynamicModule } from 'ng-dynamic-component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { 
 	IgxListModule,
 	IgxRippleModule
@@ -50,6 +51,10 @@ import { WidgetApproachingProjectsComponent } from './components/widget-approach
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 >>>>>>> d2fde6416501a1d90e49acd3d7aea9d6ef12766a
 // import { MatPaginatorIntl } from '@angular/material/paginator';
+=======
+import { ChipComponent } from './components/chip/chip.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+>>>>>>> 47c9d5c9e14d9457a5786524108d798fd3d8a65e
 
 @NgModule({
   declarations: [
@@ -78,8 +83,12 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     MilestoneTableComponent,
     TfrCreationDialogComponent,
 <<<<<<< HEAD
+<<<<<<< HEAD
     WidgetApproachingProjectsComponent,
 =======
+=======
+    ChipComponent,
+>>>>>>> 47c9d5c9e14d9457a5786524108d798fd3d8a65e
     PageNotFoundComponent,
 >>>>>>> d2fde6416501a1d90e49acd3d7aea9d6ef12766a
   ],
@@ -106,9 +115,12 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     GridsterModule.forRoot(),
     GridsterModule,
     ReactiveFormsModule,
+<<<<<<< HEAD
     DynamicModule,
     IgxListModule,
     IgxRippleModule,
+=======
+>>>>>>> 47c9d5c9e14d9457a5786524108d798fd3d8a65e
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
