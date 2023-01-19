@@ -37,8 +37,6 @@ export class TfrBasicDetailsComponent implements OnInit {
   @Output() editModeEmitter = new EventEmitter<boolean>();
 
   ngOnInit(): void {
-    console.log('Basic Details loaded');
-
     this.tfrDetails = new FormGroup({
       name: new FormControl('', [Validators.required]),
       start_date: new FormControl<Date | null>(null),
@@ -52,7 +50,6 @@ export class TfrBasicDetailsComponent implements OnInit {
       this.stepCompletedEmitter.emit(true);
       this.editModeEmitter.emit(true);
       // edit mode
-      console.log('edit mode');
       this.projectToEdit = this.tfrManager.getBasicDetails;
       // set form group details to existing details
       this.setDetailsToExistingProject();
@@ -90,15 +87,14 @@ export class TfrBasicDetailsComponent implements OnInit {
       vendor_specific: this.vendor_specificData,
       status: this.editMode ? this.projectToEdit.status : 'DRAFT',
     };
-    console.log('saveTFR');
     this.tfrManager.setBasicDetails(updatedProjectDetails);
-    console.log(this.tfrManager.getBasicDetails);
     this.tfrDetails.markAsPristine();
     this.vendorAttributes.markAsPristine();
   }
 
   onVendorSelect(vendor: VendorDTO) {
     this.tfrDetails.get('vendor_id')?.setValue(vendor.id);
+    this.tfrDetails.get('vendor_id')?.markAsDirty;
   }
 
   /*
