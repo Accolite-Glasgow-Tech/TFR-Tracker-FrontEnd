@@ -1,16 +1,15 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { of, Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { TFRStatusCountURL } from 'src/app/shared/constants';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChartsService {
-  private TfrStatusUrl = 'http://localhost:8080/projects/statusCount';
-
   constructor(private http: HttpClient) {}
 
   readTfrStatusData(): Observable<any> {
-    return this.http.get(this.TfrStatusUrl);
+    return this.http.get(TFRStatusCountURL);
   }
 }

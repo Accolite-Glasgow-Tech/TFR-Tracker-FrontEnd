@@ -1,7 +1,8 @@
-import { VendorAttribute, Project } from './types';
+import { Project } from './types';
+import { VendorAttributeDTO } from '../shared/interfaces';
 
 class dummy {
-  attributes: VendorAttribute[] = [
+  attributes: VendorAttributeDTO[] = [
     {
       vendor_id: 1,
       attribute_name: 'Cost Center',

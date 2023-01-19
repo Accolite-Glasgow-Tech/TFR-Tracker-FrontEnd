@@ -1,15 +1,19 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
 import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
+import { user } from 'src/app/mock';
+import { allProjectsURL, tasksURL } from 'src/app/shared/constants';
 import {
-  RecieverOptions,
   ProjectDTO,
   ResourceDTO,
-  TaskDTO,
   TaskCreationDTO,
-} from 'src/app/utils';
+} from 'src/app/shared/interfaces';
+
+import { RecieverOptions } from 'src/app/utils';
+import { getResourcesByProjectIdURL, log } from 'src/app/shared/utils';
+
+import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
 
 @Component({
   selector: 'app-reports',
@@ -36,14 +40,7 @@ export class ReportsComponent implements OnInit {
   constructor(private httpClient: HttpClient) {}
 
   ngOnInit(): void {
-    this.resource = {
-      id: 1,
-      first_name: 'John',
-      last_name: 'Bowers',
-      type: 'STAFF',
-      email: 'johnbowers@accolitedigital.com',
-      is_deleted: false,
-    };
+    this.resource = user;
 
     this.schedulerForm = new FormGroup({
       tfr: new FormControl(this.tfrList, [Validators.required]),
@@ -114,22 +111,18 @@ export class ReportsComponent implements OnInit {
   }
 
   getResourceTFRList(resourceId: number) {
-    this.httpClient
-      .get(`http://localhost:8080/search/project/all`)
-      .subscribe((response) => {
-        this.tfrList = <Array<ProjectDTO>>response;
-      });
+    this.httpClient.get(allProjectsURL).subscribe((response) => {
+      this.tfrList = <Array<ProjectDTO>>response;
+    });
   }
 
-  getResourcesByTFR(tfrId: number | null) {
-    return this.httpClient
-      .get(`http://localhost:8080/search/resource/project/${tfrId}`)
-      .pipe();
+  getResourcesByTFR(tfrId: number) {
+    return this.httpClient.get(getResourcesByProjectIdURL(tfrId)).pipe();
   }
 
   createTask(taskObject: TaskCreationDTO) {
     this.httpClient
-      .post('http://localhost:8080/tasks', taskObject)
-      .subscribe((response) => console.log(response));
+      .post(tasksURL, taskObject)
+      .subscribe((response) => log(response));
   }
 }
