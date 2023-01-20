@@ -1,4 +1,4 @@
-import { SidenavToggleService } from 'src/app/sidenav-toggle.service';
+import { SidenavToggleService } from 'src/app/services/sidenav-toggle/sidenav-toggle.service';
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RoutesService } from 'src/app/services/routes/routes.service';
