@@ -1,16 +1,15 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of, throwError } from 'rxjs';
 import {
   getAllocatedResourcesURL,
   getProjectURL,
   getUpdateProjectStatusURL,
 } from 'src/app/shared/utils';
-import { Milestone, Project } from '../../types/types';
-
-import { catchError, of, throwError } from 'rxjs';
 import { resourceProjectsURL, projectsURL } from 'src/app/shared/constants';
 import {
+  Milestone,
+  Project,
   AllocatedResourceTypeDTO,
   ProjectBasicDetails,
   ProjectResourceDTO,
@@ -238,7 +237,7 @@ export class TfrManagementService {
   }
 
   updateStatusToDatabase(): Observable<boolean> {
-    /* 
+    /*
       When API is ready, need to make a put request to the database
       to update the status from DRAFT to AGREED.
     */

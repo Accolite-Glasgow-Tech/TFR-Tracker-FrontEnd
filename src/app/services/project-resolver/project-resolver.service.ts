@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
-import { Project } from 'src/app/types/types';
+import { Project } from 'src/app/shared/interfaces';
 import { TfrManagementService } from '../tfr-management/tfr-management.service';
 
 @Injectable({

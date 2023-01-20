@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ResourceService } from 'src/app/services/resource/resource.service';
-import { Milestone } from 'src/app/types/types';
+import { Milestone } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-milestone-table',

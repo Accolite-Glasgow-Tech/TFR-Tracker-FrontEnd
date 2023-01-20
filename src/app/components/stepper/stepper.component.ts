@@ -14,7 +14,7 @@ import { TfrManagementService } from 'src/app/services/tfr-management/tfr-manage
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Project } from 'src/app/types/types';
+import { Project } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-stepper',
@@ -39,7 +39,7 @@ export class StepperComponent implements OnInit {
   });
 
   /*
-    The size of this array is proportional to the number of steps in the stepper (excluding the 
+    The size of this array is proportional to the number of steps in the stepper (excluding the
     last summary step).
 
     This array holds whether a step has been completed. For e.g:
@@ -50,13 +50,13 @@ export class StepperComponent implements OnInit {
 
   /*
     controls whether the user can move to another step without completing its current step.
-    
+
     A value of true forces the user to complete its current step before moving to the next.
   */
   isLinear = true;
 
   /*
-    Listens to screen size changes. When the screen is small, the orientation of the stepper 
+    Listens to screen size changes. When the screen is small, the orientation of the stepper
     will be vertical. A horizontal stepper will appear on a large screen.
   */
   stepLabels: Observable<string[]>;
@@ -90,8 +90,8 @@ export class StepperComponent implements OnInit {
     let tfrId = Number(this.route.snapshot.paramMap.get('id'));
 
     /*
-      Error validation for the path variable. 
-      The path variable (the project_id) is expected to be a number. 
+      Error validation for the path variable.
+      The path variable (the project_id) is expected to be a number.
     */
     if (!Number.isInteger(tfrId)) {
       this.router.navigate(['/home']);
@@ -102,7 +102,7 @@ export class StepperComponent implements OnInit {
 
       /*
         The data that will be rendered in the screen is pre-fetched before the component
-        is loaded. This component has a resolver (refer to /services/project-resolver) that 
+        is loaded. This component has a resolver (refer to /services/project-resolver) that
         fetches the project to be displayed.
       */
       this.route.data.subscribe((response) => {
@@ -123,9 +123,9 @@ export class StepperComponent implements OnInit {
   }
 
   /*
-    Programmatically moves to the next step. 
+    Programmatically moves to the next step.
 
-    To be able to programmatically move to the next step, the stepper should NOT be 
+    To be able to programmatically move to the next step, the stepper should NOT be
     linear. The stepper is momentarily made not linear.
     forward = true => Move to next step
     forward = false => Move to previous step
@@ -142,7 +142,7 @@ export class StepperComponent implements OnInit {
 
   /*
     When each step gets notified by its child component that the step has been completed through
-    an emitter, this method should be called with the stepNumber (first index at 0) and 
+    an emitter, this method should be called with the stepNumber (first index at 0) and
     TRUE (step completed).
   */
   stepCompleted(stepNumber: number, completed: boolean) {
@@ -153,8 +153,8 @@ export class StepperComponent implements OnInit {
 
   /*
     After submitting the whole project, this method handles the redirection to the URL where all
-    the TFRs are displayed. 
-    
+    the TFRs are displayed.
+
     A small confirmation pop-up msg (aka a snack bar) is displayed at the bottom of the screen for 3000ms.
   */
   redirect(update: boolean) {
@@ -178,7 +178,7 @@ export class StepperComponent implements OnInit {
     }
   }
 
-  /*  
+  /*
     In edit mode the submit button should not be present
   */
   setEditMode(editMode: boolean) {
