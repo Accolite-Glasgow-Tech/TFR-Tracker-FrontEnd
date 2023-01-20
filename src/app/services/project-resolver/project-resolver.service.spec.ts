@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { of } from 'rxjs';
-import { Project } from 'src/app/types/types';
+import { Project } from 'src/app/shared/interfaces';
 import { TfrManagementService } from '../tfr-management/tfr-management.service';
 
 import { ProjectResolverService } from './project-resolver.service';

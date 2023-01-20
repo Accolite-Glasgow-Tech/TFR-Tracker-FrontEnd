@@ -1,5 +1,5 @@
-import { Project } from './types';
-import { VendorAttributeDTO } from '../shared/interfaces';
+import { Project } from 'src/app/shared/interfaces';
+import { VendorAttributeDTO } from 'src/app/shared/interfaces';
 
 class dummy {
   attributes: VendorAttributeDTO[] = [
