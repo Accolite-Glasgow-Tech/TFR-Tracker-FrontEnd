@@ -11,7 +11,7 @@
     (optionsChange)="optionsChange($event)"
   >
     <ngx-gridster-item
-      style="display: inline-table; position: initial"
+      style="display: inline-table;  position: initial;" 
       *ngFor="let widget of widgets; index as i"
     >
       <div
@@ -26,7 +26,7 @@
         <mat-card
           class="widget"
           style="
-            height: 100%;
+            height: inherit;
             width: 100%;
             position: relative;
             margin: 10px;
