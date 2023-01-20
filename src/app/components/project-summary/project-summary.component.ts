@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
-import { Project } from 'src/app/types/types';
+import { Project } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-project-summary',

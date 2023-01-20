@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RoutesService } from 'src/app/routes.service';
+import { RoutesService } from 'src/app/services/routes/routes.service';
 import { SidenavToggleService } from 'src/app/sidenav-toggle.service';
 
 @Component({

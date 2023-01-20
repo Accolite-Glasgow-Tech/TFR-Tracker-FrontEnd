@@ -1,3 +1,4 @@
+Add Milestones to the TFR.
 <div id="chips">
   <mat-chip-list #chipList class="chiplist" *ngIf="!selectedMilestone">
     <app-chip
@@ -72,7 +73,7 @@
 </mat-form>
 <div id="buttons">
   <button
-    mat-button
+    mat-raised-button
     type="button"
     (click)="discardSelected()"
     *ngIf="selectedMilestone"
@@ -81,7 +82,7 @@
   </button>
   <button
     *ngIf="selectedMilestone"
-    mat-button
+    mat-raised-button
     type="button"
     (click)="saveSelected()"
     [disabled]="milestoneForm.invalid"
@@ -91,7 +92,7 @@
   <button
     *ngIf="!selectedMilestone"
     type="button"
-    mat-button
+    mat-raised-button
     [disabled]="!!selectedMilestone"
     (click)="submitMilestones()"
   >
@@ -100,7 +101,7 @@
   <button
     *ngIf="!selectedMilestone"
     type="button"
-    mat-button
+    mat-raised-button
     [disabled]="!!selectedMilestone"
     (click)="resetMilestones()"
   >
@@ -109,7 +110,7 @@
   <button
     *ngIf="!selectedMilestone"
     type="button"
-    mat-button
+    mat-raised-button
     [disabled]="!(submittable && !selectedMilestone)"
     (click)="previousStep()"
   >
@@ -118,7 +119,7 @@
   <button
     *ngIf="!selectedMilestone"
     type="button"
-    mat-button
+    mat-raised-button
     [disabled]="!(submittable && !selectedMilestone)"
     (click)="nextStep()"
   >
