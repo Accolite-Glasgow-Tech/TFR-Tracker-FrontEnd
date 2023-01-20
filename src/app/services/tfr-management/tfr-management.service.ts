@@ -6,7 +6,7 @@ import {
   getProjectURL,
   getUpdateProjectStatusURL,
 } from 'src/app/shared/utils';
-import { Milestone, Project } from '../../types/types';
+import { Milestone, Project } from 'src/app/shared/interfaces';
 
 import { catchError, of, throwError } from 'rxjs';
 import { resourceProjectsURL, projectsURL } from 'src/app/shared/constants';
@@ -238,7 +238,7 @@ export class TfrManagementService {
   }
 
   updateStatusToDatabase(): Observable<boolean> {
-    /* 
+    /*
       When API is ready, need to make a put request to the database
       to update the status from DRAFT to AGREED.
     */
