@@ -1,33 +1,64 @@
-<div >
+<div>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
   />
 
   <!-- <div fxLayout="row"   fxLayoutGap="12px"  [style.margin-top]="'12px'"> -->
-    <ngx-gridster
-      [options]="gridsterOptions"
-      [draggableOptions]="{ handlerClass: 'panel-heading' }"
-      (optionsChange)="optionsChange($event)"
+  <ngx-gridster
+    [options]="gridsterOptions"
+    [draggableOptions]="{ handlerClass: 'panel-heading' }"
+    (optionsChange)="optionsChange($event)"
+  >
+    <ngx-gridster-item
+      style="display: inline-table; position: initial"
+      *ngFor="let widget of widgets; index as i"
     >
-    <ngx-gridster-item style="height: 600px; width: 600px;" *ngFor="let widget of widgets; index as i">
-      <div style="height: 600px; width:600px; position: relative; margin: 10px; inline-size: auto;  ">
-      <mat-card class="widget" style="height: 100%; width:100%; position: relative; margin: 10px; inline-size: auto;"  >
-         <mat-card class="header">
-          <h1>
+      <div
+        style="
+          height: 600px;
+          width: 600px;
+          position: relative;
+          margin: 10px;
+          inline-size: auto;
+        "
+      >
+        <mat-card
+          class="widget"
+          style="
+            height: 100%;
+            width: 100%;
+            position: relative;
+            margin: 10px;
+            inline-size: auto;
+          "
+        >
+          <mat-card class="header">
+            <h1>
               <a class="headerText"> {{ widget.componentName }}</a>
-              <button class="closeiconbutton" (click)="remove()"><i class="fa fa-close"></i></button>
+              <button class="closeiconbutton" (click)="remove()">
+                <i class="fa fa-close"></i>
+              </button>
               <button class="geariconbtn"><i class="fa fa-gear"></i></button>
             </h1>
           </mat-card>
-          <div style="width: 80% ;height: 80%; position: relative; margin: 10%;  inline-size: auto; ">
-          <ndc-dynamic 
-            [ndcDynamicComponent]="widget.componentType"
-          ></ndc-dynamic>
+          <div
+            style="
+              width: 80%;
+              height: 80%;
+              position: relative;
+              margin: 10%;
+              size-adjust: inherit;
+              inline-size: auto;
+            "
+          >
+            <ndc-dynamic
+              [ndcDynamicComponent]="widget.componentType"
+            ></ndc-dynamic>
           </div>
         </mat-card>
       </div>
-      </ngx-gridster-item>
-    </ngx-gridster>
+    </ngx-gridster-item>
+  </ngx-gridster>
 </div>
 <!-- </div> -->

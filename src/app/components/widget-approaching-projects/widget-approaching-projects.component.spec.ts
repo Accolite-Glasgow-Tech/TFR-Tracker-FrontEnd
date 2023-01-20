@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WidgetApproachingProjectDeadlineComponent } from './widget-approaching-projects.component';
+import { WidgetApproachingProjectsComponent } from './widget-approaching-projects.component';
 
 describe('WidgetApproachingProjectDeadlineComponent', () => {
-  let component: WidgetApproachingProjectDeadlineComponent;
-  let fixture: ComponentFixture<WidgetApproachingProjectDeadlineComponent>;
+  let component: WidgetApproachingProjectsComponent;
+  let fixture: ComponentFixture<WidgetApproachingProjectsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WidgetApproachingProjectDeadlineComponent ]
+      declarations: [ WidgetApproachingProjectsComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(WidgetApproachingProjectDeadlineComponent);
+    fixture = TestBed.createComponent(WidgetApproachingProjectsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

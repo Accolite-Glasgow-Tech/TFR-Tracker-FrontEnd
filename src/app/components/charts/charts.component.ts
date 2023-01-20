@@ -19,6 +19,7 @@ export class ChartsComponent implements OnInit {
   constructor(private chartservice: ChartsService) {}
   public pieChartOptions: ChartOptions<'pie'> = {
     responsive: true,
+    plugins: { legend: { position: 'left' } },
   };
 
   pieChartData: any = [
