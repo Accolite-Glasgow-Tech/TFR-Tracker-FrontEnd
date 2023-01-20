@@ -18,23 +18,32 @@ export class RoutesService {
       label: 'Home',
       path: 'home',
       component: HomeComponent,
+      isGuarded: true,
     },
     {
+      isGuarded: false,
+
       path: 'login',
       label: 'Login',
       component: UserComponent,
     },
     {
+      isGuarded: true,
+
       label: 'TFRs',
       path: 'tfrs',
       component: TfrsComponent,
     },
     {
+      isGuarded: true,
+
       path: 'tfr/create',
       component: StepperComponent,
       label: 'Create TFR',
     },
     {
+      isGuarded: true,
+
       path: 'tfr/:id/edit',
       component: StepperComponent,
       resolve: {
@@ -42,6 +51,8 @@ export class RoutesService {
       },
     },
     {
+      isGuarded: true,
+
       path: 'tfr/:id',
       component: TfrComponent,
       resolve: {
@@ -49,15 +60,21 @@ export class RoutesService {
       },
     },
     {
+      isGuarded: true,
+
       path: 'tfr',
       component: TfrComponent,
     },
     {
+      isGuarded: true,
+
       label: 'Reports',
       path: 'reports',
       component: ReportsComponent,
     },
     {
+      isGuarded: true,
+
       path: 'picker',
       label: 'Alerts',
       component: FrequencyPickerComponent,

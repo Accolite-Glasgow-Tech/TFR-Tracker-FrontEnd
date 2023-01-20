@@ -47,6 +47,7 @@ export interface Milestone {
 
 export interface TFRRoute extends Route {
   label?: String;
+  isGuarded?: boolean;
 }
 
 export interface TaskDTO {
