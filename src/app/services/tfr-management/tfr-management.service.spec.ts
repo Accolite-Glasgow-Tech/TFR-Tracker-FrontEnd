@@ -5,13 +5,12 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import {
-  AllocatedResourceType,
-  Milestone,
-  Project,
+  AllocatedResourceTypeDTO,
   ProjectBasicDetails,
-  ProjectResource,
-  Vendor,
-} from 'src/app/types/types';
+  ProjectResourceDTO,
+  VendorDTO,
+} from 'src/app/shared/interfaces';
+import { Milestone, Project } from 'src/app/types/types';
 import { ApiService } from '../api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
@@ -25,12 +24,12 @@ describe('TfrManagementService', () => {
   let snackBarServiceSpy: jasmine.SpyObj<SnackBarService>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
   let milestones: Milestone[];
-  let projectResources: ProjectResource[];
-  let projectResourcesWithNames: AllocatedResourceType[];
+  let projectResources: ProjectResourceDTO[];
+  let projectResourcesWithNames: AllocatedResourceTypeDTO[];
   let project: Project;
   let vendorName: string;
   let basicDetails: ProjectBasicDetails;
-  let vendors: Vendor[];
+  let vendors: VendorDTO[];
 
   beforeEach(() => {
     TestBed.configureTestingModule({

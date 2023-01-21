@@ -27,7 +27,7 @@ import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-
   Returns invalidAutoCompleteResourceEmail as error if the inserted value is 
   not present in the list.
 */
-function autoCompleteResourceEmailValidator(
+export function autoCompleteResourceEmailValidator(
   validOptions: Array<ResourceListType>
 ): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -46,7 +46,9 @@ function autoCompleteResourceEmailValidator(
   Returns invalidAutoCompleteRole as error if the inserted value is 
   not present in the list.
 */
-function autoCompleteRoleValidator(validOptions: Array<string>): ValidatorFn {
+export function autoCompleteRoleValidator(
+  validOptions: Array<string>
+): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     if (validOptions.indexOf(control.value) !== -1) {
       return null; /* valid option selected */
@@ -175,7 +177,7 @@ export class TfrCreationResourceComponent implements OnInit {
           'resource_email'
         ].valueChanges.pipe(
           startWith(''),
-          map((value) => this._filterResource(value || ''))
+          map((value) => this.filterResource(value || ''))
         );
 
         /*
@@ -241,7 +243,7 @@ export class TfrCreationResourceComponent implements OnInit {
     resource email input field and returns the list of resource emails
     that are related to the inserted string.
   */
-  private _filterResource(value: string): ResourceListType[] {
+  public filterResource(value: string): ResourceListType[] {
     const filterValue = value.toLowerCase();
     return this.resources
       .filter((resource) => !resource.selected)

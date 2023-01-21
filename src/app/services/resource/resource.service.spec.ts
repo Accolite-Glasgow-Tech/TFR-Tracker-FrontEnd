@@ -1,10 +1,14 @@
-import { TestBed } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import {
+  resourceRolesURL,
+  TFRCreationResourceURL,
+} from 'src/app/shared/constants';
+import { ResourceListType } from 'src/app/shared/interfaces';
 import { ResourceService } from './resource.service';
-import { ResourceListType } from 'src/app/types/types';
 
 describe('ResourceService', () => {
   let service: ResourceService;
@@ -37,7 +41,7 @@ describe('ResourceService', () => {
       expect(roles).toEqual(dummyRoles);
     });
 
-    const request = httpMock.expectOne(service.rolesURL);
+    const request = httpMock.expectOne(resourceRolesURL);
     expect(request.request.method).toBe('GET');
     request.flush(dummyRoles);
   });
@@ -63,7 +67,7 @@ describe('ResourceService', () => {
       expect(resources).toEqual(dummyResources);
     });
 
-    const request = httpMock.expectOne(service.detailedResourceListURL);
+    const request = httpMock.expectOne(TFRCreationResourceURL);
     expect(request.request.method).toBe('GET');
     request.flush(dummyResources);
   });
