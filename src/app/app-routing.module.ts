@@ -6,4 +6,6 @@ import { RoutesService } from 'src/app/services/routes/routes.service';
   imports: [RouterModule.forRoot(RoutesService.RoutesList)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+  constructor() {}
+}

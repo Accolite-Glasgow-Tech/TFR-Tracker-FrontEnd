@@ -10,8 +10,11 @@
   </a>
   <span class="example-spacer"></span>
   <div *ngFor="let route of RoutesList" fxShow="true" fxHide.lt-md="true">
-    <a mat-button *ngIf="route.label" routerLink="{{ route.path }}">{{
-      route.label
-    }}</a>
+    <a
+      mat-button
+      *ngIf="route.label && checkRouting(route.component)"
+      routerLink="{{ route.path }}"
+      >{{ route.label }}</a
+    >
   </div>
 </mat-toolbar>
