@@ -46,7 +46,7 @@ export interface Milestone {
 }
 
 export interface TFRRoute extends Route {
-  label?: String;
+  navigationLabel?: String;
   isGuarded?: boolean;
 }
 

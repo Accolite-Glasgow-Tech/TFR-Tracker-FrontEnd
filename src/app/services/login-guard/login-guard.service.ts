@@ -1,19 +1,17 @@
 import { Injectable, Type } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
-import { RoutesService } from '../routes/routes.service';
-
+import { RoutesList } from 'src/app/app-routing.module';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class LoginGuardService implements CanActivate {
-  constructor(routesService: RoutesService) {}
-
   canActivate(route: ActivatedRouteSnapshot): boolean {
     return this.checkIfComponentCanBeActivated(route.component);
   }
 
   checkIfComponentCanBeActivated(component: Type<any> | null): boolean {
-    let routeData = RoutesService.RoutesList.find((value) => {
+    let routeData = RoutesList.find((value) => {
       return value.component == component;
     });
 
@@ -21,6 +19,9 @@ export class LoginGuardService implements CanActivate {
       return true;
     }
     let shouldPass: boolean = this.XOR(!routeData.isGuarded, this.isLoggedIn);
+    if (environment.routeGuardingDisabled == true) {
+      return true;
+    }
     return shouldPass;
   }
 

@@ -9,9 +9,9 @@
     <div fxLayout="column" *ngFor="let route of RoutesList">
       <a
         mat-button
-        *ngIf="route.label && checkRouting(route.component)"
+        *ngIf="route.navigationLabel && checkRouting(route.component)"
         routerLink="{{ route.path }}"
-        >{{ route.label }}</a
+        >{{ route.navigationLabel }}</a
       >
     </div>
   </mat-sidenav>
