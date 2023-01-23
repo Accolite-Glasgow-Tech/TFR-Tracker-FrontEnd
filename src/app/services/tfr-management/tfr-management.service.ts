@@ -211,7 +211,7 @@ export class TfrManagementService {
       .get<Project>(getProjectURL(project_id), {
         observe: 'response',
       })
-      .pipe(catchError((e) => of(`Formatted exception: ${e.error}`)));
+      .pipe(catchError((e: Error) => of(`Error occured: ${e.message}`)));
     // return this.http.get<Project>(this.projectURL);
   }
 
