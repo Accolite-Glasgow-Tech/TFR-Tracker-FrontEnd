@@ -165,11 +165,21 @@ export class TfrManagementService {
     return true;
   }
 
-  setMilestones(milestones: Milestone[]) {
+  set milestones(milestones: Milestone[]) {
     if (this.project !== undefined) {
       this.project.milestones = milestones;
-      this.updateDatabase();
     }
+  }
+
+  putMilestones(): Observable<{}> {
+    if (this.project !== undefined) {
+      return this.http.put(projectsURL, this.project);
+    }
+    let projectUndefined = new Observable<{}>((subscriber) => {
+      subscriber.error('project undefined');
+      subscriber.complete;
+    });
+    return projectUndefined;
   }
 
   setProjectResources(project_resources: ProjectResourceDTO[]) {
