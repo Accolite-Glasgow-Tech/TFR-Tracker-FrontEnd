@@ -8,6 +8,7 @@ import {
 } from 'src/app/shared/utils';
 import { Milestone, Project } from '../../types/types';
 
+import { Data } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { projectsURL, resourceProjectsURL } from 'src/app/shared/constants';
 import {
@@ -30,6 +31,18 @@ export class TfrManagementService {
 
   vendorName: string = '';
   apiError: boolean = false;
+
+  updateProjectToDatabaseObserver = {
+    next: (response: Data) => {
+      if (this.project) {
+        this.project.version = Number(response);
+      }
+      this.snackBarService.showSnackBar('Updates saved to database', 2000);
+    },
+    error: (err: Error) => {
+      console.log('Error occured: ' + err.message);
+    },
+  };
 
   constructor(
     private http: HttpClient,
@@ -118,7 +131,6 @@ export class TfrManagementService {
         this.updateProjectToDatabase();
       }
       this.setVendorName(projectBasicDetails.vendor_id);
-      // this.updateProjectToDatabase();
     }
   }
 
@@ -132,12 +144,9 @@ export class TfrManagementService {
   }
 
   updateProjectToDatabase() {
-    this.http.put(projectsURL, this.project).subscribe((response) => {
-      if (this.project) {
-        this.project.version = Number(response);
-      }
-      this.snackBarService.showSnackBar('Updates saved to database', 2000);
-    });
+    this.http
+      .put(projectsURL, this.project)
+      .subscribe(this.updateProjectToDatabaseObserver);
   }
 
   setVendorName(vendor_id: number) {

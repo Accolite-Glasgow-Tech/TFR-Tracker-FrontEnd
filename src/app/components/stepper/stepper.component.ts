@@ -3,7 +3,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Data, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
@@ -55,6 +55,22 @@ export class StepperComponent implements OnInit {
   */
   stepLabels: Observable<string[]>;
 
+  getProjectObserver = {
+    next: (response: Data) => {
+      let status: number = response['project']['status'];
+      let project: Project = response['project']['body'];
+      if (status === 200) {
+        this.tfrManagementService.project = project;
+        this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
+          project.id
+        );
+        this.tfrManagementService.setVendorName(project.vendor_id);
+      } else {
+        this.tfrManagementService.apiError = true;
+      }
+    },
+  };
+
   constructor(
     private _formBuilder: FormBuilder,
     protected tfrManagementService: TfrManagementService,
@@ -98,20 +114,7 @@ export class StepperComponent implements OnInit {
         is loaded. This component has a resolver (refer to /services/project-resolver) that 
         fetches the project to be displayed.
       */
-      this.route.data.subscribe((response) => {
-        let status: number = response['project']['status'];
-        let project: Project = response['project']['body'];
-
-        if (status === 200) {
-          this.tfrManagementService.project = project;
-          this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
-            project.id
-          );
-          this.tfrManagementService.setVendorName(project.vendor_id);
-        } else {
-          this.tfrManagementService.apiError = true;
-        }
-      });
+      this.route.data.subscribe(this.getProjectObserver);
     }
   }
 
