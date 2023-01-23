@@ -1,10 +1,5 @@
 import { Injectable, Type } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  RouterStateSnapshot,
-  CanDeactivate,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
 import { RoutesService } from '../routes/routes.service';
 
 @Injectable({
@@ -19,8 +14,9 @@ export class LoginGuardService implements CanActivate {
 
   checkIfComponentCanBeActivated(component: Type<any> | null): boolean {
     let routeData = RoutesService.RoutesList.find((value) => {
-      value.component == component;
+      return value.component == component;
     });
+
     if (routeData?.isGuarded == undefined) {
       return true;
     }

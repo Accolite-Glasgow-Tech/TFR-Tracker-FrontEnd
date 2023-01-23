@@ -18,7 +18,6 @@ export class SidenavComponent implements OnInit {
   ngOnInit(): void {
     this.sidenavToggleService.toggleEmitter.subscribe(() => {
       this.isOpen = !this.isOpen;
-      console.log(this.isOpen);
     });
   }
   checkRouting(component: Type<any> | undefined): boolean {
