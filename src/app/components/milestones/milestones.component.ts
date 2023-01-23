@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MilestoneManagerService } from 'src/app/services/milestone-manager/milestone-manager.service';
-import { Milestone } from 'src/app/types/types';
+import { Milestone } from 'src/app/shared/interfaces';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -81,6 +81,9 @@ export class MilestonesComponent implements OnInit {
   };
   ngOnInit(): void {
     this.milestoneManagerService.Update.subscribe(this.updateObserver);
+    this.milestoneManagerService.setMilestones(
+      this.projectManagerService.getMilestones
+    );
   }
   get getFormMilestone(): Milestone | null {
     if (this.selectedMilestone != null) {

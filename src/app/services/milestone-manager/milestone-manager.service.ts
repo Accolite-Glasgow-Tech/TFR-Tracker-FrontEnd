@@ -3,7 +3,7 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { getMilestonesURL } from 'src/app/shared/utils';
-import { Milestone } from 'src/app/types/types';
+import { Milestone } from 'src/app/shared/interfaces';
 
 @Injectable({
   providedIn: 'root',
