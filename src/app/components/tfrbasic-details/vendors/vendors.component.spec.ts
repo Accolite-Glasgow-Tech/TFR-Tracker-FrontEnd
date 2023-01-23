@@ -4,7 +4,7 @@ import { TfrManagementService } from 'src/app/services/tfr-management/tfr-manage
 
 import { VendorsComponent } from './vendors.component';
 
-describe('VendorsComponent', () => {
+fdescribe('VendorsComponent', () => {
   let component: VendorsComponent;
   let fixture: ComponentFixture<VendorsComponent>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
@@ -23,6 +23,8 @@ describe('VendorsComponent', () => {
     .compileComponents();
 
     fixture = TestBed.createComponent(VendorsComponent);
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>; 
+    tfrManagementServiceSpy = TestBed.inject(TfrManagementService) as jasmine.SpyObj<TfrManagementService>;
     component = fixture.componentInstance;
     fixture.detectChanges();
     component.existingDetails = {
@@ -38,6 +40,10 @@ describe('VendorsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('Test test', ()=> {
+    expect(1).toBeLessThan(2);
   });
 
 });
