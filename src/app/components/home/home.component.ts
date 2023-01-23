@@ -43,6 +43,28 @@ export class HomeComponent {
     dragAndDrop: false,
     resizable: false,
     useCSSTransforms: false,
+    responsiveOptions: [
+      {
+        breakpoint: 'sm',
+        minWidth: 320,
+        lanes: 1,
+      },
+      {
+        breakpoint: 'md',
+        minWidth: 768,
+        lanes: 1,
+      },
+      {
+        breakpoint: 'lg',
+        minWidth: 870,
+        lanes: 2,
+      },
+      {
+        breakpoint: 'xl',
+        minWidth: 1800,
+        lanes: 2,
+      },
+    ],
   };
 
   getLaneCount(): number {

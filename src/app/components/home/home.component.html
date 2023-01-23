@@ -4,14 +4,14 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
   />
 
-  <!-- <div fxLayout="row"   fxLayoutGap="12px"  [style.margin-top]="'12px'"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <ngx-gridster
     [options]="gridsterOptions"
     [draggableOptions]="{ handlerClass: 'panel-heading' }"
     (optionsChange)="optionsChange($event)"
   >
     <ngx-gridster-item
-      style="display: inline-table;  position: initial;" 
+      class="ngxgriditem"
       *ngFor="let widget of widgets; index as i"
     >
       <div
@@ -23,16 +23,7 @@
           inline-size: auto;
         "
       >
-        <mat-card
-          class="widget"
-          style="
-            height: inherit;
-            width: 100%;
-            position: relative;
-            margin: 10px;
-            inline-size: auto;
-          "
-        >
+        <mat-card class="widget">
           <mat-card class="header">
             <h1>
               <a class="headerText"> {{ widget.componentName }}</a>
@@ -44,10 +35,10 @@
           </mat-card>
           <div
             style="
-              width: 80%;
-              height: 80%;
+              width: inherit;
+              height: inherit;
               position: relative;
-              margin: 10%;
+              margin: 11%;
               size-adjust: inherit;
               inline-size: auto;
             "
@@ -61,4 +52,3 @@
     </ngx-gridster-item>
   </ngx-gridster>
 </div>
-<!-- </div> -->

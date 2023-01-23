@@ -17,13 +17,19 @@
   vertical-align: middle;
   // margin: 10px;
 }
-// .ngx-gridster-item ::-webkit-scrollbar {
-//   display: none;
-// }
+.ngxgriditem {
+  display: inline-table;
+  position: initial;
+}
 
 .widget {
   border: 8px solid #fbfbfb;
   background-color: #1e0c0c;
+  width: inherit;
+  height: inherit;
+  position: relative;
+  margin: 10px;
+  inline-size: auto;
 }
 
 .header {
