@@ -42,6 +42,15 @@ export class VendorsComponent implements OnInit {
 
     this.api.getVendorData().subscribe((data) => {
       this.vendors = data;
+      if (this.editMode) {
+        // TODO fill in details of vendor and Attributes
+        // find vendor in list with existingDetails.vendor_id and call select method
+        this.vendors.forEach((vendor) => {
+          if (vendor.id == this.existingDetails.vendor_id) {
+            this.onSelectedVendor(vendor);
+          }
+        });
+      }
     });
 
     this.attributeGroup = new FormGroup({
@@ -53,18 +62,6 @@ export class VendorsComponent implements OnInit {
       .subscribe(() => {
         this.onAttributesUpdated.emit(this.attributeGroup);
       });
-
-    if (this.editMode) {
-      log('vendor edit mode');
-      // TODO fill in details of vendor and Attributes
-      // find vendor in list with existingDetails.vendor_id and call select method
-      this.vendors.forEach((vendor) => {
-        if (vendor.id == this.existingDetails.vendor_id) {
-          this.onSelectedVendor(vendor);
-        }
-      });
-      this.fillAttributesFromExisting();
-    }
   }
 
   resetVendorControls() {
@@ -106,15 +103,21 @@ export class VendorsComponent implements OnInit {
 
     this.api.getVendorAttributes(vendor.id).subscribe((res) => {
       this.attributes = res;
-    });
 
-    this.attributesSelected.emit(this.attributes);
+      this.attributesSelected.emit(this.attributes);
 
-    this.getAttributes().clear();
+      this.getAttributes().clear();
 
-    //add a form control to form array for each attribute
-    this.attributes.forEach((res) => {
-      this.getAttributes().push(new FormControl('', [Validators.required]));
+      //add a form control to form array for each attribute
+      this.attributes.forEach((res) => {
+        this.getAttributes().push(new FormControl('', [Validators.required]));
+      });
+
+      if (
+        this.vendorGroup.value.name === this.tfrManagementService.getVendorName
+      ) {
+        this.fillAttributesFromExisting();
+      }
     });
   }
 
