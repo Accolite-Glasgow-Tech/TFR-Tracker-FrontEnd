@@ -1,8 +1,21 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
+import { daysOfWeek } from 'src/app/shared/constants';
 import { range } from 'src/app/shared/utils';
-import { DayOfMonth, daysOfWeek, Frequency } from 'src/app/utils';
+
+enum Frequency {
+  daily = 'daily',
+  weekly = 'weekly',
+  monthly = 'monthly',
+}
+
+enum DayOfMonth {
+  first = 'First',
+  last = 'Last',
+  specificLast = 'SpecificLast',
+  custom = 'Custom',
+}
 
 @Component({
   selector: 'app-frequency-picker',

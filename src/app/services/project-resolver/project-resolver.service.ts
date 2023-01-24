@@ -2,7 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Project } from 'src/app/types/types';
+import { Project } from 'src/app/shared/interfaces';
 import { TfrManagementService } from '../tfr-management/tfr-management.service';
 
 @Injectable({

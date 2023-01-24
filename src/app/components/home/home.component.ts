@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
-import { IGridsterOptions, GridsterComponent } from 'angular2gridster';
+import { Component, ViewChild } from '@angular/core';
+import { GridsterComponent, IGridsterOptions } from 'angular2gridster';
 import { ChartsComponent } from '../charts/charts.component';
 import { WidgetApproachingProjectsComponent } from '../widget-approaching-projects/widget-approaching-projects.component';
 import { WidgetVendorLocationComponent } from '../widget-vendor-location/widget-vendor-location.component';
 import { WidgetVendorProjectCountComponent } from '../widget-vendor-project-count/widget-vendor-project-count.component';
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -43,6 +42,34 @@ export class HomeComponent {
     dragAndDrop: false,
     resizable: false,
     useCSSTransforms: false,
+    widthHeightRatio: 2,
+    responsiveOptions: [
+      {
+        breakpoint: 'sm',
+        minWidth: 0,
+        lanes: 1,
+      },
+      {
+        breakpoint: 'sm',
+        minWidth: 320,
+        lanes: 1,
+      },
+      {
+        breakpoint: 'md',
+        minWidth: 875,
+        lanes: 2,
+      },
+      {
+        breakpoint: 'lg',
+        minWidth: 870,
+        lanes: 2,
+      },
+      {
+        breakpoint: 'xl',
+        minWidth: 1800,
+        lanes: 2,
+      },
+    ],
   };
 
   getLaneCount(): number {

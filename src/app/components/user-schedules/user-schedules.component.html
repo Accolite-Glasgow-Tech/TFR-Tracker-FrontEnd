@@ -1,2 +1,7 @@
 <h1 *ngIf="userTasks.length === 0">You have no scheduled tasks!</h1>
-<div *ngIf="userTasks.length > 0">list of scheduled tasks!</div>
+<div *ngIf="userTasks.length > 0">
+  <div *ngFor="let task of userTasks">
+    {{ JSON.stringify(task) }}
+    <mat-slide-toggle [color]="'primary'" [checked]="true"></mat-slide-toggle>
+  </div>
+</div>

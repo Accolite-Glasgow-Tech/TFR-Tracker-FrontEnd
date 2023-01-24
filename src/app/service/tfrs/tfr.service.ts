@@ -1,26 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PeriodicElement } from 'src/app/components/tfrs/tfrs.component';
 import {
   allProjectsURL,
   projectSearchURL,
   vendorsURLdupe,
 } from 'src/app/shared/constants';
+import { ProjectDTO } from 'src/app/shared/interfaces';
 @Injectable({
   providedIn: 'root',
 })
 export class tfrService {
   constructor(public httpClient: HttpClient) {}
-  getAllProjects(): Observable<PeriodicElement[]> {
-    return this.httpClient.get<PeriodicElement[]>(allProjectsURL);
+  getAllProjects(): Observable<ProjectDTO[]> {
+    return this.httpClient.get<ProjectDTO[]>(allProjectsURL);
   }
 
   getAllVendors() {
     return this.httpClient.get(vendorsURLdupe);
   }
 
-  getProjects(body: any): Observable<PeriodicElement[]> {
-    return this.httpClient.post<PeriodicElement[]>(projectSearchURL, body);
+  getProjects(body: any): Observable<ProjectDTO[]> {
+    return this.httpClient.post<ProjectDTO[]>(projectSearchURL, body);
   }
 }
