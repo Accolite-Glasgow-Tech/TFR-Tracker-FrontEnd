@@ -77,6 +77,7 @@ export class MilestonesComponent implements OnInit {
       }
       this.snackBarService.showSnackBar('Updates saved to database', 2000);
       this.isPristine = true;
+      this.milestoneManagerService.resetMilestones();
       this.update();
     },
     error: (err: Error) => console.error('Observer got an error: ' + err),
@@ -146,6 +147,9 @@ export class MilestonesComponent implements OnInit {
     this.milestoneManagerService.saveMilestone(this.getFormMilestone);
     this.isPristine = false;
   }
+  get milestonesNotDeleted() {
+    return this.milestones.filter((milestone) => !milestone.is_deleted);
+  }
   removeMilestone(milestone: Milestone) {
     this.milestoneManagerService.updateToRemove(milestone);
   }
@@ -153,10 +157,9 @@ export class MilestonesComponent implements OnInit {
     this.milestoneManagerService.setSelected(milestone);
   }
   submitMilestones() {
-    let projectId = this.projectManagerService.getProjectId;
-    this.projectManagerService.milestones =
-      this.milestoneManagerService.getMilestones;
-    this.projectManagerService.putMilestones().subscribe(this.putObserver);
+    this.projectManagerService
+      .putMilestones(this.milestoneManagerService.getMilestones)
+      .subscribe(this.putObserver);
   }
   resetMilestones() {
     this.milestoneManagerService.setMilestones(

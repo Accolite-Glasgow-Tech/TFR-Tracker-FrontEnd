@@ -14,6 +14,8 @@ import {
   ProjectBasicDetails,
   ProjectResourceDTO,
   VendorDTO,
+  ProjectMilestoneDTO,
+  MilestoneDTO,
 } from 'src/app/shared/interfaces';
 import { ApiService } from '../api.service';
 import { ResourceService } from '../resource/resource.service';
@@ -171,9 +173,31 @@ export class TfrManagementService {
     }
   }
 
-  putMilestones(): Observable<{}> {
+  stripTempIds(milestones: Milestone[]): MilestoneDTO[] {
+    let strippedMilestones: MilestoneDTO[] = milestones.map((milestone) => {
+      if (milestone.id > 0) {
+        return milestone;
+      }
+      let { id, ...cleanedMilestone } = milestone;
+      return cleanedMilestone;
+    });
+    return strippedMilestones;
+  }
+
+  projectStripTempIds(milestonesToStrip: Milestone[]): ProjectMilestoneDTO {
+    if (this.project) {
+      let projectDTO: ProjectMilestoneDTO = this.project;
+      projectDTO.milestones = this.stripTempIds(milestonesToStrip);
+      return projectDTO;
+    }
+    throw new Error('No project defined');
+  }
+
+  putMilestones(milestones: Milestone[]): Observable<{}> {
     if (this.project !== undefined) {
-      return this.http.put(projectsURL, this.project);
+      let projectFormatted: ProjectMilestoneDTO =
+        this.projectStripTempIds(milestones);
+      return this.http.put(projectsURL, projectFormatted);
     }
     let projectUndefined = new Observable<{}>((subscriber) => {
       subscriber.error('project undefined');
