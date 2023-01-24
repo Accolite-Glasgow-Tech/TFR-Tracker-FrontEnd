@@ -11,6 +11,20 @@
   min-width: 600px;
 }
 
+.search-filters-container{
+  display: flex;
+}
+
+.single-search-filter{
+  margin: 3px;
+}
+
+.search-button-size{
+  height: 57px;
+  margin: 3px;
+  width: 110px;
+}
+
 
 .delivered{
   color: rgb(7, 247, 107);
