@@ -3,7 +3,7 @@ import { ResourceService } from 'src/app/services/resource/resource.service';
 
 import { ProjectSummaryComponent } from './project-summary.component';
 
-fdescribe('ProjectSummaryComponent', () => {
+describe('ProjectSummaryComponent', () => {
   let component: ProjectSummaryComponent;
   let fixture: ComponentFixture<ProjectSummaryComponent>;
 

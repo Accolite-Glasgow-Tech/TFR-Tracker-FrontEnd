@@ -2,7 +2,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { WidgetApproachingProjectsService } from './widget-approaching-projects.service';
 
-describe('WidgetApproachingProjectService', () => {
+describe('WidgetApproachingProjectsService', () => {
+
   let service: WidgetApproachingProjectsService;
 
   beforeEach(() => {
