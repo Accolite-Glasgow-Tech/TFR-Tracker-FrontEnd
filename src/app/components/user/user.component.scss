@@ -11,3 +11,19 @@
 .child-container{
   margin: auto;
 }
+
+.button-row{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.heading{
+  margin: 40px;
+  padding: 2px;
+  font-weight: 400;
+  font-size: x-large;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
