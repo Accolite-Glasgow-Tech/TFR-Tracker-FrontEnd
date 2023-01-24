@@ -61,6 +61,7 @@
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
     <td mat-cell *matCellDef="let tfr" [ngClass]="{'delivered':tfr.status=='DELIVERED',
                                                       'inprogress':tfr.status=='INPROGRESS',
+                                                      'agreed':tfr.status=='AGREED',
                                                       'archived':tfr.status=='ARCHIVED',
                                                       'draft':tfr.status=='DRAFT'}"> {{tfr.status}} </td>
   </ng-container>
