@@ -1,6 +1,6 @@
 <div>
-    <div>
-      <mat-form-field appearance="fill">
+    <div class="search-filters-container">
+      <mat-form-field class="single-search-filter" appearance="fill">
         <mat-label>Vendor</mat-label>
         <mat-select [(ngModel)]="selectedVendorName">
           <mat-option>None</mat-option>
@@ -8,7 +8,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
+      <mat-form-field class="single-search-filter" appearance="fill">
         <mat-label>Status</mat-label>
         <mat-select [(ngModel)]="selectedStatus">
           <mat-option>None</mat-option>
@@ -16,15 +16,15 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
+      <mat-form-field class="single-search-filter" appearance="fill">
         <mat-label>Project Start After</mat-label>
         <input matInput [matDatepicker]="picker1" [formControl]="startAfterDate" >
         <mat-hint>{{dateFormat}}</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
         <mat-datepicker #picker1></mat-datepicker>
       </mat-form-field>
-
-      <mat-form-field appearance="fill">
+      
+      <mat-form-field class="single-search-filter" appearance="fill">
         <mat-label>Project End Before</mat-label>
         <input matInput [matDatepicker]="picker2" [formControl]="endBeforeDate">
         <mat-hint>{{dateFormat}}</mat-hint>
@@ -32,13 +32,8 @@
         <mat-datepicker #picker2></mat-datepicker>
       </mat-form-field>
 
-        <div></div>
-
-      <section>
-        <div class="">
-          <button mat-raised-button color="primary" (click)="getProjects()">Search</button>
-        </div>
-      </section>
+      <button class="search-button-size" mat-raised-button color="primary" (click)="getProjects()">Search</button> 
+      
     </div>
 </div>
 
@@ -54,18 +49,19 @@
 
   <ng-container matColumnDef="start_date" >
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </th>
-    <td mat-cell *matCellDef="let tfr"> {{tfr.start_date.split('T')[0]}} </td>
+    <td mat-cell *matCellDef="let tfr"> {{displayDate(tfr.start_date)}} </td>
   </ng-container>
 
   <ng-container matColumnDef="end_date">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> End Date </th>
-    <td mat-cell *matCellDef="let tfr"> {{tfr.end_date.split('T')[0]}} </td>
+    <td mat-cell *matCellDef="let tfr"> {{displayDate(tfr.end_date)}} </td>
   </ng-container>
 
   <ng-container matColumnDef="status">
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
     <td mat-cell *matCellDef="let tfr" [ngClass]="{'delivered':tfr.status=='DELIVERED',
                                                       'inprogress':tfr.status=='INPROGRESS',
+                                                      'agreed':tfr.status=='AGREED',
                                                       'archived':tfr.status=='ARCHIVED',
                                                       'draft':tfr.status=='DRAFT'}"> {{tfr.status}} </td>
   </ng-container>
