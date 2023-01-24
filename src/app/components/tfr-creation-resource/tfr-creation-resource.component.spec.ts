@@ -119,10 +119,6 @@ describe('TfrCreationResourceComponent', () => {
       },
     ];
 
-    // dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(
-    //   dialogRefSpyObj
-    // );
-
     dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
       afterClosed: () => of('true'),
     } as MatDialogRef<typeof component>);
