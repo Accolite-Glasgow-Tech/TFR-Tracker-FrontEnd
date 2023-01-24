@@ -11,15 +11,13 @@
   </mat-select>
 </mat-form-field>
 
-<div [formGroup]="attributeGroup">
-  <div formArrayName="attributeValues">
+<form [formGroup]="attributeGroup">
+  <div formArrayName="attributeValues" class="container">
     <ng-container *ngFor="let attribute of attributes; index as i">
-      <div>
-        <mat-form-field class="form-field" appearance="fill">
-          <mat-label>{{ attribute.attribute_name }}</mat-label>
-          <input matInput formControlName="{{ i }}" />
-        </mat-form-field>
-      </div>
+      <mat-form-field class="form-field" appearance="fill">
+        <mat-label>{{ attribute.attribute_name }}</mat-label>
+        <input matInput formControlName="{{ i }}" />
+      </mat-form-field>
     </ng-container>
   </div>
-</div>
+</form>

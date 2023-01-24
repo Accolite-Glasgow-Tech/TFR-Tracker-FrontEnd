@@ -44,8 +44,9 @@ export class TfrManagementService {
       let dialogRef = this.dialog.open(TfrCreationDialogComponent, {
         data: {
           title: 'Save unsuccessful',
-          content: 'Updating an older version of project.',
-          confirmText: 'OK',
+          content:
+            'Updating an older version of project. Please see the new changes',
+          confirmText: 'Redirect',
           cancelText: '',
         },
       });

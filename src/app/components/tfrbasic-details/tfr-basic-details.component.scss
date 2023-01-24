@@ -9,7 +9,15 @@
 }
 
 .form-field {
-  width: 70%;
+  width: 45%;
+  margin: 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .basic-details-div {
@@ -17,10 +25,7 @@
 }
 
 .intro-div {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  gap: 5px;
+  margin-left: 10px;
 }
 
 .navigation-btn {
@@ -36,5 +41,6 @@
 
   .form-field {
     width: 100%;
+    margin: 0px;
   }
 }
