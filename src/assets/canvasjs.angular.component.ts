@@ -37,7 +37,7 @@ class CanvasJSChart implements AfterViewInit, OnChanges, OnDestroy {
 	constructor() {
 		this.options = this.options ? this.options : {};
 		this.styles = this.styles ? this.styles : { width: "100%", position: "relative" };
-		this.styles.height = this.options.height ? this.options.height + "px" : "400px";
+		this.styles.height = this.options.height ? this.options.height + "px" : "200px";
 		
 		this.chartContainerId = 'canvasjs-angular-chart-container-' + CanvasJSChart._cjsChartContainerId++;
 	}
