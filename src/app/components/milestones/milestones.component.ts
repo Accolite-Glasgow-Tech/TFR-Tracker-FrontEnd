@@ -180,7 +180,9 @@ export class MilestonesComponent implements OnInit {
   resetMilestones() {
     let projectId = this.projectManagerService.getProjectId;
     if (projectId) {
-      this.projectManagerService.getFromDatabase(projectId);
+      this.projectManagerService
+        .getFromDatabase(projectId)
+        .subscribe(this.getObserver);
     }
   }
   nextStep() {
