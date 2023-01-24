@@ -95,7 +95,10 @@ export const RoutesList: TFRRoute[] = [
     navigationLabel: 'Alerts',
     component: FrequencyPickerComponent,
   },
-
+  {
+    path: 'tfr/:id/reports',
+    component: ReportsComponent,
+  },
   {
     path: '**',
     redirectTo: 'login',
