@@ -1,6 +1,7 @@
-
-<div class="" [formGroup]="registerGroup" [hidden]="!registering">
-    <p>Register</p>
+  
+<div class="page-container">
+<div class="child-container" [formGroup]="registerGroup" [hidden]="!registering">
+    <div class="heading">Register</div>
     <div class="register-container">
         <mat-form-field appearance="fill">
           <mat-label>Username</mat-label>
@@ -28,7 +29,7 @@
     </div>
 
     <section>
-        <div class="">
+        <div class="button-row">
           <button [disabled]="registerGroup.invalid||!confirmPasswordValid()" mat-raised-button color="primary" (click)="register()">Register</button>
           <button mat-raised-button color="primary" (click)="goLogin()">Go Login</button>
         </div>
@@ -37,8 +38,8 @@
 </div>
 
 
-<div class="" [formGroup]="logginGroup" [hidden]="!logging">
-    <p>Login</p>
+<div class="child-container" [formGroup]="logginGroup" [hidden]="!logging">
+    <div class="heading">Login</div>
     <div class="register-container">
         <mat-form-field appearance="fill">
           <mat-label>Username</mat-label>
@@ -54,7 +55,7 @@
     </div>
 
     <section>
-        <div class="">
+        <div class="button-row">
           <button [disabled]="logginGroup.invalid" mat-raised-button color="primary" (click)="login()">Login</button>
           <button mat-raised-button color="primary" (click)="goRegister()">Go Register</button>
         </div>
@@ -62,7 +63,7 @@
     
 </div>
 
-
+</div>
 
 
 

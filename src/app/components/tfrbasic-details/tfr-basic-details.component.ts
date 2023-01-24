@@ -18,7 +18,7 @@ import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-
 })
 export class TfrBasicDetailsComponent implements OnInit {
   constructor(
-    private tfrManager: TfrManagementService,
+    protected tfrManager: TfrManagementService,
     private matDialog: MatDialog,
     private apiService: ApiService
   ) {}
@@ -102,7 +102,14 @@ export class TfrBasicDetailsComponent implements OnInit {
   */
   next() {
     if (this.isFormDirty()) {
-      let dialogRef = this.matDialog.open(TfrCreationDialogComponent);
+      let dialogRef = this.matDialog.open(TfrCreationDialogComponent, {
+        data: {
+          title: 'Discard Changes',
+          content: 'Would you like to discard your changes and continue?',
+          confirmText: 'Yes',
+          cancelText: 'No',
+        },
+      });
       dialogRef.afterClosed().subscribe((result: string) => {
         if (result === 'true') {
           /* User wants to discard changes */

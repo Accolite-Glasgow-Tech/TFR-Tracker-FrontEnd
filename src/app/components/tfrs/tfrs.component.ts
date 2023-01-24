@@ -87,7 +87,7 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     if (this.endBeforeDate.value != undefined) {
       this.projectPostBody['end_date_before'] = this.datePipe.transform(
         this.endBeforeDate.value,
-        'yyyy-MM-dd 00:00:00'
+        'yyyy-MM-dd 23:59:59'
       );
     }
     if (this.selectedVendorName != undefined) {
@@ -114,5 +114,9 @@ export class TfrsComponent implements OnInit, AfterViewInit {
 
   scheduleReports(tfrId: number): void {
     this.router.navigateByUrl(`/tfr/${tfrId}/reports`);
+  }
+
+  displayDate(date: Date) {
+    return this.datePipe.transform(date, 'MM/dd/yyyy');
   }
 }
