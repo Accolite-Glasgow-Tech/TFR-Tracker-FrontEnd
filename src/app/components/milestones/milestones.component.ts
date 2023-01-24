@@ -76,7 +76,7 @@ export class MilestonesComponent implements OnInit {
       }
       this.snackBarService.showSnackBar('Updates saved to database', 2000);
       this.isPristine = true;
-      this.milestoneManagerService.resetMilestones();
+      this.resetMilestones();
       this.update();
     },
     error: (err: Error) =>
@@ -92,7 +92,7 @@ export class MilestonesComponent implements OnInit {
       this.milestoneManagerService.setMilestones(
         this.projectManagerService.getMilestones
       );
-      this.isPristine = true;
+      this.update();
     },
     error: (err: Error) =>
       this.snackBarService.showSnackBar('Get failed, please try again', 2000),
