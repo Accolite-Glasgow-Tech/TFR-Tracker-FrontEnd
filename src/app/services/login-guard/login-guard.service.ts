@@ -2,12 +2,27 @@ import { Injectable, Type } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
 import { RoutesList } from 'src/app/app-routing.module';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
 export class LoginGuardService implements CanActivate {
+  constructor(private router: Router) {}
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    return this.checkIfComponentCanBeActivated(route.component);
+    let activated = this.checkIfComponentCanBeActivated(route.component);
+    if (!activated) {
+      console.log('called');
+      this.navigateToValid();
+    }
+    return activated;
+  }
+
+  navigateToValid() {
+    if (this.isLoggedIn) {
+      this.router.navigateByUrl('home');
+    } else {
+      this.router.navigateByUrl('login');
+    }
   }
 
   checkIfComponentCanBeActivated(component: Type<any> | null): boolean {
