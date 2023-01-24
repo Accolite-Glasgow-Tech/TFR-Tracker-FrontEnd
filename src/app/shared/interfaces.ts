@@ -18,17 +18,6 @@ export interface ProjectDTO {
   project_resources?: ProjectResourceDTO[];
 }
 
-export interface MilestoneDTO {
-  id?: number;
-  project_id: number;
-  description?: string;
-  start_date?: Date;
-  delivery_date?: Date;
-  acceptance_date: Date;
-  is_deleted: Boolean;
-  tracker?: TrackerDTO;
-}
-
 export interface Project {
   id: number;
   name: string;

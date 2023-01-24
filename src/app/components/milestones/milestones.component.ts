@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MilestoneManagerService } from 'src/app/services/milestone-manager/milestone-manager.service';
 import { Milestone } from 'src/app/shared/interfaces';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 
 @Component({
@@ -80,8 +79,25 @@ export class MilestonesComponent implements OnInit {
       this.milestoneManagerService.resetMilestones();
       this.update();
     },
-    error: (err: Error) => console.error('Observer got an error: ' + err),
+    error: (err: Error) =>
+      this.snackBarService.showSnackBar(
+        'Update failed, please try again',
+        2000
+      ),
   };
+
+  getObserver = {
+    next: (response: {}) => {
+      this.snackBarService.showSnackBar('Get successful', 2000);
+      this.milestoneManagerService.setMilestones(
+        this.projectManagerService.getMilestones
+      );
+      this.isPristine = true;
+    },
+    error: (err: Error) =>
+      this.snackBarService.showSnackBar('Get failed, please try again', 2000),
+  };
+
   ngOnInit(): void {
     this.milestoneManagerService.Update.subscribe(this.updateObserver);
     this.milestoneManagerService.setMilestones(
@@ -162,10 +178,10 @@ export class MilestonesComponent implements OnInit {
       .subscribe(this.putObserver);
   }
   resetMilestones() {
-    this.milestoneManagerService.setMilestones(
-      this.projectManagerService.getMilestones
-    );
-    this.isPristine = true;
+    let projectId = this.projectManagerService.getProjectId;
+    if (projectId) {
+      this.projectManagerService.getFromDatabase(projectId);
+    }
   }
   nextStep() {
     this.stepCompletedEmitter.emit(true);
