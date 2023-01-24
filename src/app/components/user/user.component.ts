@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { userService } from 'src/app/service/user/user.service';
 
 export interface registerResponse {
@@ -24,7 +25,7 @@ export class UserComponent implements OnInit {
   registering: any = true;
   logging: any = false;
 
-  constructor(private userService: userService) {}
+  constructor(private userService: userService,private router:Router) {}
 
   ngOnInit(): void {
     this.registerGroup = new FormGroup({
@@ -93,12 +94,12 @@ export class UserComponent implements OnInit {
         alert('Failure, please try again');
       }
       if (info.status == true) {
-        //console.log(info.token)
         sessionStorage.setItem('jwt_token', info.token);
+        this.jumpToHome();
       } else {
         sessionStorage.removeItem('jwt_token');
+        alert(info.msg);
       }
-      alert(info.msg);
     });
   }
 
@@ -110,5 +111,9 @@ export class UserComponent implements OnInit {
   goRegister() {
     this.registering = true;
     this.logging = false;
+  }
+
+  jumpToHome():void{
+    this.router.navigateByUrl('/home')
   }
 }
