@@ -82,20 +82,6 @@ export const RoutesList: TFRRoute[] = [
   {
     isGuarded: true,
     canActivate: [LoginGuardService],
-
-    navigationLabel: 'Reports',
-    path: 'reports',
-    component: ReportsComponent,
-  },
-  {
-    isGuarded: true,
-    canActivate: [LoginGuardService],
-
-    path: 'picker',
-    navigationLabel: 'Alerts',
-    component: FrequencyPickerComponent,
-  },
-  {
     path: 'tfr/:id/reports',
     component: ReportsComponent,
   },
