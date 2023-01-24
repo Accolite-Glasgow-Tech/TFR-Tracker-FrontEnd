@@ -22,6 +22,13 @@
   display: inline-table;
   position: initial;
 }
+.widgetdivouter{
+  height: 400px;
+  width: inherit;
+  position: relative;
+  margin: 8px;
+  inline-size: auto;
+}
 
 .widget {
   border: 8px solid #fbfbfb;

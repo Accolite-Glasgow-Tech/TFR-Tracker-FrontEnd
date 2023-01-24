@@ -1,4 +1,4 @@
-<div style="padding: 20px">
+<div style="padding: 20px;" >
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -15,15 +15,7 @@
       class="ngxgriditem"
       *ngFor="let widget of widgets; index as i"
     >
-      <div
-        style="
-          height: 400px;
-          width: inherit;
-          position: relative;
-          margin: 8px;
-          inline-size: auto;
-        "
-      >
+      <div class="widgetdivouter">
         <mat-card class="widget">
           <h1 class="header">
             <a class="headerText"> {{ widget.componentName }}</a>
@@ -43,7 +35,6 @@
           <div
             style="
               width: inherit;
-              /* height: inherit; */
               position: relative;
               margin: 11%;
               size-adjust: inherit;
