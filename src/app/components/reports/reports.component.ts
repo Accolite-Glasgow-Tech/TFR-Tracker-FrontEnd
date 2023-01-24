@@ -13,6 +13,7 @@ import {
 import { getResourcesByProjectIdURL, log } from 'src/app/shared/utils';
 
 import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
+import { ActivatedRoute } from '@angular/router';
 
 enum RecieverOptions {
   self = 'Only me',
@@ -29,11 +30,10 @@ export class ReportsComponent implements OnInit {
   @ViewChild(FrequencyPickerComponent, { static: true })
   frequencyPickerComponent!: FrequencyPickerComponent;
 
-  @Input() tfrList: ProjectDTO[] = [];
   @Input() template = 'Default Template';
   @Input() recieverOption = RecieverOptions.self;
 
-  resource!: any;
+  tfrId!: number;
   selectTfrLabelText: string = 'Select TFR';
   selectTemplateLabelText: string = 'Select Template';
   submitButtonText: string = 'Schedule';
@@ -42,27 +42,23 @@ export class ReportsComponent implements OnInit {
   recieverOptionsEnum = RecieverOptions;
   schedulerForm!: FormGroup;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.resource = user;
+    this.route.paramMap.subscribe((result) => {
+      this.tfrId = Number(result.get('id'));
+    });
 
     this.schedulerForm = new FormGroup({
-      tfr: new FormControl(this.tfrList, [Validators.required]),
       type: new FormControl(this.template, [Validators.required]),
       receiver: new FormControl(this.recieverOption, [Validators.required]),
       frequency: this.frequencyPickerComponent.createFormGroup(),
     });
 
     this.schedulerForm.get('type')!.disable();
-
-    this.getResourceTFRList(this.resource.id).subscribe((response) => {
-      this.tfrList = response;
-    });
   }
 
   async onSubmit() {
-    const project_id = this.schedulerForm.get('tfr')!.value;
     const task_type = 'REPORT';
 
     const [hour, minute] = this.schedulerForm
@@ -85,11 +81,11 @@ export class ReportsComponent implements OnInit {
 
     switch (this.schedulerForm.get('receiver')!.value) {
       case RecieverOptions.self:
-        resources = [this.resource];
+        resources = [];
         break;
       case RecieverOptions.allProjectResources:
         resources = <ResourceDTO[]>(
-          await lastValueFrom(this.getResourcesByTFR(project_id))
+          await lastValueFrom(this.getResourcesByTFR(this.tfrId))
         );
         break;
       case RecieverOptions.custom:
@@ -105,7 +101,7 @@ export class ReportsComponent implements OnInit {
 
     this.createTask({
       task: {
-        project_id: project_id,
+        project_id: this.tfrId,
         task_type: task_type,
         execute_at: execute_at,
         recurring: recurring,
@@ -115,10 +111,6 @@ export class ReportsComponent implements OnInit {
       },
       resources: resources,
     });
-  }
-
-  getResourceTFRList(resourceId: number): Observable<ProjectDTO[]> {
-    return this.httpClient.get<ProjectDTO[]>(allProjectsURL);
   }
 
   getResourcesByTFR(tfrId: number) {

@@ -53,8 +53,7 @@ export class RoutesService {
       component: TfrComponent,
     },
     {
-      label: 'Reports',
-      path: 'reports',
+      path: 'tfr/:id/reports',
       component: ReportsComponent,
     },
     {
@@ -63,9 +62,9 @@ export class RoutesService {
       component: FrequencyPickerComponent,
     },
 
-    {
-      path: '**',
-      redirectTo: 'home',
-    },
+    // {
+    //   path: '**',
+    //   redirectTo: 'home',
+    // },
   ];
 }

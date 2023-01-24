@@ -1,13 +1,17 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { saveAs } from 'file-saver';
 import { tfrService } from 'src/app/service/tfrs/tfr.service';
 import { dateFormat, statusList } from 'src/app/shared/constants';
 import { ProjectDTO } from 'src/app/shared/interfaces';
+import { getPDFReportURL } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-tfrs',
@@ -58,7 +62,9 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   constructor(
     private tfrService: tfrService,
     private liveAnnouncer: LiveAnnouncer,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -93,5 +99,20 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     this.tfrService.getProjects(this.projectPostBody).subscribe((projects) => {
       this.projectList.data = projects;
     });
+  }
+
+  viewTFRDetails(tfrId: number): void {
+    this.router.navigateByUrl(`/tfr/${tfrId}`);
+  }
+
+  download(projectId: number): void {
+    this.http.get<Blob>(getPDFReportURL(projectId)).subscribe((data) => {
+      // const blob = new Blob([data], { type: 'application/pdf' });
+      // saveAs(blob, 'report.pdf');
+    });
+  }
+
+  scheduleReports(tfrId: number): void {
+    this.router.navigateByUrl(`/tfr/${tfrId}/reports`);
   }
 }

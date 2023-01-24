@@ -32,6 +32,10 @@ export function getVendorAttributesURL(vendorId: number): string {
   return `${environment.backendURL}/vendorAttributes/${vendorId}`;
 }
 
+export function getPDFReportURL(projectId: number): string {
+  return `${environment.backendURL}/reports/download/${projectId}`;
+}
+
 export function range(start: number, end?: number) {
   if (typeof start === 'number') {
     if (end === undefined) {
