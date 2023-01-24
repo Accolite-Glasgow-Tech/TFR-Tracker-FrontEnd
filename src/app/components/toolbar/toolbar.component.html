@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar style="background-color: #5203fb">
   <div fxShow="true" fxHide.gt-sm="true">
     <button mat-icon-button (click)="toggle()">
       <mat-icon>menu</mat-icon>
@@ -6,12 +6,13 @@
   </div>
 
   <a mat-button class="acc-tfr" routerLink="/">
-    <span>TFR Management</span>
+    <span style="color: white">TFR Management</span>
   </a>
   <span class="example-spacer"></span>
   <div *ngFor="let route of RoutesList" fxShow="true" fxHide.lt-md="true">
     <a
       mat-button
+      style="color: white"
       *ngIf="route.navigationLabel && checkRouting(route.component)"
       routerLink="{{ route.path }}"
       >{{ route.navigationLabel }}</a
