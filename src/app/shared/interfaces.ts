@@ -14,6 +14,19 @@ export interface ProjectDTO {
   created_at: Date;
   modified_by: number;
   modified_at: Date;
+  milestones?: MilestoneDTO[];
+  project_resources?: ProjectResourceDTO[];
+}
+
+export interface MilestoneDTO {
+  id?: number;
+  project_id: number;
+  description?: string;
+  start_date?: Date;
+  delivery_date?: Date;
+  acceptance_date: Date;
+  is_deleted: Boolean;
+  tracker?: TrackerDTO;
 }
 
 export interface Project {
@@ -71,7 +84,7 @@ export interface ResourceDTO {
 
 export interface TaskCreationDTO {
   task: TaskDTO;
-  resources: Array<ResourceDTO>;
+  resources: ResourceDTO[];
 }
 
 export interface TrackerDTO {

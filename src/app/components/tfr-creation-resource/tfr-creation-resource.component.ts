@@ -28,7 +28,7 @@ import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-
   not present in the list.
 */
 function autoCompleteResourceEmailValidator(
-  validOptions: Array<ResourceListType>
+  validOptions: ResourceListType[]
 ): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     if (validOptions.find((e) => e.resource_email === control.value)) {
@@ -46,7 +46,7 @@ function autoCompleteResourceEmailValidator(
   Returns invalidAutoCompleteRole as error if the inserted value is 
   not present in the list.
 */
-function autoCompleteRoleValidator(validOptions: Array<string>): ValidatorFn {
+function autoCompleteRoleValidator(validOptions: string[]): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     if (validOptions.indexOf(control.value) !== -1) {
       return null; /* valid option selected */

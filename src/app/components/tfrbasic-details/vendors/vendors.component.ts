@@ -8,6 +8,7 @@ import {
   VendorAttributeDTO,
   VendorDTO,
 } from 'src/app/shared/interfaces';
+import { log } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-vendors',
@@ -47,10 +48,8 @@ export class VendorsComponent implements OnInit {
         this.vendors.forEach((vendor) => {
           if (vendor.id == this.existingDetails.vendor_id) {
             this.onSelectedVendor(vendor);
-          
           }
         });
-      
       }
     });
 
@@ -63,7 +62,6 @@ export class VendorsComponent implements OnInit {
       .subscribe(() => {
         this.onAttributesUpdated.emit(this.attributeGroup);
       });
-
   }
 
   resetVendorControls() {
@@ -115,7 +113,9 @@ export class VendorsComponent implements OnInit {
         this.getAttributes().push(new FormControl('', [Validators.required]));
       });
 
-      if (this.vendorGroup.value.name === this.tfrManagementService.getVendorName) {
+      if (
+        this.vendorGroup.value.name === this.tfrManagementService.getVendorName
+      ) {
         this.fillAttributesFromExisting();
       }
     });
