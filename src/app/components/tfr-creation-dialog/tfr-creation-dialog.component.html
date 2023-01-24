@@ -1,10 +1,23 @@
-<h2 mat-dialog-title>Discard changes</h2>
+<h2 mat-dialog-title>{{ data.title }}</h2>
 <div mat-dialog-content>
-  Would you like to discard your changes and continue?
+  {{ data.content }}
 </div>
-<div mat-dialog-actions>
-  <button mat-button mat-dialog-close mat-dialog-close="true" cdkFocusInitial>
-    Yes
+<div mat-dialog-actions class="dialog-btn-div">
+  <button
+    *ngIf="data.confirmText.length !== 0"
+    mat-button
+    mat-dialog-close
+    mat-dialog-close="true"
+    cdkFocusInitial
+  >
+    {{ data.confirmText }}
   </button>
-  <button mat-button mat-dialog-close mat-dialog-close="false">No</button>
+  <button
+    *ngIf="data.cancelText.length !== 0"
+    mat-button
+    mat-dialog-close
+    mat-dialog-close="false"
+  >
+    {{ data.cancelText }}
+  </button>
 </div>

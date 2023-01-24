@@ -122,6 +122,13 @@
     >
     </app-resource-table>
   </ng-container>
+
+  <ng-container *ngIf="allocatedResources.length === 0">
+    <div class="error-div">
+      A TFR must have at least one resource associated. Please assign one to
+      move to next step.
+    </div>
+  </ng-container>
 </div>
 
 <div class="floating-btn-div">
@@ -135,7 +142,7 @@
   </button>
   <button
     mat-raised-button
-    [disabled]="!resourceListUpdated"
+    [disabled]="!resourceListUpdated || allocatedResources.length === 0"
     class="navigation-btn"
     color="primary"
     (click)="saveToDatabase()"
@@ -146,7 +153,10 @@
     mat-raised-button
     class="navigation-btn"
     color="primary"
-    [disabled]="allocatedResources.length === 0"
+    [disabled]="
+      allocatedResources.length === 0 ||
+      this.tfrManagementService.getProjectResources?.length === 0
+    "
     (click)="triggerStep(true)"
   >
     Next

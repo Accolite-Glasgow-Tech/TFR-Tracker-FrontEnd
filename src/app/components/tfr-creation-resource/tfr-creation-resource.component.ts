@@ -27,7 +27,7 @@ import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-
   Returns invalidAutoCompleteResourceEmail as error if the inserted value is 
   not present in the list.
 */
-function autoCompleteResourceEmailValidator(
+export function autoCompleteResourceEmailValidator(
   validOptions: ResourceListType[]
 ): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -46,7 +46,7 @@ function autoCompleteResourceEmailValidator(
   Returns invalidAutoCompleteRole as error if the inserted value is 
   not present in the list.
 */
-function autoCompleteRoleValidator(validOptions: string[]): ValidatorFn {
+export function autoCompleteRoleValidator(validOptions: string[]): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     if (validOptions.indexOf(control.value) !== -1) {
       return null; /* valid option selected */
@@ -63,7 +63,7 @@ function autoCompleteRoleValidator(validOptions: string[]): ValidatorFn {
 export class TfrCreationResourceComponent implements OnInit {
   constructor(
     private resourceService: ResourceService,
-    private tfrManagementService: TfrManagementService,
+    protected tfrManagementService: TfrManagementService,
     private matDialog: MatDialog
   ) {}
 
@@ -175,7 +175,7 @@ export class TfrCreationResourceComponent implements OnInit {
           'resource_email'
         ].valueChanges.pipe(
           startWith(''),
-          map((value) => this._filterResource(value || ''))
+          map((value) => this.filterResource(value || ''))
         );
 
         /*
@@ -241,7 +241,7 @@ export class TfrCreationResourceComponent implements OnInit {
     resource email input field and returns the list of resource emails
     that are related to the inserted string.
   */
-  private _filterResource(value: string): ResourceListType[] {
+  public filterResource(value: string): ResourceListType[] {
     const filterValue = value.toLowerCase();
     return this.resources
       .filter((resource) => !resource.selected)
@@ -361,7 +361,14 @@ export class TfrCreationResourceComponent implements OnInit {
     forward = false => Go to previous step
   */
   showDialog(forward: boolean) {
-    let dialogRef = this.matDialog.open(TfrCreationDialogComponent);
+    let dialogRef = this.matDialog.open(TfrCreationDialogComponent, {
+      data: {
+        title: 'Discard Changes',
+        content: 'Would you like to discard your changes and continue?',
+        confirmText: 'Yes',
+        cancelText: 'No',
+      },
+    });
     dialogRef.afterClosed().subscribe((result: string) => {
       if (result === 'true') {
         /* User wants to discard changes */
@@ -382,14 +389,20 @@ export class TfrCreationResourceComponent implements OnInit {
     Reset the allocated resources to previous state in database
   */
   resetResources() {
-    this.allocatedResources =
-      this.tfrManagementService.getProjectResourcesWithNames;
+    this.allocatedResources = [
+      ...this.tfrManagementService.getProjectResourcesWithNames,
+    ];
+
+    this.resources.map((resource) => (resource.selected = false));
+
     this.allocatedResources.forEach((allocatedResource) => {
       let indexOfResource = this.resources.findIndex(
         (val) => val.resource_id === allocatedResource.resource_id
       );
       this.resources[indexOfResource].selected = true;
     });
+
+    this.resetFormGroup();
     this.resourceListUpdated = false;
   }
 

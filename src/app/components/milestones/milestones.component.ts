@@ -1,9 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MilestoneManagerService } from 'src/app/services/milestone-manager/milestone-manager.service';
-import { Milestone } from 'src/app/shared/interfaces';
-import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+import { Milestone } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-milestones',

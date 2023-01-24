@@ -1,19 +1,13 @@
-import { Component, ViewChild, OnInit, Inject } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { MatStepper } from '@angular/material/stepper';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { StepperOrientation } from '@angular/material/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
+import { ActivatedRoute, Data, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { Project } from 'src/app/shared/interfaces';
 
 @Component({
@@ -29,7 +23,7 @@ import { Project } from 'src/app/shared/interfaces';
   ],
 })
 export class StepperComponent implements OnInit {
-  @ViewChild('stepper') private myStepper!: MatStepper;
+  @ViewChild('stepper') myStepper!: MatStepper;
 
   /*
     Will be removed once Laura's component is placed in the stepper
@@ -61,10 +55,26 @@ export class StepperComponent implements OnInit {
   */
   stepLabels: Observable<string[]>;
 
+  getProjectObserver = {
+    next: (response: Data) => {
+      let status: number = response['project']['status'];
+      let project: Project = response['project']['body'];
+      if (status === 200) {
+        this.tfrManagementService.project = project;
+        this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
+          project.id
+        );
+        this.tfrManagementService.setVendorName(project.vendor_id);
+      } else {
+        this.tfrManagementService.apiError = true;
+      }
+    },
+  };
+
   constructor(
-    @Inject(FormBuilder) private _formBuilder: FormBuilder,
+    private _formBuilder: FormBuilder,
+    @Inject(TfrManagementService)
     protected tfrManagementService: TfrManagementService,
-    @Inject(BreakpointObserver)
     protected breakpointObserver: BreakpointObserver,
     private snackBarService: SnackBarService,
     private router: Router,
@@ -72,8 +82,8 @@ export class StepperComponent implements OnInit {
   ) {
     /*
       Listener for the screen size.
-      Below 800px, the stepper is vertical.
-      Above 800px, the stepper is horizontal.
+      Below 800px, the stepper labels are just icons
+      Above 800px, the stepper labels are icons and text
     */
     this.stepLabels = breakpointObserver
       .observe('(min-width: 800px)')
@@ -105,20 +115,7 @@ export class StepperComponent implements OnInit {
         is loaded. This component has a resolver (refer to /services/project-resolver) that
         fetches the project to be displayed.
       */
-      this.route.data.subscribe((response) => {
-        let status: number = response['project']['status'];
-        let project: Project = response['project']['body'];
-
-        if (status === 200) {
-          this.tfrManagementService.project = project;
-          this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
-            project.id
-          );
-          this.tfrManagementService.setVendorName(project.vendor_id);
-        } else {
-          this.tfrManagementService.apiError = true;
-        }
-      });
+      this.route.data.subscribe(this.getProjectObserver);
     }
   }
 
@@ -158,7 +155,7 @@ export class StepperComponent implements OnInit {
     A small confirmation pop-up msg (aka a snack bar) is displayed at the bottom of the screen for 3000ms.
   */
   redirect(update: boolean) {
-    if (update) {
+    if (update || this.tfrManagementService.project?.status === 'DRAFT') {
       this.tfrManagementService
         .updateStatusToDatabase()
         .subscribe((response) => {
