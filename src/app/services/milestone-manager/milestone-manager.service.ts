@@ -12,10 +12,7 @@ export class MilestoneManagerService {
   milestones: Milestone[] = [];
   selected: Milestone | null = null;
   @Output() Update: EventEmitter<any> = new EventEmitter();
-  constructor(
-    private projectManagerService: TfrManagementService,
-    private httpClient: HttpClient
-  ) {}
+  constructor(private httpClient: HttpClient) {}
   get getMilestones() {
     return this.milestones;
   }
@@ -52,12 +49,7 @@ export class MilestoneManagerService {
     }
     return false;
   }
-  resetMilestones() {
-    this.milestones = this.projectManagerService.getMilestones
-      ? this.projectManagerService.getMilestones
-      : [];
-    this.broadcastUpdate();
-  }
+
   selectNewMilestone(projectId: number | undefined) {
     let idOfNew: number = this.generateIdOfNew();
     if (projectId != undefined) {
@@ -74,18 +66,6 @@ export class MilestoneManagerService {
       throw new Error('bad project Id passed');
     }
     this.broadcastUpdate();
-  }
-
-  get getMilestonesForPut() {
-    //milestones need to have negative temp id's stripped for sending to db.
-    let milestones = this.getMilestones;
-    return milestones.map((milestone) => {
-      if (milestone.id > 0) {
-        return milestone;
-      }
-      let { id, ...cleanedMilestone } = milestone;
-      return cleanedMilestone;
-    });
   }
 
   private add(milestoneToAdd: Milestone) {
