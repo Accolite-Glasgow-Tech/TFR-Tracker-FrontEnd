@@ -8,8 +8,10 @@ import {
 } from 'src/app/shared/utils';
 import { Milestone, Project } from '../../types/types';
 
-import { Data } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { Data, Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
+import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
 import { projectsURL, resourceProjectsURL } from 'src/app/shared/constants';
 import {
   AllocatedResourceTypeDTO,
@@ -40,7 +42,19 @@ export class TfrManagementService {
       this.snackBarService.showSnackBar('Updates saved to database', 2000);
     },
     error: (err: Error) => {
-      console.log('Error occured: ' + err.message);
+      let dialogRef = this.dialog.open(TfrCreationDialogComponent, {
+        data: {
+          title: 'Save unsuccessful',
+          content: 'Updating an older version of project.',
+          confirmText: 'OK',
+          cancelText: '',
+        },
+      });
+      dialogRef.afterClosed().subscribe((result: string) => {
+        if (result === 'true') {
+          this.router.navigate([`/tfr/${this.getProjectId}`]);
+        }
+      });
     },
   };
 
@@ -48,7 +62,9 @@ export class TfrManagementService {
     private http: HttpClient,
     private resourceService: ResourceService,
     private snackBarService: SnackBarService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   updateDatabase() {}
@@ -139,6 +155,7 @@ export class TfrManagementService {
       if (this.project) {
         this.project.id = Number(response);
         this.project.version++;
+        this.snackBarService.showSnackBar('Saved to database', 2000);
       }
     });
   }
@@ -207,12 +224,9 @@ export class TfrManagementService {
     pushes the changes to the resources for this project to the database
   */
   updateProjectToResourceMapping() {
-    this.http.post(resourceProjectsURL, this.project).subscribe((response) => {
-      if (this.project) {
-        this.project.version = Number(response);
-      }
-      this.snackBarService.showSnackBar('Updates saved to database', 2000);
-    });
+    this.http
+      .post(resourceProjectsURL, this.project)
+      .subscribe(this.updateProjectToDatabaseObserver);
   }
 
   getFromDatabase(project_id: Number) {

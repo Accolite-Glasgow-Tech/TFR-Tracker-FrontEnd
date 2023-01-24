@@ -65,7 +65,7 @@ export function autoCompleteRoleValidator(
 export class TfrCreationResourceComponent implements OnInit {
   constructor(
     private resourceService: ResourceService,
-    private tfrManagementService: TfrManagementService,
+    protected tfrManagementService: TfrManagementService,
     private matDialog: MatDialog
   ) {}
 
@@ -363,7 +363,14 @@ export class TfrCreationResourceComponent implements OnInit {
     forward = false => Go to previous step
   */
   showDialog(forward: boolean) {
-    let dialogRef = this.matDialog.open(TfrCreationDialogComponent);
+    let dialogRef = this.matDialog.open(TfrCreationDialogComponent, {
+      data: {
+        title: 'Discard Changes',
+        content: 'Would you like to discard your changes and continue?',
+        confirmText: 'Yes',
+        cancelText: 'No',
+      },
+    });
     dialogRef.afterClosed().subscribe((result: string) => {
       if (result === 'true') {
         /* User wants to discard changes */
@@ -384,14 +391,20 @@ export class TfrCreationResourceComponent implements OnInit {
     Reset the allocated resources to previous state in database
   */
   resetResources() {
-    this.allocatedResources =
-      this.tfrManagementService.getProjectResourcesWithNames;
+    this.allocatedResources = [
+      ...this.tfrManagementService.getProjectResourcesWithNames,
+    ];
+
+    this.resources.map((resource) => (resource.selected = false));
+
     this.allocatedResources.forEach((allocatedResource) => {
       let indexOfResource = this.resources.findIndex(
         (val) => val.resource_id === allocatedResource.resource_id
       );
       this.resources[indexOfResource].selected = true;
     });
+
+    this.resetFormGroup();
     this.resourceListUpdated = false;
   }
 

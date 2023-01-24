@@ -66,7 +66,7 @@
   </button>
   <button
     mat-raised-button
-    [disabled]="!isFormValid()"
+    [disabled]="!isFormValid() || this.tfrManager.project === undefined"
     class="navigation-btn"
     color="primary"
     (click)="next()"
