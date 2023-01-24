@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { WidgetApproachingProjectDeadlineService } from './widget-approaching-projects.service';
+import { WidgetApproachingProjectsService } from './widget-approaching-projects.service';
 
-describe('WidgetApproachingProjectDeadlineService', () => {
-  let service: WidgetApproachingProjectDeadlineService;
+describe('WidgetApproachingProjectService', () => {
+  let service: WidgetApproachingProjectsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(WidgetApproachingProjectDeadlineService);
+    service = TestBed.inject(WidgetApproachingProjectsService);
   });
 
   it('should be created', () => {
