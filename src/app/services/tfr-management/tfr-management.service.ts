@@ -8,8 +8,10 @@ import { projectsURL, resourceProjectsURL } from 'src/app/shared/constants';
 import {
   AllocatedResourceTypeDTO,
   Milestone,
+  MilestoneDTO,
   Project,
   ProjectBasicDetails,
+  ProjectMilestoneDTO,
   ProjectResourceDTO,
   VendorDTO,
 } from 'src/app/shared/interfaces';
@@ -192,11 +194,43 @@ export class TfrManagementService {
     return true;
   }
 
-  setMilestones(milestones: Milestone[]) {
+  set milestones(milestones: Milestone[]) {
     if (this.project !== undefined) {
       this.project.milestones = milestones;
-      this.updateDatabase();
     }
+  }
+
+  stripTempIds(milestones: Milestone[]): MilestoneDTO[] {
+    let strippedMilestones: MilestoneDTO[] = milestones.map((milestone) => {
+      if (milestone.id > 0) {
+        return milestone;
+      }
+      let { id, ...cleanedMilestone } = milestone;
+      return cleanedMilestone;
+    });
+    return strippedMilestones;
+  }
+
+  projectStripTempIds(milestonesToStrip: Milestone[]): ProjectMilestoneDTO {
+    if (this.project) {
+      let projectDTO: ProjectMilestoneDTO = this.project;
+      projectDTO.milestones = this.stripTempIds(milestonesToStrip);
+      return projectDTO;
+    }
+    throw new Error('No project defined');
+  }
+
+  putMilestones(milestones: Milestone[]): Observable<{}> {
+    if (this.project !== undefined) {
+      let projectFormatted: ProjectMilestoneDTO =
+        this.projectStripTempIds(milestones);
+      return this.http.put(projectsURL, projectFormatted);
+    }
+    let projectUndefined = new Observable<{}>((subscriber) => {
+      subscriber.error('project undefined');
+      subscriber.complete;
+    });
+    return projectUndefined;
   }
 
   setProjectResources(project_resources: ProjectResourceDTO[]) {
