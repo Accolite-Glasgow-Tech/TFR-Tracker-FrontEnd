@@ -9,7 +9,6 @@
         }}</mat-option>
       </mat-select>
     </mat-form-field>
-
     <mat-form-field class="single-search-filter" appearance="fill">
       <mat-label>Status</mat-label>
       <mat-select [(ngModel)]="selectedStatus">
@@ -19,7 +18,6 @@
         }}</mat-option>
       </mat-select>
     </mat-form-field>
-
     <mat-form-field class="single-search-filter" appearance="fill">
       <mat-label>Project Start After</mat-label>
       <input
@@ -34,7 +32,6 @@
       ></mat-datepicker-toggle>
       <mat-datepicker #picker1></mat-datepicker>
     </mat-form-field>
-
     <mat-form-field class="single-search-filter" appearance="fill">
       <mat-label>Project End Before</mat-label>
       <input matInput [matDatepicker]="picker2" [formControl]="endBeforeDate" />
@@ -45,7 +42,6 @@
       ></mat-datepicker-toggle>
       <mat-datepicker #picker2></mat-datepicker>
     </mat-form-field>
-
     <button
       class="search-button"
       mat-raised-button
@@ -56,7 +52,6 @@
     </button>
   </div>
 </div>
-
 <div class="tfrs-table-container mat-table">
   <table
     mat-table
@@ -69,22 +64,14 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
       <td mat-cell *matCellDef="let tfr">{{ tfr.name }}</td>
     </ng-container>
-
     <ng-container matColumnDef="start_date">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Start date</th>
-      <td mat-cell *matCellDef="let tfr">{{ tfr.start_date.split("T")[0] }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="start_date">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</th>
       <td mat-cell *matCellDef="let tfr">{{ displayDate(tfr.start_date) }}</td>
     </ng-container>
-
     <ng-container matColumnDef="end_date">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>End Date</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>End date</th>
       <td mat-cell *matCellDef="let tfr">{{ displayDate(tfr.end_date) }}</td>
     </ng-container>
-
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
       <td
@@ -101,11 +88,34 @@
         {{ tfr.status }}
       </td>
     </ng-container>
-
+    <ng-container matColumnDef="link">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let tfr">
+        <button mat-button [matMenuTriggerFor]="actionsMenu">
+          Choose an action
+          <mat-icon>menu</mat-icon>
+        </button>
+        <mat-menu #actionsMenu="matMenu">
+          <button mat-menu-item (click)="viewTFRDetails(tfr.id)">
+            View details
+          </button>
+          <button mat-menu-item [mat-menu-trigger-for]="reportsMenu">
+            Reports
+          </button>
+        </mat-menu>
+        <mat-menu #reportsMenu="matMenu">
+          <button [disabled]="true" mat-menu-item (click)="download(tfr.id)">
+            Download now
+          </button>
+          <button mat-menu-item (click)="scheduleReports(tfr.id)">
+            Schedule report
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-
   <mat-paginator
     [pageSizeOptions]="pageSize"
     showFirstLastButtons
