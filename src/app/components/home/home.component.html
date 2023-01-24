@@ -1,46 +1,54 @@
-<div>
+<div style="padding: 20px">
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
   />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <ngx-gridster
+    style="height: 400px; width: 85%; padding-left: 8%"
     [options]="gridsterOptions"
     [draggableOptions]="{ handlerClass: 'panel-heading' }"
     (optionsChange)="optionsChange($event)"
   >
     <ngx-gridster-item
+      style="height: fit-content; left: 0px; top: 0px; bottom: 0px"
       class="ngxgriditem"
       *ngFor="let widget of widgets; index as i"
     >
       <div
         style="
-          height: 600px;
-          width: 600px;
+          height: 400px;
+          width: inherit;
           position: relative;
-          margin: 10px;
+          margin: 8px;
           inline-size: auto;
         "
       >
         <mat-card class="widget">
-          <mat-card class="header">
-            <h1>
-              <a class="headerText"> {{ widget.componentName }}</a>
-              <button class="closeiconbutton" (click)="remove()">
-                <i class="fa fa-close"></i>
-              </button>
-              <button class="geariconbtn"><i class="fa fa-gear"></i></button>
-            </h1>
-          </mat-card>
+          <h1 class="header">
+            <a class="headerText"> {{ widget.componentName }}</a>
+            <button class="closeiconbutton" (click)="remove()">
+              <i
+                class="fa fa-close"
+                style="font-size: 24px; position: relative; margin: 7px"
+              ></i>
+            </button>
+            <button class="geariconbtn">
+              <i
+                class="fa fa-gear"
+                style="font-size: 24px; position: relative; margin: 7px"
+              ></i>
+            </button>
+          </h1>
           <div
             style="
               width: inherit;
-              height: inherit;
+              /* height: inherit; */
               position: relative;
               margin: 11%;
               size-adjust: inherit;
               inline-size: auto;
+              height: -webkit-fill-available;
             "
           >
             <ndc-dynamic
