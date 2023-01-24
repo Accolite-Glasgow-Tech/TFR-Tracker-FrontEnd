@@ -4,7 +4,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { ResourceService } from './resource.service';
-import { ResourceListType } from 'src/app/types/types';
+import { ResourceListType } from 'src/app/shared/interfaces';
 
 describe('ResourceService', () => {
   let service: ResourceService;

@@ -4,6 +4,7 @@ import { MilestoneManagerService } from 'src/app/services/milestone-manager/mile
 import { Milestone } from 'src/app/shared/interfaces';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 
 @Component({
   selector: 'app-milestones',
@@ -15,7 +16,7 @@ export class MilestonesComponent implements OnInit {
   constructor(
     private milestoneManagerService: MilestoneManagerService,
     private projectManagerService: TfrManagementService,
-    private snackBar: MatSnackBar
+    private snackBarService: SnackBarService
   ) {
     this.tfrid = this.projectManagerService.getProjectId ?? NaN;
   }
@@ -70,11 +71,13 @@ export class MilestonesComponent implements OnInit {
       this.milestoneManagerService.submittable() && this.isPristine;
   }
   putObserver = {
-    next: (x: {}) => {
-      this.snackBar.open('Saved milestones to server!', '', {
-        duration: 3000,
-      });
+    next: (response: {}) => {
+      if (this.projectManagerService.project) {
+        this.projectManagerService.project.version = Number(response);
+      }
+      this.snackBarService.showSnackBar('Updates saved to database', 2000);
       this.isPristine = true;
+      this.milestoneManagerService.resetMilestones();
       this.update();
     },
     error: (err: Error) => console.error('Observer got an error: ' + err),
@@ -144,6 +147,9 @@ export class MilestonesComponent implements OnInit {
     this.milestoneManagerService.saveMilestone(this.getFormMilestone);
     this.isPristine = false;
   }
+  get milestonesNotDeleted() {
+    return this.milestones.filter((milestone) => !milestone.is_deleted);
+  }
   removeMilestone(milestone: Milestone) {
     this.milestoneManagerService.updateToRemove(milestone);
   }
@@ -151,13 +157,9 @@ export class MilestonesComponent implements OnInit {
     this.milestoneManagerService.setSelected(milestone);
   }
   submitMilestones() {
-    let projectId = this.projectManagerService.getProjectId;
-    this.milestoneManagerService
-      .putMilestones(projectId)
+    this.projectManagerService
+      .putMilestones(this.milestoneManagerService.getMilestones)
       .subscribe(this.putObserver);
-    this.projectManagerService.setMilestones(
-      this.milestoneManagerService.getMilestones
-    );
   }
   resetMilestones() {
     this.milestoneManagerService.setMilestones(
