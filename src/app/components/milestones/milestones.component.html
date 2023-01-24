@@ -2,7 +2,7 @@ Add Milestones to the TFR.
 <div id="chips">
   <mat-chip-list #chipList class="chiplist" *ngIf="!selectedMilestone">
     <app-chip
-      *ngFor="let milestone of milestones"
+      *ngFor="let milestone of milestonesNotDeleted"
       [value]="milestone"
       (removeEmitter)="removeMilestone($event)"
       (selectEmitter)="selectMilestone($event)"
@@ -78,7 +78,7 @@ Add Milestones to the TFR.
     (click)="discardSelected()"
     *ngIf="selectedMilestone"
   >
-    discard
+    discard changes
   </button>
   <button
     *ngIf="selectedMilestone"
@@ -87,7 +87,7 @@ Add Milestones to the TFR.
     (click)="saveSelected()"
     [disabled]="milestoneForm.invalid"
   >
-    save milestone
+    accept
   </button>
   <button
     *ngIf="!selectedMilestone"
@@ -96,7 +96,7 @@ Add Milestones to the TFR.
     [disabled]="!!selectedMilestone"
     (click)="submitMilestones()"
   >
-    save milestones to server
+    save milestones
   </button>
   <button
     *ngIf="!selectedMilestone"

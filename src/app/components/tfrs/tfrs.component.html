@@ -1,6 +1,6 @@
 <div>
-    <div class="search-fields-row">
-      <mat-form-field appearance="fill">
+    <div class="search-filters-container">
+      <mat-form-field class="single-search-filter" appearance="fill">
         <mat-label>Vendor</mat-label>
         <mat-select [(ngModel)]="selectedVendorName">
           <mat-option>None</mat-option>
@@ -8,7 +8,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
+      <mat-form-field class="single-search-filter" appearance="fill">
         <mat-label>Status</mat-label>
         <mat-select [(ngModel)]="selectedStatus">
           <mat-option>None</mat-option>
@@ -16,7 +16,7 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
+      <mat-form-field class="single-search-filter" appearance="fill">
         <mat-label>Project Start After</mat-label>
         <input matInput [matDatepicker]="picker1" [formControl]="startAfterDate" >
         <!-- <mat-hint>{{dateFormat}}</mat-hint> -->
@@ -24,7 +24,7 @@
         <mat-datepicker #picker1></mat-datepicker>
       </mat-form-field>
       
-      <mat-form-field appearance="fill">
+      <mat-form-field class="single-search-filter" appearance="fill">
         <mat-label>Project End Before</mat-label>
         <input matInput [matDatepicker]="picker2" [formControl]="endBeforeDate">
         <!-- <mat-hint>{{dateFormat}}</mat-hint> -->
@@ -32,7 +32,7 @@
         <mat-datepicker #picker2></mat-datepicker>
       </mat-form-field>
 
-      <button  mat-raised-button color="primary" (click)="getProjects()" class="search-button">Search</button> 
+      <button class="search-button" mat-raised-button color="primary" (click)="getProjects()">Search</button> 
       
     </div>
 </div>
@@ -61,6 +61,7 @@
     <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
     <td mat-cell *matCellDef="let tfr" [ngClass]="{'delivered':tfr.status=='DELIVERED',
                                                       'inprogress':tfr.status=='INPROGRESS',
+                                                      'agreed':tfr.status=='AGREED',
                                                       'archived':tfr.status=='ARCHIVED',
                                                       'draft':tfr.status=='DRAFT'}"> {{tfr.status}} </td>
   </ng-container>

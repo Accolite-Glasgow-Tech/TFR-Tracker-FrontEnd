@@ -75,17 +75,8 @@ export class MilestoneManagerService {
     }
     this.broadcastUpdate();
   }
-  putMilestones(projectId: number | undefined): Observable<{}> {
-    return this.httpClient.put(
-      getMilestonesURL(projectId!),
-      this.getMilestonesForPut,
-      {
-        responseType: 'json',
-      }
-    );
-  }
 
-  private get getMilestonesForPut() {
+  get getMilestonesForPut() {
     //milestones need to have negative temp id's stripped for sending to db.
     let milestones = this.getMilestones;
     return milestones.map((milestone) => {

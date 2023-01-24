@@ -46,6 +46,7 @@ import { ChipComponent } from './components/chip/chip.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
+import { LogOutComponent } from './components/log-out/log-out.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { WidgetApproachingProjectsComponent } from './components/widget-approach
     WidgetApproachingProjectsComponent,
     ChipComponent,
     PageNotFoundComponent,
+    LogOutComponent,
   ],
 
   providers: [
