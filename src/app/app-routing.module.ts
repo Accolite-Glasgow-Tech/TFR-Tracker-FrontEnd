@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ProjectResolverService } from 'src/app/services/project-resolver/project-resolver.service';
+import { TFRRoute } from 'src/app/shared/interfaces';
+import { LoginGuardService } from 'src/app/services/login-guard/login-guard.service';
 
 import { FrequencyPickerComponent } from 'src/app/components/frequency-picker/frequency-picker.component';
 import { HomeComponent } from 'src/app/components/home/home.component';
@@ -8,15 +11,20 @@ import { StepperComponent } from 'src/app/components/stepper/stepper.component';
 import { TfrComponent } from 'src/app/components/tfr/tfr.component';
 import { TfrsComponent } from 'src/app/components/tfrs/tfrs.component';
 import { UserComponent } from 'src/app/components/user/user.component';
-import { ProjectResolverService } from 'src/app/services/project-resolver/project-resolver.service';
-import { TFRRoute } from 'src/app/shared/interfaces';
-import { LoginGuardService } from 'src/app/services/login-guard/login-guard.service';
+import { LogOutComponent } from './components/log-out/log-out.component';
 
 export const RoutesList: TFRRoute[] = [
   {
     navigationLabel: 'Home',
     path: 'home',
     component: HomeComponent,
+    isGuarded: true,
+    canActivate: [LoginGuardService],
+  },
+  {
+    navigationLabel: 'Log out',
+    path: 'logout',
+    component: LogOutComponent,
     isGuarded: true,
     canActivate: [LoginGuardService],
   },
@@ -90,7 +98,7 @@ export const RoutesList: TFRRoute[] = [
 
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: 'login',
   },
 ];
 
