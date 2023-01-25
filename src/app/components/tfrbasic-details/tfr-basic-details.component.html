@@ -60,7 +60,20 @@
   >
     Save
   </button>
-
+  <button
+    mat-raised-button
+    [disabled]="
+      !(
+        this.tfrManager.getBasicDetails &&
+        this.vendorAttributes &&
+          (this.vendorAttributes.dirty || this.tfrDetails.dirty)
+      )
+    "
+    class="navigation-btn"
+    (click)="resetInputFields()"
+  >
+    Reset
+  </button>
   <button
     mat-raised-button
     [disabled]="!isFormValid() || this.tfrManager.project === undefined"
