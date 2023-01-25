@@ -71,10 +71,12 @@ Add Milestones to the TFR.
     </mat-form-field>
   </div>
 </mat-form>
-<div id="buttons">
+<div id="buttons" class="floating-btn-div">
   <button
     mat-raised-button
     type="button"
+    class="navigation-btn"
+    color="secondary"
     (click)="discardSelected()"
     *ngIf="selectedMilestone"
   >
@@ -85,6 +87,8 @@ Add Milestones to the TFR.
     mat-raised-button
     type="button"
     (click)="saveSelected()"
+    class="navigation-btn"
+    color="primary"
     [disabled]="milestoneForm.invalid"
   >
     accept
@@ -93,12 +97,16 @@ Add Milestones to the TFR.
     *ngIf="!selectedMilestone"
     type="button"
     mat-raised-button
+    class="navigation-btn"
+    color="primary"
     [disabled]="!!selectedMilestone"
     (click)="submitMilestones()"
   >
     save milestones
   </button>
   <button
+    class="navigation-btn"
+    color="secondary"
     *ngIf="!selectedMilestone"
     type="button"
     mat-raised-button
@@ -108,6 +116,8 @@ Add Milestones to the TFR.
     reset milestones
   </button>
   <button
+    class="navigation-btn"
+    color="primary"
     *ngIf="!selectedMilestone"
     type="button"
     mat-raised-button
@@ -117,6 +127,8 @@ Add Milestones to the TFR.
     back
   </button>
   <button
+    class="navigation-btn"
+    color="primary"
     *ngIf="!selectedMilestone"
     type="button"
     mat-raised-button

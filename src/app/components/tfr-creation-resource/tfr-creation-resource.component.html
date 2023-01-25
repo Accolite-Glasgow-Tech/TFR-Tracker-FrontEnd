@@ -16,7 +16,7 @@
             type="text"
             required
             matInput
-            formControlName="resource_email"
+            formControlName="resource_name"
             [matAutocomplete]="auto1"
             id="resource"
             #resource
@@ -25,28 +25,28 @@
           <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
             <mat-option
               *ngFor="let filteredResource of filteredResourceOption | async"
-              [value]="filteredResource.resource_email"
+              [value]="filteredResource.resource_name"
               class="small-font"
             >
-              {{ filteredResource.resource_email }}
+              {{ filteredResource.resource_name }}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
 
         <div
           *ngIf="
-            resourceFormGroup.controls['resource_email'].invalid &&
-            resourceFormGroup.controls['resource_email'].touched
+            resourceFormGroup.controls['resource_name'].invalid &&
+            resourceFormGroup.controls['resource_name'].touched
           "
           class="error-div-container"
         >
           <ng-container
-            *ngFor="let validation of validation_msgs.resource_email"
+            *ngFor="let validation of validation_msgs.resource_name"
           >
             <div
               *ngIf="
                 resourceFormGroup
-                  .get('resource_email')
+                  .get('resource_name')
                   ?.hasError(validation.type)
               "
               class="error-div"
@@ -151,6 +151,14 @@
   </button>
   <button
     mat-raised-button
+    [disabled]="!resourceListUpdated"
+    class="navigation-btn"
+    (click)="resetResources()"
+  >
+    Reset
+  </button>
+  <button
+    mat-raised-button
     class="navigation-btn"
     color="primary"
     [disabled]="
@@ -163,6 +171,9 @@
   </button>
 </div>
 
+<br />
+<br />
+<br />
 <br />
 <br />
 <br />

@@ -106,10 +106,7 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   }
 
   download(projectId: number): void {
-    this.http.get<Blob>(getPDFReportURL(projectId)).subscribe((data) => {
-      // const blob = new Blob([data], { type: 'application/pdf' });
-      // saveAs(blob, 'report.pdf');
-    });
+    this.http.get<Blob>(getPDFReportURL(projectId)).subscribe((data) => {});
   }
 
   scheduleReports(tfrId: number): void {

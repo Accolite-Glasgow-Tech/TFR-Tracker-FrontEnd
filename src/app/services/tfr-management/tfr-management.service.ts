@@ -269,7 +269,6 @@ export class TfrManagementService {
         observe: 'response',
       })
       .pipe(catchError((e: Error) => of(`Error occured: ${e.message}`)));
-    // return this.http.get<Project>(this.projectURL);
   }
 
   /*

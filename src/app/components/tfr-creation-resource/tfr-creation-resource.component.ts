@@ -20,21 +20,21 @@ import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-
 
 /*
   Custom validator for the auto complete functionality of the 
-  resource email input field. It validates that the inserted value
+  resource name input field. It validates that the inserted value
   in the input field is present in the list of available resource 
-  emails.
+  names.
 
-  Returns invalidAutoCompleteResourceEmail as error if the inserted value is 
+  Returns invalidAutoCompleteResourceName as error if the inserted value is 
   not present in the list.
 */
-export function autoCompleteResourceEmailValidator(
+export function autoCompleteResourceNameValidator(
   validOptions: ResourceListType[]
 ): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
-    if (validOptions.find((e) => e.resource_email === control.value)) {
+    if (validOptions.find((e) => e.resource_name === control.value)) {
       return null; /* valid option selected */
     }
-    return { invalidAutoCompleteResourceEmail: { value: control.value } };
+    return { invalidAutoCompleteResourceName: { value: control.value } };
   };
 }
 
@@ -83,11 +83,11 @@ export class TfrCreationResourceComponent implements OnInit {
     resource form group.
   */
   public validation_msgs = {
-    resource_email: [
+    resource_name: [
       {
-        type: 'invalidAutoCompleteResourceEmail',
+        type: 'invalidAutoCompleteResourceName',
         message:
-          'Resource email not recognized. Click one of the autocomplete options.',
+          'Resource name not recognized. Click one of the autocomplete options.',
       },
       { type: 'required', message: 'Resource is required.' },
     ],
@@ -102,7 +102,7 @@ export class TfrCreationResourceComponent implements OnInit {
 
   ngOnInit(): void {
     this.resourceFormGroup = new FormGroup({
-      resource_email: new FormControl('', {
+      resource_name: new FormControl('', {
         validators: [Validators.required],
       }),
       role: new FormControl('', {
@@ -148,7 +148,7 @@ export class TfrCreationResourceComponent implements OnInit {
       API call to the server to obtain a list of all the available resources 
       present in the database. 
       
-      The resource object is a DTO that holds the resources' names, email, id, 
+      The resource object is a DTO that holds the resources' names, name, id, 
       and a boolean indicating whether the resource has been selected yet for 
       this project. Upon receiving the payload, this boolean is FALSE for all 
       resources
@@ -160,19 +160,19 @@ export class TfrCreationResourceComponent implements OnInit {
 
         /*
           Adding the custom validator for the auto complete functionality 
-          for the resource email input field.
+          for the resource name input field.
         */
-        this.resourceFormGroup.controls['resource_email'].addValidators([
-          autoCompleteResourceEmailValidator(this.resources),
+        this.resourceFormGroup.controls['resource_name'].addValidators([
+          autoCompleteResourceNameValidator(this.resources),
         ]);
 
         /*
-          Event listener when there is a letter inserted in the resource email
+          Event listener when there is a letter inserted in the resource name
           input field. The list of options showed to the user gets updated based
           on the letters he is inserting.
         */
         this.filteredResourceOption = this.resourceFormGroup.controls[
-          'resource_email'
+          'resource_name'
         ].valueChanges.pipe(
           startWith(''),
           map((value) => this.filterResource(value || ''))
@@ -202,14 +202,14 @@ export class TfrCreationResourceComponent implements OnInit {
             to it, the current allocated resource list (initially empty) 
             should be populated with these values and the resources' selected 
             value in resources object should be set to TRUE so that 
-            the auto complete resource email input field will
+            the auto complete resource name input field will
             not display these already allocated resources.
           */
           this.updateResourceList();
 
           /*
             Updating the current service object with the allocated resources
-            object which contains project_id, resources' id, name, email, role.
+            object which contains project_id, resources' id, name, name, role.
           */
           this.tfrManagementService.setProjectResourcesWithNames(
             this.allocatedResources
@@ -238,7 +238,7 @@ export class TfrCreationResourceComponent implements OnInit {
 
   /*
     This function takes in the value that the user has inserted in the 
-    resource email input field and returns the list of resource emails
+    resource name input field and returns the list of resource names
     that are related to the inserted string.
   */
   public filterResource(value: string): ResourceListType[] {
@@ -246,7 +246,7 @@ export class TfrCreationResourceComponent implements OnInit {
     return this.resources
       .filter((resource) => !resource.selected)
       .filter((resource) =>
-        resource.resource_email.toLowerCase().includes(filterValue)
+        resource.resource_name.toLowerCase().includes(filterValue)
       );
   }
 
@@ -254,21 +254,21 @@ export class TfrCreationResourceComponent implements OnInit {
     Adds the mapping between a resource and the current project with a 
     corresponding role.
   */
-  addResource(resource_email: string, role: string) {
+  addResource(resource_name: string, role: string) {
     /*
       An update API call will be required to update the project-resource database.
     */
     this.resourceListUpdated = true;
 
     /*
-      Find the index of the resource_email inserted in the input field in the
+      Find the index of the resource_name inserted in the input field in the
       list of ALL the resources of the database.
       
       Use case: To obtain all the required details about this resource. (aka name,
-      email, selected).
+      name, selected).
     */
     const index = this.resources.findIndex(
-      (resource) => resource.resource_email === resource_email
+      (resource) => resource.resource_name === resource_name
     );
     this.resources[index].selected = true;
 
@@ -279,8 +279,8 @@ export class TfrCreationResourceComponent implements OnInit {
     const allocatedResource: AllocatedResourceTypeDTO = {
       project_id: this.tfrManagementService.getProjectId as number,
       resource_id: this.resources[index].resource_id,
-      resource_name: this.resources[index].resource_name,
-      resource_email: resource_email,
+      resource_name: resource_name,
+      resource_email: this.resources[index].resource_email,
       role: role,
     };
 
@@ -311,8 +311,8 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   resetFormGroup() {
-    this.resourceFormGroup.setValue({ resource_email: '', role: '' });
-    this.resourceFormGroup.controls['resource_email'].setErrors(null);
+    this.resourceFormGroup.setValue({ resource_name: '', role: '' });
+    this.resourceFormGroup.controls['resource_name'].setErrors(null);
     this.resourceFormGroup.controls['role'].setErrors(null);
   }
 
@@ -320,7 +320,7 @@ export class TfrCreationResourceComponent implements OnInit {
     Populates the current allocated resource list (initially empty) 
     with resources' values for this existing project and the
     resources' selected value in resources object is set to TRUE so that 
-    the auto complete resource email input field will not display 
+    the auto complete resource name input field will not display 
     these already allocated resources.
   */
   updateResourceList() {

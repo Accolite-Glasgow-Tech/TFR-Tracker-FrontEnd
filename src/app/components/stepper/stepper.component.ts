@@ -57,16 +57,18 @@ export class StepperComponent implements OnInit {
 
   getProjectObserver = {
     next: (response: Data) => {
-      let status: number = response['project']['status'];
-      let project: Project = response['project']['body'];
-      if (status === 200) {
-        this.tfrManagementService.project = project;
-        this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
-          project.id
-        );
-        this.tfrManagementService.setVendorName(project.vendor_id);
-      } else {
-        this.tfrManagementService.apiError = true;
+      if (Object.keys(response).length !== 0) {
+        let status: number = response['project']['status'];
+        let project: Project = response['project']['body'];
+        if (status === 200) {
+          this.tfrManagementService.project = project;
+          this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
+            project.id
+          );
+          this.tfrManagementService.setVendorName(project.vendor_id);
+        } else {
+          this.tfrManagementService.apiError = true;
+        }
       }
     },
   };
@@ -171,7 +173,6 @@ export class StepperComponent implements OnInit {
         });
     } else {
       this.router.navigate(['/tfrs']);
-      this.snackBarService.showSnackBar('TFR updated.', 3000);
     }
   }
 
