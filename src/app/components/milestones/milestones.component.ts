@@ -25,7 +25,6 @@ export class MilestonesComponent implements OnInit {
   tfrid: number;
   milestones: any[] = this.milestoneManagerService.getMilestones;
   selectedMilestone: Milestone | null = null;
-  submittable: boolean = false;
   milestoneForm = new FormGroup({
     description: new FormControl('', {
       nonNullable: true,
@@ -57,17 +56,16 @@ export class MilestonesComponent implements OnInit {
       this.milestones = this.milestoneManagerService.getMilestones;
       this.selectedMilestone = this.milestoneManagerService.getSelected;
       this.milestoneForm.setValue(this.ConvertMilestoneToFormData());
-      this.submittable =
-        this.milestoneManagerService.submittable() && this.isPristine;
     },
   };
 
+  get submittable() {
+    return this.milestoneManagerService.submittable && this.isPristine;
+  }
   update() {
     this.milestones = this.milestoneManagerService.getMilestones;
     this.selectedMilestone = this.milestoneManagerService.getSelected;
     this.milestoneForm.setValue(this.ConvertMilestoneToFormData());
-    this.submittable =
-      this.milestoneManagerService.submittable() && this.isPristine;
   }
   putObserver = {
     next: (response: {}) => {
@@ -168,6 +166,8 @@ export class MilestonesComponent implements OnInit {
   }
   removeMilestone(milestone: Milestone) {
     this.milestoneManagerService.updateToRemove(milestone);
+    this.isPristine = false;
+    console.log(this.isPristine);
   }
   selectMilestone(milestone: Milestone) {
     this.milestoneManagerService.setSelected(milestone);
