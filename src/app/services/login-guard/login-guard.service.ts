@@ -27,15 +27,12 @@ export class LoginGuardService implements CanActivate {
   }
 
   checkIfComponentCanBeActivated(component: Type<any> | null): boolean {
-    if (environment.routeGuardingDisabled == true) {
-      return true;
-    }
     let routeData: TFRRoute | undefined = this.getRouteDataFor(component);
-    if (routeData == undefined) {
-      return true;
-    }
-    let shouldPass: boolean = this.XOR(!routeData.isGuarded, this.isLoggedIn);
-    return shouldPass;
+    return (
+      routeData?.isGuarded == undefined ||
+      this.XOR(!routeData.isGuarded, this.isLoggedIn) ||
+      environment.routeGuardingDisabled
+    );
   }
 
   private getRouteDataFor(component: Type<any> | null) {
