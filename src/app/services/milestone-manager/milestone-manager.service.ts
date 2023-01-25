@@ -43,11 +43,8 @@ export class MilestoneManagerService {
     this.broadcastUpdate();
   }
 
-  submittable() {
-    if (this.getMilestones.length >= 1) {
-      return true;
-    }
-    return false;
+  get submittable(): boolean {
+    return this.getMilestones.length >= 1;
   }
 
   selectNewMilestone(projectId: number | undefined) {
