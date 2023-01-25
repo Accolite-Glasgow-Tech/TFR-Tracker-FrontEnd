@@ -143,7 +143,7 @@ export class TfrBasicDetailsComponent implements OnInit {
       .get('vendor_id')
       ?.setValue(previousStateBasicDetails.vendor_id);
 
-    this.projectToEdit.vendor_id = previousStateBasicDetails.vendor_id;
+    !this.projectToEdit ?? (this.projectToEdit.vendor_id = previousStateBasicDetails.vendor_id);
 
     /*
       Trigger event to vendor component through the api.service
