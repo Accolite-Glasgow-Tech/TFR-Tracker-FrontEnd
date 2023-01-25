@@ -12,7 +12,7 @@ import {
 } from 'src/app/shared/interfaces';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 import {
-  autoCompleteResourceEmailValidator,
+  autoCompleteResourceNameValidator,
   autoCompleteRoleValidator,
   TfrCreationResourceComponent,
 } from './tfr-creation-resource.component';
@@ -161,20 +161,20 @@ describe('TfrCreationResourceComponent', () => {
   });
 
   it('resource auto complete validator success', () => {
-    let control = { value: 'johnmakan@accolitedigital.com' };
-    let result = autoCompleteResourceEmailValidator(resources)(
+    let control = { value: 'John Makan' };
+    let result = autoCompleteResourceNameValidator(resources)(
       control as AbstractControl
     );
     expect(result).toBeNull();
   });
 
   it('resource auto complete validator error', () => {
-    let control = { value: 'scottmctominay@accolitedigital.com' };
-    let result = autoCompleteResourceEmailValidator(resources)(
+    let control = { value: 'Scott Mctominay' };
+    let result = autoCompleteResourceNameValidator(resources)(
       control as AbstractControl
     );
     expect(result).toEqual({
-      invalidAutoCompleteResourceEmail: { value: control.value },
+      invalidAutoCompleteResourceName: { value: control.value },
     });
   });
 
