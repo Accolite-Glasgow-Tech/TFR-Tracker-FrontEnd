@@ -25,7 +25,6 @@ export class VendorsComponent implements OnInit {
 
   vendors!: VendorDTO[];
   attributes!: VendorAttributeDTO[];
-  attributeGroup!: FormGroup;
   vendorGroup!: FormGroup;
 
   @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
@@ -52,14 +51,15 @@ export class VendorsComponent implements OnInit {
       }
     });
 
-    this.attributeGroup = new FormGroup({
+    this.vendorGroup = new FormGroup({
+      name: new FormControl(''),
       attributeValues: new FormArray([]),
     });
 
     this.getAttributes()
       .valueChanges.pipe(debounce(() => interval(500)))
       .subscribe(() => {
-        this.onAttributesUpdated.emit(this.attributeGroup);
+        this.onAttributesUpdated.emit(this.vendorGroup);
       });
   }
 
@@ -123,6 +123,6 @@ export class VendorsComponent implements OnInit {
   }
 
   getAttributes(): FormArray {
-    return this.attributeGroup.controls['attributeValues'] as FormArray;
+    return this.vendorGroup.controls['attributeValues'] as FormArray;
   }
 }
