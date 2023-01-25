@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
 import { RoutesList } from 'src/app/app-routing.module';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { TFRRoute } from 'src/app/shared/interfaces';
 @Injectable({
   providedIn: 'root',
 })
@@ -26,18 +27,21 @@ export class LoginGuardService implements CanActivate {
   }
 
   checkIfComponentCanBeActivated(component: Type<any> | null): boolean {
-    let routeData = RoutesList.find((value) => {
-      return value.component == component;
-    });
-
-    if (routeData?.isGuarded == undefined) {
-      return true;
-    }
-    let shouldPass: boolean = this.XOR(!routeData.isGuarded, this.isLoggedIn);
     if (environment.routeGuardingDisabled == true) {
       return true;
     }
+    let routeData: TFRRoute | undefined = this.getRouteDataFor(component);
+    if (routeData == undefined) {
+      return true;
+    }
+    let shouldPass: boolean = this.XOR(!routeData.isGuarded, this.isLoggedIn);
     return shouldPass;
+  }
+
+  private getRouteDataFor(component: Type<any> | null) {
+    return RoutesList.find((value) => {
+      return value.component == component;
+    });
   }
 
   get isLoggedIn(): boolean {
