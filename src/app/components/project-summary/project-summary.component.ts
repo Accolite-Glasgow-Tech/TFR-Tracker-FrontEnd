@@ -19,9 +19,11 @@ export class ProjectSummaryComponent {
     console.log(
       this.milestonesWithoutDeleted(this.currentProject?.milestones!)
     );
-    return this.milestonesWithoutDeleted(this.currentProject?.milestones!);
+    return this.milestonesWithoutDeleted(this.currentProject?.milestones);
   }
-  milestonesWithoutDeleted(milestones: Milestone[]) {
-    return milestones.filter((milestone: Milestone) => !milestone.is_deleted);
+  milestonesWithoutDeleted(milestones: Milestone[] | undefined): Milestone[] {
+    return !milestones
+      ? []
+      : milestones.filter((milestone: Milestone) => !milestone.is_deleted);
   }
 }
