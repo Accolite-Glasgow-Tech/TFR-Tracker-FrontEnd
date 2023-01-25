@@ -16,12 +16,15 @@ export class ProjectSummaryComponent {
   @Input() vendorName!: string;
 
   get currentProjectMilestones(): Milestone[] {
-    console.log(
-      this.milestonesWithoutDeleted(this.currentProject?.milestones!)
-    );
     return this.milestonesWithoutDeleted(this.currentProject?.milestones!);
   }
-  milestonesWithoutDeleted(milestones: Milestone[]) {
-    return milestones.filter((milestone: Milestone) => !milestone.is_deleted);
+  milestonesWithoutDeleted(milestones: Milestone[]): Milestone[] {
+    if(milestones !== undefined) {
+      return milestones.filter((milestone: Milestone) => !milestone.is_deleted);
+    }
+    else {
+      let emptyList: Milestone[] = [];
+      return emptyList;
+    }
   }
 }
