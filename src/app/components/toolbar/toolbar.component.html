@@ -15,6 +15,7 @@
       style="color: white"
       *ngIf="route.navigationLabel && checkRouting(route.component)"
       routerLink="{{ route.path }}"
+      routerLinkActive="active-route"
       >{{ route.navigationLabel }}</a
     >
   </div>
