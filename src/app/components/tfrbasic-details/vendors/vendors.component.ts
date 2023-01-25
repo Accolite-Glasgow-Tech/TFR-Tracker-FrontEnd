@@ -8,7 +8,6 @@ import {
   VendorAttributeDTO,
   VendorDTO,
 } from 'src/app/shared/interfaces';
-import { log } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-vendors',
@@ -84,13 +83,15 @@ export class VendorsComponent implements OnInit {
     // parse values from existingDetails.vendor_specific
     // use to set values of form array
 
-    this.attributes.forEach((attribute, index) => {
-      this.getAttributes()
-        .at(index)
-        .setValue(
-          this.existingDetails.vendor_specific[attribute.attribute_name]
-        );
-    });
+    if (this.attributes) {
+      this.attributes.forEach((attribute, index) => {
+        this.getAttributes()
+          .at(index)
+          .setValue(
+            this.existingDetails.vendor_specific[attribute.attribute_name]
+          );
+      });
+    }
   }
 
   @Output() onSelected = new EventEmitter<VendorDTO>();
