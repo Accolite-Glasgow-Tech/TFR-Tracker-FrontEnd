@@ -16,7 +16,7 @@
 .button-row{
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .heading{
@@ -27,4 +27,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.button{
+  min-width: 120px;
 }
