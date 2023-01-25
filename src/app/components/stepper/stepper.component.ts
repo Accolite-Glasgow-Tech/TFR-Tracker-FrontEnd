@@ -171,7 +171,6 @@ export class StepperComponent implements OnInit {
         });
     } else {
       this.router.navigate(['/tfrs']);
-      this.snackBarService.showSnackBar('TFR updated.', 3000);
     }
   }
 
