@@ -62,14 +62,6 @@
   </button>
   <button
     mat-raised-button
-    [disabled]="!(this.vendorAttributes.dirty || this.tfrDetails.dirty)"
-    class="navigation-btn"
-    (click)="resetInputFields()"
-  >
-    Reset
-  </button>
-  <button
-    mat-raised-button
     [disabled]="!isFormValid() || this.tfrManager.project === undefined"
     class="navigation-btn"
     color="primary"
