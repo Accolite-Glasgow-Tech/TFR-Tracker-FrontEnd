@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { userService } from 'src/app/service/user/user.service';
+import { userService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-user',
@@ -14,12 +14,15 @@ export class UserComponent implements OnInit {
   registering: any = true;
   logging: any = false;
 
-  constructor(private userService: userService,private router:Router, private route: ActivatedRoute) {}
+  constructor(
+    private userService: userService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-
     // uses route path to determine whether registering or logging in
-    this.route.url.subscribe(url => {
+    this.route.url.subscribe((url) => {
       let path = url[0].path;
       this.registering = path === 'register';
     });
@@ -107,7 +110,7 @@ export class UserComponent implements OnInit {
     this.router.navigateByUrl('/register');
   }
 
-  jumpToHome():void{
+  jumpToHome(): void {
     this.router.navigateByUrl('/home');
   }
 }

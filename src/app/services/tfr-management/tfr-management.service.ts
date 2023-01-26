@@ -20,7 +20,7 @@ import {
   getProjectURL,
   getUpdateProjectStatusURL,
 } from 'src/app/shared/utils';
-import { ApiService } from '../api.service';
+import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
 
