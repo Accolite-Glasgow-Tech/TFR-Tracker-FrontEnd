@@ -112,4 +112,8 @@ export class HomeComponent {
   optionsChange(options: IGridsterOptions) {
     console.log('options change:', options.lanes);
   }
+
+  checkForWidget(widget: string): boolean {
+    return this.widgets.some(i => i.componentName === widget);
+  }
 }

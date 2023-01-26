@@ -9,9 +9,9 @@
       color="primary"
       type="button"
       class="btn btn-success top-btn-left"
-      (click)="onClick_AddClientLocationWidget()"
+      (click)="onClick_AddClientLocationWidget()" *ngIf="!checkForWidget('Client Location')"
     >
-      <i class="fa fa-plus-circle" aria-hidden="true"></i> Client_Location
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Client Location
       Widget
     </button>
 
@@ -21,8 +21,9 @@
       type="button"
       class="btn btn-success top-btn-left"
       (click)="onClick_AddOurClientsWidget()"
+      *ngIf="!checkForWidget('Our Clients')"
     >
-      <i class="fa fa-plus-circle" aria-hidden="true"></i> Our_Clients Widget
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Our Clients Widget
     </button>
 
     <button
@@ -31,8 +32,9 @@
       type="button"
       class="btn btn-success top-btn-left"
       (click)="onClick_AddTFRStatusWidget()"
+      *ngIf="!checkForWidget('TFR Status')"
     >
-      <i class="fa fa-plus-circle" aria-hidden="true"></i> TFR_Status Widget
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> TFR Status Widget
     </button>
 
     <button
@@ -41,8 +43,9 @@
       type="button"
       class="btn btn-success top-btn-left"
       (click)="onClick_AddUpcomingProjectsWidget()"
+      *ngIf="!checkForWidget('Upcoming Projects')"
     >
-      <i class="fa fa-plus-circle" aria-hidden="true"></i> Upcoming_Projects
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Upcoming Projects
       Widget
     </button>
   </div>
