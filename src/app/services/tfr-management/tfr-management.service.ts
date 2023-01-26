@@ -221,16 +221,12 @@ export class TfrManagementService {
   }
 
   putMilestones(milestones: Milestone[]): Observable<{}> {
-    if (this.project !== undefined) {
-      let projectFormatted: ProjectMilestoneDTO =
-        this.projectStripTempIds(milestones);
-      return this.http.put(projectsURL, projectFormatted);
-    }
-    let projectUndefined = new Observable<{}>((subscriber) => {
-      subscriber.error('project undefined');
-      subscriber.complete;
-    });
-    return projectUndefined;
+    return this.project == undefined
+      ? new Observable<{}>((subscriber) => {
+          subscriber.error('project undefined');
+          subscriber.complete;
+        })
+      : this.http.put(projectsURL, this.projectStripTempIds(milestones));
   }
 
   setProjectResources(project_resources: ProjectResourceDTO[]) {
