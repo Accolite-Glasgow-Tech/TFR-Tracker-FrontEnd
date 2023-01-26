@@ -105,11 +105,17 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl(`/tfr/${tfrId}`);
   }
 
-  download(projectId: number): void {
+  download(project: ProjectDTO): void {
     this.http
-      .get(getPDFReportURL(projectId), { responseType: 'blob' })
+      .get(getPDFReportURL(project.id!), { responseType: 'blob' })
       .subscribe((data) => {
-        FileSaver.saveAs(data, 'Project report.pdf');
+        FileSaver.saveAs(
+          data,
+          `${project.name}_Report_${this.datePipe.transform(
+            new Date(),
+            'yyyy-MM-ddThh:mm'
+          )}.pdf`
+        );
       });
   }
 
