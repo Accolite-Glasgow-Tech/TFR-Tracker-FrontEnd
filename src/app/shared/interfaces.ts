@@ -180,3 +180,10 @@ export interface LoginResponse {
   status: boolean;
   token: string;
 }
+
+export interface dialogContent {
+  title: string;
+  content: string;
+  confirmText: string;
+  cancelText: string;
+}

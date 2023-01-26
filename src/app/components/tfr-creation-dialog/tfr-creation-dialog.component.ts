@@ -1,5 +1,6 @@
 import { Component, HostListener, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { dialogContent } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-tfr-creation-dialog',
@@ -9,12 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class TfrCreationDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public data: {
-      title: string;
-      content: string;
-      confirmText: string;
-      cancelText: string;
-    },
+    public data: dialogContent,
     private matDialogRef: MatDialogRef<TfrCreationDialogComponent>
   ) {}
 

@@ -7,6 +7,7 @@ import { ResourceService } from 'src/app/services/resource/resource.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   AllocatedResourceTypeDTO,
+  dialogContent,
   ProjectResourceDTO,
   ResourceListType,
 } from 'src/app/shared/interfaces';
@@ -183,7 +184,7 @@ describe('TfrCreationResourceComponent', () => {
 
     component.allocatedResources = [];
     (tfrManagementServiceSpy as any).getProjectId = 1;
-    component.addResource('johnmakan@accolitedigital.com', 'SCRUM MASTER');
+    component.addResource('John Makan', 'SCRUM MASTER');
 
     fixture.detectChanges();
 
@@ -264,7 +265,18 @@ describe('TfrCreationResourceComponent', () => {
   it('show Dialog box', () => {
     component.showDialog(true);
     fixture.detectChanges();
+    let dialogContent: { data: dialogContent } = {
+      data: {
+        title: 'Discard Changes',
+        content: 'Would you like to discard your changes and continue?',
+        confirmText: 'Yes',
+        cancelText: 'No',
+      },
+    };
 
-    expect(dialogSpy).toHaveBeenCalledWith(TfrCreationDialogComponent);
+    expect(dialogSpy).toHaveBeenCalledWith(
+      TfrCreationDialogComponent,
+      dialogContent
+    );
   });
 });
