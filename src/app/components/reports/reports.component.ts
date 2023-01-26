@@ -1,19 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { lastValueFrom, Observable } from 'rxjs';
-import { user } from 'src/app/mock';
-import { allProjectsURL, tasksURL } from 'src/app/shared/constants';
-import {
-  ProjectDTO,
-  ResourceDTO,
-  TaskCreationDTO,
-} from 'src/app/shared/interfaces';
+import { lastValueFrom } from 'rxjs';
+import { tasksURL } from 'src/app/shared/constants';
+import { ResourceDTO, TaskCreationDTO } from 'src/app/shared/interfaces';
 
 import { getResourcesByProjectIdURL, log } from 'src/app/shared/utils';
 
-import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
 import { ActivatedRoute } from '@angular/router';
+import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
 
 enum RecieverOptions {
   self = 'Only me',
@@ -31,7 +26,7 @@ export class ReportsComponent implements OnInit {
   frequencyPickerComponent!: FrequencyPickerComponent;
 
   @Input() template = 'Default Template';
-  @Input() recieverOption = RecieverOptions.self;
+  @Input() recieverOption = RecieverOptions.allProjectResources;
 
   tfrId!: number;
   selectTfrLabelText: string = 'Select TFR';
@@ -118,6 +113,7 @@ export class ReportsComponent implements OnInit {
   }
 
   createTask(taskObject: TaskCreationDTO) {
+    log(taskObject);
     this.httpClient
       .post(tasksURL, taskObject)
       .subscribe((response) => log(response));
