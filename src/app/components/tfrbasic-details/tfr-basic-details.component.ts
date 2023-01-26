@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ApiService } from 'src/app/services/api.service';
+import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 
 import {
@@ -143,7 +143,8 @@ export class TfrBasicDetailsComponent implements OnInit {
       .get('vendor_id')
       ?.setValue(previousStateBasicDetails.vendor_id);
 
-    !this.projectToEdit ?? (this.projectToEdit.vendor_id = previousStateBasicDetails.vendor_id);
+    !this.projectToEdit ??
+      (this.projectToEdit.vendor_id = previousStateBasicDetails.vendor_id);
 
     /*
       Trigger event to vendor component through the api.service

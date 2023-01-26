@@ -3,7 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MilestoneManagerService } from 'src/app/services/milestone-manager/milestone-manager.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Milestone, FormMilestone } from 'src/app/shared/interfaces';
+import { Milestone, FormMilestone, Project } from 'src/app/shared/interfaces';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-milestones',
@@ -81,7 +82,8 @@ export class MilestonesComponent implements OnInit {
   };
 
   getObserver = {
-    next: (response: {}) => {
+    next: (projectResponse: HttpResponse<Project>) => {
+      this.projectManagerService.extractProject(projectResponse);
       this.snackBarService.showSnackBar('Get successful', 2000);
       this.milestoneManagerService.setMilestones(
         this.projectManagerService.getMilestones
@@ -89,7 +91,7 @@ export class MilestonesComponent implements OnInit {
       this.update();
     },
     error: (err: Error) =>
-      this.snackBarService.showSnackBar('Get failed, please try again', 2000),
+      this.snackBarService.showSnackBar('Get failed, please retry', 2000),
   };
 
   update() {

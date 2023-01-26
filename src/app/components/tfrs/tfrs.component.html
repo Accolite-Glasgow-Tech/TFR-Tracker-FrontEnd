@@ -102,9 +102,7 @@
           </button>
         </mat-menu>
         <mat-menu #reportsMenu="matMenu">
-          <button [disabled]="true" mat-menu-item (click)="download(tfr.id)">
-            Download now
-          </button>
+          <button mat-menu-item (click)="download(tfr.id)">Download now</button>
           <button mat-menu-item (click)="scheduleReports(tfr.id)">
             Schedule report
           </button>
