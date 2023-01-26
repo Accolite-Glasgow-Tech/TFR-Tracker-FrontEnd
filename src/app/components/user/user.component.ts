@@ -3,17 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { userService } from 'src/app/service/user/user.service';
 
-export interface registerResponse {
-  msg: string;
-  status: boolean;
-}
-
-export interface loginResponse {
-  msg: string;
-  status: boolean;
-  token: string;
-}
-
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',

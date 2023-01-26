@@ -169,3 +169,14 @@ export interface ResourceListType {
   resource_id: number;
   selected: boolean;
 }
+
+export interface RegisterResponse {
+  msg: string;
+  status: boolean;
+}
+
+export interface LoginResponse {
+  msg: string;
+  status: boolean;
+  token: string;
+}
