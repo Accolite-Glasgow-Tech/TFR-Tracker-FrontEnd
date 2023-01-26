@@ -158,3 +158,10 @@ export interface ResourceListType {
   resource_id: number;
   selected: boolean;
 }
+
+export interface dialogContent {
+  title: string;
+  content: string;
+  confirmText: string;
+  cancelText: string;
+}

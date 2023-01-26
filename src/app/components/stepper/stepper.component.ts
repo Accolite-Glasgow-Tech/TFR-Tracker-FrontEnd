@@ -110,6 +110,7 @@ export class StepperComponent implements OnInit {
     } else {
       this.route.paramMap.subscribe((result) => {
         tfrId = Number(result.get('id'));
+        this.route.data.subscribe(this.getProjectObserver);
       });
 
       /*
@@ -117,7 +118,6 @@ export class StepperComponent implements OnInit {
         is loaded. This component has a resolver (refer to /services/project-resolver) that
         fetches the project to be displayed.
       */
-      this.route.data.subscribe(this.getProjectObserver);
     }
   }
 
