@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { emit } from 'process';
 
 import { ResourceTableComponent } from './resource-table.component';
 
