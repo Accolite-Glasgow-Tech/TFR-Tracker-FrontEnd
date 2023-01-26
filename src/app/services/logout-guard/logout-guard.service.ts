@@ -1,16 +1,17 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class LoginGuardService implements CanActivate {
+export class LogoutGuardService implements CanActivate {
+
   constructor(private router: Router) {}
 
   /**
-   * Allows activation if User is logged in OR if guarding is disabled
+   * Allows activation if User is logged out OR if guarding is disabled
    */
   canActivate(): boolean {
     let activated = this.checkIfComponentCanBeActivated();
@@ -31,7 +32,7 @@ export class LoginGuardService implements CanActivate {
 
   checkIfComponentCanBeActivated(): boolean {
     return (
-      this.isLoggedIn ||
+      !this.isLoggedIn ||
       environment.routeGuardingDisabled
     );
   }
@@ -42,5 +43,4 @@ export class LoginGuardService implements CanActivate {
     }
     return false;
   }
-
 }

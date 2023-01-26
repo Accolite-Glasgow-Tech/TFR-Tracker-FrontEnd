@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { vendorsURL } from '../shared/constants';
-import { VendorAttributeDTO, VendorDTO } from '../shared/interfaces';
-import { getVendorAttributesURL } from '../shared/utils';
+import { vendorsURL } from '../../shared/constants';
+import { VendorAttributeDTO, VendorDTO } from '../../shared/interfaces';
+import { getVendorAttributesURL } from '../../shared/utils';
 
 @Injectable({
   providedIn: 'root',

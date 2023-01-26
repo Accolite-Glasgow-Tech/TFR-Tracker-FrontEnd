@@ -8,7 +8,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import * as FileSaver from 'file-saver';
-import { tfrService } from 'src/app/service/tfrs/tfr.service';
+import { tfrService } from 'src/app/services/tfrs/tfr.service';
 import { dateFormat, statusList } from 'src/app/shared/constants';
 import { ProjectDTO } from 'src/app/shared/interfaces';
 import { getPDFReportURL } from 'src/app/shared/utils';
