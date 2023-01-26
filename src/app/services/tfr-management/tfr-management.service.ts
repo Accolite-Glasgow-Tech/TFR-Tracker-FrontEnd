@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Data, Router } from '@angular/router';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
 import { projectsURL, resourceProjectsURL } from 'src/app/shared/constants';
 import {
@@ -221,16 +221,12 @@ export class TfrManagementService {
   }
 
   putMilestones(milestones: Milestone[]): Observable<{}> {
-    if (this.project !== undefined) {
-      let projectFormatted: ProjectMilestoneDTO =
-        this.projectStripTempIds(milestones);
-      return this.http.put(projectsURL, projectFormatted);
-    }
-    let projectUndefined = new Observable<{}>((subscriber) => {
-      subscriber.error('project undefined');
-      subscriber.complete;
-    });
-    return projectUndefined;
+    return this.project == undefined
+      ? new Observable<{}>((subscriber) => {
+          subscriber.error('project undefined');
+          subscriber.complete;
+        })
+      : this.http.put(projectsURL, this.projectStripTempIds(milestones));
   }
 
   setProjectResources(project_resources: ProjectResourceDTO[]) {
@@ -263,12 +259,15 @@ export class TfrManagementService {
       .subscribe(this.updateProjectToDatabaseObserver);
   }
 
-  getFromDatabase(project_id: Number) {
-    return this.http
-      .get<Project>(getProjectURL(project_id), {
-        observe: 'response',
-      })
-      .pipe(catchError((e: Error) => of(`Error occured: ${e.message}`)));
+  getFromDatabase(project_id: Number): Observable<HttpResponse<Project>> {
+    return this.http.get<Project>(getProjectURL(project_id), {
+      observe: 'response',
+    });
+  }
+
+  extractProject(value: HttpResponse<Project>) {
+    this.project = value.body ?? undefined;
+    return value;
   }
 
   /*
