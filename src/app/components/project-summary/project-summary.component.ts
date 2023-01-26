@@ -16,9 +16,6 @@ export class ProjectSummaryComponent {
   @Input() vendorName!: string;
 
   get currentProjectMilestones(): Milestone[] {
-    console.log(
-      this.milestonesWithoutDeleted(this.currentProject?.milestones!)
-    );
     return this.milestonesWithoutDeleted(this.currentProject?.milestones);
   }
   milestonesWithoutDeleted(milestones: Milestone[] | undefined): Milestone[] {
