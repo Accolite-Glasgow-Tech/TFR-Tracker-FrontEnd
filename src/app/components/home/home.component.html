@@ -1,33 +1,54 @@
-<div >
+<div>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
   />
-    <div class="example-button-row">
+  <div class="example-button-row">
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      class="btn btn-success top-btn-left"
+      (click)="onClick_AddClientLocationWidget()"
+    >
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Client_Location
+      Widget
+    </button>
 
-      <button  mat-raised-button color="primary" type="button" class="btn btn-success top-btn-left" 
-      (click)="onClick_AddClientLocationWidget()">
-      <i class="fa fa-plus-circle" aria-hidden="true"></i> Client_Location Widget
-      </button>
-
-      <button  mat-raised-button color="primary" type="button" class="btn btn-success top-btn-left"
-      (click)="onClick_AddOurClientsWidget()">
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      class="btn btn-success top-btn-left"
+      (click)="onClick_AddOurClientsWidget()"
+    >
       <i class="fa fa-plus-circle" aria-hidden="true"></i> Our_Clients Widget
-      </button>
+    </button>
 
-      <button mat-raised-button color="primary" type="button" class="btn btn-success top-btn-left"
-      (click)="onClick_AddTFRStatusWidget()">
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      class="btn btn-success top-btn-left"
+      (click)="onClick_AddTFRStatusWidget()"
+    >
       <i class="fa fa-plus-circle" aria-hidden="true"></i> TFR_Status Widget
-      </button>
+    </button>
 
-      <button mat-raised-button color="primary" type="button" class="btn btn-success top-btn-left"
-      (click)="onClick_AddUpcomingProjectsWidget()">
-      <i class="fa fa-plus-circle" aria-hidden="true"></i> Upcoming_Projects Widget
-      </button>
-    </div >
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      class="btn btn-success top-btn-left"
+      (click)="onClick_AddUpcomingProjectsWidget()"
+    >
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Upcoming_Projects
+      Widget
+    </button>
+  </div>
 
   <ngx-gridster
-    style="height: 400px; width: 85%; padding-left: 8%;"
+    style="height: 400px; width: 85%; padding-left: 8%"
     [options]="gridsterOptions"
     [draggableOptions]="{ handlerClass: 'panel-heading' }"
     (optionsChange)="optionsChange($event)"

@@ -36,6 +36,13 @@ export const RoutesList: TFRRoute[] = [
     canActivate: [LoginGuardService],
   },
   {
+    isGuarded: false,
+    path: 'register',
+    navigationLabel: 'Register',
+    component: UserComponent,
+    canActivate: [LoginGuardService],
+  },
+  {
     isGuarded: true,
 
     navigationLabel: 'TFRs',

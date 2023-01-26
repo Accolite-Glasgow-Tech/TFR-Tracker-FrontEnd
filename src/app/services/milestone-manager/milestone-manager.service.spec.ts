@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { MilestoneManagerService } from './milestone-manager.service';
 
-describe('MilestoneManagerService', () => {
+fdescribe('MilestoneManagerService', () => {
   let service: MilestoneManagerService;
 
   beforeEach(() => {

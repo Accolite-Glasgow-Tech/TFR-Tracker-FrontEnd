@@ -65,8 +65,8 @@
     [disabled]="
       !(
         this.tfrManager.getBasicDetails &&
-        this.vendorAttributes &&
-          (this.vendorAttributes.dirty || this.tfrDetails.dirty)
+        this.vendorGroup &&
+          (this.vendorGroup.dirty || this.tfrDetails.dirty)
       )
     "
     class="navigation-btn"
