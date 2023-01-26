@@ -1,4 +1,5 @@
 import { LoginGuardService } from 'src/app/services/login-guard/login-guard.service';
+import { LogoutGuardService } from 'src/app/services/logout-guard/logout-guard.service';
 import { TFRRoute } from './shared/interfaces';
 import { HomeComponent } from './components/home/home.component';
 import { ReportsComponent } from './components/reports/reports.component';
@@ -11,52 +12,48 @@ import { ProjectResolverService } from './services/project-resolver/project-reso
 
 export const appRoutes: TFRRoute[] = [
     {
+      isAccessibleWhenLoggedIn: true,
       navigationLabel: 'Home',
       path: 'home',
       component: HomeComponent,
-      isGuarded: true,
       canActivate: [LoginGuardService],
     },
     {
+      isAccessibleWhenLoggedIn: true,
       navigationLabel: 'Log out',
       path: 'logout',
       component: LogOutComponent,
-      isGuarded: true,
       canActivate: [LoginGuardService],
     },
     {
-      isGuarded: false,
+      isAccessibleWhenLoggedIn: false,
       path: 'login',
       navigationLabel: 'Login',
       component: UserComponent,
-      canActivate: [LoginGuardService],
+      canActivate: [LogoutGuardService],
     },
     {
-      isGuarded: false,
+      isAccessibleWhenLoggedIn: false,
       path: 'register',
       navigationLabel: 'Register',
       component: UserComponent,
-      canActivate: [LoginGuardService],
+      canActivate: [LogoutGuardService],
     },
     {
-      isGuarded: true,
-  
+      isAccessibleWhenLoggedIn: true,
       navigationLabel: 'TFRs',
       path: 'tfrs',
       component: TfrsComponent,
       canActivate: [LoginGuardService],
     },
     {
-      isGuarded: true,
-  
+      isAccessibleWhenLoggedIn: true,
       path: 'tfr/create',
       component: StepperComponent,
       navigationLabel: 'Create TFR',
       canActivate: [LoginGuardService],
     },
     {
-      isGuarded: true,
-  
       path: 'tfr/:id/edit',
       component: StepperComponent,
       canActivate: [LoginGuardService],
@@ -66,9 +63,7 @@ export const appRoutes: TFRRoute[] = [
       },
     },
     {
-      isGuarded: true,
       canActivate: [LoginGuardService],
-  
       path: 'tfr/:id',
       component: TfrComponent,
       resolve: {
@@ -76,14 +71,13 @@ export const appRoutes: TFRRoute[] = [
       },
     },
     {
-      isGuarded: true,
+      isAccessibleWhenLoggedIn: true,
       canActivate: [LoginGuardService],
-  
       path: 'tfr',
       component: TfrComponent,
     },
     {
-      isGuarded: true,
+      isAccessibleWhenLoggedIn: true,
       canActivate: [LoginGuardService],
       path: 'tfr/:id/reports',
       component: ReportsComponent,
