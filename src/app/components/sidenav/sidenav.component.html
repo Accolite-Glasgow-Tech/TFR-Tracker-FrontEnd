@@ -6,7 +6,7 @@
     [(opened)]="isOpen"
     fxHide.gt-sm="true"
   >
-    <div fxLayout="column" *ngFor="let route of RoutesList">
+    <div fxLayout="column" *ngFor="let route of appRoutes">
       <a
         mat-button
         *ngIf="route.navigationLabel && checkRouting(route.component)"

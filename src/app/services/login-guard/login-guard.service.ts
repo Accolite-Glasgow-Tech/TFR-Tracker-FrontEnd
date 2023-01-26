@@ -1,6 +1,6 @@
 import { Injectable, Type } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
-import { RoutesList } from 'src/app/app-routing.module';
+import { appRoutes } from '../../app-routes';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { TFRRoute } from 'src/app/shared/interfaces';
@@ -36,7 +36,7 @@ export class LoginGuardService implements CanActivate {
   }
 
   private getRouteDataFor(component: Type<any> | null) {
-    return RoutesList.find((value) => {
+    return appRoutes.find((value) => {
       return value.component == component;
     });
   }

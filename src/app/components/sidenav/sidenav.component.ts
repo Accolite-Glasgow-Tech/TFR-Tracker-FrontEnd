@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Type } from '@angular/core';
 import { LoginGuardService } from 'src/app/services/login-guard/login-guard.service';
 import { SidenavToggleService } from 'src/app/services/sidenav-toggle/sidenav-toggle.service';
-import { RoutesList } from 'src/app/app-routing.module';
+import { appRoutes } from 'src/app/app-routes';
 
 @Component({
   selector: 'app-sidenav',
@@ -14,7 +14,7 @@ export class SidenavComponent implements OnInit {
     private loginGuardService: LoginGuardService
   ) {}
   @Input()
-  RoutesList = RoutesList;
+  appRoutes = appRoutes;
   isOpen = false;
   ngOnInit(): void {
     this.sidenavToggleService.toggleEmitter.subscribe(() => {
