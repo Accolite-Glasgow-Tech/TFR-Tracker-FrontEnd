@@ -10,7 +10,7 @@ import { Project } from 'src/app/shared/interfaces';
 
 import { StepperComponent } from './stepper.component';
 
-fdescribe('StepperComponent', () => {
+describe('StepperComponent', () => {
   let component: StepperComponent;
   let fixture: ComponentFixture<StepperComponent>;
 
