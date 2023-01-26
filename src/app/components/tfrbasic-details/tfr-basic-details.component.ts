@@ -29,7 +29,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   tfrDetails!: FormGroup;
   projectDetails!: ProjectBasicDetails;
   selectedProject!: ProjectBasicDetails;
-  vendorAttributes!: FormGroup;
+  vendorGroup!: FormGroup;
   attributeNames: string[] = [];
   vendor_specificData: { [key: string]: string } = {};
   editMode: Boolean = false;
@@ -57,16 +57,16 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   isFormValid() {
-    if (this.vendorAttributes == undefined) {
+    if (this.vendorGroup == undefined) {
       return false;
     } else {
-      return this.vendorAttributes.valid && this.tfrDetails.valid;
+      return this.vendorGroup.valid && this.tfrDetails.valid;
     }
   }
 
   isFormDirty() {
     if (this.isFormValid()) {
-      return this.vendorAttributes.dirty || this.tfrDetails.dirty;
+      return this.vendorGroup.dirty || this.tfrDetails.dirty;
     }
     return false;
   }
@@ -89,7 +89,7 @@ export class TfrBasicDetailsComponent implements OnInit {
     };
     this.tfrManager.setBasicDetails(updatedProjectDetails);
     this.tfrDetails.markAsPristine();
-    this.vendorAttributes.markAsPristine();
+    this.vendorGroup.markAsPristine();
   }
 
   onVendorSelect(vendor: VendorDTO) {
@@ -151,7 +151,7 @@ export class TfrBasicDetailsComponent implements OnInit {
     this.apiService.resetVendorDetails();
 
     this.tfrDetails.markAsPristine();
-    this.vendorAttributes.markAsPristine();
+    this.vendorGroup.markAsPristine();
   }
 
   onAttributesSelected(attributes: VendorAttributeDTO[]) {
@@ -162,14 +162,14 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   onAttributesUpdated(group: FormGroup) {
-    this.vendorAttributes = group;
+    this.vendorGroup = group;
     this.updatevendor_specific();
   }
 
   updatevendor_specific() {
     this.vendor_specificData = {};
     // convert the form group info to string data and assign to vendor_specificData string
-    if (this.vendorAttributes.valid) {
+    if (this.vendorGroup.valid) {
       let i = 0;
       while (i < this.attributeNames.length) {
         this.vendor_specificData[this.attributeNames[i]] =
@@ -180,6 +180,6 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   getAttributesArray() {
-    return this.vendorAttributes.controls['attributeValues'] as FormArray;
+    return this.vendorGroup.controls['attributeValues'] as FormArray;
   }
 }

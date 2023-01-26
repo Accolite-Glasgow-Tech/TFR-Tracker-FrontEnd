@@ -1,18 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { userService } from 'src/app/service/user/user.service';
-
-export interface registerResponse {
-  msg: string;
-  status: boolean;
-}
-
-export interface loginResponse {
-  msg: string;
-  status: boolean;
-  token: string;
-}
 
 @Component({
   selector: 'app-user',
@@ -25,9 +14,16 @@ export class UserComponent implements OnInit {
   registering: any = true;
   logging: any = false;
 
-  constructor(private userService: userService,private router:Router) {}
+  constructor(private userService: userService,private router:Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+
+    // uses route path to determine whether registering or logging in
+    this.route.url.subscribe(url => {
+      let path = url[0].path;
+      this.registering = path === 'register';
+    });
+
     this.registerGroup = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(5)]),
       password: new FormControl('', [
@@ -104,16 +100,14 @@ export class UserComponent implements OnInit {
   }
 
   goLogin() {
-    this.registering = false;
-    this.logging = true;
+    this.router.navigateByUrl('/login');
   }
 
   goRegister() {
-    this.registering = true;
-    this.logging = false;
+    this.router.navigateByUrl('/register');
   }
 
   jumpToHome():void{
-    this.router.navigateByUrl('/home')
+    this.router.navigateByUrl('/home');
   }
 }

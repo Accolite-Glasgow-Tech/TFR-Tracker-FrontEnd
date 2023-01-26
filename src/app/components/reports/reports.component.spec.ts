@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-
 import { ReportsComponent } from './reports.component';
 import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ReportsComponent', () => {
   let component: ReportsComponent;
@@ -10,7 +10,7 @@ describe('ReportsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule,RouterTestingModule],
       declarations: [ReportsComponent, FrequencyPickerComponent],
     }).compileComponents();
 

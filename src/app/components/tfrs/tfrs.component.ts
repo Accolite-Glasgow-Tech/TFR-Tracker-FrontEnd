@@ -7,7 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { saveAs } from 'file-saver';
+import * as FileSaver from 'file-saver';
 import { tfrService } from 'src/app/service/tfrs/tfr.service';
 import { dateFormat, statusList } from 'src/app/shared/constants';
 import { ProjectDTO } from 'src/app/shared/interfaces';
@@ -106,7 +106,11 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   }
 
   download(projectId: number): void {
-    this.http.get<Blob>(getPDFReportURL(projectId)).subscribe((data) => {});
+    this.http
+      .get(getPDFReportURL(projectId), { responseType: 'blob' })
+      .subscribe((data) => {
+        FileSaver.saveAs(data, 'Project report.pdf');
+      });
   }
 
   scheduleReports(tfrId: number): void {

@@ -32,7 +32,7 @@
 
     <div class="column" id="vendor-div">
       <div class="project-details">
-        <span> <strong>Vendor: </strong> {{ vendorName }} </span>
+        <span> <strong>Client: </strong> {{ vendorName }} </span>
       </div>
       <div
         class="project-details"
@@ -60,7 +60,7 @@
     <ng-container *ngIf="currentProject?.milestones?.length !== 0">
       <br />
       <app-milestone-table
-        [milestones]="currentProject?.milestones!"
+        [milestones]="currentProjectMilestones"
       ></app-milestone-table>
       <br />
     </ng-container>

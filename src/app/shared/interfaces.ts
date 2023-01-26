@@ -54,6 +54,17 @@ export interface ProjectMilestoneDTO {
   project_resources: ProjectResourceDTO[];
 }
 
+export interface FormMilestone {
+  id: number;
+  project_id: number;
+  description: string;
+  start_date?: Date;
+  delivery_date?: Date;
+  acceptance_date?: Date;
+  is_deleted: Boolean;
+  tracker?: TrackerDTO;
+}
+
 export interface Milestone {
   id: number;
   project_id: number;
@@ -157,4 +168,15 @@ export interface ResourceListType {
   resource_email: string;
   resource_id: number;
   selected: boolean;
+}
+
+export interface RegisterResponse {
+  msg: string;
+  status: boolean;
+}
+
+export interface LoginResponse {
+  msg: string;
+  status: boolean;
+  token: string;
 }

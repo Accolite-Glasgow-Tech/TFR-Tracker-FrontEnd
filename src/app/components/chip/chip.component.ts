@@ -10,10 +10,12 @@ export class ChipComponent implements OnInit {
   @Output() selectEmitter = new EventEmitter<any>();
   @Output() removeEmitter = new EventEmitter<any>();
 
+  ngOnInit(): void {}
+  
   remove(input: any) {
     this.removeEmitter.emit(this.value);
   }
-  ngOnInit(): void {}
+  
   click(event: any) {
     this.selectEmitter.emit(this.value);
   }

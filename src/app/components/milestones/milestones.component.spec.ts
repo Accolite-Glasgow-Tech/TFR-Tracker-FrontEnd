@@ -1,4 +1,7 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatDialogModule} from '@angular/material/dialog';
 
 import { MilestonesComponent } from './milestones.component';
 
@@ -8,6 +11,7 @@ describe('MilestonesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, MatSnackBarModule,MatDialogModule],
       declarations: [MilestonesComponent],
     }).compileComponents();
 

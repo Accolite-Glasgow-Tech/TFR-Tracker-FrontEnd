@@ -1,6 +1,6 @@
 Add Milestones to the TFR.
 <div id="chips">
-  <mat-chip-list #chipList class="chiplist" *ngIf="!selectedMilestone">
+  <mat-chip-list #chipList class="chiplist" *ngIf="!formMilestone">
     <app-chip
       *ngFor="let milestone of milestonesNotDeleted"
       [value]="milestone"
@@ -12,7 +12,7 @@ Add Milestones to the TFR.
 </div>
 <mat-form
   [formGroup]="milestoneForm"
-  *ngIf="selectedMilestone"
+  *ngIf="formMilestone"
   appearance="fill"
   class="full-width"
 >
@@ -24,6 +24,7 @@ Add Milestones to the TFR.
         type="text"
         formControlName="description"
       ></textarea>
+      <mat-error>Description Required</mat-error>
     </mat-form-field>
   </div>
   <div class="inputdiv">
@@ -31,13 +32,11 @@ Add Milestones to the TFR.
       <mat-label>Acceptance Date</mat-label>
 
       <input
-        formControlName="acceptanceDate"
+        formControlName="acceptance_date"
         matInput
         [matDatepicker]="picker"
         placeholder="Acceptance Date"
         class="datepicker"
-        [min]="getMinDate"
-        [max]="getMaxDate"
       />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
@@ -53,12 +52,12 @@ Add Milestones to the TFR.
       >
         <input
           matStartDate
-          formControlName="startDate"
+          formControlName="start_date"
           placeholder="Start date"
         />
         <input
           matEndDate
-          formControlName="deliveryDate"
+          formControlName="delivery_date"
           placeholder="Delivery Date"
         />
       </mat-date-range-input>

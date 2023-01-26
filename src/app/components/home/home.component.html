@@ -1,8 +1,54 @@
-<div style="padding: 20px">
+<div>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
   />
+  <div class="example-button-row">
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      class="btn btn-success top-btn-left"
+      (click)="onClick_AddClientLocationWidget()" *ngIf="!checkForWidget('Client Location')"
+    >
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Client Location
+      Widget
+    </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      class="btn btn-success top-btn-left"
+      (click)="onClick_AddOurClientsWidget()"
+      *ngIf="!checkForWidget('Our Clients')"
+    >
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Our Clients Widget
+    </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      class="btn btn-success top-btn-left"
+      (click)="onClick_AddTFRStatusWidget()"
+      *ngIf="!checkForWidget('TFR Status')"
+    >
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> TFR Status Widget
+    </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      class="btn btn-success top-btn-left"
+      (click)="onClick_AddUpcomingProjectsWidget()"
+      *ngIf="!checkForWidget('Upcoming Projects')"
+    >
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Upcoming Projects
+      Widget
+    </button>
+  </div>
 
   <ngx-gridster
     style="height: 400px; width: 85%; padding-left: 8%"
@@ -27,7 +73,10 @@
         <mat-card class="widget">
           <h1 class="header">
             <a class="headerText"> {{ widget.componentName }}</a>
-            <button class="closeiconbutton" (click)="remove()">
+            <button
+              class="closeiconbutton"
+              (mousedown)="onClick_removeItem(widget)"
+            >
               <i
                 class="fa fa-close"
                 style="font-size: 24px; position: relative; margin: 7px"

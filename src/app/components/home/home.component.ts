@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { GridsterComponent, IGridsterOptions } from 'angular2gridster';
 import { ChartsComponent } from '../charts/charts.component';
 import { WidgetApproachingProjectsComponent } from '../widget-approaching-projects/widget-approaching-projects.component';
+import { WidgetApproachingProjectsService } from '../widget-approaching-projects/widget-approaching-projects.service';
 import { WidgetVendorLocationComponent } from '../widget-vendor-location/widget-vendor-location.component';
 import { WidgetVendorProjectCountComponent } from '../widget-vendor-project-count/widget-vendor-project-count.component';
 @Component({
@@ -76,13 +77,43 @@ export class HomeComponent {
     return 2;
   }
 
-  remove(): void {
-    this.widgets.pop();
-    console.log('Remove: LaneCount', this.getLaneCount());
-    this.gridster.setOption('lanes', this.getLaneCount());
+  public onClick_AddClientLocationWidget(): void {
+    this.widgets.push({
+      componentName: 'Client Location',
+      componentType: WidgetVendorLocationComponent,
+    });
+  }
+
+  public onClick_AddOurClientsWidget(): void {
+    this.widgets.push({
+      componentName: 'Our Clients',
+      componentType: WidgetVendorProjectCountComponent,
+    });
+  }
+
+  public onClick_AddTFRStatusWidget(): void {
+    this.widgets.push({
+      componentName: 'TFR Status',
+      componentType: ChartsComponent,
+    });
+  }
+
+  public onClick_AddUpcomingProjectsWidget(): void {
+    this.widgets.push({
+      componentName: 'Upcoming Projects',
+      componentType: WidgetApproachingProjectsComponent,
+    });
+  }
+
+  public onClick_removeItem(_widget: any): void {
+    this.widgets.splice(this.widgets.indexOf(_widget), 1);
   }
 
   optionsChange(options: IGridsterOptions) {
     console.log('options change:', options.lanes);
+  }
+
+  checkForWidget(widget: string): boolean {
+    return this.widgets.some(i => i.componentName === widget);
   }
 }
