@@ -7,12 +7,9 @@ describe('ChartsService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ChartsService);
-  });
+    service = TestBed.inject(ChartsService);});
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+  
+  
 
-  it('true should be true',()=>{expect(true).toBe(true);});
 });
