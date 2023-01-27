@@ -1,11 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { ApiService } from 'src/app/services/api/api.service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
-import { tasksURL } from 'src/app/shared/constants';
 import { ResourceDTO, TaskCreationDTO } from 'src/app/shared/interfaces';
 
-import { getResourcesByProjectIdURL, log } from 'src/app/shared/utils';
+import { log } from 'src/app/shared/utils';
 
 import { ActivatedRoute } from '@angular/router';
 import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
@@ -37,7 +36,7 @@ export class ReportsComponent implements OnInit {
   recieverOptionsEnum = RecieverOptions;
   schedulerForm!: FormGroup;
 
-  constructor(private httpClient: HttpClient, private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((result) => {
@@ -80,7 +79,9 @@ export class ReportsComponent implements OnInit {
         break;
       case RecieverOptions.allProjectResources:
         resources = <ResourceDTO[]>(
-          await lastValueFrom(this.getResourcesByTFR(this.tfrId))
+          await lastValueFrom(
+            this.apiService.getResourcesByProjectId(this.tfrId)
+          )
         );
         break;
       case RecieverOptions.custom:
@@ -108,14 +109,12 @@ export class ReportsComponent implements OnInit {
     });
   }
 
-  getResourcesByTFR(tfrId: number) {
-    return this.httpClient.get(getResourcesByProjectIdURL(tfrId)).pipe();
+  getResourcesByTFRId(tfrId: number) {
+    return this.apiService.getResourcesByProjectId(tfrId);
   }
 
   createTask(taskObject: TaskCreationDTO) {
     log(taskObject);
-    this.httpClient
-      .post(tasksURL, taskObject)
-      .subscribe((response) => log(response));
+    this.apiService.postTask(taskObject).subscribe((response) => log(response));
   }
 }
