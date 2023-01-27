@@ -1,10 +1,17 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { user } from 'src/app/mock';
-import { projectsURL, tasksURL, vendorsURL } from '../../shared/constants';
+import {
+  allProjectsURL,
+  projectSearchURL,
+  projectsURL,
+  tasksURL,
+  vendorsURL,
+  vendorsURLdupe,
+} from '../../shared/constants';
 import {
   Project,
+  ProjectDTO,
   ProjectMilestoneDTO,
   TaskCreationDTO,
   VendorAttributeDTO,
@@ -76,5 +83,17 @@ export class ApiService {
           subscriber.error('user Id undefined');
           subscriber.complete;
         });
+  }
+
+  get getAllProjects(): Observable<ProjectDTO[]> {
+    return this.http.get<ProjectDTO[]>(allProjectsURL);
+  }
+
+  get getAllVendors() {
+    return this.http.get(vendorsURLdupe);
+  }
+
+  searchProjects(body: any): Observable<ProjectDTO[]> {
+    return this.http.post<ProjectDTO[]>(projectSearchURL, body);
   }
 }
