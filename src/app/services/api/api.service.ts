@@ -1,6 +1,7 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { user } from 'src/app/mock';
 import { projectsURL, tasksURL, vendorsURL } from '../../shared/constants';
 import {
   Project,
@@ -13,6 +14,7 @@ import {
   getProjectURL,
   getResourcesByProjectIdURL,
   getUpdateProjectStatusURL,
+  getUserTasksURL,
   getVendorAttributesURL,
 } from '../../shared/utils';
 
@@ -65,5 +67,14 @@ export class ApiService {
 
   putProject(project: Project | undefined | ProjectMilestoneDTO) {
     return this.http.put(projectsURL, project);
+  }
+
+  getUserTasksById(userId: number | undefined): Observable<{}> {
+    return userId
+      ? this.http.get(getUserTasksURL(userId))
+      : new Observable((subscriber) => {
+          subscriber.error('user Id undefined');
+          subscriber.complete;
+        });
   }
 }
