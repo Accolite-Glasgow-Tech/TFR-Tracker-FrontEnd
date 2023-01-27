@@ -12,42 +12,36 @@ import { ProjectResolverService } from './services/project-resolver/project-reso
 
 export const appRoutes: TFRRoute[] = [
     {
-      isAccessibleWhenLoggedIn: true,
       navigationLabel: 'Home',
       path: 'home',
       component: HomeComponent,
       canActivate: [LoginGuardService],
     },
     {
-      isAccessibleWhenLoggedIn: true,
       navigationLabel: 'Log out',
       path: 'logout',
       component: LogOutComponent,
       canActivate: [LoginGuardService],
     },
     {
-      isAccessibleWhenLoggedIn: false,
       path: 'login',
       navigationLabel: 'Login',
       component: UserComponent,
       canActivate: [LogoutGuardService],
     },
     {
-      isAccessibleWhenLoggedIn: false,
       path: 'register',
       navigationLabel: 'Register',
       component: UserComponent,
       canActivate: [LogoutGuardService],
     },
     {
-      isAccessibleWhenLoggedIn: true,
       navigationLabel: 'TFRs',
       path: 'tfrs',
       component: TfrsComponent,
       canActivate: [LoginGuardService],
     },
     {
-      isAccessibleWhenLoggedIn: true,
       path: 'tfr/create',
       component: StepperComponent,
       navigationLabel: 'Create TFR',
@@ -71,13 +65,11 @@ export const appRoutes: TFRRoute[] = [
       },
     },
     {
-      isAccessibleWhenLoggedIn: true,
       canActivate: [LoginGuardService],
       path: 'tfr',
       component: TfrComponent,
     },
     {
-      isAccessibleWhenLoggedIn: true,
       canActivate: [LoginGuardService],
       path: 'tfr/:id/reports',
       component: ReportsComponent,
