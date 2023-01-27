@@ -18,19 +18,18 @@ export class RouteGuardManagerService {
   }
 
   /**
-   * checks whether received component can currently activate based on its Route Guards
+   * returns false if received component has any associated Route Guard that cannot currently activate
    */
   checkRouting(component: Type<any> | undefined): boolean {
     
-    let canActivate = false;
+    let canActivate = true;
 
     let route = this.getRouteDataFor(component);
 
-    // currently only checks whether at least one of the guards assigned canActivate
     route?.canActivate?.forEach(fn => {
       let guard = new fn();
-      if(guard.checkIfComponentCanBeActivated()){
-        canActivate = true;
+      if(!guard.checkIfComponentCanBeActivated()){
+        canActivate = false;
       }
     });
 
