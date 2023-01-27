@@ -1,9 +1,18 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { vendorsURL } from '../../shared/constants';
-import { VendorAttributeDTO, VendorDTO } from '../../shared/interfaces';
-import { getVendorAttributesURL } from '../../shared/utils';
+import { projectsURL, vendorsURL } from '../../shared/constants';
+import {
+  Project,
+  ProjectMilestoneDTO,
+  VendorAttributeDTO,
+  VendorDTO,
+} from '../../shared/interfaces';
+import {
+  getProjectURL,
+  getUpdateProjectStatusURL,
+  getVendorAttributesURL,
+} from '../../shared/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +26,7 @@ export class ApiService {
     this.vendorReset.emit(true);
   }
 
-  getVendorData(): Observable<VendorDTO[]> {
+  get getVendors(): Observable<VendorDTO[]> {
     return this.http.get<VendorDTO[]>(vendorsURL);
   }
 
@@ -25,5 +34,26 @@ export class ApiService {
     return this.http.get<VendorAttributeDTO[]>(
       getVendorAttributesURL(vendor_id)
     );
+  }
+
+  getProject(project_id: Number): Observable<HttpResponse<Project>> {
+    return this.http.get<Project>(getProjectURL(project_id), {
+      observe: 'response',
+    });
+  }
+
+  putStatusAgreed(projectId: number): Observable<boolean> {
+    return this.http.put<boolean>(
+      getUpdateProjectStatusURL(projectId, 'AGREED'),
+      null
+    );
+  }
+
+  postProject(project: Project | undefined | ProjectMilestoneDTO) {
+    return this.http.post(projectsURL, project);
+  }
+
+  putProject(project: Project | undefined | ProjectMilestoneDTO) {
+    return this.http.put(projectsURL, project);
   }
 }
