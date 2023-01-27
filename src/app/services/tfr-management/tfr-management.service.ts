@@ -29,7 +29,6 @@ import { SnackBarService } from '../snack-bar/snack-bar.service';
 })
 export class TfrManagementService {
   public project!: Project | undefined;
-
   projectResourcesWithNames!: AllocatedResourceTypeDTO[];
 
   vendorName: string = '';
@@ -153,7 +152,7 @@ export class TfrManagementService {
   }
 
   createProjectInDatabase() {
-    this.http.post(projectsURL, this.project).subscribe((response) => {
+    this.apiService.postProject(this.project).subscribe((response) => {
       if (this.project) {
         this.project.id = Number(response);
         this.project.version++;
@@ -163,13 +162,13 @@ export class TfrManagementService {
   }
 
   updateProjectToDatabase() {
-    this.http
-      .put(projectsURL, this.project)
+    this.apiService
+      .putProject(this.project)
       .subscribe(this.updateProjectToDatabaseObserver);
   }
 
   setVendorName(vendor_id: number) {
-    this.apiService.getVendorData().subscribe((result: VendorDTO[]) => {
+    this.apiService.getVendors.subscribe((result: VendorDTO[]) => {
       this.vendorName = result.find(
         (vendor: VendorDTO) => vendor.id === vendor_id
       )!.name;
@@ -226,7 +225,7 @@ export class TfrManagementService {
           subscriber.error('project undefined');
           subscriber.complete;
         })
-      : this.http.put(projectsURL, this.projectStripTempIds(milestones));
+      : this.apiService.putProject(this.projectStripTempIds(milestones));
   }
 
   setProjectResources(project_resources: ProjectResourceDTO[]) {
@@ -254,15 +253,17 @@ export class TfrManagementService {
     pushes the changes to the resources for this project to the database
   */
   updateProjectToResourceMapping() {
-    this.http
-      .post(resourceProjectsURL, this.project)
-      .subscribe(this.updateProjectToDatabaseObserver);
+    this.putProjectToResource(this.project).subscribe(
+      this.updateProjectToDatabaseObserver
+    );
+  }
+
+  private putProjectToResource(project: Project | undefined) {
+    return this.http.post(resourceProjectsURL, project);
   }
 
   getFromDatabase(project_id: Number): Observable<HttpResponse<Project>> {
-    return this.http.get<Project>(getProjectURL(project_id), {
-      observe: 'response',
-    });
+    return this.apiService.getProject(project_id);
   }
 
   extractProject(value: HttpResponse<Project>) {
@@ -293,9 +294,6 @@ export class TfrManagementService {
       When API is ready, need to make a put request to the database
       to update the status from DRAFT to AGREED.
     */
-    return this.http.put<boolean>(
-      getUpdateProjectStatusURL(this.project!.id, 'AGREED'),
-      null
-    );
+    return this.apiService.putStatusAgreed(this.project!.id);
   }
 }
