@@ -47,6 +47,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
+import { ManageWidgetModalComponent } from './components/manage-widget-modal/manage-widget-modal.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { LogOutComponent } from './components/log-out/log-out.component';
     ChipComponent,
     PageNotFoundComponent,
     LogOutComponent,
+    ManageWidgetModalComponent,
   ],
 
   providers: [

@@ -2,15 +2,24 @@ import { Component, ViewChild } from '@angular/core';
 import { GridsterComponent, IGridsterOptions } from 'angular2gridster';
 import { ChartsComponent } from '../charts/charts.component';
 import { WidgetApproachingProjectsComponent } from '../widget-approaching-projects/widget-approaching-projects.component';
-import { WidgetApproachingProjectsService } from '../widget-approaching-projects/widget-approaching-projects.service';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { WidgetVendorLocationComponent } from '../widget-vendor-location/widget-vendor-location.component';
 import { WidgetVendorProjectCountComponent } from '../widget-vendor-project-count/widget-vendor-project-count.component';
+import { ManageWidgetModalComponent } from '../manage-widget-modal/manage-widget-modal.component';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  providers:[MdbModalService]
 })
 export class HomeComponent {
+
+  modalRef: MdbModalRef<ManageWidgetModalComponent> | null = null;
+
+  constructor(private modalService: MdbModalService) {}
+
+
+
   @ViewChild(GridsterComponent) gridster!: GridsterComponent;
   @ViewChild(WidgetVendorLocationComponent)
   WidgetVendorLocationComponent!: WidgetVendorLocationComponent;
@@ -113,7 +122,23 @@ export class HomeComponent {
     console.log('options change:', options.lanes);
   }
 
-  checkForWidget(widget: string): boolean {
-    return this.widgets.some(i => i.componentName === widget);
+  // checkForWidget(widget: string): boolean {
+  //   return this.widgets.some(i => i.componentName === widget);
+  // }
+
+  openModal() {
+   this.modalRef = this.modalService.open(ManageWidgetModalComponent)
+
+}
+
+
+  addItem(newItem: string) {
+    this.widgets.push({
+      componentName: newItem,
+      componentType: WidgetApproachingProjectsComponent,
+    });
   }
+
+  
+
 }
