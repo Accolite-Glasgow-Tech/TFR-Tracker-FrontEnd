@@ -9,7 +9,7 @@
     <div fxLayout="column" *ngFor="let route of appRoutes">
       <a
         mat-button
-        *ngIf="route.navigationLabel && checkRouting(route.component)"
+        *ngIf="route.navigationLabel && routeGuardManager.checkRouting(route.component)"
         routerLink="{{ route.path }}"
         >{{ route.navigationLabel }}</a
       >
