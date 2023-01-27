@@ -1,15 +1,17 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { projectsURL, vendorsURL } from '../../shared/constants';
+import { projectsURL, tasksURL, vendorsURL } from '../../shared/constants';
 import {
   Project,
   ProjectMilestoneDTO,
+  TaskCreationDTO,
   VendorAttributeDTO,
   VendorDTO,
 } from '../../shared/interfaces';
 import {
   getProjectURL,
+  getResourcesByProjectIdURL,
   getUpdateProjectStatusURL,
   getVendorAttributesURL,
 } from '../../shared/utils';
@@ -28,6 +30,14 @@ export class ApiService {
 
   get getVendors(): Observable<VendorDTO[]> {
     return this.http.get<VendorDTO[]>(vendorsURL);
+  }
+
+  getResourcesByProjectId(tfrId: number) {
+    return this.http.get(getResourcesByProjectIdURL(tfrId));
+  }
+
+  postTask(taskObject: TaskCreationDTO) {
+    return this.http.post(tasksURL, taskObject);
   }
 
   getVendorAttributes(vendor_id: number): Observable<VendorAttributeDTO[]> {
