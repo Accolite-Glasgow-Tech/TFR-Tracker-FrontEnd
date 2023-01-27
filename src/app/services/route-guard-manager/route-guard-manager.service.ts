@@ -1,7 +1,7 @@
 import { Injectable, OnInit, Type } from '@angular/core';
-import {appRoutes} from '../../app-routes';
-import { LoginGuardService } from '../login-guard/login-guard.service';
-import { LogoutGuardService } from '../logout-guard/logout-guard.service';
+import { appRoutes } from '../../app-routes';
+import { LoginGuardService } from '../guards/login-guard/login-guard.service';
+import { LogoutGuardService } from '../guards/logout-guard/logout-guard.service';
 
 @Injectable({
   providedIn: 'root'

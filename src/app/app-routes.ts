@@ -1,5 +1,5 @@
-import { LoginGuardService } from 'src/app/services/login-guard/login-guard.service';
-import { LogoutGuardService } from 'src/app/services/logout-guard/logout-guard.service';
+import { LoginGuardService } from 'src/app/services/guards/login-guard/login-guard.service';
+import { LogoutGuardService } from 'src/app/services/guards/logout-guard/logout-guard.service';
 import { TFRRoute } from './shared/interfaces';
 import { HomeComponent } from './components/home/home.component';
 import { ReportsComponent } from './components/reports/reports.component';
