@@ -2,7 +2,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Data, Router } from '@angular/router';
-import { catchError, map, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
 import { projectsURL, resourceProjectsURL } from 'src/app/shared/constants';
 import {
@@ -68,8 +68,6 @@ export class TfrManagementService {
     private dialog: MatDialog,
     private router: Router
   ) {}
-
-  updateDatabase() {}
 
   get getProjectId(): number | undefined {
     return this.project?.id;
