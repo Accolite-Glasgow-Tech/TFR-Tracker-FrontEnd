@@ -10,14 +10,14 @@
       <div class="project-details">
         <span
           ><strong>Start Date: </strong>
-          {{ currentProject?.start_date! | date : "short" }}</span
+          {{ dateFormatterService.getShortDisplayDate(currentProject?.start_date) }}</span
         >
       </div>
 
       <div class="project-details">
         <span>
           <strong>End Date: </strong>
-          {{ currentProject?.end_date! | date : "short" }}
+          {{ dateFormatterService.getShortDisplayDate(currentProject?.end_date) }}
         </span>
       </div>
 
