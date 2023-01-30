@@ -281,6 +281,7 @@ export class TfrCreationResourceComponent implements OnInit {
       resource_id: this.resources[index].resource_id,
       resource_name: resource_name,
       resource_email: this.resources[index].resource_email,
+      seniority: this.resources[index].seniority,
       role: role,
     };
 
@@ -335,6 +336,7 @@ export class TfrCreationResourceComponent implements OnInit {
         resource_id: resource.resource_id,
         resource_name: this.resources[indexOfResource].resource_name,
         resource_email: this.resources[indexOfResource].resource_email,
+        seniority: this.resources[indexOfResource].seniority,
         role: this.resourceService.getAssociatedCleanRole(resource.role),
       };
 

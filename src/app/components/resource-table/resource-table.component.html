@@ -3,6 +3,7 @@
     <th class="data-header"></th>
     <th class="data-header">Name</th>
     <th class="data-header">Email</th>
+    <th class="data-header">Seniority</th>
     <th class="data-header">Role</th>
     <th class="data-header" *ngIf="withDelete"></th>
   </tr>
@@ -13,6 +14,7 @@
     <td class="data-cell">{{ i + 1 }}</td>
     <td class="data-cell">{{ resource.resource_name }}</td>
     <td class="data-cell">{{ resource.resource_email }}</td>
+    <td class="data-cell">{{ resource.seniority }}</td>
     <td class="data-cell">{{ resource.role }}</td>
     <td *ngIf="withDelete">
       <button
@@ -41,6 +43,9 @@
         </div>
         <div class="data-cell-div-mobile">
           <strong>Email: </strong>{{ resource.resource_email }}
+        </div>
+        <div class="data-cell-div-mobile">
+          <strong>Seniority: </strong>{{ resource.seniority }}
         </div>
         <div class="data-cell-div-mobile">
           <strong>Role: </strong>{{ resource.role }}

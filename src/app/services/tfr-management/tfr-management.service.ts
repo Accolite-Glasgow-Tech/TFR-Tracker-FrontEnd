@@ -236,12 +236,17 @@ export class TfrManagementService {
   setProjectResourcesWithNames(
     projectResourcesWithNames: AllocatedResourceTypeDTO[]
   ) {
-    const newArray = projectResourcesWithNames.map(
+    const newArray: ProjectResourceDTO[] = projectResourcesWithNames.map(
       ({ resource_name, resource_email, ...keepAttrs }) => {
         keepAttrs.role = this.resourceService.getAssociatedEnumRole(
           keepAttrs.role
         );
-        return keepAttrs;
+        return {
+          resource_id: keepAttrs.resource_id,
+          project_id: keepAttrs.project_id,
+          role: keepAttrs.role,
+          is_deleted: false,
+        };
       }
     );
     this.projectResourcesWithNames = [...projectResourcesWithNames];

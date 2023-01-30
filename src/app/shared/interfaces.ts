@@ -108,6 +108,8 @@ export interface ResourceDTO {
   first_name: string;
   last_name: string;
   type: string;
+  start_date?: Date;
+  seniority: string;
   email: string;
   is_deleted: boolean;
 }
@@ -145,6 +147,7 @@ export interface AllocatedResourceTypeDTO {
   resource_id: number;
   resource_name: string;
   resource_email: string;
+  seniority: string;
   role: string;
 }
 
@@ -152,6 +155,7 @@ export interface ProjectResourceDTO {
   project_id: number;
   resource_id: number;
   role: string;
+  is_deleted: boolean;
 }
 
 export interface ProjectBasicDetails {
@@ -167,6 +171,7 @@ export interface ResourceListType {
   resource_name: string;
   resource_email: string;
   resource_id: number;
+  seniority: string;
   selected: boolean;
 }
 
