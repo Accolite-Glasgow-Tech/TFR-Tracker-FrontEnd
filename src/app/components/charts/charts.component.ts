@@ -1,13 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ChartComponent, ChartOptions } from 'chart.js';
-import { IStatus } from 'src/app/Interface/Status.Interface';
+import { Component, OnInit } from '@angular/core';
+import { ChartOptions } from 'chart.js';
 import { ChartsService } from './charts.service';
-
-import {
-  ApexNonAxisChartSeries,
-  ApexResponsive,
-  ApexChart,
-} from 'ng-apexcharts';
 
 @Component({
   selector: 'app-charts',

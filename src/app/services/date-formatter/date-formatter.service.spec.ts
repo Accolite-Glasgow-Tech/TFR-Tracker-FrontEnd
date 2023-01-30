@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RoutesService } from './routes.service';
+import { DateFormatterService } from './date-formatter.service';
 
-describe('RoutesService', () => {
-  let service: RoutesService;
+describe('DateFormatterService', () => {
+  let service: DateFormatterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(RoutesService);
+    service = TestBed.inject(DateFormatterService);
   });
 
   it('should be created', () => {

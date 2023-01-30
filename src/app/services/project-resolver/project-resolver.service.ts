@@ -1,11 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  Resolve,
-  RouterStateSnapshot,
-} from '@angular/router';
-import { catchError, Observable, throwError } from 'rxjs';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
 import { TfrManagementService } from '../tfr-management/tfr-management.service';
 
@@ -22,7 +18,9 @@ export class ProjectResolverService
 {
   constructor(private tfrManagementService: TfrManagementService) {}
 
-  resolve(route: ActivatedRouteSnapshot) {
+  resolve(
+    route: ActivatedRouteSnapshot
+  ): Observable<string | HttpResponse<Project>> {
     return this.tfrManagementService.getFromDatabase(
       Number(route.paramMap.get('id'))
     );

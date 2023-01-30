@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { of } from 'rxjs';
@@ -99,10 +100,16 @@ describe('ProjectResolverService', () => {
       ],
     };
 
-    tfrManagementServiceSpy.getFromDatabase.and.returnValue(of(dummyProject));
+    let httpResponseProject: HttpResponse<Project> = new HttpResponse({
+      body: dummyProject,
+    });
+
+    tfrManagementServiceSpy.getFromDatabase.and.returnValue(
+      of(httpResponseProject)
+    );
 
     service.resolve(route).subscribe((project) => {
-      expect(project).toEqual(dummyProject);
+      expect(project).toEqual(httpResponseProject);
     });
   });
 });

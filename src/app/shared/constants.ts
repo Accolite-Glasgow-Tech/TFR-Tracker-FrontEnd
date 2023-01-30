@@ -17,3 +17,16 @@ export const TFRCreationResourceURL = `${backendURL}/resources/all/tfr-creation-
 export const projectsURL = `${backendURL}/projects`;
 export const approachingProjectsURL = `${backendURL}/ProjectsStartingInAWeek`;
 export const vendorProjectCountURL = `${backendURL}/VendorProjectCount`;
+
+export const dateFormat = 'MM/dd/YYYY';
+export const statusList = ['DRAFT', 'INPROGRESS', 'ARCHIVED', 'DELIVERED'];
+
+export const daysOfWeek: string[] = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
