@@ -11,6 +11,22 @@
     <div class="form-group-div">
       <div class="resource_selection">
         <mat-form-field appearance="fill" class="form-field">
+          <mat-label class="small-font">Seniority</mat-label>
+          <mat-select disableRipple formControlName="seniorityLevel">
+            <mat-option
+              *ngFor="let seniorityLevel of seniorityLevels"
+              [value]="seniorityLevel"
+              (click)="seniorityLevelChange(seniorityLevel)"
+              class="small-font"
+            >
+              {{ seniorityLevel }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="resource_selection">
+        <mat-form-field appearance="fill" class="form-field">
           <mat-label class="small-font">Resource</mat-label>
           <input
             type="text"
@@ -28,6 +44,13 @@
               [value]="filteredResource.resource_name"
               class="small-font"
             >
+              <ng-container
+                *ngIf="
+                  resourceFormGroup.controls['seniorityLevel'].value === 'ALL'
+                "
+              >
+                {{ filteredResource.seniority }} |
+              </ng-container>
               {{ filteredResource.resource_name }}
             </mat-option>
           </mat-autocomplete>

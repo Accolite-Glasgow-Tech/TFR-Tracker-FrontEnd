@@ -17,6 +17,7 @@ export const TFRCreationResourceURL = `${backendURL}/resources/all/tfr-creation-
 export const projectsURL = `${backendURL}/projects`;
 export const approachingProjectsURL = `${backendURL}/ProjectsStartingInAWeek`;
 export const vendorProjectCountURL = `${backendURL}/VendorProjectCount`;
+export const seniorityLevelsURL = `${backendURL}/resources/seniorityLevels`;
 
 export const dateFormat = 'MM/DD/YYYY';
 export const statusList = ['DRAFT', 'INPROGRESS', 'ARCHIVED', 'DELIVERED'];

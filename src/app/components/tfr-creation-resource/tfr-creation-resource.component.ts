@@ -70,6 +70,8 @@ export class TfrCreationResourceComponent implements OnInit {
   resourceFormGroup!: FormGroup;
   resources!: ResourceListType[];
   roles!: string[];
+  seniorityLevels!: string[];
+  resourcesFilterBySeniority!: ResourceListType[];
   filteredResourceOption!: Observable<ResourceListType[]>;
   filteredRoleOption!: Observable<string[]>;
   allocatedResources: AllocatedResourceTypeDTO[] = [];
@@ -102,12 +104,22 @@ export class TfrCreationResourceComponent implements OnInit {
 
   ngOnInit(): void {
     this.resourceFormGroup = new FormGroup({
+      seniorityLevel: new FormControl(''),
       resource_name: new FormControl('', {
         validators: [Validators.required],
       }),
       role: new FormControl('', {
         validators: [Validators.required],
       }),
+    });
+
+    /*
+      API call to retrieve all the seniority levels that a resource can be
+    */
+    this.resourceService.getAllSeniorityLevels().subscribe((data: string[]) => {
+      this.seniorityLevels = data;
+      this.seniorityLevels.push('ALL');
+      this.resourceFormGroup.get('seniorityLevel')?.setValue('ALL');
     });
 
     /*
@@ -157,6 +169,7 @@ export class TfrCreationResourceComponent implements OnInit {
       .getAllResources()
       .subscribe((data: ResourceListType[]) => {
         this.resources = data;
+        this.resourcesFilterBySeniority = data;
 
         /*
           Adding the custom validator for the auto complete functionality 
@@ -243,8 +256,22 @@ export class TfrCreationResourceComponent implements OnInit {
   */
   public filterResource(value: string): ResourceListType[] {
     const filterValue = value.toLowerCase();
+
+    if (this.resourceFormGroup.controls['seniorityLevel'].value === 'ALL') {
+      return this.resources
+        .filter((resource) => !resource.selected)
+        .filter((resource) =>
+          resource.resource_name.toLowerCase().includes(filterValue)
+        );
+    }
+
     return this.resources
       .filter((resource) => !resource.selected)
+      .filter(
+        (resource) =>
+          resource.seniority ===
+          this.resourceFormGroup.controls['seniorityLevel'].value
+      )
       .filter((resource) =>
         resource.resource_name.toLowerCase().includes(filterValue)
       );
@@ -294,6 +321,8 @@ export class TfrCreationResourceComponent implements OnInit {
     Removing the mapping between a project and a resource.
   */
   removeResource(resource_id: number) {
+    console.log('Here');
+
     /*
       An update API call will be required to update the project-resource database.
     */
@@ -312,7 +341,8 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   resetFormGroup() {
-    this.resourceFormGroup.setValue({ resource_name: '', role: '' });
+    this.resourceFormGroup.get('resource_name')?.setValue('');
+    this.resourceFormGroup.get('role')?.setValue('');
     this.resourceFormGroup.controls['resource_name'].setErrors(null);
     this.resourceFormGroup.controls['role'].setErrors(null);
   }
@@ -414,5 +444,33 @@ export class TfrCreationResourceComponent implements OnInit {
     );
     this.tfrManagementService.updateProjectToResourceMapping();
     this.resourceListUpdated = false;
+  }
+
+  /* 
+    Updates the list of resources that the user can select based on the seniority
+    level selected
+  */
+  seniorityLevelChange(seniorityLevel: string) {
+    this.resetFormGroup();
+    let trimmedResources = this.resources;
+
+    if (seniorityLevel !== 'ALL') {
+      trimmedResources = this.resources.filter(
+        (resource) => resource.seniority === seniorityLevel
+      );
+    }
+
+    this.resourceFormGroup.controls['resource_name'].clearValidators();
+    this.resourceFormGroup.controls['resource_name'].addValidators([
+      autoCompleteResourceNameValidator(trimmedResources),
+      Validators.required,
+    ]);
+
+    this.filteredResourceOption = this.resourceFormGroup.controls[
+      'resource_name'
+    ].valueChanges.pipe(
+      startWith(''),
+      map((value) => this.filterResource(value || ''))
+    );
   }
 }

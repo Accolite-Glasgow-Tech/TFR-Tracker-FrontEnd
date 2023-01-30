@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   resourceRolesURL,
+  seniorityLevelsURL,
   TFRCreationResourceURL,
 } from 'src/app/shared/constants';
 import { ResourceListType } from 'src/app/shared/interfaces';
@@ -31,6 +32,13 @@ export class ResourceService {
   */
   getAllRoles(): Observable<string[]> {
     return this.http.get<string[]>(resourceRolesURL);
+  }
+
+  /*
+    Returns all the seniority levels that a resource can be
+  */
+  getAllSeniorityLevels(): Observable<string[]> {
+    return this.http.get<string[]>(seniorityLevelsURL);
   }
 
   /*
