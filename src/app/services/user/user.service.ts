@@ -9,7 +9,7 @@ import { loginURL, registrationURL } from 'src/app/shared/constants';
 @Injectable({
   providedIn: 'root',
 })
-export class userService {
+export class UserService {
   constructor(public httpClient: HttpClient) {}
 
   register(body: any) {
@@ -18,5 +18,12 @@ export class userService {
 
   login(body: any) {
     return this.httpClient.post<LoginResponse>(loginURL, body);
+  }
+
+  isLoggedIn(): boolean{
+    if (typeof sessionStorage.getItem('jwt_token') == 'string') {
+      return true;
+    }
+    return false;
   }
 }

@@ -89,7 +89,6 @@ export interface MilestoneDTO {
 
 export interface TFRRoute extends Route {
   navigationLabel?: String;
-  isAccessibleWhenLoggedIn?: boolean;
 }
 
 export interface TaskDTO {

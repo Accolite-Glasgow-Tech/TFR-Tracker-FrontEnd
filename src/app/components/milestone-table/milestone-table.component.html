@@ -10,13 +10,13 @@
     <td class="data-cell">{{ i + 1 }}</td>
     <td class="data-cell">{{ milestone.description }}</td>
     <td class="data-cell">
-      {{ milestone.start_date | date : "short" }}
+      {{ dateFormatterService.getShortDisplayDate(milestone.start_date) }}
     </td>
     <td class="data-cell">
-      {{ milestone.delivery_date | date : "short" }}
+      {{ dateFormatterService.getShortDisplayDate(milestone.delivery_date) }}
     </td>
     <td class="data-cell">
-      {{ milestone.acceptance_date | date : "short" }}
+      {{ dateFormatterService.getShortDisplayDate(milestone.acceptance_date) }}
     </td>
   </tr>
 </table>
@@ -31,15 +31,15 @@
         </div>
         <div class="data-cell-div-mobile">
           <strong>Start Date: </strong
-          >{{ milestone.start_date | date : "short" }}
+          >{{ dateFormatterService.getShortDisplayDate(milestone.start_date) }}
         </div>
         <div class="data-cell-div-mobile">
           <strong>Delivery Date: </strong
-          >{{ milestone.delivery_date | date : "short" }}
+          >{{ dateFormatterService.getShortDisplayDate(milestone.delivery_date) }}
         </div>
         <div class="data-cell-div-mobile">
           <strong>Acceptance Date: </strong
-          >{{ milestone.acceptance_date | date : "short" }}
+          >{{ dateFormatterService.getShortDisplayDate(milestone.acceptance_date) }}
         </div>
       </div>
     </td>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { userService } from 'src/app/services/user/user.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-user',
@@ -16,7 +16,7 @@ export class UserComponent implements OnInit {
   logging: any = false;
 
   constructor(
-    private userService: userService,
+    private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
     private snackBarService: SnackBarService

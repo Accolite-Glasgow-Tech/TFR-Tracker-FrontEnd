@@ -1,5 +1,5 @@
-import { LoginGuardService } from 'src/app/services/login-guard/login-guard.service';
-import { LogoutGuardService } from 'src/app/services/logout-guard/logout-guard.service';
+import { LoginGuardService } from 'src/app/services/guards/login-guard/login-guard.service';
+import { LogoutGuardService } from 'src/app/services/guards/logout-guard/logout-guard.service';
 import { TFRRoute } from './shared/interfaces';
 import { HomeComponent } from './components/home/home.component';
 import { ReportsComponent } from './components/reports/reports.component';
@@ -12,42 +12,36 @@ import { ProjectResolverService } from './services/project-resolver/project-reso
 
 export const appRoutes: TFRRoute[] = [
     {
-      isAccessibleWhenLoggedIn: true,
       navigationLabel: 'Home',
       path: 'home',
       component: HomeComponent,
       canActivate: [LoginGuardService],
     },
     {
-      isAccessibleWhenLoggedIn: true,
       navigationLabel: 'Log out',
       path: 'logout',
       component: LogOutComponent,
       canActivate: [LoginGuardService],
     },
     {
-      isAccessibleWhenLoggedIn: false,
       path: 'login',
       navigationLabel: 'Login',
       component: UserComponent,
       canActivate: [LogoutGuardService],
     },
     {
-      isAccessibleWhenLoggedIn: false,
       path: 'register',
       navigationLabel: 'Register',
       component: UserComponent,
       canActivate: [LogoutGuardService],
     },
     {
-      isAccessibleWhenLoggedIn: true,
       navigationLabel: 'TFRs',
       path: 'tfrs',
       component: TfrsComponent,
       canActivate: [LoginGuardService],
     },
     {
-      isAccessibleWhenLoggedIn: true,
       path: 'tfr/create',
       component: StepperComponent,
       navigationLabel: 'Create TFR',
@@ -71,13 +65,11 @@ export const appRoutes: TFRRoute[] = [
       },
     },
     {
-      isAccessibleWhenLoggedIn: true,
       canActivate: [LoginGuardService],
       path: 'tfr',
       component: TfrComponent,
     },
     {
-      isAccessibleWhenLoggedIn: true,
       canActivate: [LoginGuardService],
       path: 'tfr/:id/reports',
       component: ReportsComponent,
