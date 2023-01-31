@@ -274,8 +274,6 @@ export class TfrManagementService {
     pushes the changes to the resources for this project to the database
   */
   updateProjectToResourceMapping() {
-    console.log(this.project);
-
     this.http
       .post(resourceProjectsURL, this.project)
       .subscribe(this.updateProjectToDatabaseObserver);

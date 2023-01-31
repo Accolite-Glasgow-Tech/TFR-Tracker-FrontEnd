@@ -95,9 +95,6 @@ export class TfrCreationResourceComponent implements OnInit {
         ...this.tfrManagementService.getProjectResourcesWithNames,
       ];
 
-      console.log(this.tfrManagementService.getProjectResourcesWithNames);
-      console.log(this.resources);
-
       this.resources.map((resource) => (resource.selected = false));
 
       this.allocatedResources.forEach((allocatedResource) => {
@@ -349,7 +346,18 @@ export class TfrCreationResourceComponent implements OnInit {
       role: role,
     };
 
-    this.allocatedResources.push(allocatedResource);
+    const existingAllocatedResourceIndex = this.allocatedResources.findIndex(
+      (resource) =>
+        resource.resource_id === allocatedResource.resource_id &&
+        resource.role === allocatedResource.role
+    );
+
+    if (existingAllocatedResourceIndex !== -1) {
+      this.allocatedResources[existingAllocatedResourceIndex].is_deleted =
+        false;
+    } else {
+      this.allocatedResources.push(allocatedResource);
+    }
 
     this.resetFormGroup();
   }
@@ -484,7 +492,6 @@ export class TfrCreationResourceComponent implements OnInit {
   */
   seniorityLevelChange(seniorityLevel: string) {
     this.resetFormGroup();
-    console.log(this.resources);
 
     let trimmedResources = this.resources;
 
