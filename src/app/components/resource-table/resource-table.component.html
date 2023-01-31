@@ -17,11 +17,7 @@
     <td class="data-cell">{{ resource.seniority }}</td>
     <td class="data-cell">{{ resource.role }}</td>
     <td *ngIf="withDelete">
-      <button
-        mat-icon-button
-        color="warn"
-        (click)="removeResource(resource.resource_id)"
-      >
+      <button mat-icon-button color="warn" (click)="removeResource(resource)">
         <mat-icon>delete</mat-icon>
       </button>
     </td>
@@ -53,11 +49,7 @@
       </div>
     </td>
     <td *ngIf="withDelete">
-      <button
-        mat-icon-button
-        color="warn"
-        (click)="removeResource(resource.resource_id)"
-      >
+      <button mat-icon-button color="warn" (click)="removeResource(resource)">
         <mat-icon>delete</mat-icon>
       </button>
     </td>

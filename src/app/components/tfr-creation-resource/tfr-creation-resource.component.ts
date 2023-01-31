@@ -62,7 +62,7 @@ export function autoCompleteRoleValidator(validOptions: string[]): ValidatorFn {
 })
 export class TfrCreationResourceComponent implements OnInit {
   constructor(
-    private resourceService: ResourceService,
+    protected resourceService: ResourceService,
     protected tfrManagementService: TfrManagementService,
     private matDialog: MatDialog
   ) {}
@@ -79,6 +79,42 @@ export class TfrCreationResourceComponent implements OnInit {
   resourceListUpdated: boolean = false;
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
+
+  getResourceNameObserver = {
+    next: (data: AllocatedResourceTypeDTO[]) => {
+      this.tfrManagementService.projectResourcesWithNames = data;
+      this.tfrManagementService.projectResourcesWithNames.forEach(
+        (project_resourceWithName: AllocatedResourceTypeDTO) => {
+          project_resourceWithName.role = project_resourceWithName.role.replace(
+            /_/g,
+            ' '
+          );
+        }
+      );
+      this.allocatedResources = [
+        ...this.tfrManagementService.getProjectResourcesWithNames,
+      ];
+
+      console.log(this.tfrManagementService.getProjectResourcesWithNames);
+      console.log(this.resources);
+
+      this.resources.map((resource) => (resource.selected = false));
+
+      this.allocatedResources.forEach((allocatedResource) => {
+        let indexOfResource = this.resources.findIndex(
+          (val) =>
+            val.resource_id === allocatedResource.resource_id &&
+            !allocatedResource.is_deleted
+        );
+        if (indexOfResource !== -1) {
+          this.resources[indexOfResource].selected = true;
+        }
+      });
+
+      this.resetFormGroup();
+      this.resourceListUpdated = false;
+    },
+  };
 
   /*
     object that holds the corresponding error messages for the 
@@ -308,6 +344,7 @@ export class TfrCreationResourceComponent implements OnInit {
       resource_id: this.resources[index].resource_id,
       resource_name: resource_name,
       resource_email: this.resources[index].resource_email,
+      is_deleted: false,
       seniority: this.resources[index].seniority,
       role: role,
     };
@@ -320,22 +357,23 @@ export class TfrCreationResourceComponent implements OnInit {
   /*
     Removing the mapping between a project and a resource.
   */
-  removeResource(resource_id: number) {
-    console.log('Here');
-
+  removeResource(removedResource: AllocatedResourceTypeDTO) {
     /*
       An update API call will be required to update the project-resource database.
     */
     this.resourceListUpdated = true;
 
     const indexForResourcesArr = this.resources.findIndex(
-      (resource) => resource.resource_id === resource_id
+      (resource) => resource.resource_id === removedResource.resource_id
     );
     this.resources[indexForResourcesArr].selected = false;
     const indexForAllocatedResourceArr = this.allocatedResources.findIndex(
-      (resource) => resource.resource_id === resource_id
+      (resource) =>
+        resource.resource_id === removedResource.resource_id &&
+        resource.role === removedResource.role
     );
-    this.allocatedResources.splice(indexForAllocatedResourceArr, 1);
+    // this.allocatedResources.splice(indexForAllocatedResourceArr, 1);
+    this.allocatedResources[indexForAllocatedResourceArr].is_deleted = true;
 
     this.resetFormGroup();
   }
@@ -360,12 +398,16 @@ export class TfrCreationResourceComponent implements OnInit {
         (val) => val.resource_id === resource.resource_id
       );
 
-      this.resources[indexOfResource].selected = true;
+      if (!resource.is_deleted) {
+        this.resources[indexOfResource].selected = true;
+      }
+
       const allocatedResource: AllocatedResourceTypeDTO = {
         project_id: resource.project_id,
         resource_id: resource.resource_id,
         resource_name: this.resources[indexOfResource].resource_name,
         resource_email: this.resources[indexOfResource].resource_email,
+        is_deleted: resource.is_deleted,
         seniority: this.resources[indexOfResource].seniority,
         role: this.resourceService.getAssociatedCleanRole(resource.role),
       };
@@ -421,21 +463,11 @@ export class TfrCreationResourceComponent implements OnInit {
     Reset the allocated resources to previous state in database
   */
   resetResources() {
-    this.allocatedResources = [
-      ...this.tfrManagementService.getProjectResourcesWithNames,
-    ];
-
-    this.resources.map((resource) => (resource.selected = false));
-
-    this.allocatedResources.forEach((allocatedResource) => {
-      let indexOfResource = this.resources.findIndex(
-        (val) => val.resource_id === allocatedResource.resource_id
-      );
-      this.resources[indexOfResource].selected = true;
-    });
-
-    this.resetFormGroup();
-    this.resourceListUpdated = false;
+    this.tfrManagementService
+      .getResourcesNamesByProjectIdFromDatabase(
+        this.tfrManagementService.getProjectId as Number
+      )
+      .subscribe(this.getResourceNameObserver);
   }
 
   saveToDatabase() {
@@ -452,6 +484,8 @@ export class TfrCreationResourceComponent implements OnInit {
   */
   seniorityLevelChange(seniorityLevel: string) {
     this.resetFormGroup();
+    console.log(this.resources);
+
     let trimmedResources = this.resources;
 
     if (seniorityLevel !== 'ALL') {

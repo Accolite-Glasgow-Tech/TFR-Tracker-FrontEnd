@@ -137,16 +137,26 @@
 
   <br />
 
-  <ng-container *ngIf="allocatedResources.length !== 0">
+  <ng-container
+    *ngIf="
+      resourceService.resourcesWithoutDeleted(allocatedResources).length !== 0
+    "
+  >
     <app-resource-table
-      [resourcesWithNames]="allocatedResources"
+      [resourcesWithNames]="
+        resourceService.resourcesWithoutDeleted(allocatedResources)
+      "
       [withDelete]="true"
       (removeResourceEmitter)="removeResource($event)"
     >
     </app-resource-table>
   </ng-container>
 
-  <ng-container *ngIf="allocatedResources.length === 0">
+  <ng-container
+    *ngIf="
+      resourceService.resourcesWithoutDeleted(allocatedResources).length === 0
+    "
+  >
     <div class="error-div">
       A TFR must have at least one resource associated. Please assign one to
       move to next step.
@@ -165,7 +175,10 @@
   </button>
   <button
     mat-raised-button
-    [disabled]="!resourceListUpdated || allocatedResources.length === 0"
+    [disabled]="
+      !resourceListUpdated ||
+      resourceService.resourcesWithoutDeleted(allocatedResources).length === 0
+    "
     class="navigation-btn"
     color="primary"
     (click)="saveToDatabase()"
@@ -185,8 +198,8 @@
     class="navigation-btn"
     color="primary"
     [disabled]="
-      allocatedResources.length === 0 ||
-      this.tfrManagementService.getProjectResources?.length === 0
+      resourceService.resourcesWithoutDeleted(allocatedResources).length ===
+        0 || this.tfrManagementService.getProjectResources?.length === 0
     "
     (click)="triggerStep(true)"
   >

@@ -1,7 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { ResourceService } from 'src/app/services/resource/resource.service';
-import { AllocatedResourceTypeDTO, Milestone } from 'src/app/shared/interfaces';
-import { Project } from 'src/app/shared/interfaces';
+import {
+  AllocatedResourceTypeDTO,
+  Milestone,
+  Project,
+} from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-project-summary',
@@ -22,5 +25,11 @@ export class ProjectSummaryComponent {
     return !milestones
       ? []
       : milestones.filter((milestone: Milestone) => !milestone.is_deleted);
+  }
+
+  get currentResourcesWithNames(): AllocatedResourceTypeDTO[] {
+    return this.resourceService.resourcesWithoutDeleted(
+      this.resourcesWithNames
+    );
   }
 }

@@ -148,6 +148,7 @@ export interface AllocatedResourceTypeDTO {
   resource_name: string;
   resource_email: string;
   seniority: string;
+  is_deleted: boolean;
   role: string;
 }
 

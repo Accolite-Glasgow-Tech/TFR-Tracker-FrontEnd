@@ -1,6 +1,10 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Data, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
@@ -42,16 +46,29 @@ export class TfrManagementService {
       }
       this.snackBarService.showSnackBar('Updates saved to database', 2000);
     },
-    error: (err: Error) => {
-      let dialogRef = this.dialog.open(TfrCreationDialogComponent, {
-        data: {
-          title: 'Save unsuccessful',
-          content:
-            'Updating an older version of project. Please see the new changes',
-          confirmText: 'Redirect',
-          cancelText: '',
-        },
-      });
+    error: (err: HttpErrorResponse) => {
+      let dialogRef!: MatDialogRef<TfrCreationDialogComponent, any>;
+      if (err.status === 500) {
+        dialogRef = this.dialog.open(TfrCreationDialogComponent, {
+          data: {
+            title: 'Server error',
+            content: 'Could not update the database',
+            confirmText: 'Ok',
+            cancelText: '',
+          },
+        });
+      } else if (err.status === 412) {
+        dialogRef = this.dialog.open(TfrCreationDialogComponent, {
+          data: {
+            title: 'Save unsuccessful',
+            content:
+              'Updating an older version of project. Please see the new changes',
+            confirmText: 'Redirect',
+            cancelText: '',
+          },
+        });
+      }
+
       dialogRef.afterClosed().subscribe((result: string) => {
         if (result === 'true') {
           this.router.navigate([`/tfr/${this.getProjectId}`]);
@@ -245,7 +262,7 @@ export class TfrManagementService {
           resource_id: keepAttrs.resource_id,
           project_id: keepAttrs.project_id,
           role: keepAttrs.role,
-          is_deleted: false,
+          is_deleted: keepAttrs.is_deleted,
         };
       }
     );
@@ -257,6 +274,8 @@ export class TfrManagementService {
     pushes the changes to the resources for this project to the database
   */
   updateProjectToResourceMapping() {
+    console.log(this.project);
+
     this.http
       .post(resourceProjectsURL, this.project)
       .subscribe(this.updateProjectToDatabaseObserver);
@@ -277,18 +296,12 @@ export class TfrManagementService {
     Returns more details information about the resources associated with the project.
     Each object contains the current project_id, the resource's id, name, email, role.
   */
-  getResourcesNamesByProjectIdFromDatabase(project_id: Number) {
-    this.http
-      .get<AllocatedResourceTypeDTO[]>(getAllocatedResourcesURL(project_id))
-      .subscribe((data: AllocatedResourceTypeDTO[]) => {
-        this.projectResourcesWithNames = data;
-        this.projectResourcesWithNames.forEach(
-          (project_resourceWithName: AllocatedResourceTypeDTO) => {
-            project_resourceWithName.role =
-              project_resourceWithName.role.replace(/_/g, ' ');
-          }
-        );
-      });
+  getResourcesNamesByProjectIdFromDatabase(
+    project_id: Number
+  ): Observable<AllocatedResourceTypeDTO[]> {
+    return this.http.get<AllocatedResourceTypeDTO[]>(
+      getAllocatedResourcesURL(project_id)
+    );
   }
 
   updateStatusToDatabase(): Observable<boolean> {

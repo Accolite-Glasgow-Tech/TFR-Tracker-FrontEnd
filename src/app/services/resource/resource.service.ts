@@ -6,7 +6,10 @@ import {
   seniorityLevelsURL,
   TFRCreationResourceURL,
 } from 'src/app/shared/constants';
-import { ResourceListType } from 'src/app/shared/interfaces';
+import {
+  AllocatedResourceTypeDTO,
+  ResourceListType,
+} from 'src/app/shared/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -75,5 +78,18 @@ export class ResourceService {
   */
   getAssociatedCleanRole(role: string): string {
     return this.roleHashMap.get(role);
+  }
+
+  /*
+    Get full list of project resources with names that have not been deleted
+  */
+  resourcesWithoutDeleted(
+    resourcesWithNames: AllocatedResourceTypeDTO[] | undefined
+  ): AllocatedResourceTypeDTO[] {
+    return !resourcesWithNames
+      ? []
+      : resourcesWithNames.filter(
+          (resource: AllocatedResourceTypeDTO) => !resource.is_deleted
+        );
   }
 }
