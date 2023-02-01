@@ -8,7 +8,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Data, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
-import { projectsURL, resourceProjectsURL } from 'src/app/shared/constants';
+import { resourceProjectsURL } from 'src/app/shared/constants';
 import {
   AllocatedResourceTypeDTO,
   Milestone,
@@ -19,11 +19,7 @@ import {
   ProjectResourceDTO,
   VendorDTO,
 } from 'src/app/shared/interfaces';
-import {
-  getAllocatedResourcesURL,
-  getProjectURL,
-  getUpdateProjectStatusURL,
-} from 'src/app/shared/utils';
+import { getAllocatedResourcesURL } from 'src/app/shared/utils';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';

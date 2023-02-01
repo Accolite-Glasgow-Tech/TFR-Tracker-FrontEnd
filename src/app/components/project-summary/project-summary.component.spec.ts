@@ -1,12 +1,34 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
-import { Milestone } from 'src/app/shared/interfaces';
+import { AllocatedResourceTypeDTO, Milestone } from 'src/app/shared/interfaces';
 
 import { ProjectSummaryComponent } from './project-summary.component';
 
 describe('ProjectSummaryComponent', () => {
   let component: ProjectSummaryComponent;
   let fixture: ComponentFixture<ProjectSummaryComponent>;
+  let resourceServiceSpy: jasmine.SpyObj<ResourceService>;
+  let dummyAllocatedResource: AllocatedResourceTypeDTO[] = [
+    {
+      project_id: 1,
+      resource_id: 1,
+      resource_name: 'John Bowers',
+      resource_email: 'johnbowers@accolitedigital.com',
+      seniority: 'SENIOR',
+      is_deleted: false,
+      role: 'SCRUM MASTER',
+    },
+    {
+      project_id: 1,
+      resource_id: 3,
+      resource_name: 'Kimberly Gould',
+      resource_email: 'kimberlygould@accolitedigital.com',
+      seniority: 'JUNIOR',
+      is_deleted: false,
+      role: 'SOFTWARE DEVELOPER',
+    },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -14,12 +36,23 @@ describe('ProjectSummaryComponent', () => {
       providers: [
         {
           provide: ResourceService,
-          useValue: jasmine.createSpyObj(['']),
+          useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
+        },
+        {
+          provide: DateFormatterService,
+          useValue: jasmine.createSpyObj(['getShortDisplayDate']),
         },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProjectSummaryComponent);
+    resourceServiceSpy = TestBed.inject(
+      ResourceService
+    ) as jasmine.SpyObj<ResourceService>;
+    resourceServiceSpy.resourcesWithoutDeleted.and.returnValue(
+      dummyAllocatedResource
+    );
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -70,5 +103,9 @@ describe('ProjectSummaryComponent', () => {
 
     let results = component.milestonesWithoutDeleted(dummyMilestones);
     expect(results).toEqual([]);
+  });
+
+  it('should return allocated resources without delete', () => {
+    expect(component.currentResourcesWithNames).toEqual(dummyAllocatedResource);
   });
 });

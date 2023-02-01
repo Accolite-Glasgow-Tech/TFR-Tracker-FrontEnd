@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project } from 'src/app/shared/interfaces';
+import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
 
 import { TfrComponent } from './tfr.component';
 
@@ -69,19 +69,42 @@ describe('TfrComponent', () => {
         project_id: 1,
         resource_id: 3,
         role: 'SOFTWARE_DEVELOPER',
+        is_deleted: false,
       },
       {
         project_id: 1,
         resource_id: 1,
         role: 'SCRUM_MASTER',
+        is_deleted: false,
       },
       {
         project_id: 1,
         resource_id: 2,
         role: 'PROJECT_MANAGER',
+        is_deleted: false,
       },
     ],
   };
+  const dummyAllocatedResource: AllocatedResourceTypeDTO[] = [
+    {
+      project_id: 1,
+      resource_id: 1,
+      resource_name: 'John Bowers',
+      resource_email: 'johnbowers@accolitedigital.com',
+      seniority: 'SENIOR',
+      is_deleted: false,
+      role: 'SCRUM MASTER',
+    },
+    {
+      project_id: 1,
+      resource_id: 3,
+      resource_name: 'Kimberly Gould',
+      resource_email: 'kimberlygould@accolitedigital.com',
+      seniority: 'JUNIOR',
+      is_deleted: false,
+      role: 'SOFTWARE DEVELOPER',
+    },
+  ];
 
   async function setUpSuccess() {
     await TestBed.configureTestingModule({
@@ -180,6 +203,10 @@ describe('TfrComponent', () => {
     tfrManagementServiceSpy = fixture.debugElement.injector.get(
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
+
+    tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
+      of(dummyAllocatedResource)
+    );
 
     component = fixture.componentInstance;
   }

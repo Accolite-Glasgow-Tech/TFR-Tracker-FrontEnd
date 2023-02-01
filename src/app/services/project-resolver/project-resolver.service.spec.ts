@@ -86,16 +86,19 @@ describe('ProjectResolverService', () => {
           project_id: 1,
           resource_id: 3,
           role: 'SOFTWARE_DEVELOPER',
+          is_deleted: false,
         },
         {
           project_id: 1,
           resource_id: 1,
           role: 'SCRUM_MASTER',
+          is_deleted: false,
         },
         {
           project_id: 1,
           resource_id: 2,
           role: 'PROJECT_MANAGER',
+          is_deleted: false,
         },
       ],
     };

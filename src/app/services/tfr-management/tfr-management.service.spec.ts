@@ -1,4 +1,8 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse,
+} from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
@@ -6,7 +10,7 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
-import { projectsURL, resourceProjectsURL } from 'src/app/shared/constants';
+import { resourceProjectsURL } from 'src/app/shared/constants';
 import {
   AllocatedResourceTypeDTO,
   Milestone,
@@ -15,11 +19,7 @@ import {
   ProjectResourceDTO,
   VendorDTO,
 } from 'src/app/shared/interfaces';
-import {
-  getAllocatedResourcesURL,
-  getProjectURL,
-  getUpdateProjectStatusURL,
-} from 'src/app/shared/utils';
+import { getAllocatedResourcesURL } from 'src/app/shared/utils';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
@@ -42,8 +42,8 @@ describe('TfrManagementService', () => {
   let vendors: VendorDTO[];
   let dialogSpy: jasmine.Spy;
   let dialogRefSpyObj = jasmine.createSpyObj({
-    afterClosed: of({}),
-    close: null,
+    afterClosed: of('true'),
+    close: of('true'),
   });
 
   beforeEach(() => {
@@ -62,7 +62,13 @@ describe('TfrManagementService', () => {
         },
         {
           provide: ApiService,
-          useValue: jasmine.createSpyObj('ApiService', ['getVendorData']),
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getVendors',
+            'postProject',
+            'putStatusAgreed',
+            'putProject',
+            'getProject',
+          ]),
         },
       ],
     });
@@ -116,11 +122,13 @@ describe('TfrManagementService', () => {
         project_id: 1,
         resource_id: 1,
         role: 'SCRUM_MASTER',
+        is_deleted: false,
       },
       {
         project_id: 1,
         resource_id: 3,
         role: 'SOFTWARE_DEVELOPER',
+        is_deleted: false,
       },
     ];
 
@@ -186,6 +194,8 @@ describe('TfrManagementService', () => {
         resource_id: 1,
         resource_name: 'John Bowers',
         resource_email: 'johnbowers@accolitedigital.com',
+        seniority: 'JUNIOR',
+        is_deleted: false,
         role: 'SCRUM_MASTER',
       },
       {
@@ -193,11 +203,15 @@ describe('TfrManagementService', () => {
         resource_id: 3,
         resource_name: 'Kimberly Gould',
         resource_email: 'kimberlygould@accolitedigital.com',
+        seniority: 'SENIOR',
+        is_deleted: false,
         role: 'SOFTWARE_DEVELOPER',
       },
     ];
 
     service.project = project;
+
+    apiServiceSpy.postProject.and.returnValue(of(1));
   });
 
   afterEach(() => {
@@ -258,23 +272,39 @@ describe('TfrManagementService', () => {
   });
 
   it('should set Basic Details', () => {
+    apiServiceSpy.putProject.and.returnValue(of(1));
+
     service.project = project;
     service.vendorName = 'Morgan Stanley';
-    apiServiceSpy.getVendorData.and.returnValue(of(vendors));
+    (apiServiceSpy as any).getVendors = of(vendors);
     service.setBasicDetails(basicDetails);
-    const req = httpMock.expectOne(projectsURL);
-    expect(req.request.method).toEqual('PUT');
-    req.flush(2);
 
     expect(service.getBasicDetails).toEqual(basicDetails);
   });
 
+  it('should update project to db - failure bad versioning', () => {
+    let httpErrorResponse: HttpErrorResponse = new HttpErrorResponse({
+      status: 412,
+    });
+    dialogRefSpyObj.afterClosed.and.returnValue(of('true'));
+
+    service.updateProjectToDatabaseObserver.error(httpErrorResponse);
+    expect(dialogSpy).toHaveBeenCalled();
+  });
+
+  it('should update project to db - failure server error', () => {
+    let httpErrorResponse: HttpErrorResponse = new HttpErrorResponse({
+      status: 500,
+    });
+
+    service.updateProjectToDatabaseObserver.error(httpErrorResponse);
+    expect(dialogSpy).toHaveBeenCalled();
+  });
+
   it('should make API call to create project in db', () => {
     service.project = project;
+    apiServiceSpy.postProject.and.returnValue(of(1));
     service.createProjectInDatabase();
-    const req = httpMock.expectOne(projectsURL);
-    expect(req.request.method).toEqual('POST');
-    req.flush(1);
     expect(service.project.id).toBe(1);
     expect(service.project.version).toBe(2);
     expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
@@ -283,20 +313,11 @@ describe('TfrManagementService', () => {
     );
   });
 
-  it('should update project to db failure versioning', () => {
-    service.updateProjectToDatabase();
-    const req = httpMock.expectOne(projectsURL);
-    expect(req.request.method).toEqual('PUT');
-    req.flush(Error('An error occured'));
-  });
-
   it('should create a new project by setting basic details', () => {
     service.project = undefined;
-    apiServiceSpy.getVendorData.and.returnValue(of(vendors));
+    (apiServiceSpy as any).getVendors = of(vendors);
+    apiServiceSpy.postProject.and.returnValue(of(2));
     service.setBasicDetails(basicDetails);
-    const req = httpMock.expectOne(projectsURL);
-    expect(req.request.method).toEqual('POST');
-    req.flush(2);
 
     expect(service.getBasicDetails).toEqual(basicDetails);
   });
@@ -352,15 +373,13 @@ describe('TfrManagementService', () => {
       status: 200,
     });
 
+    apiServiceSpy.getProject.and.returnValue(of(httpResponse));
+
     let result = service.getFromDatabase(1);
     result.subscribe((data) => {
       expect(data.url).toEqual(httpResponse.url);
       expect(data.status).toEqual(httpResponse.status);
     });
-
-    const req = httpMock.expectOne(getProjectURL(1));
-    expect(req.request.method).toEqual('GET');
-    req.flush(httpResponse);
   });
 
   it('should extract project success', () => {
@@ -384,40 +403,19 @@ describe('TfrManagementService', () => {
   });
 
   it('should get resource detailed by project id from db', () => {
-    service.getResourcesNamesByProjectIdFromDatabase(1);
+    let result = service.getResourcesNamesByProjectIdFromDatabase(1);
+    result.subscribe((allocatedResources) => {
+      expect(allocatedResources).toEqual(projectResourcesWithNames);
+    });
 
     const req = httpMock.expectOne(getAllocatedResourcesURL(1));
     expect(req.request.method).toEqual('GET');
     req.flush(projectResourcesWithNames);
-
-    let cleanProjectResourcesWithNames = [
-      {
-        project_id: 1,
-        resource_id: 1,
-        resource_name: 'John Bowers',
-        resource_email: 'johnbowers@accolitedigital.com',
-        role: 'SCRUM MASTER',
-      },
-      {
-        project_id: 1,
-        resource_id: 3,
-        resource_name: 'Kimberly Gould',
-        resource_email: 'kimberlygould@accolitedigital.com',
-        role: 'SOFTWARE DEVELOPER',
-      },
-    ];
-
-    expect(service.projectResourcesWithNames).toEqual(
-      cleanProjectResourcesWithNames
-    );
   });
 
   it('should update project status to db', () => {
+    apiServiceSpy.putStatusAgreed.and.returnValue(of(true));
     let result = service.updateStatusToDatabase();
     result.subscribe((response) => expect(response).toBe(true));
-
-    const req = httpMock.expectOne(getUpdateProjectStatusURL(1, 'AGREED'));
-    expect(req.request.method).toEqual('PUT');
-    req.flush(true);
   });
 });
