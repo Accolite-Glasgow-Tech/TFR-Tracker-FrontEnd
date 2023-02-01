@@ -1,14 +1,17 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { GridsterComponent, IGridsterOptions } from 'angular2gridster';
 import { ChartsComponent } from '../charts/charts.component';
 import { WidgetApproachingProjectsComponent } from '../widget-approaching-projects/widget-approaching-projects.component';
-import { WidgetApproachingProjectsService } from '../widget-approaching-projects/widget-approaching-projects.service';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { WidgetVendorLocationComponent } from '../widget-vendor-location/widget-vendor-location.component';
 import { WidgetVendorProjectCountComponent } from '../widget-vendor-project-count/widget-vendor-project-count.component';
+import { ManageWidgetModalComponent } from '../manage-widget-modal/manage-widget-modal.component';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  providers: [MdbModalService],
 })
 export class HomeComponent {
   @ViewChild(GridsterComponent) gridster!: GridsterComponent;
@@ -20,21 +23,35 @@ export class HomeComponent {
   @ViewChild(WidgetApproachingProjectsComponent)
   WidgetApproachingProjectsComponent!: WidgetApproachingProjectsComponent;
 
+  constructor(private matdialog: MatDialog) {}
+
   widgets: any[] = [
     {
-      componentType: WidgetVendorLocationComponent,
       componentName: 'Client Location',
+      present: true,
+      componentType: WidgetVendorLocationComponent,
     },
     {
-      componentType: WidgetVendorProjectCountComponent,
       componentName: 'Our Clients',
+      present: true,
+      componentType: WidgetVendorProjectCountComponent,
+
     },
-    { componentType: ChartsComponent, componentName: 'TFR Status' },
     {
-      componentType: WidgetApproachingProjectsComponent,
+      componentName: 'TFR Status',
+      present: true,
+      componentType: ChartsComponent,
+
+    },
+    {
       componentName: 'Upcoming Projects',
+      present: true,
+      componentType: WidgetApproachingProjectsComponent,
+
     },
   ];
+
+  widgetsfalse: any[] = [];
 
   gridsterOptions: IGridsterOptions = {
     lanes: this.getLaneCount(),
@@ -77,43 +94,82 @@ export class HomeComponent {
     return 2;
   }
 
-  public onClick_AddClientLocationWidget(): void {
-    this.widgets.push({
-      componentName: 'Client Location',
-      componentType: WidgetVendorLocationComponent,
-    });
-  }
-
-  public onClick_AddOurClientsWidget(): void {
-    this.widgets.push({
-      componentName: 'Our Clients',
-      componentType: WidgetVendorProjectCountComponent,
-    });
-  }
-
-  public onClick_AddTFRStatusWidget(): void {
-    this.widgets.push({
-      componentName: 'TFR Status',
-      componentType: ChartsComponent,
-    });
-  }
-
-  public onClick_AddUpcomingProjectsWidget(): void {
-    this.widgets.push({
-      componentName: 'Upcoming Projects',
-      componentType: WidgetApproachingProjectsComponent,
-    });
-  }
-
   public onClick_removeItem(_widget: any): void {
     this.widgets.splice(this.widgets.indexOf(_widget), 1);
+    this.widgetsfalse.push({
+      componentName: _widget.componentName,
+      present: false,
+      componentType: _widget.ChartsComponent,
+    });
   }
 
   optionsChange(options: IGridsterOptions) {
-    console.log('options change:', options.lanes);
+    // console.log('options change:', options.lanes);
   }
 
-  checkForWidget(widget: string): boolean {
-    return this.widgets.some(i => i.componentName === widget);
+  OpenPopup() {
+    const popup = this.matdialog.open(ManageWidgetModalComponent, {
+      width: '35%',
+      height: '300px',
+      enterAnimationDuration: '500ms',
+      data: { widgetdata: this.widgetsfalse },
+    });
+
+    popup.afterClosed().subscribe((item) => {
+      if (item === 'TFR Status') {
+        this.widgetsfalse.splice(
+          this.widgetsfalse.findIndex((x) => x.componentName === 'TFR Status'),
+          1
+        );
+        this.widgets.push({
+          componentName: 'TFR Status',
+          present: true,
+          componentType: ChartsComponent,
+        });
+      }
+
+      if (item === 'Upcoming Projects') {
+        this.widgetsfalse.splice(
+          this.widgetsfalse.findIndex(
+            (x) => x.componentName === 'Upcoming Projects'
+          ),
+          1
+        );
+        this.widgets.push({
+          componentName: 'Upcoming Projects',
+          present: true,
+          componentType: WidgetApproachingProjectsComponent,
+
+        });
+      }
+
+      if (item === 'Our Clients') {
+        this.widgetsfalse.splice(
+          this.widgetsfalse.findIndex((x) => x.componentName === 'Our Clients'),
+          1
+        );
+        this.widgets.push({
+          componentName: 'Our Clients',
+          present: true,
+          componentType: WidgetVendorProjectCountComponent,
+
+        });
+      }
+
+      if (item === 'Client Location') {
+        this.widgetsfalse.splice(
+          this.widgetsfalse.findIndex(
+            (x) => x.componentName === 'Client Location'
+          ),
+          1
+        );
+        this.widgets.push({
+          componentName: 'Client Location',
+          present: true,
+          componentType: WidgetVendorLocationComponent,
+
+        });
+      }
+    });
   }
 }
