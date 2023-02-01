@@ -48,6 +48,7 @@ export class MilestoneManagerService {
     if (projectId != undefined) {
       this.setSelected({
         project_id: projectId,
+        name: '',
         description: '',
         id: idOfNew,
         is_deleted: false,
