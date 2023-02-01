@@ -8,7 +8,6 @@ import { TFRStatusCountURL } from 'src/app/shared/constants';
 })
 export class ChartsService {
   constructor(private http: HttpClient) {}
-
   readTfrStatusData(): Observable<any> {
     return this.http.get(TFRStatusCountURL);
   }

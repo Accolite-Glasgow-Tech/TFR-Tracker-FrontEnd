@@ -1,9 +1,3 @@
-.rangepicker {
-  width: 300px;
-}
-.datepicker {
-  width: 200px;
-}
 #datediv {
   margin: 20px;
 }
@@ -14,10 +8,58 @@
 .inputdiv {
   margin: 20px;
   display: flex;
+  flex-wrap: wrap;
 }
 #buttons {
   margin: 20px;
 }
 #chips {
   margin: 20px;
+}
+
+.floating-btn-div {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+}
+
+.small-text {
+  font-size: smaller;
+}
+
+.form-field {
+  width: 45%;
+  margin: 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.basic-details-div {
+  margin: 1rem;
+}
+
+.intro-div {
+  margin-left: 10px;
+}
+
+.navigation-btn {
+  margin: 5px;
+}
+
+@media screen and (max-width: 800px) {
+  button {
+    width: 2%;
+    height: 2%;
+    font-size: smaller;
+  }
+
+  .form-field {
+    width: 100%;
+    margin: 0px;
+  }
 }

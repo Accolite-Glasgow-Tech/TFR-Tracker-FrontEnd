@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from 'src/app/services/api.service';
+import { Component, Inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Data, Router } from '@angular/router';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { Project } from 'src/app/shared/interfaces';
 
@@ -13,11 +12,28 @@ import { Project } from 'src/app/shared/interfaces';
 export class TfrComponent implements OnInit {
   TfrId!: Number;
   errorMessage: string = '';
+
+  getProjectObserver = {
+    next: (response: Data) => {
+      let status: number = response['project']['status'];
+      let project: Project = response['project']['body'];
+      if (status === 200) {
+        this.tfrManagementService.project = project;
+        this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
+          project.id
+        );
+        this.tfrManagementService.setVendorName(project.vendor_id);
+      } else {
+        this.tfrManagementService.apiError = true;
+      }
+    },
+  };
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    protected tfrManagementService: TfrManagementService,
-    private apiService: ApiService
+    @Inject(TfrManagementService)
+    protected tfrManagementService: TfrManagementService
   ) {}
 
   ngOnInit() {
@@ -39,20 +55,7 @@ export class TfrComponent implements OnInit {
         is loaded. This component has a resolver (refer to /services/project-resolver) that
         fetches the project to be displayed.
       */
-      this.route.data.subscribe((response) => {
-        let status: number = response['project']['status'];
-        let project: Project = response['project']['body'];
-
-        if (status === 200) {
-          this.tfrManagementService.project = project;
-          this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
-            project.id
-          );
-          this.tfrManagementService.setVendorName(project.vendor_id);
-        } else {
-          this.tfrManagementService.apiError = true;
-        }
-      });
+      this.route.data.subscribe(this.getProjectObserver);
     }
   }
 

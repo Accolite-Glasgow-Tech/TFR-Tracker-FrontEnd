@@ -4,7 +4,7 @@
   </div>
   <br />
   <form [formGroup]="tfrDetails">
-    <p>
+    <div class="container">
       <mat-form-field class="form-field" appearance="fill">
         <mat-label>Name</mat-label>
         <input matInput formControlName="name" />
@@ -12,9 +12,7 @@
           >Invalid name</mat-error
         >
       </mat-form-field>
-    </p>
 
-    <p>
       <mat-form-field class="form-field" appearance="fill">
         <mat-label>Start and End date of project</mat-label>
         <mat-date-range-input [rangePicker]="picker">
@@ -31,7 +29,6 @@
             placeholder="End date"
           />
         </mat-date-range-input>
-        <mat-hint class="small-text">MM/DD/YYYY – MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
 
@@ -42,8 +39,7 @@
           >Invalid end date</mat-error
         >
       </mat-form-field>
-    </p>
-    <br />
+    </div>
     <app-vendors
       (onSelected)="onVendorSelect($event)"
       (onAttributesUpdated)="onAttributesUpdated($event)"
@@ -66,7 +62,21 @@
   </button>
   <button
     mat-raised-button
-    [disabled]="!isFormValid()"
+    [disabled]="
+      !(
+        this.tfrManager.getBasicDetails &&
+        this.vendorGroup &&
+          (this.vendorGroup.dirty || this.tfrDetails.dirty)
+      )
+    "
+    class="navigation-btn"
+    (click)="resetInputFields()"
+  >
+    Reset
+  </button>
+  <button
+    mat-raised-button
+    [disabled]="!isFormValid() || this.tfrManager.project === undefined"
     class="navigation-btn"
     color="primary"
     (click)="next()"
@@ -75,5 +85,6 @@
   </button>
 </div>
 
+<br />
 <br />
 <br />

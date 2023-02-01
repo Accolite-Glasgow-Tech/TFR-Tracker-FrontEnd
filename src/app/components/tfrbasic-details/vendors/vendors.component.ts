@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
-import { ApiService } from 'src/app/services/api.service';
+import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   ProjectBasicDetails,
@@ -25,7 +25,6 @@ export class VendorsComponent implements OnInit {
 
   vendors!: VendorDTO[];
   attributes!: VendorAttributeDTO[];
-  attributeGroup!: FormGroup;
   vendorGroup!: FormGroup;
 
   @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
@@ -39,7 +38,7 @@ export class VendorsComponent implements OnInit {
       this.resetVendorControls();
     });
 
-    this.api.getVendorData().subscribe((data) => {
+    this.api.getVendors.subscribe((data) => {
       this.vendors = data;
       if (this.editMode) {
         // TODO fill in details of vendor and Attributes
@@ -47,23 +46,21 @@ export class VendorsComponent implements OnInit {
         this.vendors.forEach((vendor) => {
           if (vendor.id == this.existingDetails.vendor_id) {
             this.onSelectedVendor(vendor);
-          
           }
         });
-      
       }
     });
 
-    this.attributeGroup = new FormGroup({
+    this.vendorGroup = new FormGroup({
+      name: new FormControl(''),
       attributeValues: new FormArray([]),
     });
 
     this.getAttributes()
       .valueChanges.pipe(debounce(() => interval(500)))
       .subscribe(() => {
-        this.onAttributesUpdated.emit(this.attributeGroup);
+        this.onAttributesUpdated.emit(this.vendorGroup);
       });
-
   }
 
   resetVendorControls() {
@@ -86,13 +83,15 @@ export class VendorsComponent implements OnInit {
     // parse values from existingDetails.vendor_specific
     // use to set values of form array
 
-    this.attributes.forEach((attribute, index) => {
-      this.getAttributes()
-        .at(index)
-        .setValue(
-          this.existingDetails.vendor_specific[attribute.attribute_name]
-        );
-    });
+    if (this.attributes) {
+      this.attributes.forEach((attribute, index) => {
+        this.getAttributes()
+          .at(index)
+          .setValue(
+            this.existingDetails.vendor_specific[attribute.attribute_name]
+          );
+      });
+    }
   }
 
   @Output() onSelected = new EventEmitter<VendorDTO>();
@@ -115,13 +114,15 @@ export class VendorsComponent implements OnInit {
         this.getAttributes().push(new FormControl('', [Validators.required]));
       });
 
-      if (this.vendorGroup.value.name === this.tfrManagementService.getVendorName) {
+      if (
+        this.vendorGroup.value.name === this.tfrManagementService.getVendorName
+      ) {
         this.fillAttributesFromExisting();
       }
     });
   }
 
   getAttributes(): FormArray {
-    return this.attributeGroup.controls['attributeValues'] as FormArray;
+    return this.vendorGroup.controls['attributeValues'] as FormArray;
   }
 }

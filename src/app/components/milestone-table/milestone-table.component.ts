@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { Milestone } from 'src/app/shared/interfaces';
+import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
 
 @Component({
   selector: 'app-milestone-table',
@@ -10,5 +11,6 @@ import { Milestone } from 'src/app/shared/interfaces';
 export class MilestoneTableComponent {
   @Input() milestones!: Milestone[];
 
-  constructor(protected resourceService: ResourceService) {}
+  constructor(protected resourceService: ResourceService,
+    public dateFormatterService: DateFormatterService) {}
 }

@@ -1,3 +1,24 @@
+
+
+.top-btn-left {
+  width: 250px;
+  margin: 5px;
+  height: 40px;
+}
+
+.example-button-row {
+  display: block;
+  text-align: right;
+  padding-right: 9%;
+  margin-bottom: -6px;
+  margin-top: 6px;
+}
+
+
+section {
+  display: table;
+}
+
 .closeiconbutton {
   background-color: #507fc6;
   border: none;
@@ -22,13 +43,6 @@
   display: inline-table;
   position: initial;
 }
-.widgetdivouter{
-  height: 400px;
-  width: inherit;
-  position: relative;
-  margin: 8px;
-  inline-size: auto;
-}
 
 .widget {
   border: 8px solid #fbfbfb;
@@ -51,46 +65,6 @@ a.headerText {
   font-size: 24px;
   color: #000000;
   font-weight: bold;
-  // padding: 16px;
   vertical-align: -webkit-baseline-middle;
-  // margin: 8px;
   margin: 14px;
 }
-
-// .btn {
-//   border: 1px solid #ccc;
-//   width: 100%;
-//   height: 100%;
-// }
-
-// .example-button-row {
-//   display: table-cell;
-//   max-width: 600px;
-// }
-
-// .example-button-row .mat-mdc-button-base {
-//   margin: 8px 8px 8px 0;
-// }
-
-// .acc-tfr {
-//   font-size: 150%;
-// }
-
-// // div {
-// //   overflow: -moz-hidden-unscrollable;
-
-// // }
-
-// a {
-//   text-decoration: none;
-//   font-size: 110%;
-//   white-space: normal;
-// }
-
-// .example-icon {
-//   padding: 0 14px;
-// }
-
-// .example-spacer {
-//   flex: 1 1 auto;
-// }

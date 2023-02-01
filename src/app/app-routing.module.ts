@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { RoutesService } from 'src/app/services/routes/routes.service';
+import { appRoutes } from './app-routes';
 
 @NgModule({
-  imports: [RouterModule.forRoot(RoutesService.RoutesList)],
+  imports: [RouterModule.forRoot(appRoutes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+  constructor() {}
+}

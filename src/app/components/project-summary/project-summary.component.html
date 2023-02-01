@@ -10,25 +10,29 @@
       <div class="project-details">
         <span
           ><strong>Start Date: </strong>
-          {{ currentProject?.start_date! | date : "short" }}</span
+          {{ dateFormatterService.getShortDisplayDate(currentProject?.start_date) }}</span
         >
       </div>
 
       <div class="project-details">
         <span>
           <strong>End Date: </strong>
-          {{ currentProject?.end_date! | date : "short" }}
+          {{ dateFormatterService.getShortDisplayDate(currentProject?.end_date) }}
         </span>
       </div>
 
       <div class="project-details">
         <span> <strong>Version: </strong> {{ currentProject?.version }} </span>
       </div>
+
+      <div class="project-details">
+        <span> <strong>Status: </strong> {{ currentProject?.status }} </span>
+      </div>
     </div>
 
     <div class="column" id="vendor-div">
       <div class="project-details">
-        <span> <strong>Vendor: </strong> {{ vendorName }} </span>
+        <span> <strong>Client: </strong> {{ vendorName }} </span>
       </div>
       <div
         class="project-details"
@@ -46,25 +50,41 @@
   </div>
 
   <div class="project-details table-div">
-    <strong>Milestones: </strong>
-    <br />
-    <app-milestone-table
-      [milestones]="currentProject?.milestones!"
-    ></app-milestone-table>
-  </div>
+    <span>
+      <strong>Milestones: </strong>
+      <mat-error *ngIf="currentProject?.milestones?.length === 0">
+        No milestones created.
+      </mat-error>
+    </span>
 
-  <br />
+    <ng-container *ngIf="currentProject?.milestones?.length !== 0">
+      <br />
+      <app-milestone-table
+        [milestones]="currentProjectMilestones"
+      ></app-milestone-table>
+      <br />
+    </ng-container>
+  </div>
 
   <div class="project-details table-div">
-    <strong>Resources: </strong>
-    <br />
-    <app-resource-table
-      [resourcesWithNames]="resourcesWithNames"
-      [withDelete]="false"
-    >
-    </app-resource-table>
+    <span>
+      <strong>Resources: </strong>
+      <mat-error *ngIf="currentProject?.project_resources?.length === 0">
+        No resources assigned.
+      </mat-error>
+    </span>
+    <ng-container *ngIf="currentProject?.project_resources?.length !== 0">
+      <br />
+
+      <app-resource-table
+        [resourcesWithNames]="resourcesWithNames"
+        [withDelete]="false"
+      >
+      </app-resource-table>
+    </ng-container>
   </div>
 </div>
+<br />
 <br />
 <br />
 <br />

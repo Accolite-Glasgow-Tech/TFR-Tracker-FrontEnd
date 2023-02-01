@@ -1,21 +1,14 @@
-import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { Observable } from 'rxjs';
-import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { getMilestonesURL } from 'src/app/shared/utils';
-import { Milestone } from 'src/app/shared/interfaces';
+import { FormMilestone, Milestone } from 'src/app/shared/interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MilestoneManagerService {
   milestones: Milestone[] = [];
-  selected: Milestone | null = null;
+  selected: FormMilestone | null = null;
   @Output() Update: EventEmitter<any> = new EventEmitter();
-  constructor(
-    private projectManagerService: TfrManagementService,
-    private httpClient: HttpClient
-  ) {}
+  constructor() {}
   get getMilestones() {
     return this.milestones;
   }
@@ -23,11 +16,11 @@ export class MilestoneManagerService {
     this.milestones = milestones ? milestones : [];
     this.broadcastUpdate();
   }
-  setSelected(milestone: Milestone | null) {
+  setSelected(milestone: FormMilestone | null) {
     this.selected = milestone;
     this.broadcastUpdate();
   }
-  get getSelected(): Milestone | null {
+  get getSelected(): FormMilestone | null {
     return this.selected;
   }
 
@@ -46,55 +39,45 @@ export class MilestoneManagerService {
     this.broadcastUpdate();
   }
 
-  submittable() {
-    if (this.getMilestones.length >= 1) {
-      return true;
-    }
-    return false;
+  get submittable(): boolean {
+    return this.getMilestones.length >= 1;
   }
-  resetMilestones() {
-    this.milestones = this.projectManagerService.getMilestones
-      ? this.projectManagerService.getMilestones
-      : [];
-    this.broadcastUpdate();
-  }
+
   selectNewMilestone(projectId: number | undefined) {
     let idOfNew: number = this.generateIdOfNew();
     if (projectId != undefined) {
-      this.selected = {
+      this.setSelected({
         project_id: projectId,
-        delivery_date: new Date(),
-        acceptance_date: new Date(),
-        start_date: new Date(),
         description: '',
         id: idOfNew,
         is_deleted: false,
-      };
+      });
     } else {
       throw new Error('bad project Id passed');
     }
     this.broadcastUpdate();
   }
-  putMilestones(projectId: number | undefined): Observable<{}> {
-    return this.httpClient.put(
-      getMilestonesURL(projectId!),
-      this.getMilestonesForPut,
-      {
-        responseType: 'json',
-      }
-    );
+
+  saveFormMilestone(milestone: FormMilestone | null) {
+    if (this.isSaveable(milestone)) {
+      this.remove(milestone as Milestone);
+      this.add(milestone as Milestone);
+      this.setSelected(null);
+      console.log('Saved');
+      console.log(milestone);
+    } else {
+      console.log(milestone);
+      throw new Error('bad milestone save');
+    }
   }
 
-  private get getMilestonesForPut() {
-    //milestones need to have negative temp id's stripped for sending to db.
-    let milestones = this.getMilestones;
-    return milestones.map((milestone) => {
-      if (milestone.id > 0) {
-        return milestone;
-      }
-      let { id, ...cleanedMilestone } = milestone;
-      return cleanedMilestone;
-    });
+  isSaveable(milestone: FormMilestone | null): boolean {
+    return (
+      !!milestone?.acceptance_date &&
+      !!milestone?.delivery_date &&
+      !!milestone?.start_date &&
+      !!milestone?.description
+    );
   }
 
   private add(milestoneToAdd: Milestone) {

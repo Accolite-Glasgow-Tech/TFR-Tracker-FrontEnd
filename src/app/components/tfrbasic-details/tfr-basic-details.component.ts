@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ApiService } from 'src/app/services/api.service';
+import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 
 import {
@@ -18,7 +18,7 @@ import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-
 })
 export class TfrBasicDetailsComponent implements OnInit {
   constructor(
-    private tfrManager: TfrManagementService,
+    protected tfrManager: TfrManagementService,
     private matDialog: MatDialog,
     private apiService: ApiService
   ) {}
@@ -29,7 +29,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   tfrDetails!: FormGroup;
   projectDetails!: ProjectBasicDetails;
   selectedProject!: ProjectBasicDetails;
-  vendorAttributes!: FormGroup;
+  vendorGroup!: FormGroup;
   attributeNames: string[] = [];
   vendor_specificData: { [key: string]: string } = {};
   editMode: Boolean = false;
@@ -57,16 +57,16 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   isFormValid() {
-    if (this.vendorAttributes == undefined) {
+    if (this.vendorGroup == undefined) {
       return false;
     } else {
-      return this.vendorAttributes.valid && this.tfrDetails.valid;
+      return this.vendorGroup.valid && this.tfrDetails.valid;
     }
   }
 
   isFormDirty() {
     if (this.isFormValid()) {
-      return this.vendorAttributes.dirty || this.tfrDetails.dirty;
+      return this.vendorGroup.dirty || this.tfrDetails.dirty;
     }
     return false;
   }
@@ -89,7 +89,7 @@ export class TfrBasicDetailsComponent implements OnInit {
     };
     this.tfrManager.setBasicDetails(updatedProjectDetails);
     this.tfrDetails.markAsPristine();
-    this.vendorAttributes.markAsPristine();
+    this.vendorGroup.markAsPristine();
   }
 
   onVendorSelect(vendor: VendorDTO) {
@@ -102,7 +102,14 @@ export class TfrBasicDetailsComponent implements OnInit {
   */
   next() {
     if (this.isFormDirty()) {
-      let dialogRef = this.matDialog.open(TfrCreationDialogComponent);
+      let dialogRef = this.matDialog.open(TfrCreationDialogComponent, {
+        data: {
+          title: 'Discard Changes',
+          content: 'Would you like to discard your changes and continue?',
+          confirmText: 'Yes',
+          cancelText: 'No',
+        },
+      });
       dialogRef.afterClosed().subscribe((result: string) => {
         if (result === 'true') {
           /* User wants to discard changes */
@@ -136,7 +143,8 @@ export class TfrBasicDetailsComponent implements OnInit {
       .get('vendor_id')
       ?.setValue(previousStateBasicDetails.vendor_id);
 
-    this.projectToEdit.vendor_id = previousStateBasicDetails.vendor_id;
+    !this.projectToEdit ??
+      (this.projectToEdit.vendor_id = previousStateBasicDetails.vendor_id);
 
     /*
       Trigger event to vendor component through the api.service
@@ -144,7 +152,7 @@ export class TfrBasicDetailsComponent implements OnInit {
     this.apiService.resetVendorDetails();
 
     this.tfrDetails.markAsPristine();
-    this.vendorAttributes.markAsPristine();
+    this.vendorGroup.markAsPristine();
   }
 
   onAttributesSelected(attributes: VendorAttributeDTO[]) {
@@ -155,14 +163,14 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   onAttributesUpdated(group: FormGroup) {
-    this.vendorAttributes = group;
+    this.vendorGroup = group;
     this.updatevendor_specific();
   }
 
   updatevendor_specific() {
     this.vendor_specificData = {};
     // convert the form group info to string data and assign to vendor_specificData string
-    if (this.vendorAttributes.valid) {
+    if (this.vendorGroup.valid) {
       let i = 0;
       while (i < this.attributeNames.length) {
         this.vendor_specificData[this.attributeNames[i]] =
@@ -173,6 +181,6 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   getAttributesArray() {
-    return this.vendorAttributes.controls['attributeValues'] as FormArray;
+    return this.vendorGroup.controls['attributeValues'] as FormArray;
   }
 }

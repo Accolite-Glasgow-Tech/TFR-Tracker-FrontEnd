@@ -1,4 +1,4 @@
-<mat-sidenav-container fxFlexFill class="example-container">
+<mat-sidenav-container fxFlexFill class="background-fix">
   <mat-sidenav
     color="primary"
     fxLayout="column"
@@ -6,10 +6,13 @@
     [(opened)]="isOpen"
     fxHide.gt-sm="true"
   >
-    <div fxLayout="column" *ngFor="let route of RoutesList">
-      <a mat-button *ngIf="route.label" routerLink="{{ route.path }}">{{
-        route.label
-      }}</a>
+    <div fxLayout="column" *ngFor="let route of appRoutes">
+      <a
+        mat-button
+        *ngIf="route.navigationLabel && routeGuardManager.checkRouting(route.component)"
+        routerLink="{{ route.path }}"
+        >{{ route.navigationLabel }}</a
+      >
     </div>
   </mat-sidenav>
   <mat-sidenav-content fxFlexFill>

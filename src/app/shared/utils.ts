@@ -1,5 +1,6 @@
 import { environment } from 'src/environments/environment';
 import { projectsURL } from './constants';
+import { Console } from 'console';
 
 export function getUserTasksURL(userId: number): string {
   return `${environment.backendURL}/tasks/${userId}`;
@@ -30,6 +31,10 @@ export function getMilestonesURL(projectId: number): string {
 
 export function getVendorAttributesURL(vendorId: number): string {
   return `${environment.backendURL}/vendorAttributes/${vendorId}`;
+}
+
+export function getPDFReportURL(projectId: number): string {
+  return `${environment.backendURL}/reports/download/${projectId}`;
 }
 
 export function range(start: number, end?: number) {

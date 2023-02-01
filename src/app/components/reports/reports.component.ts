@@ -1,19 +1,19 @@
-import { HttpClient } from '@angular/common/http';
+import { ApiService } from 'src/app/services/api/api.service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
-import { user } from 'src/app/mock';
-import { allProjectsURL, tasksURL } from 'src/app/shared/constants';
-import {
-  ProjectDTO,
-  ResourceDTO,
-  TaskCreationDTO,
-} from 'src/app/shared/interfaces';
+import { ResourceDTO, TaskCreationDTO } from 'src/app/shared/interfaces';
 
-import { RecieverOptions } from 'src/app/utils';
-import { getResourcesByProjectIdURL, log } from 'src/app/shared/utils';
+import { log } from 'src/app/shared/utils';
 
+import { ActivatedRoute } from '@angular/router';
 import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
+
+enum RecieverOptions {
+  self = 'Only me',
+  allProjectResources = 'All project contacts',
+  custom = 'Custom',
+}
 
 @Component({
   selector: 'app-reports',
@@ -24,11 +24,10 @@ export class ReportsComponent implements OnInit {
   @ViewChild(FrequencyPickerComponent, { static: true })
   frequencyPickerComponent!: FrequencyPickerComponent;
 
-  @Input() tfrList: Array<ProjectDTO> = [];
   @Input() template = 'Default Template';
-  @Input() recieverOption = RecieverOptions.self;
+  @Input() recieverOption = RecieverOptions.allProjectResources;
 
-  resource!: any;
+  tfrId!: number;
   selectTfrLabelText: string = 'Select TFR';
   selectTemplateLabelText: string = 'Select Template';
   submitButtonText: string = 'Schedule';
@@ -37,25 +36,23 @@ export class ReportsComponent implements OnInit {
   recieverOptionsEnum = RecieverOptions;
   schedulerForm!: FormGroup;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private route: ActivatedRoute, private apiService: ApiService) {}
 
   ngOnInit(): void {
-    this.resource = user;
+    this.route.paramMap.subscribe((result) => {
+      this.tfrId = Number(result.get('id'));
+    });
 
     this.schedulerForm = new FormGroup({
-      tfr: new FormControl(this.tfrList, [Validators.required]),
       type: new FormControl(this.template, [Validators.required]),
       receiver: new FormControl(this.recieverOption, [Validators.required]),
       frequency: this.frequencyPickerComponent.createFormGroup(),
     });
 
     this.schedulerForm.get('type')!.disable();
-
-    this.getResourceTFRList(this.resource.id);
   }
 
   async onSubmit() {
-    const project_id = this.schedulerForm.get('tfr')!.value;
     const task_type = 'REPORT';
 
     const [hour, minute] = this.schedulerForm
@@ -74,15 +71,17 @@ export class ReportsComponent implements OnInit {
 
     const cron = recurring ? this.frequencyPickerComponent.getCron() : null;
     const by_email = true;
-    let resources: Array<ResourceDTO> = [];
+    let resources: ResourceDTO[] = [];
 
     switch (this.schedulerForm.get('receiver')!.value) {
       case RecieverOptions.self:
-        resources = [this.resource];
+        resources = [];
         break;
       case RecieverOptions.allProjectResources:
-        resources = <Array<ResourceDTO>>(
-          await lastValueFrom(this.getResourcesByTFR(project_id))
+        resources = <ResourceDTO[]>(
+          await lastValueFrom(
+            this.apiService.getResourcesByProjectId(this.tfrId)
+          )
         );
         break;
       case RecieverOptions.custom:
@@ -98,7 +97,7 @@ export class ReportsComponent implements OnInit {
 
     this.createTask({
       task: {
-        project_id: project_id,
+        project_id: this.tfrId,
         task_type: task_type,
         execute_at: execute_at,
         recurring: recurring,
@@ -110,19 +109,12 @@ export class ReportsComponent implements OnInit {
     });
   }
 
-  getResourceTFRList(resourceId: number) {
-    this.httpClient.get(allProjectsURL).subscribe((response) => {
-      this.tfrList = <Array<ProjectDTO>>response;
-    });
-  }
-
-  getResourcesByTFR(tfrId: number) {
-    return this.httpClient.get(getResourcesByProjectIdURL(tfrId)).pipe();
+  getResourcesByTFRId(tfrId: number) {
+    return this.apiService.getResourcesByProjectId(tfrId);
   }
 
   createTask(taskObject: TaskCreationDTO) {
-    this.httpClient
-      .post(tasksURL, taskObject)
-      .subscribe((response) => log(response));
+    log(taskObject);
+    this.apiService.postTask(taskObject).subscribe((response) => log(response));
   }
 }
