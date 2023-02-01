@@ -8,6 +8,7 @@
   </tr>
   <tr *ngFor="let milestone of milestones; let i = index" class="data-row">
     <td class="data-cell">{{ i + 1 }}</td>
+    <td class="data-cell">{{ milestone.name }}</td>
     <td class="data-cell">{{ milestone.description }}</td>
     <td class="data-cell">
       {{ milestone.start_date | date : "short" }}
@@ -26,6 +27,9 @@
     <td class="data-cell-mobile">{{ i + 1 }}</td>
     <td class="data-cell-mobile">
       <div class="data-cell-div-container-mobile">
+        <div class="data-cell-div-mobile">
+          <strong>Name: </strong>{{ milestone.name }}
+        </div>
         <div class="data-cell-div-mobile">
           <strong>Description: </strong>{{ milestone.description }}
         </div>

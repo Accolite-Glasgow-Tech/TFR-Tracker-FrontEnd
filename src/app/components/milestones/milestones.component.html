@@ -17,6 +17,15 @@ Add Milestones to the TFR.
   class="full-width"
 >
   <div class="inputdiv">
+    <mat-form-field class="name">
+      <textarea
+        matInput
+        placeholder="Milestone Name: "
+        type="text"
+        formControlName="name"
+      ></textarea>
+      <mat-error>Name Required</mat-error>
+    </mat-form-field>
     <mat-form-field class="description">
       <textarea
         matInput

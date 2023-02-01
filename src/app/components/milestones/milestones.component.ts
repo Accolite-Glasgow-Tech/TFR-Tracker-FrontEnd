@@ -24,6 +24,10 @@ export class MilestonesComponent implements OnInit {
   milestones: Milestone[] = this.milestoneManagerService.getMilestones;
   formMilestone: FormMilestone | null = null;
   milestoneForm = new FormGroup({
+    name: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
     description: new FormControl<string>('', {
       nonNullable: true,
       validators: [Validators.required],
@@ -114,15 +118,17 @@ export class MilestonesComponent implements OnInit {
   }
 
   ConvertMilestoneToFormData(): {
+    name: string;
     description: string;
     acceptance_date: Date | null;
     start_date: Date | null;
     delivery_date: Date | null;
   } {
     if (this.formMilestone != null) {
-      let { description, acceptance_date, start_date, delivery_date } =
+      let { name, description, acceptance_date, start_date, delivery_date } =
         this.formMilestone;
       return {
+        name,
         description,
         acceptance_date: acceptance_date ?? null,
         start_date: start_date ?? null,
@@ -130,6 +136,7 @@ export class MilestonesComponent implements OnInit {
       };
     }
     return {
+      name: '',
       description: '',
       acceptance_date: null,
       start_date: null,
@@ -156,6 +163,7 @@ export class MilestonesComponent implements OnInit {
   }
   saveSelected() {
     this.milestoneManagerService.saveFormMilestone(this.getFormMilestone);
+    this.isPristine = false;
   }
 
   get milestonesNotDeleted() {
