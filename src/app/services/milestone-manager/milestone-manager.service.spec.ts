@@ -3,7 +3,7 @@ import { MilestoneManagerService } from './milestone-manager.service';
 import { FormMilestone } from 'src/app/shared/interfaces';
 import { getMatIconFailedToSanitizeLiteralError } from '@angular/material/icon';
 
-fdescribe('MilestoneManagerService', () => {
+describe('MilestoneManagerService', () => {
   let service: MilestoneManagerService;
 
   beforeEach(() => {
@@ -11,11 +11,11 @@ fdescribe('MilestoneManagerService', () => {
     service = TestBed.inject(MilestoneManagerService);
   });
 
-  fit('should be created', () => {
+  it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  fit('should successfully determine saveability', () => {
+  it('should successfully determine saveability', () => {
     let saveableMilestone: FormMilestone = {
       id: 1,
       project_id: 1,

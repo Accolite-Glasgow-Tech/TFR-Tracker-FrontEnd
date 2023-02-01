@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { Milestone } from 'src/app/shared/interfaces';
 
@@ -16,6 +17,10 @@ describe('ProjectSummaryComponent', () => {
           provide: ResourceService,
           useValue: jasmine.createSpyObj(['']),
         },
+        {
+          provide: DateFormatterService,
+          useValue: jasmine.createSpyObj('DateFormatterService', ['getShortDisplayDate']),
+        }
       ],
     }).compileComponents();
 

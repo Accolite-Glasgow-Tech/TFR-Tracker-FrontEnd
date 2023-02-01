@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { user } from 'src/app/mock';
 import { getUserTasksURL } from 'src/app/shared/utils';

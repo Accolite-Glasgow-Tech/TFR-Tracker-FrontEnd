@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ToolbarComponent } from './toolbar.component';
@@ -9,6 +10,7 @@ describe('ToolbarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ToolbarComponent],
+      imports: [ HttpClientTestingModule ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ToolbarComponent);

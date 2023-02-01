@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { TfrBasicDetailsComponent } from './tfr-basic-details.component';
+import { ApiService } from 'src/app/services/api/api.service';
 
 describe('TFRBasicDetailsComponent', () => {
   let component: TfrBasicDetailsComponent;
@@ -9,6 +12,17 @@ describe('TFRBasicDetailsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TfrBasicDetailsComponent],
+      imports: [ MatDialogModule ],
+      providers: [
+        {
+          provide: TfrManagementService,
+          useValue: jasmine.createSpyObj(['']),
+        },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj(['']),
+        }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TfrBasicDetailsComponent);

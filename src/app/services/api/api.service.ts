@@ -29,9 +29,11 @@ import {
   providedIn: 'root',
 })
 export class ApiService {
-  vendorReset = new EventEmitter<boolean>();
+  vendorReset!: EventEmitter<boolean>;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.vendorReset = new EventEmitter<boolean>();
+  }
 
   resetVendorDetails() {
     this.vendorReset.emit(true);
