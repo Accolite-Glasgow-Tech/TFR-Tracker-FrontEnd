@@ -7,18 +7,18 @@ describe('ChipComponent', () => {
   const testMilestone = {
     id: 1,
     project_id: 1,
-    start_date: new Date("01/01/2024"),
-    delivery_date: new Date("01/02/2024"),
-    acceptance_date: new Date("01/02/2024"),
+    start_date: new Date('01/01/2024'),
+    delivery_date: new Date('01/02/2024'),
+    acceptance_date: new Date('01/02/2024'),
     is_deleted: false,
+    name: 'test milestone name',
     description: 'test milestone description',
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChipComponent ]
-    })
-    .compileComponents();
+      declarations: [ChipComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ChipComponent);
     component = fixture.componentInstance;
