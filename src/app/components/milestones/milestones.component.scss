@@ -1,17 +1,18 @@
 #datediv {
   margin: 20px;
 }
+.name {
+  width: 200px;
+}
 .description {
-  width: 100%;
+  width: 400px;
   justify-content: center;
 }
 .inputdiv {
-  margin: 20px;
   display: flex;
   flex-wrap: wrap;
-}
-#buttons {
-  margin: 20px;
+  width: 100%;
+  justify-content: space-between;
 }
 #chips {
   margin: 20px;
@@ -21,13 +22,17 @@
   position: fixed;
   bottom: 5%;
   right: 5%;
+  width: 30%;
+  display: flex;
+  justify-content: end;
 }
 
 .small-text {
   font-size: smaller;
 }
 
-.form-field {
+.form-field,
+.form-field-date {
   width: 45%;
   margin: 10px;
 }
@@ -39,11 +44,11 @@
   justify-content: space-between;
 }
 
-.basic-details-div {
+.milestones {
   margin: 1rem;
 }
 
-.intro-div {
+.intro {
   margin-left: 10px;
 }
 
@@ -53,13 +58,17 @@
 
 @media screen and (max-width: 800px) {
   button {
-    width: 2%;
-    height: 2%;
-    font-size: smaller;
+    width: 1%;
+    height: 0.5%;
+    font-size: small;
   }
 
   .form-field {
     width: 100%;
+    margin: 0px;
+  }
+  .form-field-date {
+    width: 70%;
     margin: 0px;
   }
 }
