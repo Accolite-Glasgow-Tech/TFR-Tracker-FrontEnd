@@ -20,6 +20,7 @@ describe('MilestoneManagerService', () => {
       name: 'unsaveable',
       description: '',
       is_deleted: false,
+      status: 'INTENT',
     };
     deletedMilestone = {
       id: -2,
@@ -30,6 +31,7 @@ describe('MilestoneManagerService', () => {
       start_date: new Date(),
       delivery_date: new Date(),
       acceptance_date: new Date(),
+      status: 'INTENT',
     };
   });
 
