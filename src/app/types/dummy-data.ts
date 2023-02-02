@@ -23,6 +23,7 @@ export const DummyProject: Project = {
       delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
       acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
       is_deleted: true,
+      status: 'APPROVED',
     },
     {
       id: 2,
@@ -33,6 +34,7 @@ export const DummyProject: Project = {
       delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
       acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
       is_deleted: false,
+      status: 'APPROVED',
     },
     {
       id: 1,
@@ -43,6 +45,7 @@ export const DummyProject: Project = {
       delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
       acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
       is_deleted: false,
+      status: 'APPROVED',
     },
   ],
   is_deleted: false,

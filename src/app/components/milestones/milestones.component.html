@@ -38,6 +38,14 @@
         ></textarea>
         <mat-error>Description Required</mat-error>
       </mat-form-field>
+      <mat-form-field *ngIf="projectStatus != 'DRAFT'" class="form-field">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let option of options" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
     <div class="inputdiv">
       <mat-form-field class="form-field-date">

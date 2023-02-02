@@ -57,37 +57,37 @@ export interface ProjectMilestoneDTO {
 export interface FormMilestone {
   id: number;
   project_id: number;
+  status: string;
   name: string;
   description: string;
   start_date?: Date;
   delivery_date?: Date;
   acceptance_date?: Date;
   is_deleted: Boolean;
-  tracker?: TrackerDTO;
 }
 
 export interface Milestone {
   id: number;
   project_id: number;
+  status: string;
   name: string;
   description: string;
   start_date: Date;
   delivery_date: Date;
   acceptance_date: Date;
   is_deleted: Boolean;
-  tracker?: TrackerDTO;
 }
 
 export interface MilestoneDTO {
   id?: number;
   project_id: number;
+  status: string;
   name: string;
   description: string;
   start_date: Date;
   delivery_date: Date;
   acceptance_date: Date;
   is_deleted: Boolean;
-  tracker?: TrackerDTO;
 }
 
 export interface TFRRoute extends Route {
@@ -117,18 +117,6 @@ export interface ResourceDTO {
 export interface TaskCreationDTO {
   task: TaskDTO;
   resources: ResourceDTO[];
-}
-
-export interface TrackerDTO {
-  milestone_id: number;
-  project_id: number;
-  start_date: Date;
-  end_date: Date;
-  status: string;
-  created_by: number;
-  modified_by: number;
-  created_at: Date;
-  modified_at: Date;
 }
 
 export interface VendorDTO {

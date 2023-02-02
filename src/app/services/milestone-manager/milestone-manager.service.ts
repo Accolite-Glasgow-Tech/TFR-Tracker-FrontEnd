@@ -57,6 +57,7 @@ export class MilestoneManagerService {
         description: '',
         id: idOfNew,
         is_deleted: false,
+        status: 'INTENT',
       });
     } else {
       throw new Error('bad project Id passed');
