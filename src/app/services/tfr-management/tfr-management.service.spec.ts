@@ -147,12 +147,6 @@ describe('TfrManagementService', () => {
         'ED/MD': 'Julia Lee',
       },
       resources_count: 4,
-      detailed_resources_count: {
-        ADVANCED: 1,
-        SENIOR: 1,
-        INTERMEDIATE: 1,
-        JUNIOR: 1,
-      },
       milestones: milestones,
       is_deleted: false,
       created_by: 1,

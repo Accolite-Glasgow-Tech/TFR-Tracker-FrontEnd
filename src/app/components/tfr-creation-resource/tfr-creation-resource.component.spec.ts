@@ -240,7 +240,7 @@ describe('TfrCreationResourceComponent', () => {
   });
 
   it('should add a new resource', () => {
-    expect(component.resourceListUpdated).toBe(false);
+    expect(component.resourceDetailsUpdated).toBe(false);
 
     component.allocatedResources = [];
     (tfrManagementServiceSpy as any).getProjectId = 1;
@@ -248,7 +248,7 @@ describe('TfrCreationResourceComponent', () => {
 
     fixture.detectChanges();
 
-    expect(component.resourceListUpdated).toBe(true);
+    expect(component.resourceDetailsUpdated).toBe(true);
     expect(component.resources[0].selected).toBe(true);
     expect(component.allocatedResources.length).toBe(1);
     expect(
@@ -274,7 +274,7 @@ describe('TfrCreationResourceComponent', () => {
   });
 
   it('should remove resource', () => {
-    expect(component.resourceListUpdated).toBe(false);
+    expect(component.resourceDetailsUpdated).toBe(false);
 
     component.allocatedResources = dummyAllocatedResource;
     expect(component.allocatedResources).toEqual(dummyAllocatedResource);
@@ -282,7 +282,7 @@ describe('TfrCreationResourceComponent', () => {
     component.removeResource(projectResourcesWithNames[0]);
     projectResourcesWithNames[0].is_deleted = true;
 
-    expect(component.resourceListUpdated).toBe(true);
+    expect(component.resourceDetailsUpdated).toBe(true);
     expect(component.resources[0].selected).toBe(false);
     expect(
       component.allocatedResources.find((resource) => {
@@ -293,7 +293,7 @@ describe('TfrCreationResourceComponent', () => {
 
   it('trigger next step', () => {
     spyOn(component, 'showDialog');
-    component.resourceListUpdated = true;
+    component.resourceDetailsUpdated = true;
     component.triggerStep(true);
     fixture.detectChanges();
     expect(component.showDialog).toHaveBeenCalled();
@@ -301,7 +301,7 @@ describe('TfrCreationResourceComponent', () => {
 
   it('trigger previous step', () => {
     spyOn(component, 'nextStep');
-    component.resourceListUpdated = false;
+    component.resourceDetailsUpdated = false;
     component.triggerStep(true);
     fixture.detectChanges();
     expect(component.nextStep).toHaveBeenCalled();
@@ -325,7 +325,7 @@ describe('TfrCreationResourceComponent', () => {
   it('call service to save to database', () => {
     component.saveToDatabase();
     fixture.detectChanges();
-    expect(component.resourceListUpdated).toBe(false);
+    expect(component.resourceDetailsUpdated).toBe(false);
   });
 
   it('reset all resources', () => {
@@ -334,7 +334,7 @@ describe('TfrCreationResourceComponent', () => {
     expect(component.allocatedResources).toEqual(projectResourcesWithNames);
     expect(component.resources.length).toBe(2);
     expect(component.resources[0].selected).toBe(true);
-    expect(component.resourceListUpdated).toBe(false);
+    expect(component.resourceDetailsUpdated).toBe(false);
   });
 
   it('show Dialog box', () => {

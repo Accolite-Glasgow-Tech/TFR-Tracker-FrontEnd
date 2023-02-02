@@ -28,7 +28,6 @@ export interface Project {
   version: number;
   vendor_specific: { [key: string]: string };
   resources_count: number;
-  detailed_resources_count: { [key: string]: number };
   is_deleted: Boolean;
   created_by: number;
   modified_by: number;

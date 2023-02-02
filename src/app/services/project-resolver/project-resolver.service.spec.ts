@@ -48,12 +48,6 @@ describe('ProjectResolverService', () => {
         'ED/MD': 'Julia Lee',
       },
       resources_count: 4,
-      detailed_resources_count: {
-        ADVANCED: 1,
-        SENIOR: 1,
-        INTERMEDIATE: 1,
-        JUNIOR: 1,
-      },
       milestones: [
         {
           id: 3,

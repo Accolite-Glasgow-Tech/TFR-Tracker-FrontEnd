@@ -140,7 +140,6 @@ export class TfrManagementService {
           end_date: projectBasicDetails.end_date,
           vendor_specific: projectBasicDetails.vendor_specific,
           resources_count: 0,
-          detailed_resources_count: {},
           status: 'DRAFT',
           version: 0,
           milestones: [],
@@ -244,6 +243,12 @@ export class TfrManagementService {
   setProjectResources(project_resources: ProjectResourceDTO[]) {
     if (this.project !== undefined) {
       this.project.project_resources = project_resources;
+    }
+  }
+
+  setResourcesCount(resources_count: number) {
+    if (this.project) {
+      this.project.resources_count = resources_count;
     }
   }
 

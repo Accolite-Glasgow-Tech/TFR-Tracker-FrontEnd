@@ -8,7 +8,12 @@ import {
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  startWith,
+} from 'rxjs/operators';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
@@ -68,6 +73,8 @@ export class TfrCreationResourceComponent implements OnInit {
   ) {}
 
   resourceFormGroup!: FormGroup;
+  resourcesCountFormGroup!: FormGroup;
+  resourcesCount: number = 1;
   resources!: ResourceListType[];
   roles!: string[];
   seniorityLevels!: string[];
@@ -76,7 +83,7 @@ export class TfrCreationResourceComponent implements OnInit {
   filteredRoleOption!: Observable<string[]>;
   allocatedResources: AllocatedResourceTypeDTO[] = [];
   savedAllocatedResource: ProjectResourceDTO[] = [];
-  resourceListUpdated: boolean = false;
+  resourceDetailsUpdated: boolean = false;
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
 
@@ -107,9 +114,13 @@ export class TfrCreationResourceComponent implements OnInit {
           this.resources[indexOfResource].selected = true;
         }
       });
+      this.resourcesCount =
+        this.tfrManagementService.project?.resources_count === 0
+          ? 1
+          : this.tfrManagementService.project?.resources_count!;
 
       this.resetFormGroup();
-      this.resourceListUpdated = false;
+      this.resourceDetailsUpdated = false;
     },
   };
 
@@ -140,6 +151,9 @@ export class TfrCreationResourceComponent implements OnInit {
 
   ngOnInit(): void {
     this.resourceFormGroup = new FormGroup({
+      resources_count: new FormControl('', {
+        validators: [Validators.required],
+      }),
       resource_name: new FormControl('', {
         validators: [Validators.required],
       }),
@@ -150,6 +164,18 @@ export class TfrCreationResourceComponent implements OnInit {
         validators: [Validators.required],
       }),
     });
+
+    if (this.tfrManagementService.project?.resources_count === 0) {
+      this.resourceFormGroup.get('resources_count')?.setValue('');
+      this.resourcesCount = 1;
+    } else {
+      this.resourceFormGroup
+        .get('resources_count')
+        ?.setValue(this.tfrManagementService.project?.resources_count);
+      this.resourcesCount = this.tfrManagementService.project?.resources_count!;
+    }
+
+    this.addEventListerner();
 
     /*
       API call to retrieve all the seniority levels that a resource can be
@@ -293,14 +319,6 @@ export class TfrCreationResourceComponent implements OnInit {
   public filterResource(value: string): ResourceListType[] {
     const filterValue = value.toLowerCase();
 
-    if (this.resourceFormGroup.controls['seniorityLevel'].value === 'ALL') {
-      return this.resources
-        .filter((resource) => !resource.selected)
-        .filter((resource) =>
-          resource.resource_name.toLowerCase().includes(filterValue)
-        );
-    }
-
     return this.resources
       .filter((resource) => !resource.selected)
       .filter((resource) =>
@@ -316,7 +334,7 @@ export class TfrCreationResourceComponent implements OnInit {
     /*
       An update API call will be required to update the project-resource database.
     */
-    this.resourceListUpdated = true;
+    this.resourceDetailsUpdated = true;
 
     /*
       Find the index of the resource_name inserted in the input field in the
@@ -357,6 +375,9 @@ export class TfrCreationResourceComponent implements OnInit {
       this.allocatedResources.push(allocatedResource);
     }
 
+    console.log(this.allocatedResources);
+    console.log(this.resources);
+
     this.resetFormGroup();
   }
 
@@ -367,7 +388,7 @@ export class TfrCreationResourceComponent implements OnInit {
     /*
       An update API call will be required to update the project-resource database.
     */
-    this.resourceListUpdated = true;
+    this.resourceDetailsUpdated = true;
 
     const indexForResourcesArr = this.resources.findIndex(
       (resource) => resource.resource_id === removedResource.resource_id
@@ -385,11 +406,17 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   resetFormGroup() {
-    this.resourceFormGroup.setValue({
-      resource_name: '',
-      role: '',
-      seniorityLevel: '',
-    });
+    this.resourceFormGroup.setValue(
+      {
+        resources_count: this.resourcesCount,
+        resource_name: '',
+        role: '',
+        seniorityLevel: '',
+      },
+      { emitEvent: false }
+    );
+    this.addEventListerner();
+
     this.resourceFormGroup.controls['resource_name'].setErrors(null);
     this.resourceFormGroup.controls['role'].setErrors(null);
     this.resourceFormGroup.controls['seniorityLevel'].setErrors(null);
@@ -432,7 +459,7 @@ export class TfrCreationResourceComponent implements OnInit {
     forward = false => Go to previous step
   */
   triggerStep(forward: boolean) {
-    if (this.resourceListUpdated) {
+    if (this.resourceDetailsUpdated) {
       this.showDialog(forward);
     } else {
       this.nextStep(forward);
@@ -484,7 +511,18 @@ export class TfrCreationResourceComponent implements OnInit {
     this.tfrManagementService.setProjectResourcesWithNames(
       this.allocatedResources
     );
+    this.tfrManagementService.setResourcesCount(this.resourcesCount);
     this.tfrManagementService.updateProjectToResourceMapping();
-    this.resourceListUpdated = false;
+    this.resourceDetailsUpdated = false;
+  }
+
+  addEventListerner() {
+    this.resourceFormGroup
+      .get('resources_count')
+      ?.valueChanges.pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe((val: number) => {
+        this.resourcesCount = val;
+        this.resourceDetailsUpdated = true;
+      });
   }
 }

@@ -1,13 +1,53 @@
 <div id="resource_div">
-  <div id="intro_div">
-    <label
-      >Add the resources and assign their respective roles for the
-      project</label
-    >
-  </div>
-  <br />
-
   <form [formGroup]="resourceFormGroup">
+    <div>
+      <label class="label-padding">Total number of resources: </label>
+      <mat-form-field appearance="fill" class="form-field small-font">
+        <input
+          type="number"
+          min="1"
+          oninput="validity.valid||(value='');"
+          matInput
+          formControlName="resources_count"
+        />
+        <mat-error
+          *ngIf="
+            resourceFormGroup.controls['resources_count'].invalid &&
+            resourceFormGroup.controls['resources_count'].touched
+          "
+        >
+          Required
+        </mat-error>
+      </mat-form-field>
+      <mat-error
+        *ngIf="
+          resourceService.resourcesWithoutDeleted(allocatedResources).length >
+          resourcesCount
+        "
+      >
+        You have allocated more resources than required
+      </mat-error>
+      <mat-error
+        *ngIf="
+          resourceService.resourcesWithoutDeleted(allocatedResources).length ===
+            resourcesCount &&
+          (resourceFormGroup.controls['seniorityLevel'].touched ||
+            resourceFormGroup.controls['resource_name'].touched ||
+            resourceFormGroup.controls['role'].touched)
+        "
+      >
+        Maximum number of resources reached
+      </mat-error>
+    </div>
+    <br />
+
+    <div id="intro_div">
+      <label
+        >Add the resources and assign their respective roles for the project
+      </label>
+    </div>
+    <br />
+
     <div class="form-group-div">
       <div class="resource_selection">
         <mat-form-field appearance="fill" class="form-field">
@@ -138,7 +178,10 @@
 
       <button
         [disabled]="
-          !resourceFormGroup.valid || resource.value === '' || role.value === ''
+          !resourceFormGroup.valid ||
+          resource.value === '' ||
+          role.value === '' ||
+          allocatedResources.length >= resourcesCount
         "
         (click)="addResource(resource.value, role.value, seniority.value)"
         mat-raised-button
@@ -191,8 +234,10 @@
   <button
     mat-raised-button
     [disabled]="
-      !resourceListUpdated ||
-      resourceService.resourcesWithoutDeleted(allocatedResources).length === 0
+      !resourceDetailsUpdated ||
+      resourceService.resourcesWithoutDeleted(allocatedResources).length ===
+        0 ||
+      allocatedResources.length > resourcesCount
     "
     class="navigation-btn"
     color="primary"
@@ -202,7 +247,7 @@
   </button>
   <button
     mat-raised-button
-    [disabled]="!resourceListUpdated"
+    [disabled]="!resourceDetailsUpdated"
     class="navigation-btn"
     (click)="resetResources()"
   >

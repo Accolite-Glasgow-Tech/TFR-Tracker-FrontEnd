@@ -74,14 +74,12 @@ describe('ResourceService', () => {
         resource_id: 1,
         resource_name: 'John Bowers',
         resource_email: 'johnbowers@accolitedigital.com',
-        seniority: 'JUNIOR',
         selected: false,
       },
       {
         resource_id: 2,
         resource_name: 'Heather Reed',
         resource_email: 'heatherreed@accolitedigital.com',
-        seniority: 'SENIOR',
         selected: false,
       },
     ];
