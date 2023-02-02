@@ -18,6 +18,7 @@ describe('MilestoneManagerService', () => {
   it('should successfully determine saveability', () => {
     let saveableMilestone: FormMilestone = {
       id: 1,
+      name: 'saveable',
       project_id: 1,
       description: '',
       start_date: new Date(),
@@ -28,6 +29,7 @@ describe('MilestoneManagerService', () => {
     let unsaveableMilestone: FormMilestone = {
       id: 1,
       project_id: 1,
+      name: 'unsaveable',
       description: '',
       is_deleted: false,
     };

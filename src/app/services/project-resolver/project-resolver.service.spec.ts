@@ -3,31 +3,31 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { of } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
-import { TfrManagementService } from '../tfr-management/tfr-management.service';
+import { ApiService } from '../api/api.service';
 
 import { ProjectResolverService } from './project-resolver.service';
 
 describe('ProjectResolverService', () => {
   let service: ProjectResolverService;
   let route: ActivatedRouteSnapshot;
-  let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
+  let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('TfrManagementService', [
-      'getFromDatabase',
+    const spy = jasmine.createSpyObj('ApiService', [
+      'getProject',
     ]);
     route = new ActivatedRouteSnapshot();
 
     TestBed.configureTestingModule({
       providers: [
         ProjectResolverService,
-        { provide: TfrManagementService, useValue: spy },
+        { provide: ApiService, useValue: spy },
       ],
     });
     service = TestBed.inject(ProjectResolverService);
-    tfrManagementServiceSpy = TestBed.inject(
-      TfrManagementService
-    ) as jasmine.SpyObj<TfrManagementService>;
+    apiServiceSpy = TestBed.inject(
+      ApiService
+    ) as jasmine.SpyObj<ApiService>;
   });
 
   it('should be created', () => {
@@ -51,7 +51,8 @@ describe('ProjectResolverService', () => {
         {
           id: 3,
           project_id: 1,
-          description: 'deployment',
+          name: 'deployment',
+          description: 'deployment description',
           start_date: new Date('2022-12-26T09:00:00.000+00:00'),
           delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
           acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
@@ -60,7 +61,8 @@ describe('ProjectResolverService', () => {
         {
           id: 2,
           project_id: 1,
-          description: 'frontend',
+          name: 'frontend',
+          description: 'frontend description',
           start_date: new Date('2022-12-19T09:00:00.000+00:00'),
           delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
           acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
@@ -69,7 +71,8 @@ describe('ProjectResolverService', () => {
         {
           id: 1,
           project_id: 1,
-          description: 'backend',
+          name: 'backend',
+          description: 'backend description',
           start_date: new Date('2022-12-12T09:00:00.000+00:00'),
           delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
           acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
@@ -104,7 +107,7 @@ describe('ProjectResolverService', () => {
       body: dummyProject,
     });
 
-    tfrManagementServiceSpy.getFromDatabase.and.returnValue(
+    apiServiceSpy.getProject.and.returnValue(
       of(httpResponseProject)
     );
 
