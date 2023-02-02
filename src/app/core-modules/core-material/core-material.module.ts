@@ -39,7 +39,6 @@ const materialModules = [
   MatFormFieldModule,
   MatInputModule,
   MatCardModule,
-  MatDialogModule,
   MatRadioModule,
   MatChipsModule,
   MatSlideToggleModule,

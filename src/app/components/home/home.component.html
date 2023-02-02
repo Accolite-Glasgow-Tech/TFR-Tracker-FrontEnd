@@ -1,33 +1,11 @@
-<div class="example-button-row">  
-  <button mat-raised-button class="btn btn-primary"  color="primary" type="button"  class="btn btn-success top-btn-left" (click)="openModal()"><strong>Widget Manager</strong></button>
-</div>
 <div >
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-  />
-  <app-manage-widget-modal (newItemEvent)="addItem($event)"></app-manage-widget-modal>
-    
-
-    <!-- <button mat-raised-button color="primary" type="button"  class="btn btn-success top-btn-left"
-    (click)="onClick_AddClientLocationWidget()" >
-    <i class="fa fa-plus-circle" aria-hidden="true"></i> Client Location Widget
-    </button>
-
-    <button mat-raised-button color="primary" type="button"  class="btn btn-success top-btn-left"
-    (click)="onClick_AddOurClientsWidget()">
-    <i class="fa fa-plus-circle" aria-hidden="true"></i> Our Clients Widget
-    </button>
-
-    <button mat-raised-button color="primary" type="button"  class="btn btn-success top-btn-left"
-    (click)="onClick_AddTFRStatusWidget()">
-    <i class="fa fa-plus-circle" aria-hidden="true"></i> TFR Status Widget
-    </button>
-
-    <button mat-raised-button color="primary" type="button"  class="btn btn-success top-btn-left"
-    (click)="onClick_AddUpcomingProjectsWidget()" >
-    <i class="fa fa-plus-circle" aria-hidden="true"></i> Upcoming Projects Widget
-    </button>  -->
+  />    
+  <div class="example-button-row" >  
+    <button mat-raised-button class="btn btn-primary"  color="primary" type="button"  class="btn btn-success top-btn-left" (click)="OpenPopup()"><strong>Widget Manager</strong></button>
+  </div>
 
   <ngx-gridster
     style="height: 400px; width: 85%; padding-left: 8%;"
@@ -40,7 +18,7 @@
       class="ngxgriditem"
       *ngFor="let widget of widgets; index as i"
     >
-      <div
+      <div   
         style="
           height: 400px;
           width: inherit;
