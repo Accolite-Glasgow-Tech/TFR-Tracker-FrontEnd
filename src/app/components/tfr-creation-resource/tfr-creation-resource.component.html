@@ -105,20 +105,10 @@
             required
             matInput
             formControlName="role"
-            [matAutocomplete]="auto2"
             id="role"
             #role
             class="small-font"
           />
-          <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
-            <mat-option
-              *ngFor="let filteredRole of filteredRoleOption | async"
-              [value]="filteredRole"
-              class="small-font"
-            >
-              {{ filteredRole }}
-            </mat-option>
-          </mat-autocomplete>
         </mat-form-field>
         <div
           *ngIf="
@@ -181,7 +171,9 @@
           !resourceFormGroup.valid ||
           resource.value === '' ||
           role.value === '' ||
-          allocatedResources.length >= resourcesCount
+          seniority.value === '' ||
+          resourceService.resourcesWithoutDeleted(allocatedResources).length >=
+            resourcesCount
         "
         (click)="addResource(resource.value, role.value, seniority.value)"
         mat-raised-button
@@ -237,7 +229,8 @@
       !resourceDetailsUpdated ||
       resourceService.resourcesWithoutDeleted(allocatedResources).length ===
         0 ||
-      allocatedResources.length > resourcesCount
+      resourceService.resourcesWithoutDeleted(allocatedResources).length >
+        resourcesCount
     "
     class="navigation-btn"
     color="primary"

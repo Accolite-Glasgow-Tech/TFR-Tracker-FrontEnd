@@ -1,7 +1,7 @@
 import {
   HttpClient,
   HttpErrorResponse,
-  HttpResponse,
+  HttpResponse
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -17,7 +17,7 @@ import {
   ProjectBasicDetails,
   ProjectMilestoneDTO,
   ProjectResourceDTO,
-  VendorDTO,
+  VendorDTO
 } from 'src/app/shared/interfaces';
 import { getAllocatedResourcesURL } from 'src/app/shared/utils';
 import { ApiService } from '../api/api.service';
@@ -107,6 +107,10 @@ export class TfrManagementService {
 
   get getVendorName(): string {
     return this.vendorName;
+  }
+
+  get getResourcesCount(): number | undefined {
+    return this.project?.resources_count;
   }
 
   setProject(project: Project) {

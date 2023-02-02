@@ -60,7 +60,6 @@ export class TfrCreationResourceComponent implements OnInit {
   resourcesCount: number = 1;
   resources!: ResourceListType[];
   seniorityLevels!: string[];
-  resourcesFilterBySeniority!: ResourceListType[];
   filteredResourceOption!: Observable<ResourceListType[]>;
   filteredRoleOption!: Observable<string[]>;
   allocatedResources: AllocatedResourceTypeDTO[] = [];
@@ -89,9 +88,9 @@ export class TfrCreationResourceComponent implements OnInit {
         }
       });
       this.resourcesCount =
-        this.tfrManagementService.project?.resources_count === 0
+        this.tfrManagementService.getResourcesCount === 0
           ? 1
-          : this.tfrManagementService.project?.resources_count!;
+          : this.tfrManagementService.getResourcesCount!;
 
       this.resetFormGroup();
       this.resourceDetailsUpdated = false;
@@ -133,17 +132,17 @@ export class TfrCreationResourceComponent implements OnInit {
       }),
     });
 
-    if (this.tfrManagementService.project?.resources_count === 0) {
+    if (this.tfrManagementService.getResourcesCount === 0) {
       this.resourceFormGroup.get('resources_count')?.setValue('');
       this.resourcesCount = 1;
     } else {
       this.resourceFormGroup
         .get('resources_count')
-        ?.setValue(this.tfrManagementService.project?.resources_count);
-      this.resourcesCount = this.tfrManagementService.project?.resources_count!;
+        ?.setValue(this.tfrManagementService.getResourcesCount);
+      this.resourcesCount = this.tfrManagementService.getResourcesCount!;
     }
 
-    this.addEventListerner();
+    this.addEventListener();
 
     /*
       API call to retrieve all the seniority levels that a resource can be
@@ -165,7 +164,6 @@ export class TfrCreationResourceComponent implements OnInit {
       .getAllResources()
       .subscribe((data: ResourceListType[]) => {
         this.resources = data;
-        this.resourcesFilterBySeniority = data;
 
         /*
           Adding the custom validator for the auto complete functionality 
@@ -297,9 +295,6 @@ export class TfrCreationResourceComponent implements OnInit {
       this.allocatedResources.push(allocatedResource);
     }
 
-    console.log(this.allocatedResources);
-    console.log(this.resources);
-
     this.resetFormGroup();
   }
 
@@ -328,20 +323,17 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   resetFormGroup() {
-    this.resourceFormGroup.setValue(
-      {
-        resources_count: this.resourcesCount,
-        resource_name: '',
-        role: '',
-        seniorityLevel: '',
-      },
-      { emitEvent: false }
-    );
-    this.addEventListerner();
-
+    this.resourceFormGroup.get('resource_name')?.setValue('');
+    this.resourceFormGroup.get('role')?.setValue('');
+    this.resourceFormGroup.get('seniorityLevel')?.setValue('');
     this.resourceFormGroup.controls['resource_name'].setErrors(null);
     this.resourceFormGroup.controls['role'].setErrors(null);
     this.resourceFormGroup.controls['seniorityLevel'].setErrors(null);
+
+    this.resourceFormGroup
+      .get('resources_count')
+      ?.setValue(this.resourcesCount, { emitEvent: false });
+    this.addEventListener();
   }
 
   /*
@@ -438,7 +430,7 @@ export class TfrCreationResourceComponent implements OnInit {
     this.resourceDetailsUpdated = false;
   }
 
-  addEventListerner() {
+  addEventListener() {
     this.resourceFormGroup
       .get('resources_count')
       ?.valueChanges.pipe(debounceTime(500), distinctUntilChanged())

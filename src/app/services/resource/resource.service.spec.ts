@@ -4,7 +4,6 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import {
-  resourceRolesURL,
   seniorityLevelsURL,
   TFRCreationResourceURL,
 } from 'src/app/shared/constants';
@@ -32,22 +31,6 @@ describe('ResourceService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
-  });
-
-  it('should retrieve roles from API via GET', () => {
-    const dummyRoles: string[] = [
-      'SCRUM_MASTER',
-      'SOFTWARE_DEVELOPER',
-      'PROJECT_LEAD',
-    ];
-    service.getAllRoles().subscribe((roles) => {
-      expect(roles.length).toBe(3);
-      expect(roles).toEqual(dummyRoles);
-    });
-
-    const request = httpMock.expectOne(resourceRolesURL);
-    expect(request.request.method).toBe('GET');
-    request.flush(dummyRoles);
   });
 
   it('should retrieve all seniority levels from API via GET', () => {
@@ -92,56 +75,6 @@ describe('ResourceService', () => {
     const request = httpMock.expectOne(TFRCreationResourceURL);
     expect(request.request.method).toBe('GET');
     request.flush(dummyResources);
-  });
-
-  it('should remove _ from each role in roles array', () => {
-    const dummyRolesToBeDisplayed: string[] = [
-      'SCRUM MASTER',
-      'SOFTWARE DEVELOPER',
-      'UX UI DEVELOPER',
-    ];
-
-    const roles: string[] = [
-      'SCRUM_MASTER',
-      'SOFTWARE_DEVELOPER',
-      'UX_UI_DEVELOPER',
-    ];
-
-    const returnedRoleList: string[] = service.convertRoleEnum(roles);
-
-    expect(returnedRoleList).toEqual(dummyRolesToBeDisplayed);
-  });
-
-  it('should get the associated role from Roles HashMap', () => {
-    const dummyRole = 'SCRUM_MASTER';
-    const role = 'SCRUM MASTER';
-
-    service.roleHashMap = new Map([['SCRUM_MASTER', 'SCRUM MASTER']]);
-
-    const returnedRole: string = service.getAssociatedEnumRole(role);
-
-    expect(returnedRole).toEqual(dummyRole);
-  });
-
-  it('should return empty string if role not found in Roles HashMap', () => {
-    const role = 'JUNIOR DEVELOPER';
-
-    service.roleHashMap = new Map([['SCRUM_MASTER', 'SCRUM MASTER']]);
-
-    const returnedRole: string = service.getAssociatedEnumRole(role);
-
-    expect(returnedRole).toEqual('');
-  });
-
-  it('should return role to be displayed', () => {
-    const role = 'SCRUM_MASTER';
-    const dummyRole = 'SCRUM MASTER';
-
-    service.roleHashMap = new Map([['SCRUM_MASTER', 'SCRUM MASTER']]);
-
-    const returnedRole: string = service.getAssociatedCleanRole(role);
-
-    expect(returnedRole).toEqual(dummyRole);
   });
 
   it('should return resources that have not been deleted - with result list', () => {

@@ -14,7 +14,6 @@ import {
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 import {
   autoCompleteResourceNameValidator,
-  autoCompleteRoleValidator,
   TfrCreationResourceComponent,
 } from './tfr-creation-resource.component';
 
@@ -29,8 +28,6 @@ export class MatDialogMock {
 describe('TfrCreationResourceComponent', () => {
   let component: TfrCreationResourceComponent;
   let fixture: ComponentFixture<TfrCreationResourceComponent>;
-  let roles: string[];
-  let databaseRoles: string[];
   let seniorityLevels: string[];
   let dummyAllocatedResource: AllocatedResourceTypeDTO[];
   let resourceServiceSpy: jasmine.SpyObj<ResourceService>;
@@ -68,9 +65,11 @@ describe('TfrCreationResourceComponent', () => {
             'getProjectResources',
             'setProjectResourcesWithNames',
             'getProjectId',
+            'getResourcesCount',
             'getProjectResourcesWithNames',
             'updateProjectToResourceMapping',
             'getResourcesNamesByProjectIdFromDatabase',
+            'setResourcesCount',
           ]),
         },
         {
@@ -87,8 +86,8 @@ describe('TfrCreationResourceComponent', () => {
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
 
-    roles = ['TEAM LEAD', 'SCRUM MASTER', 'SOFTWARE DEVELOPER'];
-    databaseRoles = ['TEAM_LEAD', 'SCRUM_MASTER', 'SOFTWARE_DEVELOPER'];
+    (tfrManagementServiceSpy as any).getResourcesCount = 3;
+
     resources = [
       {
         resource_name: 'John Makan',
@@ -156,8 +155,6 @@ describe('TfrCreationResourceComponent', () => {
       afterClosed: () => of('true'),
     } as MatDialogRef<typeof component>);
 
-    resourceServiceSpy.getAllRoles.and.returnValue(of(databaseRoles));
-    resourceServiceSpy.convertRoleEnum.and.returnValue(roles);
     resourceServiceSpy.getAllResources.and.returnValue(of(resources));
     resourceServiceSpy.getAllSeniorityLevels.and.returnValue(
       of(seniorityLevels)
@@ -180,26 +177,11 @@ describe('TfrCreationResourceComponent', () => {
   });
 
   it('should create and initialise values', () => {
-    expect(component.roles).toBe(roles);
     expect(component.resources).toBe(resources);
     expect(
       tfrManagementServiceSpy.setProjectResourcesWithNames.calls.count()
     ).toBe(1);
     expect(component).toBeTruthy();
-  });
-
-  it('role auto complete validator success', () => {
-    let control = { value: 'SOFTWARE DEVELOPER' };
-    let result = autoCompleteRoleValidator(roles)(control as AbstractControl);
-    expect(result).toBeNull();
-  });
-
-  it('role auto complete validator error', () => {
-    let control = { value: 'JUNIOR DEVELOPER' };
-    let result = autoCompleteRoleValidator(roles)(control as AbstractControl);
-    expect(result).toEqual({
-      invalidAutoCompleteRole: { value: control.value },
-    });
   });
 
   it('resource auto complete validator success', () => {
@@ -244,7 +226,7 @@ describe('TfrCreationResourceComponent', () => {
 
     component.allocatedResources = [];
     (tfrManagementServiceSpy as any).getProjectId = 1;
-    component.addResource('John Makan', 'SCRUM MASTER', 'INTERMEDIATE');
+    component.addResource('John Makan', 'SCRUM MASTER', 'JUNIOR');
 
     fixture.detectChanges();
 

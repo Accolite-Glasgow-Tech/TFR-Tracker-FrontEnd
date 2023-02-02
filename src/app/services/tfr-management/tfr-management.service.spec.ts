@@ -65,7 +65,7 @@ describe('TfrManagementService', () => {
           useValue: jasmine.createSpyObj('ApiService', [
             'getVendors',
             'postProject',
-            'putStatusAgreed',
+            'putStatus',
             'putProject',
             'getProject',
           ]),
@@ -262,6 +262,10 @@ describe('TfrManagementService', () => {
     expect(service.getVendorName).toBe(vendorName);
   });
 
+  it('should get Resources Count', () => {
+    expect(service.getResourcesCount).toBe(4);
+  });
+
   it('should set Project', () => {
     service.setProject(project);
     expect(service.project).toBe(project);
@@ -279,10 +283,10 @@ describe('TfrManagementService', () => {
 
   it('should set Basic Details', () => {
     apiServiceSpy.putProject.and.returnValue(of(1));
+    apiServiceSpy.getVendors.and.returnValue(of(vendors));
 
     service.project = project;
     service.vendorName = 'Morgan Stanley';
-    (apiServiceSpy as any).getVendors = of(vendors);
     service.setBasicDetails(basicDetails);
 
     expect(service.getBasicDetails).toEqual(basicDetails);
@@ -321,7 +325,7 @@ describe('TfrManagementService', () => {
 
   it('should create a new project by setting basic details', () => {
     service.project = undefined;
-    (apiServiceSpy as any).getVendors = of(vendors);
+    apiServiceSpy.getVendors.and.returnValue(of(vendors));
     apiServiceSpy.postProject.and.returnValue(of(2));
     service.setBasicDetails(basicDetails);
 
@@ -420,8 +424,13 @@ describe('TfrManagementService', () => {
   });
 
   it('should update project status to db', () => {
-    apiServiceSpy.putStatusAgreed.and.returnValue(of(true));
+    apiServiceSpy.putStatus.and.returnValue(of(true));
     let result = service.updateStatusToDatabase();
     result.subscribe((response) => expect(response).toBe(true));
+  });
+
+  it('should set resources count', () => {
+    service.setResourcesCount(1);
+    expect(service.project?.resources_count).toBe(1);
   });
 });

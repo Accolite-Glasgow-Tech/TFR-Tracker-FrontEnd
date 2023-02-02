@@ -44,8 +44,10 @@ describe('ProjectSummaryComponent', () => {
         },
         {
           provide: DateFormatterService,
-          useValue: jasmine.createSpyObj('DateFormatterService', ['getShortDisplayDate']),
-        }
+          useValue: jasmine.createSpyObj('DateFormatterService', [
+            'getShortDisplayDate',
+          ]),
+        },
       ],
     }).compileComponents();
 
