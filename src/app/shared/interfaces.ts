@@ -154,6 +154,7 @@ export interface ProjectResourceDTO {
   project_id: number;
   resource_id: number;
   role: string;
+  seniority: string;
   is_deleted: boolean;
 }
 
@@ -170,7 +171,6 @@ export interface ResourceListType {
   resource_name: string;
   resource_email: string;
   resource_id: number;
-  seniority: string;
   selected: boolean;
 }
 

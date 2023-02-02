@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { first, of } from 'rxjs';
@@ -94,14 +94,12 @@ describe('TfrCreationResourceComponent', () => {
         resource_name: 'John Makan',
         resource_email: 'johnmakan@accolitedigital.com',
         resource_id: 1,
-        seniority: 'JUNIOR',
         selected: false,
       },
       {
         resource_name: 'Yves Reed',
         resource_email: 'yvesreed@accolitedigital.com',
         resource_id: 2,
-        seniority: 'ADVANCED',
         selected: false,
       },
     ];
@@ -110,12 +108,14 @@ describe('TfrCreationResourceComponent', () => {
         project_id: 1,
         resource_id: 1,
         role: 'TEAM_LEAD',
+        seniority: 'SENIOR',
         is_deleted: false,
       },
       {
         project_id: 1,
         resource_id: 2,
         role: 'SCRUM_MASTER',
+        seniority: 'INTERMEDIATE',
         is_deleted: false,
       },
     ];
@@ -228,7 +228,6 @@ describe('TfrCreationResourceComponent', () => {
         resource_name: 'John Makan',
         resource_email: 'johnmakan@accolitedigital.com',
         resource_id: 1,
-        seniority: 'JUNIOR',
         selected: false,
       },
     ];
@@ -245,7 +244,7 @@ describe('TfrCreationResourceComponent', () => {
 
     component.allocatedResources = [];
     (tfrManagementServiceSpy as any).getProjectId = 1;
-    component.addResource('John Makan', 'SCRUM MASTER');
+    component.addResource('John Makan', 'SCRUM MASTER', 'INTERMEDIATE');
 
     fixture.detectChanges();
 
@@ -269,7 +268,7 @@ describe('TfrCreationResourceComponent', () => {
 
     component.resources = resources;
 
-    component.addResource('John Makan', 'SCRUM MASTER');
+    component.addResource('John Makan', 'SCRUM MASTER', 'INTERMEDIATE');
 
     expect(component.allocatedResources).toEqual(expectAllocatedResources);
   });
@@ -354,22 +353,5 @@ describe('TfrCreationResourceComponent', () => {
       TfrCreationDialogComponent,
       dialogContent
     );
-  });
-
-  it('should respond to change to seniority level selection', () => {
-    component.resources = resources;
-    component.seniorityLevelChange('JUNIOR');
-    expect(
-      component.resourceFormGroup.controls['resource_name'].hasValidator(
-        Validators.required
-      )
-    ).toBe(true);
-
-    component.seniorityLevelChange('ALL');
-    expect(
-      component.resourceFormGroup.controls['resource_name'].hasValidator(
-        Validators.required
-      )
-    ).toBe(true);
   });
 });

@@ -257,6 +257,7 @@ export class TfrManagementService {
           resource_id: keepAttrs.resource_id,
           project_id: keepAttrs.project_id,
           role: keepAttrs.role,
+          seniority: keepAttrs.seniority,
           is_deleted: keepAttrs.is_deleted,
         };
       }

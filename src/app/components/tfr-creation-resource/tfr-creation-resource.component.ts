@@ -133,12 +133,17 @@ export class TfrCreationResourceComponent implements OnInit {
       },
       { type: 'required', message: 'Role is required.' },
     ],
+    seniorityLevel: [
+      { type: 'required', message: 'Seniority Level is required.' },
+    ],
   };
 
   ngOnInit(): void {
     this.resourceFormGroup = new FormGroup({
-      seniorityLevel: new FormControl(''),
       resource_name: new FormControl('', {
+        validators: [Validators.required],
+      }),
+      seniorityLevel: new FormControl('', {
         validators: [Validators.required],
       }),
       role: new FormControl('', {
@@ -151,8 +156,6 @@ export class TfrCreationResourceComponent implements OnInit {
     */
     this.resourceService.getAllSeniorityLevels().subscribe((data: string[]) => {
       this.seniorityLevels = data;
-      this.seniorityLevels.push('ALL');
-      this.resourceFormGroup.get('seniorityLevel')?.setValue('ALL');
     });
 
     /*
@@ -300,11 +303,6 @@ export class TfrCreationResourceComponent implements OnInit {
 
     return this.resources
       .filter((resource) => !resource.selected)
-      .filter(
-        (resource) =>
-          resource.seniority ===
-          this.resourceFormGroup.controls['seniorityLevel'].value
-      )
       .filter((resource) =>
         resource.resource_name.toLowerCase().includes(filterValue)
       );
@@ -314,7 +312,7 @@ export class TfrCreationResourceComponent implements OnInit {
     Adds the mapping between a resource and the current project with a 
     corresponding role.
   */
-  addResource(resource_name: string, role: string) {
+  addResource(resource_name: string, role: string, seniority: string) {
     /*
       An update API call will be required to update the project-resource database.
     */
@@ -342,7 +340,7 @@ export class TfrCreationResourceComponent implements OnInit {
       resource_name: resource_name,
       resource_email: this.resources[index].resource_email,
       is_deleted: false,
-      seniority: this.resources[index].seniority,
+      seniority: seniority,
       role: role,
     };
 
@@ -387,10 +385,14 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   resetFormGroup() {
-    this.resourceFormGroup.get('resource_name')?.setValue('');
-    this.resourceFormGroup.get('role')?.setValue('');
+    this.resourceFormGroup.setValue({
+      resource_name: '',
+      role: '',
+      seniorityLevel: '',
+    });
     this.resourceFormGroup.controls['resource_name'].setErrors(null);
     this.resourceFormGroup.controls['role'].setErrors(null);
+    this.resourceFormGroup.controls['seniorityLevel'].setErrors(null);
   }
 
   /*
@@ -416,7 +418,7 @@ export class TfrCreationResourceComponent implements OnInit {
         resource_name: this.resources[indexOfResource].resource_name,
         resource_email: this.resources[indexOfResource].resource_email,
         is_deleted: resource.is_deleted,
-        seniority: this.resources[indexOfResource].seniority,
+        seniority: resource.seniority,
         role: this.resourceService.getAssociatedCleanRole(resource.role),
       };
 
@@ -484,34 +486,5 @@ export class TfrCreationResourceComponent implements OnInit {
     );
     this.tfrManagementService.updateProjectToResourceMapping();
     this.resourceListUpdated = false;
-  }
-
-  /* 
-    Updates the list of resources that the user can select based on the seniority
-    level selected
-  */
-  seniorityLevelChange(seniorityLevel: string) {
-    this.resetFormGroup();
-
-    let trimmedResources = this.resources;
-
-    if (seniorityLevel !== 'ALL') {
-      trimmedResources = this.resources.filter(
-        (resource) => resource.seniority === seniorityLevel
-      );
-    }
-
-    this.resourceFormGroup.controls['resource_name'].clearValidators();
-    this.resourceFormGroup.controls['resource_name'].addValidators([
-      autoCompleteResourceNameValidator(trimmedResources),
-      Validators.required,
-    ]);
-
-    this.filteredResourceOption = this.resourceFormGroup.controls[
-      'resource_name'
-    ].valueChanges.pipe(
-      startWith(''),
-      map((value) => this.filterResource(value || ''))
-    );
   }
 }

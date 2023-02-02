@@ -11,22 +11,6 @@
     <div class="form-group-div">
       <div class="resource_selection">
         <mat-form-field appearance="fill" class="form-field">
-          <mat-label class="small-font">Seniority</mat-label>
-          <mat-select disableRipple formControlName="seniorityLevel">
-            <mat-option
-              *ngFor="let seniorityLevel of seniorityLevels"
-              [value]="seniorityLevel"
-              (click)="seniorityLevelChange(seniorityLevel)"
-              class="small-font"
-            >
-              {{ seniorityLevel }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <div class="resource_selection">
-        <mat-form-field appearance="fill" class="form-field">
           <mat-label class="small-font">Resource</mat-label>
           <input
             type="text"
@@ -44,13 +28,6 @@
               [value]="filteredResource.resource_name"
               class="small-font"
             >
-              <ng-container
-                *ngIf="
-                  resourceFormGroup.controls['seniorityLevel'].value === 'ALL'
-                "
-              >
-                {{ filteredResource.seniority }} |
-              </ng-container>
               {{ filteredResource.resource_name }}
             </mat-option>
           </mat-autocomplete>
@@ -121,11 +98,49 @@
         </div>
       </div>
 
+      <div class="resource_selection">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label class="small-font">Seniority</mat-label>
+          <mat-select disableRipple formControlName="seniorityLevel" #seniority>
+            <mat-option
+              *ngFor="let seniorityLevel of seniorityLevels"
+              [value]="seniorityLevel"
+              class="small-font"
+            >
+              {{ seniorityLevel }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div
+          *ngIf="
+            resourceFormGroup.controls['seniorityLevel'].invalid &&
+            resourceFormGroup.controls['seniorityLevel'].touched
+          "
+          class="error-div-container"
+        >
+          <ng-container
+            *ngFor="let validation of validation_msgs.seniorityLevel"
+          >
+            <div
+              *ngIf="
+                resourceFormGroup
+                  .get('seniorityLevel')
+                  ?.hasError(validation.type)
+              "
+              class="error-div"
+            >
+              {{ validation.message }}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
       <button
         [disabled]="
           !resourceFormGroup.valid || resource.value === '' || role.value === ''
         "
-        (click)="addResource(resource.value, role.value)"
+        (click)="addResource(resource.value, role.value, seniority.value)"
         mat-raised-button
         class="add-btn"
         color="primary"
