@@ -154,7 +154,7 @@ export class MilestonesComponent implements OnInit {
     this.milestoneManagerService.selectNewMilestone(
       this.projectManagerService.getProjectId
     );
-    this.milestoneForm.markAsPristine();
+    this.milestoneForm.markAsUntouched();
   }
   discardSelected() {
     this.milestoneManagerService.setSelected(null);
@@ -175,7 +175,7 @@ export class MilestonesComponent implements OnInit {
   }
   selectMilestone(milestone: Milestone) {
     this.milestoneManagerService.setSelected(milestone);
-    this.milestoneForm.markAsPristine();
+    this.milestoneForm.markAsUntouched();
   }
   submitMilestones() {
     this.projectManagerService
