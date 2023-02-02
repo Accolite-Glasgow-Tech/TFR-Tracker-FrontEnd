@@ -51,7 +51,8 @@
     </button>
   </div>
 </div>
-<div class="tfrs-table-container mat-table">
+<h1 *ngIf="projectList.data.length === 0">No projects to show</h1>
+<div class="tfrs-table-container mat-table" *ngIf="projectList.data.length > 0">
   <table
     mat-table
     [dataSource]="projectList"
