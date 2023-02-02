@@ -257,9 +257,6 @@ export class TfrManagementService {
   ) {
     const newArray: ProjectResourceDTO[] = projectResourcesWithNames.map(
       ({ resource_name, resource_email, ...keepAttrs }) => {
-        keepAttrs.role = this.resourceService.getAssociatedEnumRole(
-          keepAttrs.role
-        );
         return {
           resource_id: keepAttrs.resource_id,
           project_id: keepAttrs.project_id,

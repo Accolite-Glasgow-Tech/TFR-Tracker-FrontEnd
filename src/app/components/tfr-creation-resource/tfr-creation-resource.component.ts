@@ -43,23 +43,6 @@ export function autoCompleteResourceNameValidator(
   };
 }
 
-/*
-  Custom validator for the auto complete functionality of the 
-  role input field. It validates that the inserted value
-  in the input field is present in the list of available roles.
-
-  Returns invalidAutoCompleteRole as error if the inserted value is 
-  not present in the list.
-*/
-export function autoCompleteRoleValidator(validOptions: string[]): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    if (validOptions.indexOf(control.value) !== -1) {
-      return null; /* valid option selected */
-    }
-    return { invalidAutoCompleteRole: { value: control.value } };
-  };
-}
-
 @Component({
   selector: 'app-tfr-creation-resource',
   templateUrl: './tfr-creation-resource.component.html',
@@ -76,7 +59,6 @@ export class TfrCreationResourceComponent implements OnInit {
   resourcesCountFormGroup!: FormGroup;
   resourcesCount: number = 1;
   resources!: ResourceListType[];
-  roles!: string[];
   seniorityLevels!: string[];
   resourcesFilterBySeniority!: ResourceListType[];
   filteredResourceOption!: Observable<ResourceListType[]>;
@@ -90,14 +72,6 @@ export class TfrCreationResourceComponent implements OnInit {
   getResourceNameObserver = {
     next: (data: AllocatedResourceTypeDTO[]) => {
       this.tfrManagementService.projectResourcesWithNames = data;
-      this.tfrManagementService.projectResourcesWithNames.forEach(
-        (project_resourceWithName: AllocatedResourceTypeDTO) => {
-          project_resourceWithName.role = project_resourceWithName.role.replace(
-            /_/g,
-            ' '
-          );
-        }
-      );
       this.allocatedResources = [
         ...this.tfrManagementService.getProjectResourcesWithNames,
       ];
@@ -137,13 +111,7 @@ export class TfrCreationResourceComponent implements OnInit {
       },
       { type: 'required', message: 'Resource is required.' },
     ],
-    role: [
-      {
-        type: 'invalidAutoCompleteRole',
-        message: 'Role not recognized. Click one of the autocomplete options.',
-      },
-      { type: 'required', message: 'Role is required.' },
-    ],
+    role: [{ type: 'required', message: 'Role is required.' }],
     seniorityLevel: [
       { type: 'required', message: 'Seniority Level is required.' },
     ],
@@ -182,40 +150,6 @@ export class TfrCreationResourceComponent implements OnInit {
     */
     this.resourceService.getAllSeniorityLevels().subscribe((data: string[]) => {
       this.seniorityLevels = data;
-    });
-
-    /*
-      API call to the server to obtain a list of all the roles that a 
-      resource can be assigned to in a project.
-    */
-    this.resourceService.getAllRoles().subscribe((data: string[]) => {
-      /*
-        The list of roles obtained from the database contains underscores. 
-        
-        The service function called returns the list of roles with no 
-        underscores which look better on display.
-      */
-      this.roles = this.resourceService.convertRoleEnum(data);
-
-      /*
-        Adding the custom validator for the auto complete functionality 
-        for the role input field.
-      */
-      this.resourceFormGroup.controls['role'].addValidators([
-        autoCompleteRoleValidator(this.roles),
-      ]);
-
-      /*
-        Event listener when there is a letter inserted in the role input 
-        field. The list of options showed to the user gets updated based
-        on the letters he is inserting.
-      */
-      this.filteredRoleOption = this.resourceFormGroup.controls[
-        'role'
-      ].valueChanges.pipe(
-        startWith(''),
-        map((value) => this._filterRole(value || ''))
-      );
     });
 
     /*
@@ -297,18 +231,6 @@ export class TfrCreationResourceComponent implements OnInit {
           // this.stepCompletedEmitter.emit(true);
         }
       });
-  }
-
-  /*
-    This function takes in the value that the user has inserted in the 
-    role input field and returns the list of roles that are related to 
-    the inserted string.
-  */
-  private _filterRole(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.roles.filter((role) =>
-      role.toLowerCase().includes(filterValue)
-    );
   }
 
   /*
@@ -446,7 +368,7 @@ export class TfrCreationResourceComponent implements OnInit {
         resource_email: this.resources[indexOfResource].resource_email,
         is_deleted: resource.is_deleted,
         seniority: resource.seniority,
-        role: this.resourceService.getAssociatedCleanRole(resource.role),
+        role: resource.role,
       };
 
       this.allocatedResources.push(allocatedResource);
