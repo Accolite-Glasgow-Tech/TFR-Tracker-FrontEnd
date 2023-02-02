@@ -69,10 +69,7 @@ export class MilestoneManagerService {
       this.remove(milestone as Milestone);
       this.add(milestone as Milestone);
       this.setSelected(null);
-      console.log('Saved');
-      console.log(milestone);
     } else {
-      console.log(milestone);
       throw new Error('bad milestone save');
     }
   }
@@ -97,7 +94,7 @@ export class MilestoneManagerService {
   private broadcastUpdate() {
     this.Update.emit();
   }
-  private generateIdOfNew() {
+  generateIdOfNew() {
     return Math.min(0, ...this.milestones.map((milestone) => milestone.id)) - 1;
   }
 }
