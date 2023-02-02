@@ -2,9 +2,9 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Data, Router } from '@angular/router';
-import { catchError, map, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
-import { projectsURL, resourceProjectsURL } from 'src/app/shared/constants';
+import { resourceProjectsURL } from 'src/app/shared/constants';
 import {
   AllocatedResourceTypeDTO,
   Milestone,
@@ -15,11 +15,7 @@ import {
   ProjectResourceDTO,
   VendorDTO,
 } from 'src/app/shared/interfaces';
-import {
-  getAllocatedResourcesURL,
-  getProjectURL,
-  getUpdateProjectStatusURL,
-} from 'src/app/shared/utils';
+import { getAllocatedResourcesURL } from 'src/app/shared/utils';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
@@ -168,7 +164,7 @@ export class TfrManagementService {
   }
 
   setVendorName(vendor_id: number) {
-    this.apiService.getVendors.subscribe((result: VendorDTO[]) => {
+    this.apiService.getVendors().subscribe((result: VendorDTO[]) => {
       this.vendorName = result.find(
         (vendor: VendorDTO) => vendor.id === vendor_id
       )!.name;
@@ -294,6 +290,6 @@ export class TfrManagementService {
       When API is ready, need to make a put request to the database
       to update the status from DRAFT to AGREED.
     */
-    return this.apiService.putStatusAgreed(this.project!.id);
+    return this.apiService.putStatus(this.project!.id, 'AGREED');
   }
 }

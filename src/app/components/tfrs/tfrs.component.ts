@@ -8,11 +8,11 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import * as FileSaver from 'file-saver';
-import { tfrService } from 'src/app/services/tfrs/tfr.service';
 import { statusList } from 'src/app/shared/constants';
 import { ProjectDTO } from 'src/app/shared/interfaces';
 import { getPDFReportURL } from 'src/app/shared/utils';
-import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service'
+import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
+import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'app-tfrs',
@@ -60,19 +60,19 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   projectPostBody: any = {};
 
   constructor(
-    private tfrService: tfrService,
+    private ApiService: ApiService,
     private liveAnnouncer: LiveAnnouncer,
     private datePipe: DatePipe,
     private router: Router,
     private http: HttpClient,
-    public dateFormatterService: DateFormatterService,
+    public dateFormatterService: DateFormatterService
   ) {}
 
   ngOnInit(): void {
-    this.tfrService.getAllProjects().subscribe((allProjects) => {
+    this.ApiService.getAllProjects().subscribe((allProjects) => {
       this.projectList.data = allProjects;
     });
-    this.tfrService.getAllVendors().subscribe((allVendors) => {
+    this.ApiService.getAllVendors().subscribe((allVendors) => {
       this.vendors = allVendors;
     });
   }
@@ -97,9 +97,11 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     if (this.selectedStatus != undefined) {
       this.projectPostBody['status'] = this.selectedStatus;
     }
-    this.tfrService.getProjects(this.projectPostBody).subscribe((projects) => {
-      this.projectList.data = projects;
-    });
+    this.ApiService.searchProjects(this.projectPostBody).subscribe(
+      (projects) => {
+        this.projectList.data = projects;
+      }
+    );
   }
 
   viewTFRDetails(tfrId: number): void {
@@ -123,5 +125,4 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   scheduleReports(tfrId: number): void {
     this.router.navigateByUrl(`/tfr/${tfrId}/reports`);
   }
-
 }

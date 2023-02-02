@@ -38,7 +38,7 @@ export class VendorsComponent implements OnInit {
       this.resetVendorControls();
     });
 
-    this.api.getVendors.subscribe((data) => {
+    this.api.getVendors().subscribe((data) => {
       this.vendors = data;
       if (this.editMode) {
         // TODO fill in details of vendor and Attributes
