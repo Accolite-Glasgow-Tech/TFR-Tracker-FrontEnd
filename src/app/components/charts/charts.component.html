@@ -1,5 +1,9 @@
-<mat-card class="chartouter">
-  <canvas class="chartinner"
+<mat-card *ngIf="pieChartData.length === 0">
+  <h1>No client data to show</h1>
+</mat-card>
+<mat-card class="chartouter" *ngIf="pieChartData.length > 0">
+  <canvas
+    class="chartinner"
     baseChart
     [type]="'pie'"
     [datasets]="pieChartData"

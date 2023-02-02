@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { GridsterComponent, IGridsterOptions } from 'angular2gridster';
 import { ChartsComponent } from '../charts/charts.component';
 import { WidgetApproachingProjectsComponent } from '../widget-approaching-projects/widget-approaching-projects.component';
@@ -13,7 +13,7 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./home.component.scss'],
   providers: [MdbModalService],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   @ViewChild(GridsterComponent) gridster!: GridsterComponent;
   @ViewChild(WidgetVendorLocationComponent)
   WidgetVendorLocationComponent!: WidgetVendorLocationComponent;
@@ -23,33 +23,32 @@ export class HomeComponent {
   @ViewChild(WidgetApproachingProjectsComponent)
   WidgetApproachingProjectsComponent!: WidgetApproachingProjectsComponent;
 
+  widgets: any[] = [];
+
   constructor(private matdialog: MatDialog) {}
 
-  widgets: any[] = [
-    {
+  ngOnInit() {
+    this.widgets.push({
       componentName: 'Client Location',
       present: true,
       componentType: WidgetVendorLocationComponent,
-    },
-    {
+    });
+    this.widgets.push({
       componentName: 'Our Clients',
       present: true,
       componentType: WidgetVendorProjectCountComponent,
-
-    },
-    {
+    });
+    this.widgets.push({
       componentName: 'TFR Status',
       present: true,
       componentType: ChartsComponent,
-
-    },
-    {
+    });
+    this.widgets.push({
       componentName: 'Upcoming Projects',
       present: true,
       componentType: WidgetApproachingProjectsComponent,
-
-    },
-  ];
+    });
+  }
 
   widgetsfalse: any[] = [];
 
@@ -139,7 +138,6 @@ export class HomeComponent {
           componentName: 'Upcoming Projects',
           present: true,
           componentType: WidgetApproachingProjectsComponent,
-
         });
       }
 
@@ -152,7 +150,6 @@ export class HomeComponent {
           componentName: 'Our Clients',
           present: true,
           componentType: WidgetVendorProjectCountComponent,
-
         });
       }
 
@@ -167,7 +164,6 @@ export class HomeComponent {
           componentName: 'Client Location',
           present: true,
           componentType: WidgetVendorLocationComponent,
-
         });
       }
     });

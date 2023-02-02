@@ -1,8 +1,6 @@
-<mat-card *ngIf="dataPoints.length" >
-
-    <canvasjs-chart
-      [options]="chartOptions"
-    ></canvasjs-chart>
-
-</mat-card >
-  
+<mat-card *ngIf="dataPoints.length === 0">
+  <h1>No client data to show</h1>
+</mat-card>
+<mat-card *ngIf="dataPoints.length > 0">
+  <canvasjs-chart [options]="chartOptions"></canvasjs-chart>
+</mat-card>

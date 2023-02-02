@@ -15,12 +15,7 @@ export class ChartsComponent implements OnInit {
     plugins: { legend: { position: 'left' } },
   };
 
-  pieChartData: any = [
-    {
-      backgroundColor: [],
-      data: [],
-    },
-  ];
+  pieChartData: any = [];
   pieChartLabels: any[] = [];
   ngOnInit() {
     this.chartservice.readTfrStatusData().subscribe((responsedata) => {
