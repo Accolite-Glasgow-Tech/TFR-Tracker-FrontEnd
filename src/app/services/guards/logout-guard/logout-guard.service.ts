@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
-import { UserService } from '../../user/user.service';
+import { userService } from '../../user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import { UserService } from '../../user/user.service';
 export class LogoutGuardService implements CanActivate {
 
   constructor(private router: Router,
-    private userService: UserService) {}
+    private userService: userService) {}
 
   /**
    * Allows activation if User is logged out OR if guarding is disabled

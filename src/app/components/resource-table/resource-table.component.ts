@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 
 @Component({
@@ -22,8 +22,9 @@ export class ResourceTableComponent {
   /*
     Signifies to the parent component that the delete symbol was clicked.
   */
-  @Output() removeResourceEmitter: EventEmitter<number> = new EventEmitter();
-  removeResource(resource_id: number) {
-    this.removeResourceEmitter.emit(resource_id);
+  @Output() removeResourceEmitter: EventEmitter<AllocatedResourceTypeDTO> =
+    new EventEmitter();
+  removeResource(resource: AllocatedResourceTypeDTO) {
+    this.removeResourceEmitter.emit(resource);
   }
 }

@@ -4,9 +4,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { filter, from, map, Observable, of } from 'rxjs';
+import { ResourceService } from 'src/app/services/resource/resource.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project } from 'src/app/shared/interfaces';
+import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
 import { DummyProject } from 'src/app/types/dummy-data';
 import { StepperComponent } from './stepper.component';
 
@@ -16,6 +17,7 @@ describe('StepperComponent', () => {
 
   let activatedRoute: ActivatedRoute;
   let responseObj: Object;
+  let resourceServiceSpy: jasmine.SpyObj<ResourceService>;
   const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
   const snackBarServiceSpy = jasmine.createSpyObj('SnackBarService', [
     'showSnackBar',
@@ -36,6 +38,28 @@ describe('StepperComponent', () => {
   }
 
   const dummyProject: Project = DummyProject;
+
+  const dummyAllocatedResource: AllocatedResourceTypeDTO[] = [
+    {
+      project_id: 1,
+      resource_id: 1,
+      resource_name: 'John Bowers',
+      resource_email: 'johnbowers@accolitedigital.com',
+      seniority: 'SENIOR',
+      is_deleted: false,
+      role: 'SCRUM MASTER',
+    },
+    {
+      project_id: 1,
+      resource_id: 3,
+      resource_name: 'Kimberly Gould',
+      resource_email: 'kimberlygould@accolitedigital.com',
+      seniority: 'JUNIOR',
+      is_deleted: false,
+      role: 'SOFTWARE DEVELOPER',
+    },
+  ];
+
   async function setUpSuccess() {
     responseObj = {
       project: new HttpResponse<Project>({
@@ -74,6 +98,10 @@ describe('StepperComponent', () => {
           provide: BreakpointObserver,
           useValue: breakPointSpy,
         },
+        {
+          provide: ResourceService,
+          useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
+        },
       ],
     }).compileComponents();
 
@@ -110,6 +138,10 @@ describe('StepperComponent', () => {
         {
           provide: BreakpointObserver,
           useValue: breakPointSpy,
+        },
+        {
+          provide: ResourceService,
+          useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
         },
       ],
     }).compileComponents();
@@ -155,6 +187,10 @@ describe('StepperComponent', () => {
           provide: BreakpointObserver,
           useValue: breakPointSpy,
         },
+        {
+          provide: ResourceService,
+          useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
+        },
       ],
     }).compileComponents();
 
@@ -167,7 +203,13 @@ describe('StepperComponent', () => {
     tfrManagementServiceSpy = fixture.debugElement.injector.get(
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
+    resourceServiceSpy = TestBed.inject(
+      ResourceService
+    ) as jasmine.SpyObj<ResourceService>;
     TestBed.inject(BreakpointObserver);
+    tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
+      of(dummyAllocatedResource)
+    );
 
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -267,5 +309,12 @@ describe('StepperComponent', () => {
     await setUpSuccess();
     component.setEditMode(true);
     expect(component.editMode).toBe(true);
+  });
+
+  it('should return allocated resources without delete', () => {
+    resourceServiceSpy.resourcesWithoutDeleted.and.returnValue(
+      dummyAllocatedResource
+    );
+    expect(component.currentResourcesWithNames).toEqual(dummyAllocatedResource);
   });
 });

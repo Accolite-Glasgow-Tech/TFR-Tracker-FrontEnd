@@ -1,8 +1,11 @@
 import { Component, Input } from '@angular/core';
+import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
-import { AllocatedResourceTypeDTO, Milestone } from 'src/app/shared/interfaces';
-import { Project } from 'src/app/shared/interfaces';
-import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service'
+import {
+  AllocatedResourceTypeDTO,
+  Milestone,
+  Project,
+} from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-project-summary',
@@ -10,8 +13,10 @@ import { DateFormatterService } from 'src/app/services/date-formatter/date-forma
   styleUrls: ['./project-summary.component.scss'],
 })
 export class ProjectSummaryComponent {
-  constructor(protected resourceService: ResourceService,
-    public dateFormatterService: DateFormatterService) {}
+  constructor(
+    protected resourceService: ResourceService,
+    public dateFormatterService: DateFormatterService
+  ) {}
 
   @Input() currentProject!: Project | undefined;
   @Input() resourcesWithNames!: AllocatedResourceTypeDTO[];
@@ -24,5 +29,11 @@ export class ProjectSummaryComponent {
     return !milestones
       ? []
       : milestones.filter((milestone: Milestone) => !milestone.is_deleted);
+  }
+
+  get currentResourcesWithNames(): AllocatedResourceTypeDTO[] {
+    return this.resourceService.resourcesWithoutDeleted(
+      this.resourcesWithNames
+    );
   }
 }

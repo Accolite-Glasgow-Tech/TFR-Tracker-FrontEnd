@@ -27,6 +27,7 @@ export interface Project {
   status: string;
   version: number;
   vendor_specific: { [key: string]: string };
+  resources_count: number;
   is_deleted: Boolean;
   created_by: number;
   modified_by: number;
@@ -135,6 +136,8 @@ export interface AllocatedResourceTypeDTO {
   resource_id: number;
   resource_name: string;
   resource_email: string;
+  seniority: string;
+  is_deleted: boolean;
   role: string;
 }
 
@@ -142,6 +145,8 @@ export interface ProjectResourceDTO {
   project_id: number;
   resource_id: number;
   role: string;
+  seniority: string;
+  is_deleted: boolean;
 }
 
 export interface ProjectBasicDetails {
@@ -166,6 +171,8 @@ export interface RegisterResponse {
 }
 
 export interface LoginResponse {
+  id: BigInteger;
+  user_name: string;
   msg: string;
   status: boolean;
   token: string;

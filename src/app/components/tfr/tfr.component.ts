@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project } from 'src/app/shared/interfaces';
+import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-tfr',
@@ -13,15 +13,29 @@ export class TfrComponent implements OnInit {
   TfrId!: Number;
   errorMessage: string = '';
 
+  getResourceNameObserver = {
+    next: (data: AllocatedResourceTypeDTO[]) => {
+      this.tfrManagementService.projectResourcesWithNames = data;
+      this.tfrManagementService.projectResourcesWithNames.forEach(
+        (project_resourceWithName: AllocatedResourceTypeDTO) => {
+          project_resourceWithName.role = project_resourceWithName.role.replace(
+            /_/g,
+            ' '
+          );
+        }
+      );
+    },
+  };
+
   getProjectObserver = {
     next: (response: Data) => {
       let status: number = response['project']['status'];
       let project: Project = response['project']['body'];
       if (status === 200) {
         this.tfrManagementService.project = project;
-        this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
-          project.id
-        );
+        this.tfrManagementService
+          .getResourcesNamesByProjectIdFromDatabase(project.id)
+          .subscribe(this.getResourceNameObserver);
         this.tfrManagementService.setVendorName(project.vendor_id);
       } else {
         this.tfrManagementService.apiError = true;

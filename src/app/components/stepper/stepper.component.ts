@@ -6,9 +6,10 @@ import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ResourceService } from 'src/app/services/resource/resource.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project } from 'src/app/shared/interfaces';
+import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-stepper',
@@ -47,13 +48,19 @@ export class StepperComponent implements OnInit {
 
     A value of true forces the user to complete its current step before moving to the next.
   */
-  isLinear = true;
+  isLinear = false;
 
   /*
     Listens to screen size changes. When the screen is small, the orientation of the stepper
     will be vertical. A horizontal stepper will appear on a large screen.
   */
   stepLabels: Observable<string[]>;
+
+  getResourceNameObserver = {
+    next: (data: AllocatedResourceTypeDTO[]) => {
+      this.tfrManagementService.projectResourcesWithNames = data;
+    },
+  };
 
   getProjectObserver = {
     next: (response: Data) => {
@@ -62,9 +69,9 @@ export class StepperComponent implements OnInit {
         let project: Project = response['project']['body'];
         if (status === 200) {
           this.tfrManagementService.project = project;
-          this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
-            project.id
-          );
+          this.tfrManagementService
+            .getResourcesNamesByProjectIdFromDatabase(project.id)
+            .subscribe(this.getResourceNameObserver);
           this.tfrManagementService.setVendorName(project.vendor_id);
         } else {
           this.tfrManagementService.apiError = true;
@@ -80,7 +87,8 @@ export class StepperComponent implements OnInit {
     protected breakpointObserver: BreakpointObserver,
     private snackBarService: SnackBarService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private resourceService: ResourceService
   ) {
     /*
       Listener for the screen size.
@@ -181,5 +189,11 @@ export class StepperComponent implements OnInit {
   */
   setEditMode(editMode: boolean) {
     this.editMode = editMode;
+  }
+
+  get currentResourcesWithNames(): AllocatedResourceTypeDTO[] {
+    return this.resourceService.resourcesWithoutDeleted(
+      this.tfrManagementService.getProjectResourcesWithNames
+    );
   }
 }

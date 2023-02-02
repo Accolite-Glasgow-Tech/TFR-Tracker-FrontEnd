@@ -4,6 +4,7 @@
   flex-direction: row;
   justify-content: flex-start;
   width: 100%;
+  gap: 10px;
 }
 
 .form-field {
@@ -53,6 +54,10 @@
   position: fixed;
   bottom: 5%;
   right: 5%;
+}
+
+.label-padding {
+  padding-right: 10px;
 }
 
 @media screen and (max-width: 800px) {
