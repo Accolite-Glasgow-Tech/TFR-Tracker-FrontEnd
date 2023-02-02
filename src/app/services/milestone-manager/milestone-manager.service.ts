@@ -9,6 +9,7 @@ export class MilestoneManagerService {
   selected: FormMilestone | null = null;
   @Output() Update: EventEmitter<any> = new EventEmitter();
   constructor() {}
+
   get getMilestones() {
     return this.milestones;
   }
@@ -16,12 +17,13 @@ export class MilestoneManagerService {
     this.milestones = milestones ? milestones : [];
     this.broadcastUpdate();
   }
+
+  get getSelected(): FormMilestone | null {
+    return this.selected;
+  }
   setSelected(milestone: FormMilestone | null) {
     this.selected = milestone;
     this.broadcastUpdate();
-  }
-  get getSelected(): FormMilestone | null {
-    return this.selected;
   }
 
   updateToRemove(milestone: Milestone) {
@@ -39,8 +41,11 @@ export class MilestoneManagerService {
     this.broadcastUpdate();
   }
 
+  get MilestonesNotDeletedLength(): number {
+    return this.milestones.filter((milestone) => !milestone.is_deleted).length;
+  }
   get submittable(): boolean {
-    return this.getMilestones.length >= 1;
+    return this.MilestonesNotDeletedLength >= 1;
   }
 
   selectNewMilestone(projectId: number | undefined) {

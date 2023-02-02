@@ -65,6 +65,10 @@ export class MilestonesComponent implements OnInit {
     this.formMilestone = milestone;
   }
   get submittable(): boolean {
+    this.stepCompletedEmitter.emit(
+      this.milestoneManagerService.submittable && this.isPristine
+    );
+    console.log(this.milestoneManagerService.submittable && this.isPristine);
     return this.milestoneManagerService.submittable && this.isPristine;
   }
 
