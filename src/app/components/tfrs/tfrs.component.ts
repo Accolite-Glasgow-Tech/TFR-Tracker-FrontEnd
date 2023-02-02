@@ -11,6 +11,13 @@ import * as FileSaver from 'file-saver';
 import { statusList } from 'src/app/shared/constants';
 import { ProjectDTO } from 'src/app/shared/interfaces';
 import { getPDFReportURL } from 'src/app/shared/utils';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
 import { ApiService } from 'src/app/services/api/api.service';
 
@@ -18,6 +25,16 @@ import { ApiService } from 'src/app/services/api/api.service';
   selector: 'app-tfrs',
   templateUrl: './tfrs.component.html',
   styleUrls: ['./tfrs.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
+    ]),
+  ],
 })
 export class TfrsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
@@ -27,7 +44,11 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     'status',
     'link',
   ];
-  ELEMENT_DATA: any = [];
+
+  displayedColumnsWithExpand: string[] = [...this.displayedColumns, 'expand'];
+  expandedElement: any;
+  ELEMENT_DATA: ProjectDTO[] = [];
+
   projectList: MatTableDataSource<ProjectDTO> = new MatTableDataSource(
     this.ELEMENT_DATA
   );
@@ -124,5 +145,9 @@ export class TfrsComponent implements OnInit, AfterViewInit {
 
   scheduleReports(tfrId: number): void {
     this.router.navigateByUrl(`/tfr/${tfrId}/reports`);
+  }
+
+  displayDate(date: Date) {
+    return this.dateFormatterService.getShortDisplayDate(date);
   }
 }

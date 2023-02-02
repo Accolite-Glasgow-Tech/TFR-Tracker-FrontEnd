@@ -178,6 +178,8 @@ export interface RegisterResponse {
 }
 
 export interface LoginResponse {
+  id: BigInteger;
+  user_name: string;
   msg: string;
   status: boolean;
   token: string;

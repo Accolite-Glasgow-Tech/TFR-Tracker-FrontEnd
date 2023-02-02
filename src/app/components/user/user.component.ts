@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { UserService } from 'src/app/services/user/user.service';
+import { userService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-user',
@@ -14,30 +14,26 @@ export class UserComponent implements OnInit {
   logginGroup: any;
   registering: any = true;
   logging: any = false;
-
   constructor(
-    private userService: UserService,
+    private userService: userService,
     private router: Router,
     private route: ActivatedRoute,
     private snackBarService: SnackBarService
   ) {}
-
   ngOnInit(): void {
     // uses route path to determine whether registering or logging in
     this.route.url.subscribe((url) => {
       let path = url[0].path;
       this.registering = path === 'register';
     });
-
     this.registerGroup = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      name: new FormControl('', [Validators.required,Validators.email]),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
       ]),
       confirmPassword: new FormControl('', []),
     });
-
     this.logginGroup = new FormGroup({
       name: new FormControl('', []),
       password: new FormControl('', []),
@@ -49,16 +45,14 @@ export class UserComponent implements OnInit {
       this.registerGroup.get('password').value;
     return valid;
   }
-
   getUsernameErrorMessage() {
     if (this.registerGroup.get('name').hasError('required')) {
       return 'Username cannot be empty';
     }
-    return this.registerGroup.get('name').hasError('minlength')
-      ? 'Less than 5 characters'
+    return this.registerGroup.get('name').hasError('email')
+      ? 'Please enter an valid email address'
       : '';
   }
-
   getPasswordErrorMessage() {
     if (this.registerGroup.get('password').hasError('required')) {
       return 'Password cannot be empty';
@@ -67,7 +61,6 @@ export class UserComponent implements OnInit {
       ? 'Less than 8 characters'
       : '';
   }
-
   register() {
     let registerRequestBody = {
       user_name: this.registerGroup.get('name').value,
@@ -84,7 +77,6 @@ export class UserComponent implements OnInit {
       }
     });
   }
-
   login() {
     let loginBody = {
       user_name: this.logginGroup.get('name').value,
@@ -96,22 +88,21 @@ export class UserComponent implements OnInit {
       }
       if (info.status == true) {
         sessionStorage.setItem('jwt_token', info.token);
+        userService.user_id = info.id;
         this.jumpToHome();
       } else {
+        userService.user_id = undefined;
         sessionStorage.removeItem('jwt_token');
         this.snackBarService.showSnackBar(info.msg, 3000);
       }
     });
   }
-
   goLogin() {
     this.router.navigateByUrl('/login');
   }
-
   goRegister() {
     this.router.navigateByUrl('/register');
   }
-
   jumpToHome(): void {
     this.router.navigateByUrl('/home');
   }
