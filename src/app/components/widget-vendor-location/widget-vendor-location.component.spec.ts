@@ -1,6 +1,7 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { WidgetVendorLocationComponent } from './widget-vendor-location.component';
+import { WidgetVendorLocationService } from './widget-vendor-location.service';
 
 describe('WidgetVendorLocationComponent', () => {
   let component: WidgetVendorLocationComponent;
@@ -8,7 +9,14 @@ describe('WidgetVendorLocationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WidgetVendorLocationComponent ]
+      declarations: [ WidgetVendorLocationComponent ],
+      imports: [ HttpClientTestingModule ],
+      providers: [
+        {
+          provide: WidgetVendorLocationService,
+          useValue: jasmine.createSpyObj([''])
+        }
+      ]
     })
     .compileComponents();
 

@@ -180,7 +180,7 @@ export class TfrManagementService {
   }
 
   setVendorName(vendor_id: number) {
-    this.apiService.getVendors.subscribe((result: VendorDTO[]) => {
+    this.apiService.getVendors().subscribe((result: VendorDTO[]) => {
       this.vendorName = result.find(
         (vendor: VendorDTO) => vendor.id === vendor_id
       )!.name;
@@ -312,6 +312,6 @@ export class TfrManagementService {
       When API is ready, need to make a put request to the database
       to update the status from DRAFT to AGREED.
     */
-    return this.apiService.putStatusAgreed(this.project!.id);
+    return this.apiService.putStatus(this.project!.id, 'AGREED');
   }
 }

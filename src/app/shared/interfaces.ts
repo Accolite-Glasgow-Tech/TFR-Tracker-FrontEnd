@@ -58,6 +58,7 @@ export interface ProjectMilestoneDTO {
 export interface FormMilestone {
   id: number;
   project_id: number;
+  name: string;
   description: string;
   start_date?: Date;
   delivery_date?: Date;
@@ -69,6 +70,7 @@ export interface FormMilestone {
 export interface Milestone {
   id: number;
   project_id: number;
+  name: string;
   description: string;
   start_date: Date;
   delivery_date: Date;
@@ -80,6 +82,7 @@ export interface Milestone {
 export interface MilestoneDTO {
   id?: number;
   project_id: number;
+  name: string;
   description: string;
   start_date: Date;
   delivery_date: Date;

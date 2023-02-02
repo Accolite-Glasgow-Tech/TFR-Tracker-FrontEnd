@@ -1,5 +1,5 @@
-<mat-card style="background-color: transparent; height: 100%; width: inherit; margin: -30px;">
-  <canvas
+<mat-card class="chartouter">
+  <canvas class="chartinner"
     baseChart
     [type]="'pie'"
     [datasets]="pieChartData"
@@ -7,14 +7,6 @@
     [options]="pieChartOptions"
     [legend]="true"
     (chartClick)="onChartClick($event)"
-    style="
-      background-color: #1e0c0c;
-      position: relative;
-      margin: 2%;
-      height: 100%;
-      width: 100%;
-      content-visibility: hidden;
-    "
   >
   </canvas>
 </mat-card>

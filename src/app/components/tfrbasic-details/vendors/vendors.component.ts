@@ -14,6 +14,7 @@ import {
   templateUrl: './vendors.component.html',
   styleUrls: ['./vendors.component.scss'],
 })
+
 export class VendorsComponent implements OnInit {
   constructor(
     private api: ApiService,
@@ -34,11 +35,11 @@ export class VendorsComponent implements OnInit {
       name: new FormControl(''),
     });
 
-    this.api.vendorReset.subscribe((result) => {
+    this.api.vendorReset.subscribe(() => {
       this.resetVendorControls();
     });
 
-    this.api.getVendors.subscribe((data) => {
+    this.api.getVendors().subscribe((data) => {
       this.vendors = data;
       if (this.editMode) {
         // TODO fill in details of vendor and Attributes

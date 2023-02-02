@@ -90,6 +90,7 @@ describe('TfrManagementService', () => {
     milestones = [
       {
         id: 3,
+        name: 'deployment',
         project_id: 1,
         description: 'deployment',
         start_date: new Date('2022-12-26T09:00:00.000+00:00'),
@@ -99,6 +100,7 @@ describe('TfrManagementService', () => {
       },
       {
         id: 2,
+        name: 'frontend',
         project_id: 1,
         description: 'frontend',
         start_date: new Date('2022-12-19T09:00:00.000+00:00'),
@@ -108,6 +110,7 @@ describe('TfrManagementService', () => {
       },
       {
         id: 1,
+        name: 'backend',
         project_id: 1,
         description: 'backend',
         start_date: new Date('2022-12-12T09:00:00.000+00:00'),
