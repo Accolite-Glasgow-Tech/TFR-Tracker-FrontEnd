@@ -58,18 +58,25 @@ export const DummyProject: Project = {
       project_id: 1,
       resource_id: 3,
       role: 'SOFTWARE_DEVELOPER',
+      seniority: 'JUNIOR',
+      is_deleted: false,
     },
     {
       project_id: 1,
       resource_id: 1,
       role: 'SCRUM_MASTER',
+      seniority: 'SENIOR',
+      is_deleted: false,
     },
     {
       project_id: 1,
       resource_id: 2,
       role: 'PROJECT_MANAGER',
+      seniority: 'ADVANCED',
+      is_deleted: false,
     },
   ],
+  resources_count: 3,
 };
 
 class dummy {
