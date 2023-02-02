@@ -19,6 +19,7 @@ describe('MilestoneManagerService', () => {
     let saveableMilestone: FormMilestone = {
       id: 1,
       project_id: 1,
+      name: '',
       description: '',
       start_date: new Date(),
       delivery_date: new Date(),
@@ -28,6 +29,7 @@ describe('MilestoneManagerService', () => {
     let unsaveableMilestone: FormMilestone = {
       id: 1,
       project_id: 1,
+      name: '',
       description: '',
       is_deleted: false,
     };

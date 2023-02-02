@@ -34,6 +34,7 @@ describe('TfrComponent', () => {
       {
         id: 3,
         project_id: 1,
+        name: 'deployment',
         description: 'deployment',
         start_date: new Date('2022-12-26T09:00:00.000+00:00'),
         delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
@@ -43,6 +44,7 @@ describe('TfrComponent', () => {
       {
         id: 2,
         project_id: 1,
+        name: 'frontend',
         description: 'frontend',
         start_date: new Date('2022-12-19T09:00:00.000+00:00'),
         delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
@@ -52,6 +54,7 @@ describe('TfrComponent', () => {
       {
         id: 1,
         project_id: 1,
+        name: 'backend',
         description: 'backend',
         start_date: new Date('2022-12-12T09:00:00.000+00:00'),
         delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
