@@ -7,7 +7,7 @@ import { filter, from, map, Observable, of } from 'rxjs';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { Project } from 'src/app/shared/interfaces';
-
+import { DummyProject } from 'src/app/types/dummy-data';
 import { StepperComponent } from './stepper.component';
 
 describe('StepperComponent', () => {
@@ -35,74 +35,7 @@ describe('StepperComponent', () => {
     matchObj[0].result = width >= 800;
   }
 
-  const dummyProject: Project = {
-    id: 1,
-    name: 'Bench Project',
-    vendor_id: 2,
-    start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-    end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-    status: 'INPROGRESS',
-    version: 1,
-    vendor_specific: {
-      Department: 'Finance',
-      'ED/MD': 'Julia Lee',
-    },
-    milestones: [
-      {
-        id: 3,
-        project_id: 1,
-        name: 'deployment',
-        description: 'deployment description',
-        start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: true,
-      },
-      {
-        id: 2,
-        project_id: 1,
-        name: 'frontend',
-        description: 'frontend description',
-        start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-      {
-        id: 1,
-        project_id: 1,
-        name: 'backend',
-        description: 'backend desccription',
-        start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-    ],
-    is_deleted: false,
-    created_by: 1,
-    modified_by: 2,
-    created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-    modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-    project_resources: [
-      {
-        project_id: 1,
-        resource_id: 3,
-        role: 'SOFTWARE_DEVELOPER',
-      },
-      {
-        project_id: 1,
-        resource_id: 1,
-        role: 'SCRUM_MASTER',
-      },
-      {
-        project_id: 1,
-        resource_id: 2,
-        role: 'PROJECT_MANAGER',
-      },
-    ],
-  };
-
+  const dummyProject: Project = DummyProject;
   async function setUpSuccess() {
     responseObj = {
       project: new HttpResponse<Project>({
