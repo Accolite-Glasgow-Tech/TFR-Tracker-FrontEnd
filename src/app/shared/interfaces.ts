@@ -27,6 +27,8 @@ export interface Project {
   status: string;
   version: number;
   vendor_specific: { [key: string]: string };
+  resources_count: number;
+  detailed_resources_count: { [key: string]: number };
   is_deleted: Boolean;
   created_by: number;
   modified_by: number;
@@ -107,7 +109,6 @@ export interface ResourceDTO {
   first_name: string;
   last_name: string;
   type: string;
-  seniority: string;
   email: string;
   is_deleted: boolean;
 }

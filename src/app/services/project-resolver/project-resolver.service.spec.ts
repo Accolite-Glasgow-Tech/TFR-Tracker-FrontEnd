@@ -47,6 +47,13 @@ describe('ProjectResolverService', () => {
         Department: 'Finance',
         'ED/MD': 'Julia Lee',
       },
+      resources_count: 4,
+      detailed_resources_count: {
+        ADVANCED: 1,
+        SENIOR: 1,
+        INTERMEDIATE: 1,
+        JUNIOR: 1,
+      },
       milestones: [
         {
           id: 3,
@@ -86,18 +93,21 @@ describe('ProjectResolverService', () => {
           project_id: 1,
           resource_id: 3,
           role: 'SOFTWARE_DEVELOPER',
+          seniority: 'JUNIOR',
           is_deleted: false,
         },
         {
           project_id: 1,
           resource_id: 1,
           role: 'SCRUM_MASTER',
+          seniority: 'SENIOR',
           is_deleted: false,
         },
         {
           project_id: 1,
           resource_id: 2,
           role: 'PROJECT_MANAGER',
+          seniority: 'ADVANCED',
           is_deleted: false,
         },
       ],

@@ -139,6 +139,8 @@ export class TfrManagementService {
           start_date: projectBasicDetails.start_date,
           end_date: projectBasicDetails.end_date,
           vendor_specific: projectBasicDetails.vendor_specific,
+          resources_count: 0,
+          detailed_resources_count: {},
           status: 'DRAFT',
           version: 0,
           milestones: [],
