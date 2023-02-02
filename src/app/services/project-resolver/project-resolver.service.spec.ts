@@ -13,9 +13,7 @@ describe('ProjectResolverService', () => {
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('ApiService', [
-      'getProject',
-    ]);
+    const spy = jasmine.createSpyObj('ApiService', ['getProject']);
     route = new ActivatedRouteSnapshot();
 
     TestBed.configureTestingModule({
@@ -25,9 +23,7 @@ describe('ProjectResolverService', () => {
       ],
     });
     service = TestBed.inject(ProjectResolverService);
-    apiServiceSpy = TestBed.inject(
-      ApiService
-    ) as jasmine.SpyObj<ApiService>;
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
   });
 
   it('should be created', () => {
@@ -51,9 +47,9 @@ describe('ProjectResolverService', () => {
       milestones: [
         {
           id: 3,
-          project_id: 1,
           name: 'deployment',
-          description: 'deployment description',
+          project_id: 1,
+          description: 'deployment',
           start_date: new Date('2022-12-26T09:00:00.000+00:00'),
           delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
           acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
@@ -61,9 +57,9 @@ describe('ProjectResolverService', () => {
         },
         {
           id: 2,
-          project_id: 1,
           name: 'frontend',
-          description: 'frontend description',
+          project_id: 1,
+          description: 'frontend',
           start_date: new Date('2022-12-19T09:00:00.000+00:00'),
           delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
           acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
@@ -71,9 +67,9 @@ describe('ProjectResolverService', () => {
         },
         {
           id: 1,
-          project_id: 1,
           name: 'backend',
-          description: 'backend description',
+          project_id: 1,
+          description: 'backend',
           start_date: new Date('2022-12-12T09:00:00.000+00:00'),
           delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
           acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
@@ -114,9 +110,7 @@ describe('ProjectResolverService', () => {
       body: dummyProject,
     });
 
-    apiServiceSpy.getProject.and.returnValue(
-      of(httpResponseProject)
-    );
+    apiServiceSpy.getProject.and.returnValue(of(httpResponseProject));
 
     service.resolve(route).subscribe((project) => {
       expect(project).toEqual(httpResponseProject);
