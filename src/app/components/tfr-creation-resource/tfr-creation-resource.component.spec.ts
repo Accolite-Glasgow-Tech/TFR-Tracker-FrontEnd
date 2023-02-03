@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl, FormBuilder } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -11,6 +12,7 @@ import {
   dialogContent,
   ProjectResourceDTO,
   ResourceListType,
+  ResourceSkillDTO,
 } from 'src/app/shared/interfaces';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 import {
@@ -62,6 +64,7 @@ describe('TfrCreationResourceComponent', () => {
             'getAllResources',
             'getAllSeniorityLevels',
             'getResourcesNamesByProjectIdFromDatabase',
+            'getSkillsByResourceId',
           ]),
         },
         {
@@ -338,5 +341,32 @@ describe('TfrCreationResourceComponent', () => {
       TfrCreationDialogComponent,
       dialogContent
     );
+  });
+
+  it('should retrieve resource skills by resource id - success', () => {
+    let resourceSkills: ResourceSkillDTO[] = [
+      {
+        resource_id: 1,
+        skill: 'Java',
+        experience: 1,
+      },
+      {
+        resource_id: 1,
+        skill: 'Python',
+        experience: 4,
+      },
+    ];
+    apiServiceSpy.getSkillsByResourceId.and.returnValue(of(resourceSkills));
+    component.getSkills(1);
+    expect(component.currentResourceSkills).toEqual(resourceSkills);
+  });
+
+  it('should retrieve resource skills by resource id - server error', () => {
+    component.getResourceSkillObserver.error(
+      new HttpErrorResponse({
+        status: 500,
+      })
+    );
+    expect(component.currentResourceSkills).toBe([]);
   });
 });
