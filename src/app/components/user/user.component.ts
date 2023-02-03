@@ -50,12 +50,9 @@ export class UserComponent implements OnInit {
       return 'Username cannot be empty';
     }
     if(this.registerGroup.get('name').hasError('email')){
-      return 'Please enter an valid accolite email address';
+      return 'Valid accolite email address needed';
     }
     return '';
-    return this.registerGroup.get('name').value.match(".@accolitedigital.com")
-      ? ''
-      : 'Please enter an valid email address';
   }
   getPasswordErrorMessage() {
     if (this.registerGroup.get('password').hasError('required')) {
