@@ -151,6 +151,7 @@ export class TfrManagementService {
           modified_by: NaN,
           created_at: new Date('2022-12-05T10:00:00.000+00:00'),
           modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
+          notes: '',
         };
         this.createProjectInDatabase();
       } else {
