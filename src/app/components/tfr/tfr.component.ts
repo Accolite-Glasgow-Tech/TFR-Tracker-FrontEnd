@@ -17,14 +17,6 @@ export class TfrComponent implements OnInit {
   getResourceNameObserver = {
     next: (data: AllocatedResourceTypeDTO[]) => {
       this.tfrManagementService.projectResourcesWithNames = data;
-      this.tfrManagementService.projectResourcesWithNames.forEach(
-        (project_resourceWithName: AllocatedResourceTypeDTO) => {
-          project_resourceWithName.role = project_resourceWithName.role.replace(
-            /_/g,
-            ' '
-          );
-        }
-      );
     },
   };
 

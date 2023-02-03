@@ -440,8 +440,11 @@ export class TfrCreationResourceComponent implements OnInit {
       this.allocatedResources
     );
     this.tfrManagementService.setResourcesCount(this.resourcesCount);
-    this.tfrManagementService.updateProjectToResourceMapping();
-    this.resourceDetailsUpdated = false;
+    this.tfrManagementService
+      .updateProjectToResourceMapping()
+      .subscribe((updateSuccessful) => {
+        this.resourceDetailsUpdated = !updateSuccessful;
+      });
   }
 
   addEventListener() {

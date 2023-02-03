@@ -1,10 +1,10 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MilestoneManagerService } from 'src/app/services/milestone-manager/milestone-manager.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Milestone, FormMilestone, Project } from 'src/app/shared/interfaces';
-import { HttpResponse } from '@angular/common/http';
+import { FormMilestone, Milestone, Project } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-milestones',
@@ -75,7 +75,6 @@ export class MilestonesComponent implements OnInit {
     this.stepCompletedEmitter.emit(
       this.milestoneManagerService.submittable && this.isPristine
     );
-    console.log(this.milestoneManagerService.submittable && this.isPristine);
     return this.milestoneManagerService.submittable && this.isPristine;
   }
 
