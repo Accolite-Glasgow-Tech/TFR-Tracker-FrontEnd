@@ -18,6 +18,7 @@ import {
   ProjectResourceDTO,
   ClientDTO,
 } from 'src/app/shared/interfaces';
+import { DummyProject } from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
@@ -86,89 +87,20 @@ describe('TfrManagementService', () => {
     );
     service = TestBed.inject(TfrManagementService);
 
-    milestones = [
-      {
-        id: 3,
-        name: 'deployment',
-        project_id: 1,
-        description: 'deployment',
-        start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: true,
-      },
-      {
-        id: 2,
-        name: 'frontend',
-        project_id: 1,
-        description: 'frontend',
-        start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-      {
-        id: 1,
-        name: 'backend',
-        project_id: 1,
-        description: 'backend',
-        start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-    ];
+    project = DummyProject;
+    milestones = project.milestones;
+    projectResources = project.project_resources;
 
-    projectResources = [
-      {
-        project_id: 1,
-        resource_id: 1,
-        role: 'SCRUM_MASTER',
-        seniority: 'INTERMEDIATE',
-        is_deleted: false,
-      },
-      {
-        project_id: 1,
-        resource_id: 3,
-        role: 'SOFTWARE_DEVELOPER',
-        seniority: 'JUNIOR',
-        is_deleted: false,
-      },
-    ];
-
-    project = {
-      id: 1,
-      name: 'Bench Project',
-      client_id: 2,
-      start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-      end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-      status: 'DRAFT',
-      version: 1,
-      client_specific: {
-        Department: 'Finance',
-        'ED/MD': 'Julia Lee',
-      },
-      resources_count: 4,
-      milestones: milestones,
-      is_deleted: false,
-      created_by: 1,
-      modified_by: 2,
-      created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-      modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-      project_resources: projectResources,
-    };
-
-    basicDetails = {
-      name: 'Bench Project',
-      start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-      end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-      status: 'DRAFT',
-      client_id: 2,
-      client_specific: {
-        Department: 'Finance',
-        'ED/MD': 'Julia Lee',
-      },
-    };
+    basicDetails = (({
+      name,
+      start_date,
+      end_date,
+      client_id,
+      client_specific,
+      status,
+    }) => ({ name, start_date, end_date, client_id, client_specific, status }))(
+      project
+    );
 
     clients = [
       {
@@ -215,6 +147,7 @@ describe('TfrManagementService', () => {
     ];
 
     service.project = project;
+    // console.log(service.project);
 
     apiServiceSpy.postProject.and.returnValue(of(1));
   });
@@ -261,7 +194,8 @@ describe('TfrManagementService', () => {
     expect(service.getClientName).toBe(clientName);
   });
 
-  it('should get Resources Count', () => {
+  fit('should get Resources Count', () => {
+    console.log(service.project);
     expect(service.getResourcesCount).toBe(4);
   });
 
@@ -327,11 +261,11 @@ describe('TfrManagementService', () => {
     apiServiceSpy.getClients.and.returnValue(of(clients));
     apiServiceSpy.postProject.and.returnValue(of(2));
     service.setBasicDetails(basicDetails);
-
     expect(service.getBasicDetails).toEqual(basicDetails);
   });
 
   it('should compare basic details undefined project', () => {
+    service.project = undefined;
     let result = service.compareBasicDetails(basicDetails);
     expect(result).toBe(false);
   });

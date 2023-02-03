@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { of } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
+import { DummyProject } from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
 
 import { ProjectResolverService } from './project-resolver.service';
@@ -31,81 +32,7 @@ describe('ProjectResolverService', () => {
   });
 
   it('should call resolve() and return project obj', () => {
-    const dummyProject: Project = {
-      id: 1,
-      name: 'Bench Project',
-      client_id: 2,
-      start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-      end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-      status: 'INPROGRESS',
-      version: 1,
-      client_specific: {
-        Department: 'Finance',
-        'ED/MD': 'Julia Lee',
-      },
-      resources_count: 4,
-      milestones: [
-        {
-          id: 3,
-          name: 'deployment',
-          project_id: 1,
-          description: 'deployment',
-          start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-          delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-          acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-          is_deleted: true,
-        },
-        {
-          id: 2,
-          name: 'frontend',
-          project_id: 1,
-          description: 'frontend',
-          start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-          delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-          acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-          is_deleted: false,
-        },
-        {
-          id: 1,
-          name: 'backend',
-          project_id: 1,
-          description: 'backend',
-          start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-          delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
-          acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-          is_deleted: false,
-        },
-      ],
-      is_deleted: false,
-      created_by: 1,
-      modified_by: 2,
-      created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-      modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-      project_resources: [
-        {
-          project_id: 1,
-          resource_id: 3,
-          role: 'SOFTWARE_DEVELOPER',
-          seniority: 'JUNIOR',
-          is_deleted: false,
-        },
-        {
-          project_id: 1,
-          resource_id: 1,
-          role: 'SCRUM_MASTER',
-          seniority: 'SENIOR',
-          is_deleted: false,
-        },
-        {
-          project_id: 1,
-          resource_id: 2,
-          role: 'PROJECT_MANAGER',
-          seniority: 'ADVANCED',
-          is_deleted: false,
-        },
-      ],
-    };
-
+    const dummyProject: Project = DummyProject;
     let httpResponseProject: HttpResponse<Project> = new HttpResponse({
       body: dummyProject,
     });

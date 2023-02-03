@@ -142,7 +142,7 @@ export class TfrManagementService {
           end_date: projectBasicDetails.end_date,
           client_specific: projectBasicDetails.client_specific,
           resources_count: 0,
-          status: 'DRAFT',
+          status: projectBasicDetails.status,
           version: 0,
           milestones: [],
           project_resources: [],
@@ -159,6 +159,7 @@ export class TfrManagementService {
         this.project.end_date = projectBasicDetails.end_date;
         this.project.client_id = projectBasicDetails.client_id;
         this.project.client_specific = projectBasicDetails.client_specific;
+        this.project.status = projectBasicDetails.status;
         this.updateProjectToDatabase();
       }
       this.setClientName(projectBasicDetails.client_id);
@@ -234,6 +235,7 @@ export class TfrManagementService {
   }
 
   putMilestones(milestones: Milestone[]): Observable<{}> {
+    console.log(this.projectStripTempIds(milestones));
     return this.project == undefined
       ? new Observable<{}>((subscriber) => {
           subscriber.error('project undefined');

@@ -9,7 +9,7 @@ import { ResourceService } from 'src/app/services/resource/resource.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
-
+import { DummyProject } from 'src/app/types/dummy-data';
 import { StepperComponent } from './stepper.component';
 
 describe('StepperComponent', () => {
@@ -39,80 +39,8 @@ describe('StepperComponent', () => {
     matchObj[0].result = width >= 800;
   }
 
-  const dummyProject: Project = {
-    id: 1,
-    name: 'Bench Project',
-    client_id: 2,
-    start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-    end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-    status: 'INPROGRESS',
-    version: 1,
-    client_specific: {
-      Department: 'Finance',
-      'ED/MD': 'Julia Lee',
-    },
-    resources_count: 4,
-    milestones: [
-      {
-        id: 3,
-        project_id: 1,
-        name: 'deployment',
-        description: 'deployment description',
-        start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: true,
-      },
-      {
-        id: 2,
-        project_id: 1,
-        name: 'frontend',
-        description: 'frontend description',
-        start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-      {
-        id: 1,
-        project_id: 1,
-        name: 'backend',
-        description: 'backend desccription',
-        start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-    ],
-    is_deleted: false,
-    created_by: 1,
-    modified_by: 2,
-    created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-    modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-    project_resources: [
-      {
-        project_id: 1,
-        resource_id: 3,
-        role: 'SOFTWARE_DEVELOPER',
-        seniority: 'JUNIOR',
-        is_deleted: false,
-      },
-      {
-        project_id: 1,
-        resource_id: 1,
-        role: 'SCRUM_MASTER',
-        seniority: 'SENIOR',
-        is_deleted: false,
-      },
-      {
-        project_id: 1,
-        resource_id: 2,
-        role: 'PROJECT_MANAGER',
-        seniority: 'ADVANCED',
-        is_deleted: false,
-      },
-    ],
-  };
+  const dummyProject: Project = DummyProject;
+
   const dummyAllocatedResource: AllocatedResourceTypeDTO[] = [
     {
       project_id: 1,
@@ -316,7 +244,7 @@ describe('StepperComponent', () => {
           {
             provide: TfrManagementService,
             useValue: jasmine.createSpyObj('TfrManagementService', [
-              'setVendorName',
+              'setClientName',
               'updateStatusToDatabase',
             ]),
           },
@@ -328,7 +256,7 @@ describe('StepperComponent', () => {
   it('load project given projectId path variable', async () => {
     await setUpSuccess();
     fixture.detectChanges();
-    expect(tfrManagementServiceSpy.setVendorName.calls.count()).toBe(1);
+    expect(tfrManagementServiceSpy.setClientName.calls.count()).toBe(1);
     expect(
       apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
     ).toBe(1);
