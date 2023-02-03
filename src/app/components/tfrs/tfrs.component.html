@@ -2,10 +2,10 @@
   <div class="search-filters-container">
     <mat-form-field class="single-search-filter" appearance="fill">
       <mat-label>Client</mat-label>
-      <mat-select [(ngModel)]="selectedVendorName">
+      <mat-select [(ngModel)]="selectedClientName">
         <mat-option>None</mat-option>
-        <mat-option *ngFor="let vendor of vendors" [value]="vendor.name">{{
-          vendor.name
+        <mat-option *ngFor="let client of clients" [value]="client.name">{{
+          client.name
         }}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -84,7 +84,7 @@
         *matCellDef="let tfr"
         [ngClass]="{
           delivered: tfr.status == 'DELIVERED',
-          inprogress: tfr.status == 'INPROGRESS',
+          inprogress: tfr.status == 'IN PROGRESS',
           agreed: tfr.status == 'AGREED',
           archived: tfr.status == 'ARCHIVED',
           draft: tfr.status == 'DRAFT'

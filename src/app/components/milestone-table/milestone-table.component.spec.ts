@@ -19,7 +19,7 @@ describe('MilestoneTableComponent', () => {
         {
           provide: DateFormatterService,
           useValue: jasmine.createSpyObj(['']),
-        }
+        },
       ],
     }).compileComponents();
 

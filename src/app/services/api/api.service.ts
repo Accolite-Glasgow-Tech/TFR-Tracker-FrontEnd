@@ -5,20 +5,27 @@ import {
   allProjectsURL,
   projectSearchURL,
   projectsURL,
+  resourceProjectsURL,
+  seniorityLevelsURL,
   tasksURL,
-  vendorsURL,
-  vendorsURLdupe,
+  TFRCreationResourceURL,
+  clientsURL,
+  clientsURLdupe,
 } from '../../shared/constants';
 import {
+  AllocatedResourceTypeDTO,
   Project,
   ProjectDTO,
   ProjectMilestoneDTO,
   ResourceDTO,
+  ResourceListType,
+  ResourceSkillDTO,
   TaskCreationDTO,
-  VendorAttributeDTO,
-  VendorDTO,
+  ClientAttributeDTO,
+  ClientDTO,
 } from '../../shared/interfaces';
 
+import { getAllocatedResourcesURL, getSkillsURL } from 'src/app/shared/utils';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -37,6 +44,10 @@ export class ApiService {
   postProject(project: Project | undefined | ProjectMilestoneDTO) {
     return this.http.post(projectsURL, project);
   }
+
+  postProjectResources(project: Project | undefined) {
+    return this.http.post(resourceProjectsURL, project);
+  }
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// GET ///////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
@@ -47,9 +58,9 @@ export class ApiService {
     );
   }
 
-  getVendorAttributes(vendorId: number): Observable<VendorAttributeDTO[]> {
-    return this.http.get<VendorAttributeDTO[]>(
-      `${environment.backendURL}/vendorAttributes/${vendorId}`
+  getClientAttributes(clientId: number): Observable<ClientAttributeDTO[]> {
+    return this.http.get<ClientAttributeDTO[]>(
+      `${environment.backendURL}/vendorAttributes/${clientId}`
     );
   }
 
@@ -67,6 +78,27 @@ export class ApiService {
   getAllProjects(): Observable<ProjectDTO[]> {
     return this.http.get<ProjectDTO[]>(allProjectsURL);
   }
+
+  getSkillsByResourceId(resourceId: number): Observable<ResourceSkillDTO[]> {
+    return this.http.get<ResourceSkillDTO[]>(getSkillsURL(resourceId));
+  }
+
+  getAllResources(): Observable<ResourceListType[]> {
+    return this.http.get<ResourceListType[]>(TFRCreationResourceURL);
+  }
+
+  getAllSeniorityLevels(): Observable<string[]> {
+    return this.http.get<string[]>(seniorityLevelsURL);
+  }
+
+  getResourcesNamesByProjectIdFromDatabase(
+    projectId: Number
+  ): Observable<AllocatedResourceTypeDTO[]> {
+    return this.http.get<AllocatedResourceTypeDTO[]>(
+      getAllocatedResourcesURL(projectId)
+    );
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// PUT ///////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
@@ -81,14 +113,14 @@ export class ApiService {
   /////////////////////////////////// REFACTOR //////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
 
-  // Duplicate code (getVendors)
-  getAllVendors() {
-    return this.http.get(vendorsURLdupe);
+  // Duplicate code (getClients)
+  getAllClients() {
+    return this.http.get(clientsURLdupe);
   }
 
-  // Duplicate code (getAllVendors)
-  getVendors(): Observable<VendorDTO[]> {
-    return this.http.get<VendorDTO[]>(vendorsURL);
+  // Duplicate code (getAllClients)
+  getClients(): Observable<ClientDTO[]> {
+    return this.http.get<ClientDTO[]>(clientsURL);
   }
 
   // Rename to something like PostProjectSearch
@@ -105,10 +137,10 @@ export class ApiService {
   }
 
   // This is not an API
-  vendorReset = new EventEmitter<boolean>();
+  clientReset = new EventEmitter<boolean>();
 
   // This is not an API
-  resetVendorDetails() {
-    this.vendorReset.emit(true);
+  resetClientDetails() {
+    this.clientReset.emit(true);
   }
 }

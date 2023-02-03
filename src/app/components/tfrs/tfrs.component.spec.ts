@@ -19,7 +19,7 @@ describe('TfrsComponent', () => {
           provide: tfrService,
           useValue: jasmine.createSpyObj('tfrService', {
             'getAllProjects': of([]),
-            'getAllVendors': of([])
+            'getAllClients': of([])
           })
         }
       ]

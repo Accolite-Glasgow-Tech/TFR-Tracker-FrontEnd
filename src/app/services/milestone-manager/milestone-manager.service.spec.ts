@@ -1,14 +1,38 @@
 import { TestBed } from '@angular/core/testing';
 import { MilestoneManagerService } from './milestone-manager.service';
-import { FormMilestone } from 'src/app/shared/interfaces';
+import { FormMilestone, Milestone } from 'src/app/shared/interfaces';
 import { getMatIconFailedToSanitizeLiteralError } from '@angular/material/icon';
+import { DummyProject } from 'src/app/types/dummy-data';
 
 describe('MilestoneManagerService', () => {
   let service: MilestoneManagerService;
+  let unsaveableMilestone: FormMilestone;
+  let deletedMilestone: Milestone;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(MilestoneManagerService);
+    const dummyProject = DummyProject;
+    service.setMilestones(DummyProject.milestones);
+    unsaveableMilestone = {
+      id: 1,
+      project_id: 1,
+      name: 'unsaveable',
+      description: '',
+      is_deleted: false,
+      status: 'INTENT',
+    };
+    deletedMilestone = {
+      id: -2,
+      project_id: 1,
+      name: 'deleted',
+      description: 'this milestone is deleted',
+      is_deleted: true,
+      start_date: new Date(),
+      delivery_date: new Date(),
+      acceptance_date: new Date(),
+      status: 'INTENT',
+    };
   });
 
   it('should be created', () => {
@@ -16,24 +40,15 @@ describe('MilestoneManagerService', () => {
   });
 
   it('should successfully determine saveability', () => {
-    let saveableMilestone: FormMilestone = {
-      id: 1,
-      name: 'saveable',
-      project_id: 1,
-      description: '',
-      start_date: new Date(),
-      delivery_date: new Date(),
-      acceptance_date: new Date(),
-      is_deleted: false,
-    };
-    let unsaveableMilestone: FormMilestone = {
-      id: 1,
-      project_id: 1,
-      name: 'unsaveable',
-      description: '',
-      is_deleted: false,
-    };
-    expect(service.isSaveable(saveableMilestone)).toBeTruthy();
+    expect(service.isSaveable(DummyProject.milestones[0])).toBeTruthy();
     expect(service.isSaveable(unsaveableMilestone)).toBeFalsy();
+  });
+
+  it('should generate temporary ids correctly', () => {
+    expect(service.generateIdOfNew()).toEqual(-1);
+    service.setMilestones([deletedMilestone, ...DummyProject.milestones]);
+    expect(service.generateIdOfNew()).toEqual(-3);
+    service.setMilestones([]);
+    expect(service.generateIdOfNew()).toEqual(-1);
   });
 });

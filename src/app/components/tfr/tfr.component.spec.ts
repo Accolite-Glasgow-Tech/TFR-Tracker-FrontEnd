@@ -2,8 +2,13 @@ import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { of } from 'rxjs';
+import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project } from 'src/app/shared/interfaces';
+import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
+import {
+  DummyAllocatedResources,
+  DummyProject,
+} from 'src/app/types/dummy-data';
 
 import { TfrComponent } from './tfr.component';
 
@@ -17,74 +22,12 @@ describe('TfrComponent', () => {
     'navigate',
   ]);
   let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
+  let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
-  const dummyProject: Project = {
-    id: 1,
-    name: 'Bench Project',
-    vendor_id: 2,
-    start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-    end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-    status: 'INPROGRESS',
-    version: 1,
-    vendor_specific: {
-      Department: 'Finance',
-      'ED/MD': 'Julia Lee',
-    },
-    milestones: [
-      {
-        id: 3,
-        project_id: 1,
-        name: 'deployment',
-        description: 'deployment dsecription',
-        start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: true,
-      },
-      {
-        id: 2,
-        project_id: 1,
-        name: 'frontend',
-        description: 'frontend description',
-        start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-      {
-        id: 1,
-        project_id: 1,
-        name: 'backend',
-        description: 'backend description',
-        start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-    ],
-    is_deleted: false,
-    created_by: 1,
-    modified_by: 2,
-    created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-    modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-    project_resources: [
-      {
-        project_id: 1,
-        resource_id: 3,
-        role: 'SOFTWARE_DEVELOPER',
-      },
-      {
-        project_id: 1,
-        resource_id: 1,
-        role: 'SCRUM_MASTER',
-      },
-      {
-        project_id: 1,
-        resource_id: 2,
-        role: 'PROJECT_MANAGER',
-      },
-    ],
-  };
+  const dummyProject: Project = DummyProject;
+
+  const dummyAllocatedResource: AllocatedResourceTypeDTO[] =
+    DummyAllocatedResources;
 
   async function setUpSuccess() {
     await TestBed.configureTestingModule({
@@ -107,6 +50,12 @@ describe('TfrComponent', () => {
             paramMap: of(convertToParamMap({ id: 1 })),
             data: of(responseObj),
           },
+        },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesNamesByProjectIdFromDatabase',
+          ]),
         },
       ],
     }).compileComponents();
@@ -135,6 +84,12 @@ describe('TfrComponent', () => {
             paramMap: of(convertToParamMap({ id: 'asds' })),
             data: of(responseObj),
           },
+        },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesNamesByProjectIdFromDatabase',
+          ]),
         },
       ],
     }).compileComponents();
@@ -170,6 +125,12 @@ describe('TfrComponent', () => {
             data: of(errorResponse),
           },
         },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesNamesByProjectIdFromDatabase',
+          ]),
+        },
       ],
     }).compileComponents();
 
@@ -183,6 +144,11 @@ describe('TfrComponent', () => {
     tfrManagementServiceSpy = fixture.debugElement.injector.get(
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
+
+    apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
+      of(dummyAllocatedResource)
+    );
 
     component = fixture.componentInstance;
   }
@@ -201,8 +167,7 @@ describe('TfrComponent', () => {
           {
             provide: TfrManagementService,
             useValue: jasmine.createSpyObj('TfrManagementService', [
-              'getResourcesNamesByProjectIdFromDatabase',
-              'setVendorName',
+              'setClientName',
             ]),
           },
         ],
@@ -228,9 +193,9 @@ describe('TfrComponent', () => {
     await setUpSuccess();
     fixture.detectChanges();
     expect(component.TfrId).toBe(1);
-    expect(tfrManagementServiceSpy.setVendorName.calls.count()).toBe(1);
+    expect(tfrManagementServiceSpy.setClientName.calls.count()).toBe(1);
     expect(
-      tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
+      apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
     ).toBe(1);
     expect(component).toBeTruthy();
   });
@@ -240,5 +205,13 @@ describe('TfrComponent', () => {
     component.TfrId = 1;
     component.redirectToEditTfr();
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/tfr/1/edit']);
+  });
+
+  it('load fail, project does not exist', async () => {
+    await setUpSuccess();
+    fixture.detectChanges();
+    component.getProjectObserver.error();
+    expect(tfrManagementServiceSpy.apiError).toBe(true);
+    expect(component).toBeTruthy();
   });
 });

@@ -1,4 +1,4 @@
-<h1 class="title" mat-dialog-title><marquee behavior="alternate"><strong> Add Widgets </strong></marquee></h1>
+<h1 class="title" mat-dialog-title><strong> Add Widgets </strong></h1>
 <div  *ngFor="let wid of widgets" style="    padding: 5px 20px 5px 20px;">
   <mat-card> 
       <button mat-raised-button  type="button" class="btn btn-success top-btn-left" (click)="pushWidget(wid.componentName)"     [ngClass]="isempty(wid.present)"  [disabled]="wid.present"   >

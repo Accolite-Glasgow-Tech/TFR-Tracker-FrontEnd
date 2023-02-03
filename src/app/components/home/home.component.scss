@@ -1,4 +1,111 @@
 
+@media all 
+and (min-device-width: 800px) 
+and (-webkit-min-device-pixel-ratio: 1) { 
+  
+  .example-button-row {
+    display: block;
+    text-align: right;
+    padding-right: 9%;
+    margin-bottom: -6px;
+    margin-top: 6px;
+  }
+
+  a.headerText {
+    font-family: Roboto;
+    font-size: 3vw;
+    color: #000000;
+    font-weight: bold;
+    vertical-align: -webkit-baseline-middle;
+    margin: 14px;
+  }
+
+  .header {
+    background: #507fc6;
+    border: 1px solid #ffffff;
+    display: flexbox;
+    flex-wrap: wrap ;
+    height: 13%;
+    padding-right: 2vw;
+    padding-top: 1vw;
+    padding-bottom: 1.5vw;
+    padding-left: 1vw;
+  }
+
+  .closeiconbutton {
+    background-color: #507fc6;
+    font-size: 24px;
+    cursor: pointer;
+    margin: 0px;
+    max-width: 2vw;
+    float: right;
+    border: none;
+    margin-right: 1vw;
+  }
+  
+  .geariconbtn {
+    max-width: 2vw;
+    background-color: #507fc6;
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 1vw;
+    float: right;
+    border: none;
+  }
+}
+
+@media all 
+and (min-device-width: 0px) 
+and (max-device-width: 799px) 
+and (-webkit-min-device-pixel-ratio: 1) { 
+
+  .example-button-row {
+    display: block;
+    text-align: center;
+    margin-bottom: -6px;
+    margin-top: 6px;
+  }
+
+  a.headerText {
+    font-family: Roboto;
+    font-size: 5vw;
+    color: #000000;
+    font-weight: bold;
+    vertical-align: -webkit-baseline-middle;
+    margin: 14px;
+  }
+
+  .header {
+    background: #507fc6;
+    border: 1px solid #ffffff;
+    display: flexbox;
+    height: 13%;
+    padding-right: 6vw;
+    padding-top: 1vw;
+    padding-bottom: 3vw;
+  }
+
+  .closeiconbutton {
+    background-color: #507fc6;
+    font-size: 24px;
+    cursor: pointer;
+    margin: 0px;
+    max-width: 2vw;
+    float: right;
+    border: none;
+    margin-right: 3vw;
+  }
+  
+  .geariconbtn {
+    max-width: 2vw;
+    background-color: #507fc6;
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 3vw;
+    float: right;
+    border: none;
+  }
+}
 
 .top-btn-left {
   width: 250px;
@@ -6,37 +113,9 @@
   height: 40px;
 }
 
-.example-button-row {
-  display: block;
-  text-align: right;
-  padding-right: 9%;
-  margin-bottom: -6px;
-  margin-top: 6px;
-}
-
 
 section {
   display: table;
-}
-
-.closeiconbutton {
-  background-color: #507fc6;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  float: right;
-  vertical-align: middle;
-  margin: 6px;
-}
-
-.geariconbtn {
-  background-color: #507fc6;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  float: right;
-  vertical-align: middle;
-  margin: 6px;
 }
 
 .ngxgriditem {
@@ -54,17 +133,6 @@ section {
   inline-size: auto;
 }
 
-.header {
-  background: #507fc6;
-  border: 1px solid #ffffff;
-  height: 13%;
-}
 
-a.headerText {
-  font-family: Roboto;
-  font-size: 24px;
-  color: #000000;
-  font-weight: bold;
-  vertical-align: -webkit-baseline-middle;
-  margin: 14px;
-}
+
+

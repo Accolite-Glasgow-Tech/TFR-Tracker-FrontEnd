@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project } from 'src/app/shared/interfaces';
+import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-tfr',
@@ -13,19 +14,31 @@ export class TfrComponent implements OnInit {
   TfrId!: Number;
   errorMessage: string = '';
 
+  getResourceNameObserver = {
+    next: (data: AllocatedResourceTypeDTO[]) => {
+      this.tfrManagementService.projectResourcesWithNames = data;
+      this.tfrManagementService.projectResourcesWithNames.forEach(
+        (project_resourceWithName: AllocatedResourceTypeDTO) => {
+          project_resourceWithName.role = project_resourceWithName.role.replace(
+            /_/g,
+            ' '
+          );
+        }
+      );
+    },
+  };
+
   getProjectObserver = {
     next: (response: Data) => {
-      let status: number = response['project']['status'];
-      let project: Project = response['project']['body'];
-      if (status === 200) {
-        this.tfrManagementService.project = project;
-        this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
-          project.id
-        );
-        this.tfrManagementService.setVendorName(project.vendor_id);
-      } else {
-        this.tfrManagementService.apiError = true;
-      }
+      let project = response['project'];
+      this.tfrManagementService.project = project;
+      this.apiService
+        .getResourcesNamesByProjectIdFromDatabase(project.id)
+        .subscribe(this.getResourceNameObserver);
+      this.tfrManagementService.setClientName(project.client_id);
+    },
+    error: () => {
+      this.tfrManagementService.apiError = true;
     },
   };
 
@@ -33,7 +46,8 @@ export class TfrComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     @Inject(TfrManagementService)
-    protected tfrManagementService: TfrManagementService
+    protected tfrManagementService: TfrManagementService,
+    @Inject(ApiService) private apiService: ApiService
   ) {}
 
   ngOnInit() {

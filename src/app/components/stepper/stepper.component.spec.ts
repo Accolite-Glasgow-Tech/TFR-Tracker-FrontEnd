@@ -4,10 +4,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { filter, from, map, Observable, of } from 'rxjs';
+import { ApiService } from 'src/app/services/api/api.service';
+import { ResourceService } from 'src/app/services/resource/resource.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project } from 'src/app/shared/interfaces';
-
+import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
+import {
+  DummyAllocatedResources,
+  DummyProject,
+} from 'src/app/types/dummy-data';
 import { StepperComponent } from './stepper.component';
 
 describe('StepperComponent', () => {
@@ -16,11 +21,13 @@ describe('StepperComponent', () => {
 
   let activatedRoute: ActivatedRoute;
   let responseObj: Object;
+  let resourceServiceSpy: jasmine.SpyObj<ResourceService>;
   const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
   const snackBarServiceSpy = jasmine.createSpyObj('SnackBarService', [
     'showSnackBar',
   ]);
   let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
+  let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
   const matchObj = [{ matchStr: '(min-width: 800px)', result: false }];
   const fakeObserve = (s: string[]): Observable<BreakpointState> =>
@@ -35,73 +42,10 @@ describe('StepperComponent', () => {
     matchObj[0].result = width >= 800;
   }
 
-  const dummyProject: Project = {
-    id: 1,
-    name: 'Bench Project',
-    vendor_id: 2,
-    start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-    end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-    status: 'INPROGRESS',
-    version: 1,
-    vendor_specific: {
-      Department: 'Finance',
-      'ED/MD': 'Julia Lee',
-    },
-    milestones: [
-      {
-        id: 3,
-        project_id: 1,
-        name: 'deployment',
-        description: 'deployment description',
-        start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: true,
-      },
-      {
-        id: 2,
-        project_id: 1,
-        name: 'frontend',
-        description: 'frontend description',
-        start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-      {
-        id: 1,
-        project_id: 1,
-        name: 'backend',
-        description: 'backend desccription',
-        start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-    ],
-    is_deleted: false,
-    created_by: 1,
-    modified_by: 2,
-    created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-    modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-    project_resources: [
-      {
-        project_id: 1,
-        resource_id: 3,
-        role: 'SOFTWARE_DEVELOPER',
-      },
-      {
-        project_id: 1,
-        resource_id: 1,
-        role: 'SCRUM_MASTER',
-      },
-      {
-        project_id: 1,
-        resource_id: 2,
-        role: 'PROJECT_MANAGER',
-      },
-    ],
-  };
+  const dummyProject: Project = DummyProject;
+
+  const dummyAllocatedResource: AllocatedResourceTypeDTO[] =
+    DummyAllocatedResources;
 
   async function setUpSuccess() {
     responseObj = {
@@ -141,6 +85,16 @@ describe('StepperComponent', () => {
           provide: BreakpointObserver,
           useValue: breakPointSpy,
         },
+        {
+          provide: ResourceService,
+          useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
+        },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesNamesByProjectIdFromDatabase',
+          ]),
+        },
       ],
     }).compileComponents();
 
@@ -178,49 +132,15 @@ describe('StepperComponent', () => {
           provide: BreakpointObserver,
           useValue: breakPointSpy,
         },
-      ],
-    }).compileComponents();
-
-    createComponent();
-  }
-
-  async function setUpFailureProjectNotFound() {
-    responseObj = {
-      project: new HttpResponse<Project>({
-        body: dummyProject,
-        status: 404,
-      }),
-    };
-
-    await TestBed.configureTestingModule({
-      declarations: [StepperComponent],
-      providers: [
-        FormBuilder,
         {
-          provide: Router,
-          useValue: routerSpy,
+          provide: ResourceService,
+          useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
         },
         {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return '13';
-                },
-              },
-            },
-            paramMap: of(convertToParamMap({ id: '13' })),
-            data: of(responseObj),
-          },
-        },
-        {
-          provide: SnackBarService,
-          useValue: snackBarServiceSpy,
-        },
-        {
-          provide: BreakpointObserver,
-          useValue: breakPointSpy,
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesNamesByProjectIdFromDatabase',
+          ]),
         },
       ],
     }).compileComponents();
@@ -234,7 +154,15 @@ describe('StepperComponent', () => {
     tfrManagementServiceSpy = fixture.debugElement.injector.get(
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
+    resourceServiceSpy = TestBed.inject(
+      ResourceService
+    ) as jasmine.SpyObj<ResourceService>;
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
+
     TestBed.inject(BreakpointObserver);
+    apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
+      of(dummyAllocatedResource)
+    );
 
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -247,8 +175,7 @@ describe('StepperComponent', () => {
           {
             provide: TfrManagementService,
             useValue: jasmine.createSpyObj('TfrManagementService', [
-              'getResourcesNamesByProjectIdFromDatabase',
-              'setVendorName',
+              'setClientName',
               'updateStatusToDatabase',
             ]),
           },
@@ -260,16 +187,17 @@ describe('StepperComponent', () => {
   it('load project given projectId path variable', async () => {
     await setUpSuccess();
     fixture.detectChanges();
-    expect(tfrManagementServiceSpy.setVendorName.calls.count()).toBe(1);
+    expect(tfrManagementServiceSpy.setClientName.calls.count()).toBe(1);
     expect(
-      tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
+      apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
     ).toBe(1);
     expect(component).toBeTruthy();
   });
 
   it('load fail, project does not exist', async () => {
-    await setUpFailureProjectNotFound();
+    await setUpSuccess();
     fixture.detectChanges();
+    component.getProjectObserver.error();
     expect(tfrManagementServiceSpy.apiError).toBe(true);
     expect(component).toBeTruthy();
   });
@@ -334,5 +262,12 @@ describe('StepperComponent', () => {
     await setUpSuccess();
     component.setEditMode(true);
     expect(component.editMode).toBe(true);
+  });
+
+  it('should return allocated resources without delete', () => {
+    resourceServiceSpy.resourcesWithoutDeleted.and.returnValue(
+      dummyAllocatedResource
+    );
+    expect(component.currentResourcesWithNames).toEqual(dummyAllocatedResource);
   });
 });

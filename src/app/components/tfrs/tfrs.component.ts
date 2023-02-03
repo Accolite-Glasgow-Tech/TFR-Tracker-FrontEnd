@@ -51,8 +51,8 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   projectList: MatTableDataSource<ProjectDTO> = new MatTableDataSource(
     this.ELEMENT_DATA
   );
-  selectedVendorName: any;
-  vendors: any;
+  selectedClientName: any;
+  clients: any;
   statusList = statusList;
   selectedStatus: any;
   startAfterDate: any = new FormControl();
@@ -92,8 +92,8 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     this.ApiService.getAllProjects().subscribe((allProjects) => {
       this.projectList.data = allProjects;
     });
-    this.ApiService.getAllVendors().subscribe((allVendors) => {
-      this.vendors = allVendors;
+    this.ApiService.getAllClients().subscribe((allClients) => {
+      this.clients = allClients;
     });
     console.log(this.projectList)
   }
@@ -112,8 +112,8 @@ export class TfrsComponent implements OnInit, AfterViewInit {
         'yyyy-MM-dd 23:59:59'
       );
     }
-    if (this.selectedVendorName != undefined) {
-      this.projectPostBody['vendor_name'] = this.selectedVendorName;
+    if (this.selectedClientName != undefined) {
+      this.projectPostBody['client_name'] = this.selectedClientName;
     }
     if (this.selectedStatus != undefined) {
       this.projectPostBody['status'] = this.selectedStatus;
