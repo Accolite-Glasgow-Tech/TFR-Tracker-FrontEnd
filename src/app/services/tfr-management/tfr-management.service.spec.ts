@@ -10,7 +10,6 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
-import { resourceProjectsURL } from 'src/app/shared/constants';
 import {
   AllocatedResourceTypeDTO,
   Milestone,
@@ -19,7 +18,6 @@ import {
   ProjectResourceDTO,
   VendorDTO,
 } from 'src/app/shared/interfaces';
-import { getAllocatedResourcesURL } from 'src/app/shared/utils';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
@@ -68,6 +66,7 @@ describe('TfrManagementService', () => {
             'putStatus',
             'putProject',
             'getProject',
+            'postProjectResources',
           ]),
         },
       ],
@@ -369,11 +368,10 @@ describe('TfrManagementService', () => {
   });
 
   it('should update project to resource mapping in db success', () => {
+    apiServiceSpy.postProjectResources.and.returnValue(of(1));
     service.project = project;
     service.updateProjectToResourceMapping();
-    const req = httpMock.expectOne(resourceProjectsURL);
-    expect(req.request.method).toEqual('POST');
-    req.flush(2);
+    expect(service.project.version).toBe(1);
   });
 
   it('should get project from database', () => {
@@ -410,17 +408,6 @@ describe('TfrManagementService', () => {
     });
     expect(service.extractProject(httpResponse)).toEqual(httpResponse);
     expect(service.project).toEqual(undefined);
-  });
-
-  it('should get resource detailed by project id from db', () => {
-    let result = service.getResourcesNamesByProjectIdFromDatabase(1);
-    result.subscribe((allocatedResources) => {
-      expect(allocatedResources).toEqual(projectResourcesWithNames);
-    });
-
-    const req = httpMock.expectOne(getAllocatedResourcesURL(1));
-    expect(req.request.method).toEqual('GET');
-    req.flush(projectResourcesWithNames);
   });
 
   it('should update project status to db', () => {

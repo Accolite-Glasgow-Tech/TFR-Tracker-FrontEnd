@@ -196,3 +196,9 @@ export interface dialogContent {
   confirmText: string;
   cancelText: string;
 }
+
+export interface ResourceSkillDTO {
+  resource_id: number;
+  skill: string;
+  experience: number;
+}

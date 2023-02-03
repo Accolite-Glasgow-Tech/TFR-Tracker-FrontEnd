@@ -22,7 +22,7 @@
       <mat-error
         *ngIf="
           resourceService.resourcesWithoutDeleted(allocatedResources).length >
-          resourcesCount
+            resourcesCount && resourcesCount !== null
         "
       >
         You have allocated more resources than required
@@ -67,6 +67,7 @@
               *ngFor="let filteredResource of filteredResourceOption | async"
               [value]="filteredResource.resource_name"
               class="small-font"
+              (click)="getSkills(filteredResource.resource_id)"
             >
               {{ filteredResource.resource_name }}
             </mat-option>
@@ -184,6 +185,18 @@
       </button>
     </div>
   </form>
+
+  <br />
+
+  <div class="resource-skill-div" *ngIf="currentResourceSkills.length !== 0">
+    <label>{{ resource.value }}'s skillset:</label>
+    <ul>
+      <li *ngFor="let resourceSkill of currentResourceSkills">
+        {{ resourceSkill.skill }} with {{ resourceSkill.experience }} years of
+        experience
+      </li>
+    </ul>
+  </div>
 
   <br />
 
