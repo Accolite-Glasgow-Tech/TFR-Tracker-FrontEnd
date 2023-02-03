@@ -50,7 +50,7 @@ export class StepperComponent implements OnInit {
 
     A value of true forces the user to complete its current step before moving to the next.
   */
-  isLinear = false;
+  isLinear = true;
 
   /*
     Listens to screen size changes. When the screen is small, the orientation of the stepper
@@ -111,7 +111,7 @@ export class StepperComponent implements OnInit {
 
   ngOnInit(): void {
     let tfrId = Number(this.route.snapshot.paramMap.get('id'));
-
+    this.stepsValid = [false, false, false];
     /*
       Error validation for the path variable.
       The path variable (the project_id) is expected to be a number.
@@ -159,7 +159,6 @@ export class StepperComponent implements OnInit {
     if (stepNumber >= 0) {
       this.stepsValid[stepNumber] = completed;
     }
-    log(this.stepsValid);
   }
 
   /*
