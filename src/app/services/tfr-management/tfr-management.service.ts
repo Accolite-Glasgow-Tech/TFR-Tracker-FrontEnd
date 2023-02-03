@@ -142,7 +142,7 @@ export class TfrManagementService {
           end_date: projectBasicDetails.end_date,
           vendor_specific: projectBasicDetails.vendor_specific,
           resources_count: 0,
-          status: 'DRAFT',
+          status: projectBasicDetails.status,
           version: 0,
           milestones: [],
           project_resources: [],
@@ -159,6 +159,7 @@ export class TfrManagementService {
         this.project.end_date = projectBasicDetails.end_date;
         this.project.vendor_id = projectBasicDetails.vendor_id;
         this.project.vendor_specific = projectBasicDetails.vendor_specific;
+        this.project.status = projectBasicDetails.status;
         this.updateProjectToDatabase();
       }
       this.setVendorName(projectBasicDetails.vendor_id);

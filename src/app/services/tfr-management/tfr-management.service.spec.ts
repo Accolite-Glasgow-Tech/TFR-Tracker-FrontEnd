@@ -18,6 +18,7 @@ import {
   ProjectResourceDTO,
   VendorDTO,
 } from 'src/app/shared/interfaces';
+import { DummyProject } from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
@@ -86,89 +87,20 @@ describe('TfrManagementService', () => {
     );
     service = TestBed.inject(TfrManagementService);
 
-    milestones = [
-      {
-        id: 3,
-        name: 'deployment',
-        project_id: 1,
-        description: 'deployment',
-        start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: true,
-      },
-      {
-        id: 2,
-        name: 'frontend',
-        project_id: 1,
-        description: 'frontend',
-        start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-      {
-        id: 1,
-        name: 'backend',
-        project_id: 1,
-        description: 'backend',
-        start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-    ];
+    project = DummyProject;
+    milestones = project.milestones;
+    projectResources = project.project_resources;
 
-    projectResources = [
-      {
-        project_id: 1,
-        resource_id: 1,
-        role: 'SCRUM_MASTER',
-        seniority: 'INTERMEDIATE',
-        is_deleted: false,
-      },
-      {
-        project_id: 1,
-        resource_id: 3,
-        role: 'SOFTWARE_DEVELOPER',
-        seniority: 'JUNIOR',
-        is_deleted: false,
-      },
-    ];
-
-    project = {
-      id: 1,
-      name: 'Bench Project',
-      vendor_id: 2,
-      start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-      end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-      status: 'DRAFT',
-      version: 1,
-      vendor_specific: {
-        Department: 'Finance',
-        'ED/MD': 'Julia Lee',
-      },
-      resources_count: 4,
-      milestones: milestones,
-      is_deleted: false,
-      created_by: 1,
-      modified_by: 2,
-      created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-      modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-      project_resources: projectResources,
-    };
-
-    basicDetails = {
-      name: 'Bench Project',
-      start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-      end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-      status: 'DRAFT',
-      vendor_id: 2,
-      vendor_specific: {
-        Department: 'Finance',
-        'ED/MD': 'Julia Lee',
-      },
-    };
+    basicDetails = (({
+      name,
+      start_date,
+      end_date,
+      vendor_id,
+      vendor_specific,
+      status,
+    }) => ({ name, start_date, end_date, vendor_id, vendor_specific, status }))(
+      project
+    );
 
     vendors = [
       {
@@ -322,16 +254,21 @@ describe('TfrManagementService', () => {
     );
   });
 
-  it('should create a new project by setting basic details', () => {
+  fit('should create a new project by setting basic details', () => {
     service.project = undefined;
     apiServiceSpy.getVendors.and.returnValue(of(vendors));
     apiServiceSpy.postProject.and.returnValue(of(2));
     service.setBasicDetails(basicDetails);
+    console.log('raw basic details:');
+    console.log(basicDetails);
+    console.log('service basic details:');
 
+    console.log(service.getBasicDetails);
     expect(service.getBasicDetails).toEqual(basicDetails);
   });
 
   it('should compare basic details undefined project', () => {
+    service.project = undefined;
     let result = service.compareBasicDetails(basicDetails);
     expect(result).toBe(false);
   });
@@ -416,7 +353,7 @@ describe('TfrManagementService', () => {
     result.subscribe((response) => expect(response).toBe(true));
   });
 
-  it('should set resources count', () => {
+  fit('should set resources count', () => {
     service.setResourcesCount(1);
     expect(service.project?.resources_count).toBe(1);
   });

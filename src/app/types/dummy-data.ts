@@ -76,7 +76,7 @@ export const DummyProject: Project = {
       is_deleted: false,
     },
   ],
-  resources_count: 3,
+  resources_count: 4,
 };
 
 class dummy {
