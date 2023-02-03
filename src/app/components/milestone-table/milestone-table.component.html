@@ -2,8 +2,8 @@
   <tr>
     <th></th>
     <th>Name</th>
-
     <th>Description</th>
+    <th>Status</th>
     <th>Start Date</th>
     <th>Delivery Date</th>
     <th>Acceptance Date</th>
@@ -12,6 +12,7 @@
     <td class="data-cell">{{ i + 1 }}</td>
     <td class="data-cell">{{ milestone.name }}</td>
     <td class="data-cell">{{ milestone.description }}</td>
+    <td class="data-cell">{{ milestone.status }}</td>
     <td class="data-cell">
       {{ dateFormatterService.getShortDisplayDate(milestone.start_date) }}
     </td>
@@ -41,11 +42,15 @@
         </div>
         <div class="data-cell-div-mobile">
           <strong>Delivery Date: </strong
-          >{{ dateFormatterService.getShortDisplayDate(milestone.delivery_date) }}
+          >{{
+            dateFormatterService.getShortDisplayDate(milestone.delivery_date)
+          }}
         </div>
         <div class="data-cell-div-mobile">
           <strong>Acceptance Date: </strong
-          >{{ dateFormatterService.getShortDisplayDate(milestone.acceptance_date) }}
+          >{{
+            dateFormatterService.getShortDisplayDate(milestone.acceptance_date)
+          }}
         </div>
       </div>
     </td>
