@@ -18,7 +18,7 @@ export const approachingProjectsURL = `${backendURL}/ProjectsStartingInAWeek`;
 export const clientProjectCountURL = `${backendURL}/VendorProjectCount`;
 export const seniorityLevelsURL = `${backendURL}/resources/seniorityLevels`;
 
-export const dateFormat = 'MM/dd/YYYY';
+export const dateFormat = 'MM/dd/YY';
 export const statusList = ['DRAFT', 'INPROGRESS', 'ARCHIVED', 'DELIVERED'];
 
 export const daysOfWeek: string[] = [
