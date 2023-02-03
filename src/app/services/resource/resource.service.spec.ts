@@ -1,6 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
+import { DummyAllocatedResources } from 'src/app/types/dummy-data';
 import { ResourceService } from './resource.service';
 
 describe('ResourceService', () => {
@@ -18,26 +19,11 @@ describe('ResourceService', () => {
   });
 
   it('should return resources that have not been deleted - with result list', () => {
-    let dummyAllocatedResources: AllocatedResourceTypeDTO[] = [
-      {
-        project_id: 1,
-        resource_id: 1,
-        resource_name: 'John Makan',
-        resource_email: 'johnmakan@accolitedigital.com',
-        seniority: 'JUNIOR',
-        is_deleted: true,
-        role: 'SCRUM MASTER',
-      },
-      {
-        project_id: 1,
-        resource_id: 3,
-        resource_name: 'Kimberly Gould',
-        resource_email: 'kimberlygould@accolitedigital.com',
-        seniority: 'JUNIOR',
-        is_deleted: false,
-        role: 'SOFTWARE DEVELOPER',
-      },
-    ];
+    let dummyAllocatedResources: AllocatedResourceTypeDTO[] =
+      DummyAllocatedResources;
+    dummyAllocatedResources[0].is_deleted = true;
+    expect(dummyAllocatedResources[0].is_deleted).toBe(true);
+    expect(dummyAllocatedResources[1].is_deleted).toBe(false);
 
     let expectedResult = [dummyAllocatedResources[1]];
 
@@ -47,26 +33,10 @@ describe('ResourceService', () => {
   });
 
   it('should return resources that have not been deleted - with return empty list', () => {
-    let dummyAllocatedResources: AllocatedResourceTypeDTO[] = [
-      {
-        project_id: 1,
-        resource_id: 1,
-        resource_name: 'John Makan',
-        resource_email: 'johnmakan@accolitedigital.com',
-        seniority: 'JUNIOR',
-        is_deleted: true,
-        role: 'SCRUM MASTER',
-      },
-      {
-        project_id: 1,
-        resource_id: 3,
-        resource_name: 'Kimberly Gould',
-        resource_email: 'kimberlygould@accolitedigital.com',
-        seniority: 'JUNIOR',
-        is_deleted: true,
-        role: 'SOFTWARE DEVELOPER',
-      },
-    ];
+    let dummyAllocatedResources: AllocatedResourceTypeDTO[] =
+      DummyAllocatedResources;
+    dummyAllocatedResources[0].is_deleted = true;
+    dummyAllocatedResources[1].is_deleted = true;
 
     let result = service.resourcesWithoutDeleted(dummyAllocatedResources);
 

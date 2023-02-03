@@ -9,7 +9,10 @@ import { ResourceService } from 'src/app/services/resource/resource.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
-import { DummyProject } from 'src/app/types/dummy-data';
+import {
+  DummyAllocatedResources,
+  DummyProject,
+} from 'src/app/types/dummy-data';
 import { StepperComponent } from './stepper.component';
 
 describe('StepperComponent', () => {
@@ -41,26 +44,8 @@ describe('StepperComponent', () => {
 
   const dummyProject: Project = DummyProject;
 
-  const dummyAllocatedResource: AllocatedResourceTypeDTO[] = [
-    {
-      project_id: 1,
-      resource_id: 1,
-      resource_name: 'John Bowers',
-      resource_email: 'johnbowers@accolitedigital.com',
-      seniority: 'SENIOR',
-      is_deleted: false,
-      role: 'SCRUM MASTER',
-    },
-    {
-      project_id: 1,
-      resource_id: 3,
-      resource_name: 'Kimberly Gould',
-      resource_email: 'kimberlygould@accolitedigital.com',
-      seniority: 'JUNIOR',
-      is_deleted: false,
-      role: 'SOFTWARE DEVELOPER',
-    },
-  ];
+  const dummyAllocatedResource: AllocatedResourceTypeDTO[] =
+    DummyAllocatedResources;
 
   async function setUpSuccess() {
     responseObj = {

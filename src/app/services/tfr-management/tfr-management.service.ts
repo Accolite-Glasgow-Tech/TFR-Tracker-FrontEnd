@@ -10,13 +10,13 @@ import { Observable } from 'rxjs';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
 import {
   AllocatedResourceTypeDTO,
+  ClientDTO,
   Milestone,
   MilestoneDTO,
   Project,
   ProjectBasicDetails,
   ProjectMilestoneDTO,
   ProjectResourceDTO,
-  ClientDTO,
 } from 'src/app/shared/interfaces';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
@@ -192,7 +192,7 @@ export class TfrManagementService {
 
   compareBasicDetails(newDetails: ProjectBasicDetails): Boolean {
     var currentDetails = this.getBasicDetails;
-    if (currentDetails == undefined) {
+    if (currentDetails === undefined) {
       return false;
     }
     if (
