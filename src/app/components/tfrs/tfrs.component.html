@@ -97,7 +97,7 @@
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let tfr">
         <button mat-button [matMenuTriggerFor]="actionsMenu">
-          Choose an action
+          <span class="optional-text">Choose an action</span>
           <mat-icon>menu</mat-icon>
         </button>
         <mat-menu #actionsMenu="matMenu">
