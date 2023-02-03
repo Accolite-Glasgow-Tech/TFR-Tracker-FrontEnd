@@ -1,33 +1,29 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { of } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
-import { TfrManagementService } from '../tfr-management/tfr-management.service';
+import { ApiService } from '../api/api.service';
 
 import { ProjectResolverService } from './project-resolver.service';
 
 describe('ProjectResolverService', () => {
   let service: ProjectResolverService;
   let route: ActivatedRouteSnapshot;
-  let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
+  let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
   beforeEach(() => {
-    const spy = jasmine.createSpyObj('TfrManagementService', [
-      'getFromDatabase',
-    ]);
+    const spy = jasmine.createSpyObj('ApiService', ['getProject']);
     route = new ActivatedRouteSnapshot();
 
     TestBed.configureTestingModule({
       providers: [
         ProjectResolverService,
-        { provide: TfrManagementService, useValue: spy },
+        { provide: ApiService, useValue: spy },
       ],
     });
     service = TestBed.inject(ProjectResolverService);
-    tfrManagementServiceSpy = TestBed.inject(
-      TfrManagementService
-    ) as jasmine.SpyObj<TfrManagementService>;
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
   });
 
   it('should be created', () => {
@@ -47,9 +43,11 @@ describe('ProjectResolverService', () => {
         Department: 'Finance',
         'ED/MD': 'Julia Lee',
       },
+      resources_count: 4,
       milestones: [
         {
           id: 3,
+          name: 'deployment',
           project_id: 1,
           description: 'deployment',
           start_date: new Date('2022-12-26T09:00:00.000+00:00'),
@@ -59,6 +57,7 @@ describe('ProjectResolverService', () => {
         },
         {
           id: 2,
+          name: 'frontend',
           project_id: 1,
           description: 'frontend',
           start_date: new Date('2022-12-19T09:00:00.000+00:00'),
@@ -68,6 +67,7 @@ describe('ProjectResolverService', () => {
         },
         {
           id: 1,
+          name: 'backend',
           project_id: 1,
           description: 'backend',
           start_date: new Date('2022-12-12T09:00:00.000+00:00'),
@@ -86,16 +86,22 @@ describe('ProjectResolverService', () => {
           project_id: 1,
           resource_id: 3,
           role: 'SOFTWARE_DEVELOPER',
+          seniority: 'JUNIOR',
+          is_deleted: false,
         },
         {
           project_id: 1,
           resource_id: 1,
           role: 'SCRUM_MASTER',
+          seniority: 'SENIOR',
+          is_deleted: false,
         },
         {
           project_id: 1,
           resource_id: 2,
           role: 'PROJECT_MANAGER',
+          seniority: 'ADVANCED',
+          is_deleted: false,
         },
       ],
     };
@@ -104,9 +110,7 @@ describe('ProjectResolverService', () => {
       body: dummyProject,
     });
 
-    tfrManagementServiceSpy.getFromDatabase.and.returnValue(
-      of(httpResponseProject)
-    );
+    apiServiceSpy.getProject.and.returnValue(of(httpResponseProject));
 
     service.resolve(route).subscribe((project) => {
       expect(project).toEqual(httpResponseProject);

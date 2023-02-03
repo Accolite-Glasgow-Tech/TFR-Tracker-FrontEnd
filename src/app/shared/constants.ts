@@ -11,14 +11,14 @@ export const vendorsURLdupe = `${backendURL}/search/vendors/all`;
 export const projectSearchURL = `${backendURL}/search/project`;
 export const registrationURL = `${backendURL}/register`;
 export const loginURL = `${backendURL}/login`;
-export const resourceRolesURL = `${backendURL}/resources/roles`;
 export const resourceProjectsURL = `${backendURL}/resources/projects`;
 export const TFRCreationResourceURL = `${backendURL}/resources/all/tfr-creation-resource`;
 export const projectsURL = `${backendURL}/projects`;
 export const approachingProjectsURL = `${backendURL}/ProjectsStartingInAWeek`;
 export const vendorProjectCountURL = `${backendURL}/VendorProjectCount`;
+export const seniorityLevelsURL = `${backendURL}/resources/seniorityLevels`;
 
-export const dateFormat = 'MM/DD/YYYY';
+export const dateFormat = 'MM/dd/YYYY';
 export const statusList = ['DRAFT', 'INPROGRESS', 'ARCHIVED', 'DELIVERED'];
 
 export const daysOfWeek: string[] = [

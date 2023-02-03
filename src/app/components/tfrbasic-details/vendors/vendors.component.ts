@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
-import { ApiService } from 'src/app/services/api.service';
+import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   ProjectBasicDetails,
@@ -14,6 +14,7 @@ import {
   templateUrl: './vendors.component.html',
   styleUrls: ['./vendors.component.scss'],
 })
+
 export class VendorsComponent implements OnInit {
   constructor(
     private api: ApiService,
@@ -34,11 +35,11 @@ export class VendorsComponent implements OnInit {
       name: new FormControl(''),
     });
 
-    this.api.vendorReset.subscribe((result) => {
+    this.api.vendorReset.subscribe(() => {
       this.resetVendorControls();
     });
 
-    this.api.getVendorData().subscribe((data) => {
+    this.api.getVendors().subscribe((data) => {
       this.vendors = data;
       if (this.editMode) {
         // TODO fill in details of vendor and Attributes

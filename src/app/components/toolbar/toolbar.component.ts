@@ -1,7 +1,7 @@
 import { SidenavToggleService } from 'src/app/services/sidenav-toggle/sidenav-toggle.service';
 import { Component, OnInit, Type } from '@angular/core';
-import { LoginGuardService } from 'src/app/services/login-guard/login-guard.service';
-import { RoutesList } from 'src/app/app-routing.module';
+import { RouteGuardManagerService } from 'src/app/services/route-guard-manager/route-guard-manager.service';
+import { appRoutes } from 'src/app/app-routes';
 
 @Component({
   selector: 'app-toolbar',
@@ -11,18 +11,13 @@ import { RoutesList } from 'src/app/app-routing.module';
 export class ToolbarComponent implements OnInit {
   constructor(
     private sidenavToggleService: SidenavToggleService,
-    private loginGuardService: LoginGuardService
+    public routeGuardManager: RouteGuardManagerService,
   ) {}
 
   ngOnInit(): void {}
-  RoutesList = RoutesList;
+  appRoutes = appRoutes;
   toggle() {
     this.sidenavToggleService.toggle();
   }
-  checkRouting(component: Type<any> | undefined): boolean {
-    if (component) {
-      return this.loginGuardService.checkIfComponentCanBeActivated(component);
-    }
-    return false;
-  }
+
 }

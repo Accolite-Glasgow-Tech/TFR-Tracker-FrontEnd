@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
-import { TfrManagementService } from '../tfr-management/tfr-management.service';
+import { ApiService } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,11 +16,11 @@ import { TfrManagementService } from '../tfr-management/tfr-management.service';
 export class ProjectResolverService
   implements Resolve<Observable<string | HttpResponse<Project>>>
 {
-  constructor(private tfrManagementService: TfrManagementService) {}
+  constructor(private apiService: ApiService) {}
 
-  resolve(route: ActivatedRouteSnapshot) {
-    return this.tfrManagementService.getFromDatabase(
-      Number(route.paramMap.get('id'))
-    );
+  resolve(
+    route: ActivatedRouteSnapshot
+  ): Observable<string | HttpResponse<Project>> {
+    return this.apiService.getProject(Number(route.paramMap.get('id')));
   }
 }

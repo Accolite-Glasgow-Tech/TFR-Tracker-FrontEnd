@@ -1,9 +1,9 @@
 <h1 class="title" mat-dialog-title><marquee behavior="alternate"><strong> Add Widgets </strong></marquee></h1>
 <div  *ngFor="let wid of widgets" style="    padding: 5px 20px 5px 20px;">
-    <mat-card> 
+  <mat-card> 
       <button mat-raised-button  type="button" class="btn btn-success top-btn-left" (click)="pushWidget(wid.componentName)"     [ngClass]="isempty(wid.present)"  [disabled]="wid.present"   >
         <i class="fa fa-plus-circle" aria-hidden="true" *ngIf="!wid.present"></i><b> {{wid.componentName}} Widget </b></button>
-    </mat-card>
+      </mat-card>
 </div>
 
 <div  class= "foot" mat-dialog-actions>

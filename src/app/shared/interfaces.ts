@@ -27,6 +27,7 @@ export interface Project {
   status: string;
   version: number;
   vendor_specific: { [key: string]: string };
+  resources_count: number;
   is_deleted: Boolean;
   created_by: number;
   modified_by: number;
@@ -57,6 +58,7 @@ export interface ProjectMilestoneDTO {
 export interface FormMilestone {
   id: number;
   project_id: number;
+  name: string;
   description: string;
   start_date?: Date;
   delivery_date?: Date;
@@ -68,6 +70,7 @@ export interface FormMilestone {
 export interface Milestone {
   id: number;
   project_id: number;
+  name: string;
   description: string;
   start_date: Date;
   delivery_date: Date;
@@ -79,6 +82,7 @@ export interface Milestone {
 export interface MilestoneDTO {
   id?: number;
   project_id: number;
+  name: string;
   description: string;
   start_date: Date;
   delivery_date: Date;
@@ -89,7 +93,6 @@ export interface MilestoneDTO {
 
 export interface TFRRoute extends Route {
   navigationLabel?: String;
-  isGuarded?: boolean;
 }
 
 export interface TaskDTO {
@@ -145,6 +148,8 @@ export interface AllocatedResourceTypeDTO {
   resource_id: number;
   resource_name: string;
   resource_email: string;
+  seniority: string;
+  is_deleted: boolean;
   role: string;
 }
 
@@ -152,6 +157,8 @@ export interface ProjectResourceDTO {
   project_id: number;
   resource_id: number;
   role: string;
+  seniority: string;
+  is_deleted: boolean;
 }
 
 export interface ProjectBasicDetails {
@@ -168,4 +175,24 @@ export interface ResourceListType {
   resource_email: string;
   resource_id: number;
   selected: boolean;
+}
+
+export interface RegisterResponse {
+  msg: string;
+  status: boolean;
+}
+
+export interface LoginResponse {
+  id: BigInteger;
+  user_name: string;
+  msg: string;
+  status: boolean;
+  token: string;
+}
+
+export interface dialogContent {
+  title: string;
+  content: string;
+  confirmText: string;
+  cancelText: string;
 }

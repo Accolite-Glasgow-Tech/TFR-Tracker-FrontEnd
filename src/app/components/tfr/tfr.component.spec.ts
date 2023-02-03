@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project } from 'src/app/shared/interfaces';
+import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
 
 import { TfrComponent } from './tfr.component';
 
@@ -30,11 +30,13 @@ describe('TfrComponent', () => {
       Department: 'Finance',
       'ED/MD': 'Julia Lee',
     },
+    resources_count: 4,
     milestones: [
       {
         id: 3,
         project_id: 1,
-        description: 'deployment',
+        name: 'deployment',
+        description: 'deployment dsecription',
         start_date: new Date('2022-12-26T09:00:00.000+00:00'),
         delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
         acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
@@ -43,7 +45,8 @@ describe('TfrComponent', () => {
       {
         id: 2,
         project_id: 1,
-        description: 'frontend',
+        name: 'frontend',
+        description: 'frontend description',
         start_date: new Date('2022-12-19T09:00:00.000+00:00'),
         delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
         acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
@@ -52,7 +55,8 @@ describe('TfrComponent', () => {
       {
         id: 1,
         project_id: 1,
-        description: 'backend',
+        name: 'backend',
+        description: 'backend description',
         start_date: new Date('2022-12-12T09:00:00.000+00:00'),
         delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
         acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
@@ -69,19 +73,45 @@ describe('TfrComponent', () => {
         project_id: 1,
         resource_id: 3,
         role: 'SOFTWARE_DEVELOPER',
+        seniority: 'JUNIOR',
+        is_deleted: false,
       },
       {
         project_id: 1,
         resource_id: 1,
         role: 'SCRUM_MASTER',
+        seniority: 'SENIOR',
+        is_deleted: false,
       },
       {
         project_id: 1,
         resource_id: 2,
         role: 'PROJECT_MANAGER',
+        seniority: 'ADVANCED',
+        is_deleted: false,
       },
     ],
   };
+  const dummyAllocatedResource: AllocatedResourceTypeDTO[] = [
+    {
+      project_id: 1,
+      resource_id: 1,
+      resource_name: 'John Bowers',
+      resource_email: 'johnbowers@accolitedigital.com',
+      seniority: 'SENIOR',
+      is_deleted: false,
+      role: 'SCRUM MASTER',
+    },
+    {
+      project_id: 1,
+      resource_id: 3,
+      resource_name: 'Kimberly Gould',
+      resource_email: 'kimberlygould@accolitedigital.com',
+      seniority: 'JUNIOR',
+      is_deleted: false,
+      role: 'SOFTWARE DEVELOPER',
+    },
+  ];
 
   async function setUpSuccess() {
     await TestBed.configureTestingModule({
@@ -180,6 +210,10 @@ describe('TfrComponent', () => {
     tfrManagementServiceSpy = fixture.debugElement.injector.get(
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
+
+    tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
+      of(dummyAllocatedResource)
+    );
 
     component = fixture.componentInstance;
   }

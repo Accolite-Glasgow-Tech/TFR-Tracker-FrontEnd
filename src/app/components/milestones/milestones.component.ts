@@ -3,7 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MilestoneManagerService } from 'src/app/services/milestone-manager/milestone-manager.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Milestone, FormMilestone } from 'src/app/shared/interfaces';
+import { Milestone, FormMilestone, Project } from 'src/app/shared/interfaces';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-milestones',
@@ -23,6 +24,10 @@ export class MilestonesComponent implements OnInit {
   milestones: Milestone[] = this.milestoneManagerService.getMilestones;
   formMilestone: FormMilestone | null = null;
   milestoneForm = new FormGroup({
+    name: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
     description: new FormControl<string>('', {
       nonNullable: true,
       validators: [Validators.required],
@@ -81,7 +86,8 @@ export class MilestonesComponent implements OnInit {
   };
 
   getObserver = {
-    next: (response: {}) => {
+    next: (projectResponse: HttpResponse<Project>) => {
+      this.projectManagerService.extractProject(projectResponse);
       this.snackBarService.showSnackBar('Get successful', 2000);
       this.milestoneManagerService.setMilestones(
         this.projectManagerService.getMilestones
@@ -89,7 +95,7 @@ export class MilestonesComponent implements OnInit {
       this.update();
     },
     error: (err: Error) =>
-      this.snackBarService.showSnackBar('Get failed, please try again', 2000),
+      this.snackBarService.showSnackBar('Get failed, please retry', 2000),
   };
 
   update() {
@@ -112,15 +118,17 @@ export class MilestonesComponent implements OnInit {
   }
 
   ConvertMilestoneToFormData(): {
+    name: string;
     description: string;
     acceptance_date: Date | null;
     start_date: Date | null;
     delivery_date: Date | null;
   } {
     if (this.formMilestone != null) {
-      let { description, acceptance_date, start_date, delivery_date } =
+      let { name, description, acceptance_date, start_date, delivery_date } =
         this.formMilestone;
       return {
+        name,
         description,
         acceptance_date: acceptance_date ?? null,
         start_date: start_date ?? null,
@@ -128,6 +136,7 @@ export class MilestonesComponent implements OnInit {
       };
     }
     return {
+      name: '',
       description: '',
       acceptance_date: null,
       start_date: null,
@@ -145,15 +154,14 @@ export class MilestonesComponent implements OnInit {
     this.milestoneManagerService.selectNewMilestone(
       this.projectManagerService.getProjectId
     );
-  }
-  selectExisting(milestone: Milestone) {
-    this.milestoneManagerService.setSelected(milestone);
+    this.milestoneForm.markAsPristine();
   }
   discardSelected() {
     this.milestoneManagerService.setSelected(null);
   }
   saveSelected() {
     this.milestoneManagerService.saveFormMilestone(this.getFormMilestone);
+    this.isPristine = false;
   }
 
   get milestonesNotDeleted() {
@@ -167,6 +175,7 @@ export class MilestonesComponent implements OnInit {
   }
   selectMilestone(milestone: Milestone) {
     this.milestoneManagerService.setSelected(milestone);
+    this.milestoneForm.markAsPristine();
   }
   submitMilestones() {
     this.projectManagerService
@@ -189,5 +198,8 @@ export class MilestonesComponent implements OnInit {
   }
   previousStep() {
     this.nextStepEmitter.emit(false);
+  }
+  get projectStatus(): string | undefined {
+    return this.projectManagerService.project?.status;
   }
 }

@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { FormMilestone, Milestone } from 'src/app/shared/interfaces';
 
@@ -9,7 +8,7 @@ export class MilestoneManagerService {
   milestones: Milestone[] = [];
   selected: FormMilestone | null = null;
   @Output() Update: EventEmitter<any> = new EventEmitter();
-  constructor(private httpClient: HttpClient) {}
+  constructor() {}
   get getMilestones() {
     return this.milestones;
   }
@@ -49,6 +48,7 @@ export class MilestoneManagerService {
     if (projectId != undefined) {
       this.setSelected({
         project_id: projectId,
+        name: '',
         description: '',
         id: idOfNew,
         is_deleted: false,

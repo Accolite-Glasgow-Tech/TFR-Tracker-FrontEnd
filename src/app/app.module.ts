@@ -49,7 +49,6 @@ import { WidgetApproachingProjectsComponent } from './components/widget-approach
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { ManageWidgetModalComponent } from './components/manage-widget-modal/manage-widget-modal.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -81,7 +80,7 @@ import { ManageWidgetModalComponent } from './components/manage-widget-modal/man
     ChipComponent,
     PageNotFoundComponent,
     LogOutComponent,
-    ManageWidgetModalComponent,
+    ManageWidgetModalComponent
   ],
 
   providers: [

@@ -7,16 +7,34 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { saveAs } from 'file-saver';
-import { tfrService } from 'src/app/service/tfrs/tfr.service';
-import { dateFormat, statusList } from 'src/app/shared/constants';
+import * as FileSaver from 'file-saver';
+import { statusList } from 'src/app/shared/constants';
 import { ProjectDTO } from 'src/app/shared/interfaces';
 import { getPDFReportURL } from 'src/app/shared/utils';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
+import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'app-tfrs',
   templateUrl: './tfrs.component.html',
   styleUrls: ['./tfrs.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+      ),
+    ]),
+  ],
 })
 export class TfrsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
@@ -26,7 +44,11 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     'status',
     'link',
   ];
-  ELEMENT_DATA: any = [];
+
+  displayedColumnsWithExpand: string[] = [...this.displayedColumns, 'expand'];
+  expandedElement: any;
+  ELEMENT_DATA: ProjectDTO[] = [];
+
   projectList: MatTableDataSource<ProjectDTO> = new MatTableDataSource(
     this.ELEMENT_DATA
   );
@@ -37,7 +59,6 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   startAfterDate: any = new FormControl();
   endBeforeDate: any = new FormControl();
   pageSize = [3, 5, 10, 15];
-  dateFormat = dateFormat;
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -60,18 +81,19 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   projectPostBody: any = {};
 
   constructor(
-    private tfrService: tfrService,
+    private ApiService: ApiService,
     private liveAnnouncer: LiveAnnouncer,
     private datePipe: DatePipe,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    public dateFormatterService: DateFormatterService
   ) {}
 
   ngOnInit(): void {
-    this.tfrService.getAllProjects().subscribe((allProjects) => {
+    this.ApiService.getAllProjects().subscribe((allProjects) => {
       this.projectList.data = allProjects;
     });
-    this.tfrService.getAllVendors().subscribe((allVendors) => {
+    this.ApiService.getAllVendors().subscribe((allVendors) => {
       this.vendors = allVendors;
     });
   }
@@ -96,17 +118,29 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     if (this.selectedStatus != undefined) {
       this.projectPostBody['status'] = this.selectedStatus;
     }
-    this.tfrService.getProjects(this.projectPostBody).subscribe((projects) => {
-      this.projectList.data = projects;
-    });
+    this.ApiService.searchProjects(this.projectPostBody).subscribe(
+      (projects) => {
+        this.projectList.data = projects;
+      }
+    );
   }
 
   viewTFRDetails(tfrId: number): void {
     this.router.navigateByUrl(`/tfr/${tfrId}`);
   }
 
-  download(projectId: number): void {
-    this.http.get<Blob>(getPDFReportURL(projectId)).subscribe((data) => {});
+  download(project: ProjectDTO): void {
+    this.http
+      .get(getPDFReportURL(project.id!), { responseType: 'blob' })
+      .subscribe((data) => {
+        FileSaver.saveAs(
+          data,
+          `${project.name}_Report_${this.datePipe.transform(
+            new Date(),
+            'yyyy-MM-ddThh:mm'
+          )}.pdf`
+        );
+      });
   }
 
   scheduleReports(tfrId: number): void {
@@ -114,6 +148,6 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   }
 
   displayDate(date: Date) {
-    return this.datePipe.transform(date, 'MM/dd/yyyy');
+    return this.dateFormatterService.getShortDisplayDate(date);
   }
 }

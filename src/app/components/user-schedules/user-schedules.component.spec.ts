@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiService } from 'src/app/services/api/api.service';
+import { of } from 'rxjs';
 
 import { UserSchedulesComponent } from './user-schedules.component';
 
@@ -8,7 +10,15 @@ describe('UserSchedulesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserSchedulesComponent ]
+      declarations: [ UserSchedulesComponent ],
+      providers: [
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', {
+            'getUserTasksById': of({})
+        })
+        }
+      ]
     })
     .compileComponents();
 

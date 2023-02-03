@@ -1,5 +1,9 @@
-<mat-card style="background-color: transparent; height: 100%; width: inherit; margin: -30px;">
+<mat-card *ngIf="pieChartData.length === 0">
+  <h1>No client data to show</h1>
+</mat-card>
+<mat-card class="chartouter" *ngIf="pieChartData.length > 0">
   <canvas
+    class="chartinner"
     baseChart
     [type]="'pie'"
     [datasets]="pieChartData"
@@ -7,13 +11,6 @@
     [options]="pieChartOptions"
     [legend]="true"
     (chartClick)="onChartClick($event)"
-    style="
-      background-color:transparent;
-      margin: 2%;
-      height: 100%;
-      width: 100%;
-      content-visibility: hidden;
-    "
   >
   </canvas>
 </mat-card>

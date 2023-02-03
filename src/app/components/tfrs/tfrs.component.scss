@@ -44,3 +44,44 @@
 .search-button {
   margin: 14px;
 }
+
+
+tr.detail-row {
+  height: 0;
+}
+
+.element-row td {
+  border-bottom-width: 0;
+}
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.element-description {
+  padding: 8px;
+}
+
+.element-description-attribution {
+  opacity: 0.5;
+
+}
+
+.element-diagram {
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  float: left;
+}
+
+.milestone-title{
+  font-size: large;
+  font-weight: 500;
+
+}
+
+
+
+
