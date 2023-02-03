@@ -299,4 +299,12 @@ export class TfrManagementService {
     */
     return this.apiService.putStatus(this.project!.id, 'AGREED');
   }
+
+  setNotes(notes: string) {
+    if (this.project) {
+      this.project.notes = notes;
+      console.log(this.project.notes);
+      this.updateProjectToDatabase();
+    }
+  }
 }
