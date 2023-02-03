@@ -1,5 +1,8 @@
-import { Project } from 'src/app/shared/interfaces';
-import { ClientAttributeDTO } from 'src/app/shared/interfaces';
+import {
+  AllocatedResourceTypeDTO,
+  ClientAttributeDTO,
+  Project,
+} from 'src/app/shared/interfaces';
 
 export const DummyProject: Project = {
   id: 1,
@@ -79,6 +82,27 @@ export const DummyProject: Project = {
   ],
   resources_count: 4,
 };
+
+export const DummyAllocatedResources: AllocatedResourceTypeDTO[] = [
+  {
+    project_id: 1,
+    resource_id: 1,
+    resource_name: 'John Bowers',
+    resource_email: 'johnbowers@accolitedigital.com',
+    seniority: 'SENIOR',
+    is_deleted: false,
+    role: 'SCRUM MASTER',
+  },
+  {
+    project_id: 1,
+    resource_id: 3,
+    resource_name: 'Kimberly Gould',
+    resource_email: 'kimberlygould@accolitedigital.com',
+    seniority: 'JUNIOR',
+    is_deleted: false,
+    role: 'SOFTWARE DEVELOPER',
+  },
+];
 
 class dummy {
   attributes: ClientAttributeDTO[] = [

@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
+import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-tfr',
@@ -30,17 +30,15 @@ export class TfrComponent implements OnInit {
 
   getProjectObserver = {
     next: (response: Data) => {
-      let status: number = response['project']['status'];
-      let project: Project = response['project']['body'];
-      if (status === 200) {
-        this.tfrManagementService.project = project;
-        this.apiService
-          .getResourcesNamesByProjectIdFromDatabase(project.id)
-          .subscribe(this.getResourceNameObserver);
-        this.tfrManagementService.setClientName(project.client_id);
-      } else {
-        this.tfrManagementService.apiError = true;
-      }
+      let project = response['project'];
+      this.tfrManagementService.project = project;
+      this.apiService
+        .getResourcesNamesByProjectIdFromDatabase(project.id)
+        .subscribe(this.getResourceNameObserver);
+      this.tfrManagementService.setClientName(project.client_id);
+    },
+    error: () => {
+      this.tfrManagementService.apiError = true;
     },
   };
 

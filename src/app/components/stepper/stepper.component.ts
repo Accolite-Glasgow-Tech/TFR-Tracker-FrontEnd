@@ -66,19 +66,15 @@ export class StepperComponent implements OnInit {
 
   getProjectObserver = {
     next: (response: Data) => {
-      if (Object.keys(response).length !== 0) {
-        let status: number = response['project']['status'];
-        let project: Project = response['project']['body'];
-        if (status === 200) {
-          this.tfrManagementService.project = project;
-          this.apiService
-            .getResourcesNamesByProjectIdFromDatabase(project.id)
-            .subscribe(this.getResourceNameObserver);
-          this.tfrManagementService.setClientName(project.client_id);
-        } else {
-          this.tfrManagementService.apiError = true;
-        }
-      }
+      let project = response['project'];
+      this.tfrManagementService.project = project;
+      this.apiService
+        .getResourcesNamesByProjectIdFromDatabase(project.id)
+        .subscribe(this.getResourceNameObserver);
+      this.tfrManagementService.setClientName(project.client_id);
+    },
+    error: () => {
+      this.tfrManagementService.apiError = true;
     },
   };
 

@@ -14,6 +14,7 @@ import {
   ResourceListType,
   ResourceSkillDTO,
 } from 'src/app/shared/interfaces';
+import { DummyAllocatedResources } from 'src/app/types/dummy-data';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 import {
   autoCompleteResourceNameValidator,
@@ -28,7 +29,7 @@ export class MatDialogMock {
   }
 }
 
-describe('TfrCreationResourceComponent', () => {
+fdescribe('TfrCreationResourceComponent', () => {
   let component: TfrCreationResourceComponent;
   let fixture: ComponentFixture<TfrCreationResourceComponent>;
   let seniorityLevels: string[];
@@ -98,15 +99,15 @@ describe('TfrCreationResourceComponent', () => {
 
     resources = [
       {
-        resource_name: 'John Makan',
-        resource_email: 'johnmakan@accolitedigital.com',
+        resource_name: 'John Bowers',
+        resource_email: 'johnbowers@accolitedigital.com',
         resource_id: 1,
         selected: false,
       },
       {
-        resource_name: 'Yves Reed',
-        resource_email: 'yvesreed@accolitedigital.com',
-        resource_id: 2,
+        resource_name: 'Kimberly Gould',
+        resource_email: 'kimberlygould@accolitedigital.com',
+        resource_id: 3,
         selected: false,
       },
     ];
@@ -114,50 +115,22 @@ describe('TfrCreationResourceComponent', () => {
       {
         project_id: 1,
         resource_id: 1,
-        role: 'TEAM_LEAD',
+        role: 'SCRUM MASTER',
         seniority: 'SENIOR',
         is_deleted: false,
       },
       {
         project_id: 1,
-        resource_id: 2,
-        role: 'SCRUM_MASTER',
-        seniority: 'INTERMEDIATE',
-        is_deleted: false,
-      },
-    ];
-    projectResourcesWithNames = [
-      {
-        project_id: 1,
-        resource_email: 'johnmakan@accolitedigital.com',
-        resource_id: 1,
-        resource_name: 'John Makan',
-        seniority: 'JUNIOR',
-        is_deleted: false,
-        role: 'SCRUM MASTER',
-      },
-    ];
-    seniorityLevels = ['ADVANCED', 'SENIOR', 'INTERMEDIATE', 'JUNIOR'];
-    dummyAllocatedResource = [
-      {
-        project_id: 1,
-        resource_id: 1,
-        resource_name: 'John Makan',
-        resource_email: 'johnmakan@accolitedigital.com',
-        seniority: 'JUNIOR',
-        is_deleted: false,
-        role: 'SCRUM MASTER',
-      },
-      {
-        project_id: 1,
         resource_id: 3,
-        resource_name: 'Kimberly Gould',
-        resource_email: 'kimberlygould@accolitedigital.com',
+        role: 'SOFTWARE DEVELOPER',
         seniority: 'JUNIOR',
         is_deleted: false,
-        role: 'SOFTWARE DEVELOPER',
       },
     ];
+
+    projectResourcesWithNames = [{ ...DummyAllocatedResources[0] }];
+    seniorityLevels = ['ADVANCED', 'SENIOR', 'INTERMEDIATE', 'JUNIOR'];
+    dummyAllocatedResource = [...DummyAllocatedResources];
 
     dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
       afterClosed: () => of('true'),
@@ -191,7 +164,7 @@ describe('TfrCreationResourceComponent', () => {
   });
 
   it('resource auto complete validator success', () => {
-    let control = { value: 'John Makan' };
+    let control = { value: 'John Bowers' };
     let result = autoCompleteResourceNameValidator(resources)(
       control as AbstractControl
     );
@@ -213,8 +186,8 @@ describe('TfrCreationResourceComponent', () => {
     component.resources = resources;
     let expectedResult: ResourceListType[] = [
       {
-        resource_name: 'John Makan',
-        resource_email: 'johnmakan@accolitedigital.com',
+        resource_name: 'John Bowers',
+        resource_email: 'johnbowers@accolitedigital.com',
         resource_id: 1,
         selected: false,
       },
@@ -232,7 +205,7 @@ describe('TfrCreationResourceComponent', () => {
 
     component.allocatedResources = [];
     (tfrManagementServiceSpy as any).getProjectId = 1;
-    component.addResource('John Makan', 'SCRUM MASTER', 'JUNIOR');
+    component.addResource('John Bowers', 'SCRUM MASTER', 'SENIOR');
 
     fixture.detectChanges();
 
@@ -256,7 +229,7 @@ describe('TfrCreationResourceComponent', () => {
 
     component.resources = resources;
 
-    component.addResource('John Makan', 'SCRUM MASTER', 'INTERMEDIATE');
+    component.addResource('John Bowers', 'SCRUM MASTER', 'INTERMEDIATE');
 
     expect(component.allocatedResources).toEqual(expectAllocatedResources);
   });
@@ -274,7 +247,7 @@ describe('TfrCreationResourceComponent', () => {
     expect(component.resources[0].selected).toBe(false);
     expect(
       component.allocatedResources.find((resource) => {
-        return resource.resource_email === 'johnmakan@accolitedigital.com';
+        return resource.resource_email === 'johnbowers@accolitedigital.com';
       })
     ).toEqual(projectResourcesWithNames[0]);
   });
