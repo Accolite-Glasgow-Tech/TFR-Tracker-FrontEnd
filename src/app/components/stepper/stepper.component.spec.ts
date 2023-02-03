@@ -235,60 +235,6 @@ describe('StepperComponent', () => {
     createComponent();
   }
 
-  async function setUpFailureProjectNotFound() {
-    responseObj = {
-      project: new HttpResponse<Project>({
-        body: dummyProject,
-        status: 404,
-      }),
-    };
-
-    await TestBed.configureTestingModule({
-      declarations: [StepperComponent],
-      providers: [
-        FormBuilder,
-        {
-          provide: Router,
-          useValue: routerSpy,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return '13';
-                },
-              },
-            },
-            paramMap: of(convertToParamMap({ id: '13' })),
-            data: of(responseObj),
-          },
-        },
-        {
-          provide: SnackBarService,
-          useValue: snackBarServiceSpy,
-        },
-        {
-          provide: BreakpointObserver,
-          useValue: breakPointSpy,
-        },
-        {
-          provide: ResourceService,
-          useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
-        },
-        {
-          provide: ApiService,
-          useValue: jasmine.createSpyObj('ApiService', [
-            'getResourcesNamesByProjectIdFromDatabase',
-          ]),
-        },
-      ],
-    }).compileComponents();
-
-    createComponent();
-  }
-
   function createComponent() {
     fixture = TestBed.createComponent(StepperComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
@@ -336,8 +282,9 @@ describe('StepperComponent', () => {
   });
 
   it('load fail, project does not exist', async () => {
-    await setUpFailureProjectNotFound();
+    await setUpSuccess();
     fixture.detectChanges();
+    component.getProjectObserver.error();
     expect(tfrManagementServiceSpy.apiError).toBe(true);
     expect(component).toBeTruthy();
   });

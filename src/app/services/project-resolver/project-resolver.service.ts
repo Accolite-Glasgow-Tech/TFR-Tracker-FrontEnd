@@ -14,13 +14,13 @@ import { ApiService } from '../api/api.service';
   the component that requires this project body.
 */
 export class ProjectResolverService
-  implements Resolve<Observable<Project | HttpErrorResponse>>
+  implements Resolve<Observable<Project | HttpErrorResponse | never>>
 {
   constructor(private apiService: ApiService, private router: Router) {}
 
   resolve(
     route: ActivatedRouteSnapshot
-  ): Observable<Project | HttpErrorResponse> {
+  ): Observable<Project | HttpErrorResponse | never> {
     return this.apiService.getProject(Number(route.paramMap.get('id'))).pipe(
       mergeMap((response: Data) => {
         if (Object.keys(response).length !== 0) {

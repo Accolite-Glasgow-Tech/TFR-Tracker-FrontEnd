@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
 import { ApiService } from '../api/api.service';
@@ -10,6 +10,7 @@ import { ProjectResolverService } from './project-resolver.service';
 describe('ProjectResolverService', () => {
   let service: ProjectResolverService;
   let route: ActivatedRouteSnapshot;
+  let routerSpy: jasmine.SpyObj<Router>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
   beforeEach(() => {
@@ -20,9 +21,14 @@ describe('ProjectResolverService', () => {
       providers: [
         ProjectResolverService,
         { provide: ApiService, useValue: spy },
+        {
+          provide: Router,
+          useValue: jasmine.createSpyObj('Router', ['navigate']),
+        },
       ],
     });
     service = TestBed.inject(ProjectResolverService);
+    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
   });
 
@@ -113,7 +119,7 @@ describe('ProjectResolverService', () => {
     apiServiceSpy.getProject.and.returnValue(of(httpResponseProject));
 
     service.resolve(route).subscribe((project) => {
-      expect(project).toEqual(httpResponseProject);
+      expect(project).toEqual(dummyProject);
     });
   });
 });
