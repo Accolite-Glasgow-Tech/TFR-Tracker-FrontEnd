@@ -17,7 +17,7 @@
   <app-project-summary
     [currentProject]="tfrManagementService.getProject"
     [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"
-    [vendorName]="tfrManagementService.getVendorName"
+    [clientName]="tfrManagementService.getClientName"
   ></app-project-summary>
 </div>
 <div *ngIf="tfrManagementService.apiError">

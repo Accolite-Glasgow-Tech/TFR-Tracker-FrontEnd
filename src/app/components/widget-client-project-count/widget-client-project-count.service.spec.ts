@@ -1,16 +1,16 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { WidgetVendorLocationService } from './widget-vendor-location.service';
+import { WidgetClientProjectCountService } from './widget-client-project-count.service';
 
-describe('WidgetVendorLocationService', () => {
-  let service: WidgetVendorLocationService;
+describe('WidgetClientProjectCountService', () => {
+  let service: WidgetClientProjectCountService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ]
     });
-    service = TestBed.inject(WidgetVendorLocationService);
+    service = TestBed.inject(WidgetClientProjectCountService);
   });
 
   it('should be created', () => {

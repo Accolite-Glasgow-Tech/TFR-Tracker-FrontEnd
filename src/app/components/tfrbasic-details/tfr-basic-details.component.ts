@@ -6,8 +6,8 @@ import { TfrManagementService } from 'src/app/services/tfr-management/tfr-manage
 
 import {
   ProjectBasicDetails,
-  VendorAttributeDTO,
-  VendorDTO,
+  ClientAttributeDTO,
+  ClientDTO,
 } from 'src/app/shared/interfaces';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
@@ -29,9 +29,9 @@ export class TfrBasicDetailsComponent implements OnInit {
   tfrDetails!: FormGroup;
   projectDetails!: ProjectBasicDetails;
   selectedProject!: ProjectBasicDetails;
-  vendorGroup!: FormGroup;
+  clientGroup!: FormGroup;
   attributeNames: string[] = [];
-  vendor_specificData: { [key: string]: string } = {};
+  client_specificData: { [key: string]: string } = {};
   editMode: Boolean = false;
   projectToEdit!: ProjectBasicDetails;
   @Output() editModeEmitter = new EventEmitter<boolean>();
@@ -41,7 +41,7 @@ export class TfrBasicDetailsComponent implements OnInit {
       name: new FormControl('', [Validators.required]),
       start_date: new FormControl<Date | null>(null),
       end_date: new FormControl<Date | null>(null),
-      vendor_id: new FormControl('', [Validators.required]),
+      client_id: new FormControl('', [Validators.required]),
     });
 
     // check whether project exists yet, and if so, pre-fill details and set to edit mode
@@ -57,16 +57,16 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   isFormValid() {
-    if (this.vendorGroup == undefined) {
+    if (this.clientGroup == undefined) {
       return false;
     } else {
-      return this.vendorGroup.valid && this.tfrDetails.valid;
+      return this.clientGroup.valid && this.tfrDetails.valid;
     }
   }
 
   isFormDirty() {
     if (this.isFormValid()) {
-      return this.vendorGroup.dirty || this.tfrDetails.dirty;
+      return this.clientGroup.dirty || this.tfrDetails.dirty;
     }
     return false;
   }
@@ -83,18 +83,18 @@ export class TfrBasicDetailsComponent implements OnInit {
       name: this.tfrDetails.get('name')?.value,
       start_date: this.tfrDetails.get('start_date')?.value,
       end_date: this.tfrDetails.get('end_date')?.value,
-      vendor_id: this.tfrDetails.get('vendor_id')?.value,
-      vendor_specific: this.vendor_specificData,
+      client_id: this.tfrDetails.get('client_id')?.value,
+      client_specific: this.client_specificData,
       status: this.editMode ? this.projectToEdit.status : 'DRAFT',
     };
     this.tfrManager.setBasicDetails(updatedProjectDetails);
     this.tfrDetails.markAsPristine();
-    this.vendorGroup.markAsPristine();
+    this.clientGroup.markAsPristine();
   }
 
-  onVendorSelect(vendor: VendorDTO) {
-    this.tfrDetails.get('vendor_id')?.setValue(vendor.id);
-    this.tfrDetails.get('vendor_id')?.markAsDirty;
+  onClientSelect(client: ClientDTO) {
+    this.tfrDetails.get('client_id')?.setValue(client.id);
+    this.tfrDetails.get('client_id')?.markAsDirty;
   }
 
   /*
@@ -140,22 +140,22 @@ export class TfrBasicDetailsComponent implements OnInit {
       .get('end_date')
       ?.setValue(previousStateBasicDetails.end_date);
     this.tfrDetails
-      .get('vendor_id')
-      ?.setValue(previousStateBasicDetails.vendor_id);
+      .get('client_id')
+      ?.setValue(previousStateBasicDetails.client_id);
 
     !this.projectToEdit ??
-      (this.projectToEdit.vendor_id = previousStateBasicDetails.vendor_id);
+      (this.projectToEdit.client_id = previousStateBasicDetails.client_id);
 
     /*
-      Trigger event to vendor component through the api.service
+      Trigger event to Client component through the api.service
     */
-    this.apiService.resetVendorDetails();
+    this.apiService.resetClientDetails();
 
     this.tfrDetails.markAsPristine();
-    this.vendorGroup.markAsPristine();
+    this.clientGroup.markAsPristine();
   }
 
-  onAttributesSelected(attributes: VendorAttributeDTO[]) {
+  onAttributesSelected(attributes: ClientAttributeDTO[]) {
     this.attributeNames = [];
     attributes.forEach((att) => {
       this.attributeNames.push(att.attribute_name);
@@ -163,17 +163,17 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   onAttributesUpdated(group: FormGroup) {
-    this.vendorGroup = group;
-    this.updatevendor_specific();
+    this.clientGroup = group;
+    this.updateClient_specific();
   }
 
-  updatevendor_specific() {
-    this.vendor_specificData = {};
-    // convert the form group info to string data and assign to vendor_specificData string
-    if (this.vendorGroup.valid) {
+  updateClient_specific() {
+    this.client_specificData = {};
+    // convert the form group info to string data and assign to client_specificData string
+    if (this.clientGroup.valid) {
       let i = 0;
       while (i < this.attributeNames.length) {
-        this.vendor_specificData[this.attributeNames[i]] =
+        this.client_specificData[this.attributeNames[i]] =
           this.getAttributesArray().controls[i].value;
         i++;
       }
@@ -181,6 +181,6 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   getAttributesArray() {
-    return this.vendorGroup.controls['attributeValues'] as FormArray;
+    return this.clientGroup.controls['attributeValues'] as FormArray;
   }
 }

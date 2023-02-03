@@ -35,7 +35,7 @@ export class TfrComponent implements OnInit {
       this.apiService
         .getResourcesNamesByProjectIdFromDatabase(project.id)
         .subscribe(this.getResourceNameObserver);
-      this.tfrManagementService.setVendorName(project.vendor_id);
+      this.tfrManagementService.setClientName(project.client_id);
     },
     error: () => {
       this.tfrManagementService.apiError = true;
