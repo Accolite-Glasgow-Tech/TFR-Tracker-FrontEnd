@@ -49,9 +49,13 @@ export class UserComponent implements OnInit {
     if (this.registerGroup.get('name').hasError('required')) {
       return 'Username cannot be empty';
     }
-    return this.registerGroup.get('name').hasError('email')
-      ? 'Please enter an valid email address'
-      : '';
+    if(this.registerGroup.get('name').hasError('email')){
+      return 'Please enter an valid accolite email address';
+    }
+    return '';
+    return this.registerGroup.get('name').value.match(".@accolitedigital.com")
+      ? ''
+      : 'Please enter an valid email address';
   }
   getPasswordErrorMessage() {
     if (this.registerGroup.get('password').hasError('required')) {
@@ -62,6 +66,10 @@ export class UserComponent implements OnInit {
       : '';
   }
   register() {
+    if (!this.registerGroup.get('name').value.match(".@accolitedigital.com")){
+      alert('Please enter an valid accolite email address')
+      return;
+    }
     let registerRequestBody = {
       user_name: this.registerGroup.get('name').value,
       password: this.registerGroup.get('password').value,
@@ -106,4 +114,5 @@ export class UserComponent implements OnInit {
   jumpToHome(): void {
     this.router.navigateByUrl('/home');
   }
+  
 }
