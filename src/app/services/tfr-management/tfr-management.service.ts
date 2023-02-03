@@ -16,7 +16,7 @@ import {
   ProjectBasicDetails,
   ProjectMilestoneDTO,
   ProjectResourceDTO,
-  VendorDTO,
+  ClientDTO,
 } from 'src/app/shared/interfaces';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
@@ -29,7 +29,7 @@ export class TfrManagementService {
   public project!: Project | undefined;
   projectResourcesWithNames!: AllocatedResourceTypeDTO[];
 
-  vendorName: string = '';
+  clientName: string = '';
   apiError: boolean = false;
 
   updateProjectToDatabaseObserver = {
@@ -103,8 +103,8 @@ export class TfrManagementService {
     return this.project;
   }
 
-  get getVendorName(): string {
-    return this.vendorName;
+  get getClientName(): string {
+    return this.clientName;
   }
 
   get getResourcesCount(): number | undefined {
@@ -121,8 +121,8 @@ export class TfrManagementService {
         name: this.project.name,
         start_date: this.project.start_date,
         end_date: this.project.end_date,
-        vendor_id: this.project.vendor_id,
-        vendor_specific: this.project.vendor_specific,
+        client_id: this.project.client_id,
+        client_specific: this.project.client_specific,
         status: this.project.status,
       };
 
@@ -137,10 +137,10 @@ export class TfrManagementService {
         this.project = {
           id: NaN,
           name: projectBasicDetails.name,
-          vendor_id: projectBasicDetails.vendor_id,
+          client_id: projectBasicDetails.client_id,
           start_date: projectBasicDetails.start_date,
           end_date: projectBasicDetails.end_date,
-          vendor_specific: projectBasicDetails.vendor_specific,
+          client_specific: projectBasicDetails.client_specific,
           resources_count: 0,
           status: 'DRAFT',
           version: 0,
@@ -157,11 +157,11 @@ export class TfrManagementService {
         this.project.name = projectBasicDetails.name;
         this.project.start_date = projectBasicDetails.start_date;
         this.project.end_date = projectBasicDetails.end_date;
-        this.project.vendor_id = projectBasicDetails.vendor_id;
-        this.project.vendor_specific = projectBasicDetails.vendor_specific;
+        this.project.client_id = projectBasicDetails.client_id;
+        this.project.client_specific = projectBasicDetails.client_specific;
         this.updateProjectToDatabase();
       }
-      this.setVendorName(projectBasicDetails.vendor_id);
+      this.setClientName(projectBasicDetails.client_id);
     }
   }
 
@@ -181,10 +181,10 @@ export class TfrManagementService {
       .subscribe(this.updateProjectToDatabaseObserver);
   }
 
-  setVendorName(vendor_id: number) {
-    this.apiService.getVendors().subscribe((result: VendorDTO[]) => {
-      this.vendorName = result.find(
-        (vendor: VendorDTO) => vendor.id === vendor_id
+  setClientName(client_id: number) {
+    this.apiService.getClients().subscribe((result: ClientDTO[]) => {
+      this.clientName = result.find(
+        (client: ClientDTO) => client.id === client_id
       )!.name;
     });
   }
@@ -199,8 +199,8 @@ export class TfrManagementService {
       currentDetails.start_date != newDetails.start_date ||
       currentDetails.end_date != newDetails.end_date ||
       currentDetails.status != newDetails.status ||
-      currentDetails.vendor_id != newDetails.vendor_id ||
-      currentDetails.vendor_specific != newDetails.vendor_specific
+      currentDetails.client_id != newDetails.client_id ||
+      currentDetails.client_specific != newDetails.client_specific
     ) {
       return false;
     }

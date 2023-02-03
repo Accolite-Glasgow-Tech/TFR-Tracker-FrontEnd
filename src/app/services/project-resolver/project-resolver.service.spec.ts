@@ -34,12 +34,12 @@ describe('ProjectResolverService', () => {
     const dummyProject: Project = {
       id: 1,
       name: 'Bench Project',
-      vendor_id: 2,
+      client_id: 2,
       start_date: new Date('2022-12-12T09:00:00.000+00:00'),
       end_date: new Date('2022-12-31T23:59:59.000+00:00'),
       status: 'INPROGRESS',
       version: 1,
-      vendor_specific: {
+      client_specific: {
         Department: 'Finance',
         'ED/MD': 'Julia Lee',
       },

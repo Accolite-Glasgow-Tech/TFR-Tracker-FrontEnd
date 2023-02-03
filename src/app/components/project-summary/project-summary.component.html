@@ -30,20 +30,20 @@
       </div>
     </div>
 
-    <div class="column" id="vendor-div">
+    <div class="column" id="client-div">
       <div class="project-details">
-        <span> <strong>Client: </strong> {{ vendorName }} </span>
+        <span> <strong>Client: </strong> {{ clientName }} </span>
       </div>
       <div
         class="project-details"
         *ngFor="
-          let vendor_attribute of this.currentProject?.vendor_specific
+          let client_attribute of this.currentProject?.client_specific
             | keyvalue
         "
       >
         <span>
-          <strong>{{ vendor_attribute.key }}: </strong>
-          {{ vendor_attribute.value }}
+          <strong>{{ client_attribute.key }}: </strong>
+          {{ client_attribute.value }}
         </span>
       </div>
     </div>
