@@ -367,6 +367,6 @@ describe('TfrCreationResourceComponent', () => {
         status: 500,
       })
     );
-    expect(component.currentResourceSkills).toBe([]);
+    expect(component.currentResourceSkills).toEqual([]);
   });
 });
