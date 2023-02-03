@@ -4,6 +4,7 @@ import { ClientAttributeDTO } from 'src/app/shared/interfaces';
 export const DummyProject: Project = {
   id: 1,
   name: 'Bench Project',
+  notes: '',
   client_id: 2,
   start_date: new Date('2022-12-12T09:00:00.000+00:00'),
   end_date: new Date('2022-12-31T23:59:59.000+00:00'),
