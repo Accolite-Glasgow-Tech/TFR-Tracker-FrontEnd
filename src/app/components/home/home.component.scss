@@ -27,7 +27,9 @@ and (-webkit-min-device-pixel-ratio: 1) {
     flex-wrap: wrap ;
     height: 13%;
     padding-right: 2vw;
-    padding-bottom: 0.7vw;
+    padding-top: 1vw;
+    padding-bottom: 1.5vw;
+    padding-left: 1vw;
   }
 
   .closeiconbutton {
@@ -79,6 +81,8 @@ and (-webkit-min-device-pixel-ratio: 1) {
     display: flexbox;
     height: 13%;
     padding-right: 6vw;
+    padding-top: 1vw;
+    padding-bottom: 3vw;
   }
 
   .closeiconbutton {
