@@ -5,20 +5,27 @@ import {
   allProjectsURL,
   projectSearchURL,
   projectsURL,
+  resourceProjectsURL,
+  seniorityLevelsURL,
   tasksURL,
+  TFRCreationResourceURL,
   vendorsURL,
   vendorsURLdupe,
 } from '../../shared/constants';
 import {
+  AllocatedResourceTypeDTO,
   Project,
   ProjectDTO,
   ProjectMilestoneDTO,
   ResourceDTO,
+  ResourceListType,
+  ResourceSkillDTO,
   TaskCreationDTO,
   VendorAttributeDTO,
   VendorDTO,
 } from '../../shared/interfaces';
 
+import { getAllocatedResourcesURL, getSkillsURL } from 'src/app/shared/utils';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -36,6 +43,10 @@ export class ApiService {
 
   postProject(project: Project | undefined | ProjectMilestoneDTO) {
     return this.http.post(projectsURL, project);
+  }
+
+  postProjectResources(project: Project | undefined) {
+    return this.http.post(resourceProjectsURL, project);
   }
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// GET ///////////////////////////////////
@@ -67,6 +78,27 @@ export class ApiService {
   getAllProjects(): Observable<ProjectDTO[]> {
     return this.http.get<ProjectDTO[]>(allProjectsURL);
   }
+
+  getSkillsByResourceId(resourceId: number): Observable<ResourceSkillDTO[]> {
+    return this.http.get<ResourceSkillDTO[]>(getSkillsURL(resourceId));
+  }
+
+  getAllResources(): Observable<ResourceListType[]> {
+    return this.http.get<ResourceListType[]>(TFRCreationResourceURL);
+  }
+
+  getAllSeniorityLevels(): Observable<string[]> {
+    return this.http.get<string[]>(seniorityLevelsURL);
+  }
+
+  getResourcesNamesByProjectIdFromDatabase(
+    projectId: Number
+  ): Observable<AllocatedResourceTypeDTO[]> {
+    return this.http.get<AllocatedResourceTypeDTO[]>(
+      getAllocatedResourcesURL(projectId)
+    );
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// PUT ///////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////

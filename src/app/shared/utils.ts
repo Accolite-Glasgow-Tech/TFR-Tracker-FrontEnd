@@ -12,6 +12,10 @@ export function getPDFReportURL(projectId: number): string {
   return `${environment.backendURL}/reports/download/${projectId}`;
 }
 
+export function getSkillsURL(resourceId: number): string {
+  return `${environment.backendURL}/search/resource/resource_skill/${resourceId}`;
+}
+
 export function range(start: number, end?: number) {
   if (typeof start === 'number') {
     if (end === undefined) {

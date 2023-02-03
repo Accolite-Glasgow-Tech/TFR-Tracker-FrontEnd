@@ -2,6 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { of } from 'rxjs';
+import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
 
@@ -17,6 +18,7 @@ describe('TfrComponent', () => {
     'navigate',
   ]);
   let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
+  let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
   const dummyProject: Project = {
     id: 1,
@@ -135,6 +137,12 @@ describe('TfrComponent', () => {
             data: of(responseObj),
           },
         },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesNamesByProjectIdFromDatabase',
+          ]),
+        },
       ],
     }).compileComponents();
 
@@ -162,6 +170,12 @@ describe('TfrComponent', () => {
             paramMap: of(convertToParamMap({ id: 'asds' })),
             data: of(responseObj),
           },
+        },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesNamesByProjectIdFromDatabase',
+          ]),
         },
       ],
     }).compileComponents();
@@ -197,6 +211,12 @@ describe('TfrComponent', () => {
             data: of(errorResponse),
           },
         },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesNamesByProjectIdFromDatabase',
+          ]),
+        },
       ],
     }).compileComponents();
 
@@ -210,8 +230,9 @@ describe('TfrComponent', () => {
     tfrManagementServiceSpy = fixture.debugElement.injector.get(
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
 
-    tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
+    apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
       of(dummyAllocatedResource)
     );
 
@@ -232,7 +253,6 @@ describe('TfrComponent', () => {
           {
             provide: TfrManagementService,
             useValue: jasmine.createSpyObj('TfrManagementService', [
-              'getResourcesNamesByProjectIdFromDatabase',
               'setVendorName',
             ]),
           },
@@ -261,7 +281,7 @@ describe('TfrComponent', () => {
     expect(component.TfrId).toBe(1);
     expect(tfrManagementServiceSpy.setVendorName.calls.count()).toBe(1);
     expect(
-      tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
+      apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
     ).toBe(1);
     expect(component).toBeTruthy();
   });

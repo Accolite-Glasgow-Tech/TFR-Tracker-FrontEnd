@@ -1,8 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl, FormBuilder } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { first, of } from 'rxjs';
+import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
@@ -10,6 +12,7 @@ import {
   dialogContent,
   ProjectResourceDTO,
   ResourceListType,
+  ResourceSkillDTO,
 } from 'src/app/shared/interfaces';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 import {
@@ -31,6 +34,7 @@ describe('TfrCreationResourceComponent', () => {
   let seniorityLevels: string[];
   let dummyAllocatedResource: AllocatedResourceTypeDTO[];
   let resourceServiceSpy: jasmine.SpyObj<ResourceService>;
+  let apiServiceSpy: jasmine.SpyObj<ApiService>;
   let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
   let projectResources: ProjectResourceDTO[];
   let resources: ResourceListType[];
@@ -51,12 +55,16 @@ describe('TfrCreationResourceComponent', () => {
         {
           provide: ResourceService,
           useValue: jasmine.createSpyObj('ResourceService', [
-            'getAllRoles',
-            'convertRoleEnum',
-            'getAllResources',
-            'getAssociatedCleanRole',
-            'getAllSeniorityLevels',
             'resourcesWithoutDeleted',
+          ]),
+        },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getAllResources',
+            'getAllSeniorityLevels',
+            'getResourcesNamesByProjectIdFromDatabase',
+            'getSkillsByResourceId',
           ]),
         },
         {
@@ -68,7 +76,6 @@ describe('TfrCreationResourceComponent', () => {
             'getResourcesCount',
             'getProjectResourcesWithNames',
             'updateProjectToResourceMapping',
-            'getResourcesNamesByProjectIdFromDatabase',
             'setResourcesCount',
           ]),
         },
@@ -85,6 +92,7 @@ describe('TfrCreationResourceComponent', () => {
     tfrManagementServiceSpy = TestBed.inject(
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
 
     (tfrManagementServiceSpy as any).getResourcesCount = 3;
 
@@ -155,16 +163,14 @@ describe('TfrCreationResourceComponent', () => {
       afterClosed: () => of('true'),
     } as MatDialogRef<typeof component>);
 
-    resourceServiceSpy.getAllResources.and.returnValue(of(resources));
-    resourceServiceSpy.getAllSeniorityLevels.and.returnValue(
-      of(seniorityLevels)
-    );
+    apiServiceSpy.getAllResources.and.returnValue(of(resources));
+    apiServiceSpy.getAllSeniorityLevels.and.returnValue(of(seniorityLevels));
     resourceServiceSpy.resourcesWithoutDeleted.and.returnValue(
       dummyAllocatedResource
     );
     tfrManagementServiceSpy.setProjectResourcesWithNames.and.returnValue();
     tfrManagementServiceSpy.updateProjectToResourceMapping.and.returnValue();
-    tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
+    apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
       of(dummyAllocatedResource)
     );
     (tfrManagementServiceSpy as any).getProjectResources = projectResources;
@@ -335,5 +341,32 @@ describe('TfrCreationResourceComponent', () => {
       TfrCreationDialogComponent,
       dialogContent
     );
+  });
+
+  it('should retrieve resource skills by resource id - success', () => {
+    let resourceSkills: ResourceSkillDTO[] = [
+      {
+        resource_id: 1,
+        skill: 'Java',
+        experience: 1,
+      },
+      {
+        resource_id: 1,
+        skill: 'Python',
+        experience: 4,
+      },
+    ];
+    apiServiceSpy.getSkillsByResourceId.and.returnValue(of(resourceSkills));
+    component.getSkills(1);
+    expect(component.currentResourceSkills).toEqual(resourceSkills);
+  });
+
+  it('should retrieve resource skills by resource id - server error', () => {
+    component.getResourceSkillObserver.error(
+      new HttpErrorResponse({
+        status: 500,
+      })
+    );
+    expect(component.currentResourceSkills).toEqual([]);
   });
 });

@@ -1,14 +1,13 @@
 import {
   HttpClient,
   HttpErrorResponse,
-  HttpResponse
+  HttpResponse,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Data, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
-import { resourceProjectsURL } from 'src/app/shared/constants';
 import {
   AllocatedResourceTypeDTO,
   Milestone,
@@ -17,9 +16,8 @@ import {
   ProjectBasicDetails,
   ProjectMilestoneDTO,
   ProjectResourceDTO,
-  VendorDTO
+  VendorDTO,
 } from 'src/app/shared/interfaces';
-import { getAllocatedResourcesURL } from 'src/app/shared/utils';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
@@ -278,13 +276,9 @@ export class TfrManagementService {
     pushes the changes to the resources for this project to the database
   */
   updateProjectToResourceMapping() {
-    this.putProjectToResource(this.project).subscribe(
-      this.updateProjectToDatabaseObserver
-    );
-  }
-
-  private putProjectToResource(project: Project | undefined) {
-    return this.http.post(resourceProjectsURL, project);
+    this.apiService
+      .postProjectResources(this.project)
+      .subscribe(this.updateProjectToDatabaseObserver);
   }
 
   getFromDatabase(project_id: Number): Observable<HttpResponse<Project>> {
@@ -294,18 +288,6 @@ export class TfrManagementService {
   extractProject(value: HttpResponse<Project>) {
     this.project = value.body ?? undefined;
     return value;
-  }
-
-  /*
-    Returns more details information about the resources associated with the project.
-    Each object contains the current project_id, the resource's id, name, email, role.
-  */
-  getResourcesNamesByProjectIdFromDatabase(
-    project_id: Number
-  ): Observable<AllocatedResourceTypeDTO[]> {
-    return this.http.get<AllocatedResourceTypeDTO[]>(
-      getAllocatedResourcesURL(project_id)
-    );
   }
 
   updateStatusToDatabase(): Observable<boolean> {
