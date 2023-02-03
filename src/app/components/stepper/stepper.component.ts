@@ -105,25 +105,21 @@ export class StepperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let tfrId = Number(this.route.snapshot.paramMap.get('id'));
-
-    /*
-      Error validation for the path variable.
-      The path variable (the project_id) is expected to be a number.
-    */
-    if (!Number.isInteger(tfrId)) {
-      this.router.navigate(['/home']);
-    } else {
-      this.route.paramMap.subscribe((result) => {
-        tfrId = Number(result.get('id'));
-        this.route.data.subscribe(this.getProjectObserver);
-      });
+    if (this.route.snapshot.routeConfig?.path !== 'tfr/create') {
+      let tfrId = Number(this.route.snapshot.paramMap.get('id'));
 
       /*
-        The data that will be rendered in the screen is pre-fetched before the component
-        is loaded. This component has a resolver (refer to /services/project-resolver) that
-        fetches the project to be displayed.
+        Error validation for the path variable.
+        The path variable (the project_id) is expected to be a number.
       */
+      if (!Number.isInteger(tfrId)) {
+        this.router.navigate(['/home']);
+      } else {
+        this.route.paramMap.subscribe((result) => {
+          tfrId = Number(result.get('id'));
+          this.route.data.subscribe(this.getProjectObserver);
+        });
+      }
     }
   }
 
