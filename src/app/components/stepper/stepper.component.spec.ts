@@ -244,7 +244,7 @@ describe('StepperComponent', () => {
           {
             provide: TfrManagementService,
             useValue: jasmine.createSpyObj('TfrManagementService', [
-              'setVendorName',
+              'setClientName',
               'updateStatusToDatabase',
             ]),
           },
@@ -256,7 +256,7 @@ describe('StepperComponent', () => {
   it('load project given projectId path variable', async () => {
     await setUpSuccess();
     fixture.detectChanges();
-    expect(tfrManagementServiceSpy.setVendorName.calls.count()).toBe(1);
+    expect(tfrManagementServiceSpy.setClientName.calls.count()).toBe(1);
     expect(
       apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
     ).toBe(1);

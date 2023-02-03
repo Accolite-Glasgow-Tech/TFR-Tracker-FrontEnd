@@ -95,10 +95,10 @@ describe('TfrManagementService', () => {
       name,
       start_date,
       end_date,
-      vendor_id,
-      vendor_specific,
+      client_id,
+      client_specific,
       status,
-    }) => ({ name, start_date, end_date, vendor_id, vendor_specific, status }))(
+    }) => ({ name, start_date, end_date, client_id, client_specific, status }))(
       project
     );
 
@@ -147,6 +147,7 @@ describe('TfrManagementService', () => {
     ];
 
     service.project = project;
+    // console.log(service.project);
 
     apiServiceSpy.postProject.and.returnValue(of(1));
   });
@@ -193,7 +194,8 @@ describe('TfrManagementService', () => {
     expect(service.getClientName).toBe(clientName);
   });
 
-  it('should get Resources Count', () => {
+  fit('should get Resources Count', () => {
+    console.log(service.project);
     expect(service.getResourcesCount).toBe(4);
   });
 
@@ -259,11 +261,6 @@ describe('TfrManagementService', () => {
     apiServiceSpy.getClients.and.returnValue(of(clients));
     apiServiceSpy.postProject.and.returnValue(of(2));
     service.setBasicDetails(basicDetails);
-    console.log('raw basic details:');
-    console.log(basicDetails);
-    console.log('service basic details:');
-
-    console.log(service.getBasicDetails);
     expect(service.getBasicDetails).toEqual(basicDetails);
   });
 

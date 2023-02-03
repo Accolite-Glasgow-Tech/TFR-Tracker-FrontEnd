@@ -182,7 +182,7 @@ describe('TfrComponent', () => {
           {
             provide: TfrManagementService,
             useValue: jasmine.createSpyObj('TfrManagementService', [
-              'setVendorName',
+              'setClientName',
             ]),
           },
         ],
@@ -208,7 +208,7 @@ describe('TfrComponent', () => {
     await setUpSuccess();
     fixture.detectChanges();
     expect(component.TfrId).toBe(1);
-    expect(tfrManagementServiceSpy.setVendorName.calls.count()).toBe(1);
+    expect(tfrManagementServiceSpy.setClientName.calls.count()).toBe(1);
     expect(
       apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
     ).toBe(1);
