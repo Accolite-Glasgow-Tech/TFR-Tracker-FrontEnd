@@ -1,20 +1,54 @@
-.title {
-    font-size: 220%;
-    font-family: ui-rounded;
-    background-color: black;
+
+@media all 
+and (min-device-width: 800px)
+and (-webkit-min-device-pixel-ratio: 1) {
+  .title {
+    font-size: 2.5vw;
+    font-family: Roboto;
+    background-color: #507fc6;
     color: whitesmoke;
   }
+
+  .isPresentstyle {
+    background-color: rgb(154, 154, 154);
+    color: rgb(89, 85, 85);
+    font-size: 1vw;
+  }
+  .notPresentstyle {
+    background-color: #507fc6;
+    color: white;
+    font-size: 1vw;
+  }
   
+}
+
+@media all 
+and (max-width: 799px)
+and (-webkit-min-device-pixel-ratio: 1) {
+  
+  .title {
+    font-size: 6vw;
+    font-family: Roboto;
+    background-color: #507fc6;
+    color: whitesmoke;
+  }
+
+  .isPresentstyle {
+    background-color: rgb(154, 154, 154);
+    color: rgb(89, 85, 85);
+    font-size: 3.5vw;
+  }
+  .notPresentstyle {
+    background-color: #507fc6;
+    color: white;
+    font-size: 3.5vw;
+  }
+}
+
+
+
   .foot {
     text-align: -webkit-center;
   }
   
-  .isPresentstyle {
-    background-color: orange;
-    color: black;
-  }
-  .notPresentstyle {
-    background-color: green;
-    color: white;
-  }
   

@@ -17,6 +17,11 @@
   margin: 20px;
 }
 
+.chiplist {
+  display: flex;
+  justify-content: space-between;
+}
+
 .floating-btn-div {
   position: fixed;
   bottom: 5%;
