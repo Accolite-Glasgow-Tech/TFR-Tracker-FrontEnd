@@ -29,7 +29,7 @@ export class MatDialogMock {
   }
 }
 
-fdescribe('TfrCreationResourceComponent', () => {
+describe('TfrCreationResourceComponent', () => {
   let component: TfrCreationResourceComponent;
   let fixture: ComponentFixture<TfrCreationResourceComponent>;
   let seniorityLevels: string[];

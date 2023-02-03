@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Add notes</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <textarea matInput [(ngModel)]="currentNotes"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Discard</button>
+  <button mat-button [mat-dialog-close]="currentNotes" cdkFocusInitial>
+    Save
+  </button>
+</div>

@@ -62,7 +62,6 @@ export class MilestonesComponent implements OnInit {
       this.milestones = this.milestoneManagerService.getMilestones;
       this.formMilestone = this.milestoneManagerService.getSelected;
       this.milestoneForm.setValue(this.ConvertMilestoneToFormData());
-      console.log(this.milestoneForm.value);
     },
   };
   get selectedMilestone(): Milestone | null {
@@ -72,9 +71,9 @@ export class MilestonesComponent implements OnInit {
     this.formMilestone = milestone;
   }
   get submittable(): boolean {
-    this.stepCompletedEmitter.emit(
-      this.milestoneManagerService.submittable && this.isPristine
-    );
+    // this.stepCompletedEmitter.emit(
+    //   this.milestoneManagerService.submittable && this.isPristine
+    // );
     return this.milestoneManagerService.submittable && this.isPristine;
   }
 

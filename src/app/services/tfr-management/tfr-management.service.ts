@@ -151,6 +151,7 @@ export class TfrManagementService {
           modified_by: NaN,
           created_at: new Date('2022-12-05T10:00:00.000+00:00'),
           modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
+          notes: '',
         };
         this.createProjectInDatabase();
       } else {
@@ -235,7 +236,6 @@ export class TfrManagementService {
   }
 
   putMilestones(milestones: Milestone[]): Observable<{}> {
-    console.log(this.projectStripTempIds(milestones));
     return this.project == undefined
       ? new Observable<{}>((subscriber) => {
           subscriber.error('project undefined');
@@ -299,5 +299,13 @@ export class TfrManagementService {
       to update the status from DRAFT to AGREED.
     */
     return this.apiService.putStatus(this.project!.id, 'AGREED');
+  }
+
+  setNotes(notes: string) {
+    if (this.project) {
+      this.project.notes = notes;
+      console.log(this.project.notes);
+      this.updateProjectToDatabase();
+    }
   }
 }
