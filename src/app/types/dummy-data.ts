@@ -82,57 +82,57 @@ export const DummyProject: Project = {
 class dummy {
   attributes: VendorAttributeDTO[] = [
     {
-      vendor_id: 1,
+      client_id: 1,
       attribute_name: 'Cost Center',
       is_deleted: false,
     },
     {
-      vendor_id: 1,
+      client_id: 1,
       attribute_name: 'Super Department',
       is_deleted: false,
     },
     {
-      vendor_id: 1,
+      client_id: 1,
       attribute_name: 'Department',
       is_deleted: false,
     },
     {
-      vendor_id: 1,
+      client_id: 1,
       attribute_name: 'Division',
       is_deleted: false,
     },
     {
-      vendor_id: 1,
+      client_id: 1,
       attribute_name: 'ED/MD',
       is_deleted: false,
     },
     {
-      vendor_id: 2,
+      client_id: 2,
       attribute_name: 'Department',
       is_deleted: false,
     },
     {
-      vendor_id: 2,
+      client_id: 2,
       attribute_name: 'ED/MD',
       is_deleted: true,
     },
     {
-      vendor_id: 3,
+      client_id: 3,
       attribute_name: 'Cost Center',
       is_deleted: false,
     },
     {
-      vendor_id: 4,
+      client_id: 4,
       attribute_name: 'Division',
       is_deleted: false,
     },
     {
-      vendor_id: 5,
+      client_id: 5,
       attribute_name: 'Department',
       is_deleted: false,
     },
     {
-      vendor_id: 5,
+      client_id: 5,
       attribute_name: 'ED/MD',
       is_deleted: false,
     },

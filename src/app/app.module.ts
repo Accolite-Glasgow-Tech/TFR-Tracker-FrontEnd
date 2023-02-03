@@ -11,10 +11,10 @@ import { NgChartsModule } from 'ng2-charts';
 import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
 import { ChartsComponent } from './components/charts/charts.component';
 import { ChartsService } from './components/charts/charts.service';
-import { WidgetVendorLocationComponent } from './components/widget-vendor-location/widget-vendor-location.component';
-import { WidgetVendorLocationService } from './components/widget-vendor-location/widget-vendor-location.service';
-import { WidgetVendorProjectCountComponent } from './components/widget-vendor-project-count/widget-vendor-project-count.component';
-import { WidgetVendorProjectCountService } from './components/widget-vendor-project-count/widget-vendor-project-count.service';
+import { WidgetClientLocationComponent } from './components/widget-client-location/widget-client-location.component';
+import { WidgetClientLocationService } from './components/widget-client-location/widget-client-location.service';
+import { WidgetClientProjectCountComponent } from './components/widget-client-project-count/widget-client-project-count.component';
+import { WidgetClientProjectCountService } from './components/widget-client-project-count/widget-client-project-count.service';
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
 import { StepperComponent } from './components/stepper/stepper.component';
@@ -33,7 +33,7 @@ import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { TfrBasicDetailsComponent } from './components/tfrbasic-details/tfr-basic-details.component';
-import { VendorsComponent } from './components/tfrbasic-details/vendors/vendors.component';
+import { ClientsComponent } from './components/tfrbasic-details/clients/clients.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { UserComponent } from './components/user/user.component';
@@ -54,9 +54,9 @@ import { ManageWidgetModalComponent } from './components/manage-widget-modal/man
     AppComponent,
     ChartsComponent,
     ToolbarComponent,
-    WidgetVendorLocationComponent,
+    WidgetClientLocationComponent,
     CanvasJSChart,
-    WidgetVendorProjectCountComponent,
+    WidgetClientProjectCountComponent,
     StepperComponent,
     TfrCreationResourceComponent,
     HomeComponent,
@@ -70,7 +70,7 @@ import { ManageWidgetModalComponent } from './components/manage-widget-modal/man
     UserComponent,
     FrequencyPickerComponent,
     TfrBasicDetailsComponent,
-    VendorsComponent,
+    ClientsComponent,
     ProjectSummaryComponent,
     ResourceTableComponent,
     MilestoneTableComponent,
@@ -85,8 +85,8 @@ import { ManageWidgetModalComponent } from './components/manage-widget-modal/man
 
   providers: [
     ChartsService,
-    WidgetVendorLocationService,
-    WidgetVendorProjectCountService,
+    WidgetClientLocationService,
+    WidgetClientProjectCountService,
     DatePipe,
     {
       provide: HTTP_INTERCEPTORS,

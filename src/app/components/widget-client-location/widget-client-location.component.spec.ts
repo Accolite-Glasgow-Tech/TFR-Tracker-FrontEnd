@@ -1,26 +1,26 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { WidgetVendorLocationComponent } from './widget-vendor-location.component';
-import { WidgetVendorLocationService } from './widget-vendor-location.service';
+import { WidgetClientLocationComponent } from './widget-client-location.component';
+import { WidgetClientLocationService } from './widget-client-location.service';
 
-describe('WidgetVendorLocationComponent', () => {
-  let component: WidgetVendorLocationComponent;
-  let fixture: ComponentFixture<WidgetVendorLocationComponent>;
+describe('WidgetClientLocationComponent', () => {
+  let component: WidgetClientLocationComponent;
+  let fixture: ComponentFixture<WidgetClientLocationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WidgetVendorLocationComponent ],
+      declarations: [ WidgetClientLocationComponent ],
       imports: [ HttpClientTestingModule ],
       providers: [
         {
-          provide: WidgetVendorLocationService,
+          provide: WidgetClientLocationService,
           useValue: jasmine.createSpyObj([''])
         }
       ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(WidgetVendorLocationComponent);
+    fixture = TestBed.createComponent(WidgetClientLocationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

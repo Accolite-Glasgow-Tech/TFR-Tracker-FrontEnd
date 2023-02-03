@@ -1,15 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TFRLocationCountURL } from 'src/app/shared/constants';
+import { clientProjectCountURL } from 'src/app/shared/constants';
 
 @Injectable({
   providedIn: 'root',
 })
-export class WidgetVendorLocationService {
+export class WidgetClientProjectCountService {
   constructor(private http: HttpClient) {}
 
-  readTfrLocationCountUrl(): Observable<any> {
-    return this.http.get(TFRLocationCountURL);
+  readClientProjectCountUrlUrl(): Observable<any> {
+    return this.http.get(clientProjectCountURL);
   }
 }

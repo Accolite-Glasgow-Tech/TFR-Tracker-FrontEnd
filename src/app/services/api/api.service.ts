@@ -9,8 +9,8 @@ import {
   seniorityLevelsURL,
   tasksURL,
   TFRCreationResourceURL,
-  vendorsURL,
-  vendorsURLdupe,
+  clientsURL,
+  clientsURLdupe,
 } from '../../shared/constants';
 import {
   AllocatedResourceTypeDTO,
@@ -21,8 +21,8 @@ import {
   ResourceListType,
   ResourceSkillDTO,
   TaskCreationDTO,
-  VendorAttributeDTO,
-  VendorDTO,
+  ClientAttributeDTO,
+  ClientDTO,
 } from '../../shared/interfaces';
 
 import { getAllocatedResourcesURL, getSkillsURL } from 'src/app/shared/utils';
@@ -58,9 +58,9 @@ export class ApiService {
     );
   }
 
-  getVendorAttributes(vendorId: number): Observable<VendorAttributeDTO[]> {
-    return this.http.get<VendorAttributeDTO[]>(
-      `${environment.backendURL}/vendorAttributes/${vendorId}`
+  getClientAttributes(clientId: number): Observable<ClientAttributeDTO[]> {
+    return this.http.get<ClientAttributeDTO[]>(
+      `${environment.backendURL}/vendorAttributes/${clientId}`
     );
   }
 
@@ -113,14 +113,14 @@ export class ApiService {
   /////////////////////////////////// REFACTOR //////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
 
-  // Duplicate code (getVendors)
-  getAllVendors() {
-    return this.http.get(vendorsURLdupe);
+  // Duplicate code (getClients)
+  getAllClients() {
+    return this.http.get(clientsURLdupe);
   }
 
-  // Duplicate code (getAllVendors)
-  getVendors(): Observable<VendorDTO[]> {
-    return this.http.get<VendorDTO[]>(vendorsURL);
+  // Duplicate code (getAllClients)
+  getClients(): Observable<ClientDTO[]> {
+    return this.http.get<ClientDTO[]>(clientsURL);
   }
 
   // Rename to something like PostProjectSearch
@@ -137,10 +137,10 @@ export class ApiService {
   }
 
   // This is not an API
-  vendorReset = new EventEmitter<boolean>();
+  clientReset = new EventEmitter<boolean>();
 
   // This is not an API
-  resetVendorDetails() {
-    this.vendorReset.emit(true);
+  resetClientDetails() {
+    this.clientReset.emit(true);
   }
 }

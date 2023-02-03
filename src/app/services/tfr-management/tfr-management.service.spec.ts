@@ -16,7 +16,7 @@ import {
   Project,
   ProjectBasicDetails,
   ProjectResourceDTO,
-  VendorDTO,
+  ClientDTO,
 } from 'src/app/shared/interfaces';
 import { DummyProject } from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
@@ -36,9 +36,9 @@ describe('TfrManagementService', () => {
   let projectResources: ProjectResourceDTO[];
   let projectResourcesWithNames: AllocatedResourceTypeDTO[];
   let project: Project;
-  let vendorName: string;
+  let clientName: string;
   let basicDetails: ProjectBasicDetails;
-  let vendors: VendorDTO[];
+  let clients: ClientDTO[];
   let dialogSpy: jasmine.Spy;
   let dialogRefSpyObj = jasmine.createSpyObj({
     afterClosed: of('true'),
@@ -62,7 +62,7 @@ describe('TfrManagementService', () => {
         {
           provide: ApiService,
           useValue: jasmine.createSpyObj('ApiService', [
-            'getVendors',
+            'getClients',
             'postProject',
             'putStatus',
             'putProject',
@@ -102,7 +102,7 @@ describe('TfrManagementService', () => {
       project
     );
 
-    vendors = [
+    clients = [
       {
         id: 1,
         name: 'JP Morgan',
@@ -187,10 +187,10 @@ describe('TfrManagementService', () => {
     expect(service.getProject).toBe(project);
   });
 
-  it('should get Vendor Name', () => {
-    vendorName = 'Morgan Stanley';
-    service.vendorName = vendorName;
-    expect(service.getVendorName).toBe(vendorName);
+  it('should get Client Name', () => {
+    clientName = 'Morgan Stanley';
+    service.clientName = clientName;
+    expect(service.getClientName).toBe(clientName);
   });
 
   it('should get Resources Count', () => {
@@ -214,10 +214,10 @@ describe('TfrManagementService', () => {
 
   it('should set Basic Details', () => {
     apiServiceSpy.putProject.and.returnValue(of(1));
-    apiServiceSpy.getVendors.and.returnValue(of(vendors));
+    apiServiceSpy.getClients.and.returnValue(of(clients));
 
     service.project = project;
-    service.vendorName = 'Morgan Stanley';
+    service.clientName = 'Morgan Stanley';
     service.setBasicDetails(basicDetails);
 
     expect(service.getBasicDetails).toEqual(basicDetails);
@@ -256,7 +256,7 @@ describe('TfrManagementService', () => {
 
   it('should create a new project by setting basic details', () => {
     service.project = undefined;
-    apiServiceSpy.getVendors.and.returnValue(of(vendors));
+    apiServiceSpy.getClients.and.returnValue(of(clients));
     apiServiceSpy.postProject.and.returnValue(of(2));
     service.setBasicDetails(basicDetails);
     console.log('raw basic details:');
@@ -279,8 +279,8 @@ describe('TfrManagementService', () => {
       start_date: new Date('2022-12-24T09:00:00.000+00:00'),
       end_date: new Date('2022-12-09T23:59:59.000+00:00'),
       status: 'INPROGRESS',
-      vendor_id: 3,
-      vendor_specific: {
+      client_id: 3,
+      client_specific: {
         Department: 'Wealth Management',
         'ED/MD': 'Amy Phutty',
       },

@@ -40,13 +40,13 @@
         >
       </mat-form-field>
     </div>
-    <app-vendors
-      (onSelected)="onVendorSelect($event)"
+    <app-clients
+      (onSelected)="onClientSelect($event)"
       (onAttributesUpdated)="onAttributesUpdated($event)"
       (attributesSelected)="onAttributesSelected($event)"
       [editMode]="editMode"
       [existingDetails]="projectToEdit"
-    ></app-vendors>
+    ></app-clients>
   </form>
 </div>
 
@@ -65,8 +65,8 @@
     [disabled]="
       !(
         this.tfrManager.getBasicDetails &&
-        this.vendorGroup &&
-          (this.vendorGroup.dirty || this.tfrDetails.dirty)
+        this.clientGroup &&
+          (this.clientGroup.dirty || this.tfrDetails.dirty)
       )
     "
     class="navigation-btn"
