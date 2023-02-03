@@ -12,13 +12,16 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import {
   AllocatedResourceTypeDTO,
+  ClientDTO,
   Milestone,
   Project,
   ProjectBasicDetails,
   ProjectResourceDTO,
-  ClientDTO,
 } from 'src/app/shared/interfaces';
-import { DummyProject } from 'src/app/types/dummy-data';
+import {
+  DummyAllocatedResources,
+  DummyProject,
+} from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
@@ -87,7 +90,7 @@ describe('TfrManagementService', () => {
     );
     service = TestBed.inject(TfrManagementService);
 
-    project = DummyProject;
+    project = { ...DummyProject };
     milestones = project.milestones;
     projectResources = project.project_resources;
 
@@ -125,29 +128,9 @@ describe('TfrManagementService', () => {
       },
     ];
 
-    projectResourcesWithNames = [
-      {
-        project_id: 1,
-        resource_id: 1,
-        resource_name: 'John Bowers',
-        resource_email: 'johnbowers@accolitedigital.com',
-        seniority: 'JUNIOR',
-        is_deleted: false,
-        role: 'SCRUM_MASTER',
-      },
-      {
-        project_id: 1,
-        resource_id: 3,
-        resource_name: 'Kimberly Gould',
-        resource_email: 'kimberlygould@accolitedigital.com',
-        seniority: 'SENIOR',
-        is_deleted: false,
-        role: 'SOFTWARE_DEVELOPER',
-      },
-    ];
+    projectResourcesWithNames = DummyAllocatedResources;
 
     service.project = project;
-    // console.log(service.project);
 
     apiServiceSpy.postProject.and.returnValue(of(1));
   });
@@ -194,8 +177,7 @@ describe('TfrManagementService', () => {
     expect(service.getClientName).toBe(clientName);
   });
 
-  fit('should get Resources Count', () => {
-    console.log(service.project);
+  it('should get Resources Count', () => {
     expect(service.getResourcesCount).toBe(4);
   });
 
@@ -214,15 +196,29 @@ describe('TfrManagementService', () => {
     expect(service.getBasicDetails).toEqual(basicDetails);
   });
 
-  it('should set Basic Details', () => {
+  it('should compareBasicDetails - same object', () => {
+    let result = service.compareBasicDetails(basicDetails);
+
+    expect(service.project).toEqual(project);
+    expect(service.getBasicDetails).toEqual(basicDetails);
+    expect(result).toBe(true);
+  });
+
+  it('should set Basic Details - Project already defined', () => {
     apiServiceSpy.putProject.and.returnValue(of(1));
     apiServiceSpy.getClients.and.returnValue(of(clients));
-
     service.project = project;
-    service.clientName = 'Morgan Stanley';
-    service.setBasicDetails(basicDetails);
 
-    expect(service.getBasicDetails).toEqual(basicDetails);
+    basicDetails.name = 'Portfolio Management Project';
+    service.setBasicDetails(basicDetails);
+    expect(service.project?.name).toBe(basicDetails.name);
+  });
+
+  it('should update project to db - success', () => {
+    apiServiceSpy.putProject.and.returnValue(of(1));
+    service.project = project;
+    service.updateProjectToDatabase();
+    expect(service.project.version).toBe(1);
   });
 
   it('should update project to db - failure bad versioning', () => {

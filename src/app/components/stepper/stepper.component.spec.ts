@@ -9,7 +9,10 @@ import { ResourceService } from 'src/app/services/resource/resource.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
-import { DummyProject } from 'src/app/types/dummy-data';
+import {
+  DummyAllocatedResources,
+  DummyProject,
+} from 'src/app/types/dummy-data';
 import { StepperComponent } from './stepper.component';
 
 describe('StepperComponent', () => {
@@ -41,26 +44,8 @@ describe('StepperComponent', () => {
 
   const dummyProject: Project = DummyProject;
 
-  const dummyAllocatedResource: AllocatedResourceTypeDTO[] = [
-    {
-      project_id: 1,
-      resource_id: 1,
-      resource_name: 'John Bowers',
-      resource_email: 'johnbowers@accolitedigital.com',
-      seniority: 'SENIOR',
-      is_deleted: false,
-      role: 'SCRUM MASTER',
-    },
-    {
-      project_id: 1,
-      resource_id: 3,
-      resource_name: 'Kimberly Gould',
-      resource_email: 'kimberlygould@accolitedigital.com',
-      seniority: 'JUNIOR',
-      is_deleted: false,
-      role: 'SOFTWARE DEVELOPER',
-    },
-  ];
+  const dummyAllocatedResource: AllocatedResourceTypeDTO[] =
+    DummyAllocatedResources;
 
   async function setUpSuccess() {
     responseObj = {
@@ -163,60 +148,6 @@ describe('StepperComponent', () => {
     createComponent();
   }
 
-  async function setUpFailureProjectNotFound() {
-    responseObj = {
-      project: new HttpResponse<Project>({
-        body: dummyProject,
-        status: 404,
-      }),
-    };
-
-    await TestBed.configureTestingModule({
-      declarations: [StepperComponent],
-      providers: [
-        FormBuilder,
-        {
-          provide: Router,
-          useValue: routerSpy,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return '13';
-                },
-              },
-            },
-            paramMap: of(convertToParamMap({ id: '13' })),
-            data: of(responseObj),
-          },
-        },
-        {
-          provide: SnackBarService,
-          useValue: snackBarServiceSpy,
-        },
-        {
-          provide: BreakpointObserver,
-          useValue: breakPointSpy,
-        },
-        {
-          provide: ResourceService,
-          useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
-        },
-        {
-          provide: ApiService,
-          useValue: jasmine.createSpyObj('ApiService', [
-            'getResourcesNamesByProjectIdFromDatabase',
-          ]),
-        },
-      ],
-    }).compileComponents();
-
-    createComponent();
-  }
-
   function createComponent() {
     fixture = TestBed.createComponent(StepperComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
@@ -264,8 +195,9 @@ describe('StepperComponent', () => {
   });
 
   it('load fail, project does not exist', async () => {
-    await setUpFailureProjectNotFound();
+    await setUpSuccess();
     fixture.detectChanges();
+    component.getProjectObserver.error();
     expect(tfrManagementServiceSpy.apiError).toBe(true);
     expect(component).toBeTruthy();
   });
