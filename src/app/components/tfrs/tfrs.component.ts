@@ -25,16 +25,16 @@ import { ApiService } from 'src/app/services/api/api.service';
   selector: 'app-tfrs',
   templateUrl: './tfrs.component.html',
   styleUrls: ['./tfrs.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
-    ]),
-  ],
+  // animations: [
+  //   trigger('detailExpand', [
+  //     state('collapsed', style({ height: '0px', minHeight: '0' })),
+  //     state('expanded', style({ height: '*' })),
+  //     transition(
+  //       'expanded <=> collapsed',
+  //       animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+  //     ),
+  //   ]),
+  // ],
 })
 export class TfrsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
