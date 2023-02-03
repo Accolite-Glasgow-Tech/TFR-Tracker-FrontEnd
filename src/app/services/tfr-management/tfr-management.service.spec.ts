@@ -254,7 +254,7 @@ describe('TfrManagementService', () => {
     );
   });
 
-  fit('should create a new project by setting basic details', () => {
+  it('should create a new project by setting basic details', () => {
     service.project = undefined;
     apiServiceSpy.getVendors.and.returnValue(of(vendors));
     apiServiceSpy.postProject.and.returnValue(of(2));
@@ -353,7 +353,7 @@ describe('TfrManagementService', () => {
     result.subscribe((response) => expect(response).toBe(true));
   });
 
-  fit('should set resources count', () => {
+  it('should set resources count', () => {
     service.setResourcesCount(1);
     expect(service.project?.resources_count).toBe(1);
   });
