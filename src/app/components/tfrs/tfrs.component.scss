@@ -2,13 +2,29 @@
   display: flex;
   flex-direction: column;
   max-height: 500px;
-  min-width: 600px;
 }
 .mat-table {
   overflow: auto;
   max-height: 500px;
-  min-width: 600px;
+  min-width: 100%;
+  padding: 10px;
 }
+
+.mat-column-start_date {
+  @media all 
+  and (max-width: 800px) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    display: none;
+  }
+}
+.mat-column-end_date {
+  @media all 
+  and (max-width: 800px) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    display: none;
+  }
+}
+
 .search-filters-container {
   display: flex;
   margin: 15px;
@@ -80,6 +96,14 @@ tr.detail-row {
   font-size: large;
   font-weight: 500;
 
+}
+
+.optional-text {
+  @media all 
+  and (max-width: 800px) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    display: none;
+  }
 }
 
 

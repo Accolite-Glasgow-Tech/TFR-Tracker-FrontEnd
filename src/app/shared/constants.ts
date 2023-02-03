@@ -7,7 +7,7 @@ export const allProjectsURL = `${backendURL}/search/project/all`;
 export const TFRLocationCountURL = `${backendURL}/tfrLocationCount`;
 export const TFRStatusCountURL = `${backendURL}/projects/statusCount`;
 export const clientsURL = `${backendURL}/vendors`;
-export const clientsURLdupe = `${backendURL}/search/vendors/all`;
+export const clientsURLdupe = `${backendURL}/search/clients/all`;
 export const projectSearchURL = `${backendURL}/search/project`;
 export const registrationURL = `${backendURL}/register`;
 export const loginURL = `${backendURL}/login`;
@@ -18,7 +18,7 @@ export const approachingProjectsURL = `${backendURL}/ProjectsStartingInAWeek`;
 export const clientProjectCountURL = `${backendURL}/VendorProjectCount`;
 export const seniorityLevelsURL = `${backendURL}/resources/seniorityLevels`;
 
-export const dateFormat = 'MM/dd/YYYY';
+export const dateFormat = 'MM/dd/YY';
 export const statusList = ['DRAFT', 'INPROGRESS', 'ARCHIVED', 'DELIVERED'];
 
 export const daysOfWeek: string[] = [

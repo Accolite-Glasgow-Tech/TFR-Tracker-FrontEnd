@@ -45,10 +45,9 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     'link',
   ];
 
-  displayedColumnsWithExpand: string[] = [...this.displayedColumns, 'expand'];
-  expandedElement: any;
-  ELEMENT_DATA: ProjectDTO[] = [];
-
+  // displayedColumnsWithExpand: string[] = [...this.displayedColumns, 'expand'];
+  // expandedElement: any;
+  ELEMENT_DATA: any = [];
   projectList: MatTableDataSource<ProjectDTO> = new MatTableDataSource(
     this.ELEMENT_DATA
   );
@@ -96,6 +95,7 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     this.ApiService.getAllClients().subscribe((allClients) => {
       this.clients = allClients;
     });
+    console.log(this.projectList)
   }
 
   getProjects(): void {
