@@ -147,7 +147,6 @@ describe('TfrManagementService', () => {
     ];
 
     service.project = project;
-    // console.log(service.project);
 
     apiServiceSpy.postProject.and.returnValue(of(1));
   });
@@ -195,7 +194,6 @@ describe('TfrManagementService', () => {
   });
 
   it('should get Resources Count', () => {
-    console.log(service.project);
     expect(service.getResourcesCount).toBe(4);
   });
 

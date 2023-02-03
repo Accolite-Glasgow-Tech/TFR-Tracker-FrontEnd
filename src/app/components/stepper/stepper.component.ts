@@ -11,6 +11,7 @@ import { ResourceService } from 'src/app/services/resource/resource.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
+import { log } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-stepper',
@@ -158,6 +159,7 @@ export class StepperComponent implements OnInit {
     if (stepNumber >= 0) {
       this.stepsValid[stepNumber] = completed;
     }
+    log(this.stepsValid);
   }
 
   /*

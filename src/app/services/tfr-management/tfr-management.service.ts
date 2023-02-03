@@ -236,7 +236,6 @@ export class TfrManagementService {
   }
 
   putMilestones(milestones: Milestone[]): Observable<{}> {
-    console.log(this.projectStripTempIds(milestones));
     return this.project == undefined
       ? new Observable<{}>((subscriber) => {
           subscriber.error('project undefined');
