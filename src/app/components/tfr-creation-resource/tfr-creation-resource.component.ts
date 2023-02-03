@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -14,12 +15,14 @@ import {
   map,
   startWith,
 } from 'rxjs/operators';
+import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   AllocatedResourceTypeDTO,
   ProjectResourceDTO,
   ResourceListType,
+  ResourceSkillDTO,
 } from 'src/app/shared/interfaces';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
@@ -52,13 +55,15 @@ export class TfrCreationResourceComponent implements OnInit {
   constructor(
     protected resourceService: ResourceService,
     protected tfrManagementService: TfrManagementService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    @Inject(ApiService) private apiService: ApiService
   ) {}
 
   resourceFormGroup!: FormGroup;
   resourcesCountFormGroup!: FormGroup;
   resourcesCount: number = 1;
   resources!: ResourceListType[];
+  currentResourceSkills: ResourceSkillDTO[] = [];
   seniorityLevels!: string[];
   filteredResourceOption!: Observable<ResourceListType[]>;
   filteredRoleOption!: Observable<string[]>;
@@ -94,6 +99,15 @@ export class TfrCreationResourceComponent implements OnInit {
 
       this.resetFormGroup();
       this.resourceDetailsUpdated = false;
+    },
+  };
+
+  getResourceSkillObserver = {
+    next: (data: ResourceSkillDTO[]) => {
+      this.currentResourceSkills = data;
+    },
+    error: (err: HttpErrorResponse) => {
+      this.currentResourceSkills = [];
     },
   };
 
@@ -147,7 +161,7 @@ export class TfrCreationResourceComponent implements OnInit {
     /*
       API call to retrieve all the seniority levels that a resource can be
     */
-    this.resourceService.getAllSeniorityLevels().subscribe((data: string[]) => {
+    this.apiService.getAllSeniorityLevels().subscribe((data: string[]) => {
       this.seniorityLevels = data;
     });
 
@@ -160,51 +174,49 @@ export class TfrCreationResourceComponent implements OnInit {
       this project. Upon receiving the payload, this boolean is FALSE for all 
       resources
     */
-    this.resourceService
-      .getAllResources()
-      .subscribe((data: ResourceListType[]) => {
-        this.resources = data;
+    this.apiService.getAllResources().subscribe((data: ResourceListType[]) => {
+      this.resources = data;
 
-        /*
+      /*
           Adding the custom validator for the auto complete functionality 
           for the resource name input field.
         */
-        this.resourceFormGroup.controls['resource_name'].addValidators([
-          autoCompleteResourceNameValidator(this.resources),
-        ]);
+      this.resourceFormGroup.controls['resource_name'].addValidators([
+        autoCompleteResourceNameValidator(this.resources),
+      ]);
 
-        /*
+      /*
           Event listener when there is a letter inserted in the resource name
           input field. The list of options showed to the user gets updated based
           on the letters he is inserting.
         */
-        this.filteredResourceOption = this.resourceFormGroup.controls[
-          'resource_name'
-        ].valueChanges.pipe(
-          startWith(''),
-          map((value) => this.filterResource(value || ''))
-        );
+      this.filteredResourceOption = this.resourceFormGroup.controls[
+        'resource_name'
+      ].valueChanges.pipe(
+        startWith(''),
+        map((value) => this.filterResource(value || ''))
+      );
 
-        /*
+      /*
           this variable holds the lsit of the resources that are associated
           with the current project. Each value of the list is the current 
           project_id, resource_id and the resource associated role for this 
           project
         */
-        let temp: ProjectResourceDTO[] | undefined =
-          this.tfrManagementService.getProjectResources;
+      let temp: ProjectResourceDTO[] | undefined =
+        this.tfrManagementService.getProjectResources;
 
-        /*
+      /*
           If this temp variable is undefined, this means that the user is 
           creating a new project. 
 
           If this temp variable is NOT undefined, then this means that the 
           user is editing an existing project
         */
-        if (temp !== undefined) {
-          this.savedAllocatedResource = temp;
+      if (temp !== undefined) {
+        this.savedAllocatedResource = temp;
 
-          /*
+        /*
             Since this existing project has already some resources allocated 
             to it, the current allocated resource list (initially empty) 
             should be populated with these values and the resources' selected 
@@ -212,23 +224,23 @@ export class TfrCreationResourceComponent implements OnInit {
             the auto complete resource name input field will
             not display these already allocated resources.
           */
-          this.updateResourceList();
+        this.updateResourceList();
 
-          /*
+        /*
             Updating the current service object with the allocated resources
             object which contains project_id, resources' id, name, name, role.
           */
-          this.tfrManagementService.setProjectResourcesWithNames(
-            this.allocatedResources
-          );
+        this.tfrManagementService.setProjectResourcesWithNames(
+          this.allocatedResources
+        );
 
-          /*
+        /*
             Since some resources have already been allocated, need to emit
             this to the parent component (aka stepper component).
           */
-          // this.stepCompletedEmitter.emit(true);
-        }
-      });
+        // this.stepCompletedEmitter.emit(true);
+      }
+    });
   }
 
   /*
@@ -330,6 +342,8 @@ export class TfrCreationResourceComponent implements OnInit {
     this.resourceFormGroup.controls['role'].setErrors(null);
     this.resourceFormGroup.controls['seniorityLevel'].setErrors(null);
 
+    this.currentResourceSkills = [];
+
     this.resourceFormGroup
       .get('resources_count')
       ?.setValue(this.resourcesCount, { emitEvent: false });
@@ -414,7 +428,7 @@ export class TfrCreationResourceComponent implements OnInit {
     Reset the allocated resources to previous state in database
   */
   resetResources() {
-    this.tfrManagementService
+    this.apiService
       .getResourcesNamesByProjectIdFromDatabase(
         this.tfrManagementService.getProjectId as Number
       )
@@ -438,5 +452,11 @@ export class TfrCreationResourceComponent implements OnInit {
         this.resourcesCount = val;
         this.resourceDetailsUpdated = true;
       });
+  }
+
+  getSkills(resource_id: number) {
+    this.apiService
+      .getSkillsByResourceId(resource_id)
+      .subscribe(this.getResourceSkillObserver);
   }
 }

@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
 
@@ -33,7 +34,7 @@ export class TfrComponent implements OnInit {
       let project: Project = response['project']['body'];
       if (status === 200) {
         this.tfrManagementService.project = project;
-        this.tfrManagementService
+        this.apiService
           .getResourcesNamesByProjectIdFromDatabase(project.id)
           .subscribe(this.getResourceNameObserver);
         this.tfrManagementService.setVendorName(project.vendor_id);
@@ -47,7 +48,8 @@ export class TfrComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     @Inject(TfrManagementService)
-    protected tfrManagementService: TfrManagementService
+    protected tfrManagementService: TfrManagementService,
+    @Inject(ApiService) private apiService: ApiService
   ) {}
 
   ngOnInit() {

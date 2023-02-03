@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { filter, from, map, Observable, of } from 'rxjs';
+import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
@@ -23,6 +24,7 @@ describe('StepperComponent', () => {
     'showSnackBar',
   ]);
   let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
+  let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
   const matchObj = [{ matchStr: '(min-width: 800px)', result: false }];
   const fakeObserve = (s: string[]): Observable<BreakpointState> =>
@@ -102,6 +104,12 @@ describe('StepperComponent', () => {
           provide: ResourceService,
           useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
         },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesNamesByProjectIdFromDatabase',
+          ]),
+        },
       ],
     }).compileComponents();
 
@@ -142,6 +150,12 @@ describe('StepperComponent', () => {
         {
           provide: ResourceService,
           useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
+        },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesNamesByProjectIdFromDatabase',
+          ]),
         },
       ],
     }).compileComponents();
@@ -191,6 +205,12 @@ describe('StepperComponent', () => {
           provide: ResourceService,
           useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
         },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesNamesByProjectIdFromDatabase',
+          ]),
+        },
       ],
     }).compileComponents();
 
@@ -206,8 +226,10 @@ describe('StepperComponent', () => {
     resourceServiceSpy = TestBed.inject(
       ResourceService
     ) as jasmine.SpyObj<ResourceService>;
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
+
     TestBed.inject(BreakpointObserver);
-    tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
+    apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
       of(dummyAllocatedResource)
     );
 
@@ -222,7 +244,6 @@ describe('StepperComponent', () => {
           {
             provide: TfrManagementService,
             useValue: jasmine.createSpyObj('TfrManagementService', [
-              'getResourcesNamesByProjectIdFromDatabase',
               'setVendorName',
               'updateStatusToDatabase',
             ]),
@@ -237,7 +258,7 @@ describe('StepperComponent', () => {
     fixture.detectChanges();
     expect(tfrManagementServiceSpy.setVendorName.calls.count()).toBe(1);
     expect(
-      tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
+      apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
     ).toBe(1);
     expect(component).toBeTruthy();
   });

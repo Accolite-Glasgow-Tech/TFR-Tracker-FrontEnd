@@ -6,6 +6,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
@@ -69,7 +70,7 @@ export class StepperComponent implements OnInit {
         let project: Project = response['project']['body'];
         if (status === 200) {
           this.tfrManagementService.project = project;
-          this.tfrManagementService
+          this.apiService
             .getResourcesNamesByProjectIdFromDatabase(project.id)
             .subscribe(this.getResourceNameObserver);
           this.tfrManagementService.setVendorName(project.vendor_id);
@@ -88,7 +89,8 @@ export class StepperComponent implements OnInit {
     private snackBarService: SnackBarService,
     private router: Router,
     private route: ActivatedRoute,
-    private resourceService: ResourceService
+    private resourceService: ResourceService,
+    private apiService: ApiService
   ) {
     /*
       Listener for the screen size.
