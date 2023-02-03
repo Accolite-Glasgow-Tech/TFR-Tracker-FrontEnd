@@ -194,7 +194,7 @@ describe('TfrManagementService', () => {
     expect(service.getClientName).toBe(clientName);
   });
 
-  fit('should get Resources Count', () => {
+  it('should get Resources Count', () => {
     console.log(service.project);
     expect(service.getResourcesCount).toBe(4);
   });
