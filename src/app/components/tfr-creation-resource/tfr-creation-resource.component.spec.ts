@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl, FormBuilder } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -10,9 +9,9 @@ import { TfrManagementService } from 'src/app/services/tfr-management/tfr-manage
 import {
   AllocatedResourceTypeDTO,
   dialogContent,
+  DisplaySkillDTO,
   ProjectResourceDTO,
   ResourceListType,
-  ResourceSkillDTO,
 } from 'src/app/shared/interfaces';
 import { DummyAllocatedResources } from 'src/app/types/dummy-data';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
@@ -142,7 +141,9 @@ describe('TfrCreationResourceComponent', () => {
       dummyAllocatedResource
     );
     tfrManagementServiceSpy.setProjectResourcesWithNames.and.returnValue();
-    tfrManagementServiceSpy.updateProjectToResourceMapping.and.returnValue();
+    tfrManagementServiceSpy.updateProjectToResourceMapping.and.returnValue(
+      of(true)
+    );
     apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
       of(dummyAllocatedResource)
     );
@@ -207,8 +208,6 @@ describe('TfrCreationResourceComponent', () => {
     (tfrManagementServiceSpy as any).getProjectId = 1;
     component.addResource('John Bowers', 'SCRUM MASTER', 'SENIOR');
 
-    fixture.detectChanges();
-
     expect(component.resourceDetailsUpdated).toBe(true);
     expect(component.resources[0].selected).toBe(true);
     expect(component.allocatedResources.length).toBe(1);
@@ -239,7 +238,6 @@ describe('TfrCreationResourceComponent', () => {
 
     component.allocatedResources = dummyAllocatedResource;
     expect(component.allocatedResources).toEqual(dummyAllocatedResource);
-    fixture.detectChanges();
     component.removeResource(projectResourcesWithNames[0]);
     projectResourcesWithNames[0].is_deleted = true;
 
@@ -256,7 +254,6 @@ describe('TfrCreationResourceComponent', () => {
     spyOn(component, 'showDialog');
     component.resourceDetailsUpdated = true;
     component.triggerStep(true);
-    fixture.detectChanges();
     expect(component.showDialog).toHaveBeenCalled();
   });
 
@@ -264,7 +261,6 @@ describe('TfrCreationResourceComponent', () => {
     spyOn(component, 'nextStep');
     component.resourceDetailsUpdated = false;
     component.triggerStep(true);
-    fixture.detectChanges();
     expect(component.nextStep).toHaveBeenCalled();
   });
 
@@ -280,27 +276,30 @@ describe('TfrCreationResourceComponent', () => {
     });
 
     component.nextStep(true);
-    fixture.detectChanges();
   });
 
   it('call service to save to database', () => {
     component.saveToDatabase();
-    fixture.detectChanges();
     expect(component.resourceDetailsUpdated).toBe(false);
   });
 
   it('reset all resources', () => {
     component.resetResources();
-    fixture.detectChanges();
     expect(component.allocatedResources).toEqual(projectResourcesWithNames);
     expect(component.resources.length).toBe(2);
-    expect(component.resources[0].selected).toBe(true);
+    expect(component.resourceDetailsUpdated).toBe(false);
+  });
+
+  it('reset all resources - resource count = 0', () => {
+    (tfrManagementServiceSpy as any).getResourcesCount = 0;
+    component.resetResources();
+
+    expect(component.resourcesCount).toBe(1);
     expect(component.resourceDetailsUpdated).toBe(false);
   });
 
   it('show Dialog box', () => {
     component.showDialog(true);
-    fixture.detectChanges();
     let dialogContent: { data: dialogContent } = {
       data: {
         title: 'Discard Changes',
@@ -317,29 +316,25 @@ describe('TfrCreationResourceComponent', () => {
   });
 
   it('should retrieve resource skills by resource id - success', () => {
-    let resourceSkills: ResourceSkillDTO[] = [
+    let resourceSkills: DisplaySkillDTO[] = [
       {
-        resource_id: 1,
-        skill: 'Java',
-        experience: 1,
-      },
-      {
-        resource_id: 1,
         skill: 'Python',
         experience: 4,
+        percentage: 100.0,
+      },
+      {
+        skill: 'Java',
+        experience: 1,
+        percentage: 25.0,
       },
     ];
     apiServiceSpy.getSkillsByResourceId.and.returnValue(of(resourceSkills));
-    component.getSkills(1);
+    component.getSkills(resources[0]);
     expect(component.currentResourceSkills).toEqual(resourceSkills);
   });
 
   it('should retrieve resource skills by resource id - server error', () => {
-    component.getResourceSkillObserver.error(
-      new HttpErrorResponse({
-        status: 500,
-      })
-    );
+    component.getResourceSkillObserver.error();
     expect(component.currentResourceSkills).toEqual([]);
   });
 });

@@ -98,7 +98,7 @@ export class StepperComponent implements OnInit {
       .pipe(
         map(({ matches }) =>
           matches
-            ? ['TFR Basic Details', 'Milestones', 'Resources', 'Summary']
+            ? ['TFR Basic Details', 'Milestones', 'Resources', 'TFR Submission']
             : ['', '', '', '']
         )
       );

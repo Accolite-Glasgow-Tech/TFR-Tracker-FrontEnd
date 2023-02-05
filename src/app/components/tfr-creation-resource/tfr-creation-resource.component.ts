@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
@@ -20,9 +19,9 @@ import { ResourceService } from 'src/app/services/resource/resource.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   AllocatedResourceTypeDTO,
+  DisplaySkillDTO,
   ProjectResourceDTO,
   ResourceListType,
-  ResourceSkillDTO,
 } from 'src/app/shared/interfaces';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
@@ -63,7 +62,8 @@ export class TfrCreationResourceComponent implements OnInit {
   resourcesCountFormGroup!: FormGroup;
   resourcesCount: number = 1;
   resources!: ResourceListType[];
-  currentResourceSkills: ResourceSkillDTO[] = [];
+  currentResourceSkills: DisplaySkillDTO[] = [];
+  currentResourceName!: string;
   seniorityLevels!: string[];
   filteredResourceOption!: Observable<ResourceListType[]>;
   filteredRoleOption!: Observable<string[]>;
@@ -103,10 +103,10 @@ export class TfrCreationResourceComponent implements OnInit {
   };
 
   getResourceSkillObserver = {
-    next: (data: ResourceSkillDTO[]) => {
+    next: (data: DisplaySkillDTO[]) => {
       this.currentResourceSkills = data;
     },
-    error: (err: HttpErrorResponse) => {
+    error: () => {
       this.currentResourceSkills = [];
     },
   };
@@ -214,6 +214,7 @@ export class TfrCreationResourceComponent implements OnInit {
           user is editing an existing project
         */
       if (temp !== undefined) {
+        this.stepCompletedEmitter.emit(true);
         this.savedAllocatedResource = temp;
 
         /*
@@ -457,9 +458,10 @@ export class TfrCreationResourceComponent implements OnInit {
       });
   }
 
-  getSkills(resource_id: number) {
+  getSkills(selectedResource: ResourceListType) {
+    this.currentResourceName = selectedResource.resource_name;
     this.apiService
-      .getSkillsByResourceId(resource_id)
+      .getSkillsByResourceId(selectedResource.resource_id)
       .subscribe(this.getResourceSkillObserver);
   }
 }

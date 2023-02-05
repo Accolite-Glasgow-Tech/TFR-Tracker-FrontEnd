@@ -6,7 +6,7 @@ import {
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Data, Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
 import {
   AllocatedResourceTypeDTO,
@@ -28,7 +28,7 @@ import { SnackBarService } from '../snack-bar/snack-bar.service';
 export class TfrManagementService {
   public project!: Project | undefined;
   projectResourcesWithNames!: AllocatedResourceTypeDTO[];
-  subject = new Subject<boolean>();
+  subject = new BehaviorSubject<boolean>(true);
 
   clientName: string = '';
   apiError: boolean = false;
@@ -66,6 +66,24 @@ export class TfrManagementService {
           4000
         );
       }
+      this.subject.next(false);
+    },
+  };
+
+  createProjectObserver = {
+    next: (response: any) => {
+      if (this.project) {
+        this.project.id = Number(response);
+        this.project.version++;
+        this.snackBarService.showSnackBar('Saved to database', 2000);
+        this.subject.next(true);
+      }
+    },
+    error: () => {
+      this.snackBarService.showSnackBar(
+        'Save Unsuccessful. Server Error',
+        4000
+      );
       this.subject.next(false);
     },
   };
@@ -131,8 +149,17 @@ export class TfrManagementService {
     return undefined;
   }
 
-  setBasicDetails(projectBasicDetails: ProjectBasicDetails) {
-    if (!this.compareBasicDetails(projectBasicDetails)) {
+  setBasicDetails(
+    projectBasicDetails: ProjectBasicDetails,
+    previousUpdateSuccessful: boolean
+  ): Observable<boolean> {
+    if (
+      !(
+        previousUpdateSuccessful &&
+        this.compareBasicDetails(projectBasicDetails)
+      )
+    ) {
+      this.setClientName(projectBasicDetails.client_id);
       if (this.project === undefined) {
         this.project = {
           id: NaN,
@@ -153,7 +180,7 @@ export class TfrManagementService {
           modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
           notes: '',
         };
-        this.createProjectInDatabase();
+        return this.createProjectInDatabase();
       } else {
         this.project.name = projectBasicDetails.name;
         this.project.start_date = projectBasicDetails.start_date;
@@ -161,26 +188,24 @@ export class TfrManagementService {
         this.project.client_id = projectBasicDetails.client_id;
         this.project.client_specific = projectBasicDetails.client_specific;
         this.project.status = projectBasicDetails.status;
-        this.updateProjectToDatabase();
+        return this.updateProjectToDatabase();
       }
-      this.setClientName(projectBasicDetails.client_id);
     }
+    return of(true);
   }
 
-  createProjectInDatabase() {
-    this.apiService.postProject(this.project).subscribe((response) => {
-      if (this.project) {
-        this.project.id = Number(response);
-        this.project.version++;
-        this.snackBarService.showSnackBar('Saved to database', 2000);
-      }
-    });
+  createProjectInDatabase(): Observable<boolean> {
+    this.apiService
+      .postProject(this.project)
+      .subscribe(this.createProjectObserver);
+    return this.subject.asObservable();
   }
 
-  updateProjectToDatabase() {
+  updateProjectToDatabase(): Observable<boolean> {
     this.apiService
       .putProject(this.project)
       .subscribe(this.updateProjectToDatabaseObserver);
+    return this.subject.asObservable();
   }
 
   setClientName(client_id: number) {

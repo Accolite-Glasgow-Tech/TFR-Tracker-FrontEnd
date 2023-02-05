@@ -187,8 +187,8 @@ export interface dialogContent {
   cancelText: string;
 }
 
-export interface ResourceSkillDTO {
-  resource_id: number;
+export interface DisplaySkillDTO {
   skill: string;
   experience: number;
+  percentage: number;
 }

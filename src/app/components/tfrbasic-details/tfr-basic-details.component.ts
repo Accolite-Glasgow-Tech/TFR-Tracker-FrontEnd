@@ -5,9 +5,9 @@ import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 
 import {
-  ProjectBasicDetails,
   ClientAttributeDTO,
   ClientDTO,
+  ProjectBasicDetails,
 } from 'src/app/shared/interfaces';
 import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
@@ -34,6 +34,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   client_specificData: { [key: string]: string } = {};
   editMode: Boolean = false;
   projectToEdit!: ProjectBasicDetails;
+  previousUpdateSuccessful: boolean = true;
   @Output() editModeEmitter = new EventEmitter<boolean>();
 
   ngOnInit(): void {
@@ -87,9 +88,15 @@ export class TfrBasicDetailsComponent implements OnInit {
       client_specific: this.client_specificData,
       status: this.editMode ? this.projectToEdit.status : 'DRAFT',
     };
-    this.tfrManager.setBasicDetails(updatedProjectDetails);
-    this.tfrDetails.markAsPristine();
-    this.clientGroup.markAsPristine();
+    this.tfrManager
+      .setBasicDetails(updatedProjectDetails, this.previousUpdateSuccessful)
+      .subscribe((response) => {
+        this.previousUpdateSuccessful = response;
+        if (response) {
+          this.tfrDetails.markAsPristine();
+          this.clientGroup.markAsPristine();
+        }
+      });
   }
 
   onClientSelect(client: ClientDTO) {

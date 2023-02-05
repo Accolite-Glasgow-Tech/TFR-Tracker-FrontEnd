@@ -3,26 +3,26 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   allProjectsURL,
+  clientsURL,
+  clientsURLdupe,
   projectSearchURL,
   projectsURL,
   resourceProjectsURL,
   seniorityLevelsURL,
   tasksURL,
   TFRCreationResourceURL,
-  clientsURL,
-  clientsURLdupe,
 } from '../../shared/constants';
 import {
   AllocatedResourceTypeDTO,
+  ClientAttributeDTO,
+  ClientDTO,
+  DisplaySkillDTO,
   Project,
   ProjectDTO,
   ProjectMilestoneDTO,
   ResourceDTO,
   ResourceListType,
-  ResourceSkillDTO,
   TaskCreationDTO,
-  ClientAttributeDTO,
-  ClientDTO,
 } from '../../shared/interfaces';
 
 import { getAllocatedResourcesURL, getSkillsURL } from 'src/app/shared/utils';
@@ -64,7 +64,6 @@ export class ApiService {
     );
   }
 
-  // Is there a reason that we need to read the httpResponse rather than the project itself?
   getProject(projectId: Number): Observable<HttpResponse<Project>> {
     return this.http.get<Project>(`${projectsURL}/${projectId}`, {
       observe: 'response',
@@ -79,8 +78,8 @@ export class ApiService {
     return this.http.get<ProjectDTO[]>(allProjectsURL);
   }
 
-  getSkillsByResourceId(resourceId: number): Observable<ResourceSkillDTO[]> {
-    return this.http.get<ResourceSkillDTO[]>(getSkillsURL(resourceId));
+  getSkillsByResourceId(resourceId: number): Observable<DisplaySkillDTO[]> {
+    return this.http.get<DisplaySkillDTO[]>(getSkillsURL(resourceId));
   }
 
   getAllResources(): Observable<ResourceListType[]> {

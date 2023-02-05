@@ -1,3 +1,10 @@
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -8,18 +15,11 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import * as FileSaver from 'file-saver';
+import { ApiService } from 'src/app/services/api/api.service';
+import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
 import { statusList } from 'src/app/shared/constants';
 import { ProjectDTO } from 'src/app/shared/interfaces';
 import { getPDFReportURL } from 'src/app/shared/utils';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
-import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
-import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'app-tfrs',
@@ -95,7 +95,6 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     this.ApiService.getAllClients().subscribe((allClients) => {
       this.clients = allClients;
     });
-    console.log(this.projectList)
   }
 
   getProjects(): void {
