@@ -8,8 +8,7 @@ import { userService } from '../../user/user.service';
   providedIn: 'root',
 })
 export class LoginGuardService implements CanActivate {
-  constructor(private router: Router,
-    private userService: userService) {}
+  constructor(private router: Router, private userService: userService) {}
 
   /**
    * Allows activation if User is logged in OR if guarding is disabled
@@ -17,7 +16,6 @@ export class LoginGuardService implements CanActivate {
   canActivate(): boolean {
     let activated = this.checkIfComponentCanBeActivated();
     if (!activated) {
-      console.log('called');
       this.navigateToValid();
     }
     return activated;
@@ -32,10 +30,6 @@ export class LoginGuardService implements CanActivate {
   }
 
   checkIfComponentCanBeActivated(): boolean {
-    return (
-      this.userService.isLoggedIn() ||
-      environment.routeGuardingDisabled
-    );
+    return this.userService.isLoggedIn() || environment.routeGuardingDisabled;
   }
-
 }

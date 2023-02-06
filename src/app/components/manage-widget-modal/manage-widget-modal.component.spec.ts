@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ManageWidgetModalComponent } from './manage-widget-modal.component';
 
@@ -8,9 +9,14 @@ describe('ManageWidgetModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ManageWidgetModalComponent ]
-    })
-    .compileComponents();
+      declarations: [ManageWidgetModalComponent],
+      providers: [
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: jasmine.createSpyObj(['']),
+        },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ManageWidgetModalComponent);
     component = fixture.componentInstance;

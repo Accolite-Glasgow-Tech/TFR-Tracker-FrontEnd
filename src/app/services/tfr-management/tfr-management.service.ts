@@ -6,17 +6,17 @@ import {
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Data, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
 import {
   AllocatedResourceTypeDTO,
+  ClientDTO,
   Milestone,
   MilestoneDTO,
   Project,
   ProjectBasicDetails,
   ProjectMilestoneDTO,
   ProjectResourceDTO,
-  VendorDTO,
 } from 'src/app/shared/interfaces';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
@@ -28,8 +28,9 @@ import { SnackBarService } from '../snack-bar/snack-bar.service';
 export class TfrManagementService {
   public project!: Project | undefined;
   projectResourcesWithNames!: AllocatedResourceTypeDTO[];
+  subject = new BehaviorSubject<boolean>(true);
 
-  vendorName: string = '';
+  clientName: string = '';
   apiError: boolean = false;
 
   updateProjectToDatabaseObserver = {
@@ -38,19 +39,12 @@ export class TfrManagementService {
         this.project.version = Number(response);
       }
       this.snackBarService.showSnackBar('Updates saved to database', 2000);
+      this.subject.next(true);
     },
     error: (err: HttpErrorResponse) => {
-      let dialogRef!: MatDialogRef<TfrCreationDialogComponent, any>;
-      if (err.status === 500) {
-        dialogRef = this.dialog.open(TfrCreationDialogComponent, {
-          data: {
-            title: 'Server error',
-            content: 'Could not update the database',
-            confirmText: 'Ok',
-            cancelText: '',
-          },
-        });
-      } else if (err.status === 412) {
+      if (err.status === 412) {
+        let dialogRef!: MatDialogRef<TfrCreationDialogComponent, any>;
+
         dialogRef = this.dialog.open(TfrCreationDialogComponent, {
           data: {
             title: 'Save unsuccessful',
@@ -60,13 +54,37 @@ export class TfrManagementService {
             cancelText: '',
           },
         });
-      }
 
-      dialogRef.afterClosed().subscribe((result: string) => {
-        if (result === 'true') {
-          this.router.navigate([`/tfr/${this.getProjectId}`]);
-        }
-      });
+        dialogRef.afterClosed().subscribe((result: string) => {
+          if (result === 'true') {
+            this.router.navigate([`/tfr/${this.getProjectId}`]);
+          }
+        });
+      } else {
+        this.snackBarService.showSnackBar(
+          'Save Unsuccessful. Server Error',
+          4000
+        );
+      }
+      this.subject.next(false);
+    },
+  };
+
+  createProjectObserver = {
+    next: (response: any) => {
+      if (this.project) {
+        this.project.id = Number(response);
+        this.project.version++;
+        this.snackBarService.showSnackBar('Saved to database', 2000);
+        this.subject.next(true);
+      }
+    },
+    error: () => {
+      this.snackBarService.showSnackBar(
+        'Save Unsuccessful. Server Error',
+        4000
+      );
+      this.subject.next(false);
     },
   };
 
@@ -103,8 +121,8 @@ export class TfrManagementService {
     return this.project;
   }
 
-  get getVendorName(): string {
-    return this.vendorName;
+  get getClientName(): string {
+    return this.clientName;
   }
 
   get getResourcesCount(): number | undefined {
@@ -121,8 +139,8 @@ export class TfrManagementService {
         name: this.project.name,
         start_date: this.project.start_date,
         end_date: this.project.end_date,
-        vendor_id: this.project.vendor_id,
-        vendor_specific: this.project.vendor_specific,
+        client_id: this.project.client_id,
+        client_specific: this.project.client_specific,
         status: this.project.status,
       };
 
@@ -131,18 +149,27 @@ export class TfrManagementService {
     return undefined;
   }
 
-  setBasicDetails(projectBasicDetails: ProjectBasicDetails) {
-    if (!this.compareBasicDetails(projectBasicDetails)) {
+  setBasicDetails(
+    projectBasicDetails: ProjectBasicDetails,
+    previousUpdateSuccessful: boolean
+  ): Observable<boolean> {
+    if (
+      !(
+        previousUpdateSuccessful &&
+        this.compareBasicDetails(projectBasicDetails)
+      )
+    ) {
+      this.setClientName(projectBasicDetails.client_id);
       if (this.project === undefined) {
         this.project = {
           id: NaN,
           name: projectBasicDetails.name,
-          vendor_id: projectBasicDetails.vendor_id,
+          client_id: projectBasicDetails.client_id,
           start_date: projectBasicDetails.start_date,
           end_date: projectBasicDetails.end_date,
-          vendor_specific: projectBasicDetails.vendor_specific,
+          client_specific: projectBasicDetails.client_specific,
           resources_count: 0,
-          status: 'DRAFT',
+          status: projectBasicDetails.status,
           version: 0,
           milestones: [],
           project_resources: [],
@@ -151,47 +178,47 @@ export class TfrManagementService {
           modified_by: NaN,
           created_at: new Date('2022-12-05T10:00:00.000+00:00'),
           modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
+          notes: '',
         };
-        this.createProjectInDatabase();
+        return this.createProjectInDatabase();
       } else {
         this.project.name = projectBasicDetails.name;
         this.project.start_date = projectBasicDetails.start_date;
         this.project.end_date = projectBasicDetails.end_date;
-        this.project.vendor_id = projectBasicDetails.vendor_id;
-        this.project.vendor_specific = projectBasicDetails.vendor_specific;
-        this.updateProjectToDatabase();
+        this.project.client_id = projectBasicDetails.client_id;
+        this.project.client_specific = projectBasicDetails.client_specific;
+        this.project.status = projectBasicDetails.status;
+        return this.updateProjectToDatabase();
       }
-      this.setVendorName(projectBasicDetails.vendor_id);
     }
+    return of(true);
   }
 
-  createProjectInDatabase() {
-    this.apiService.postProject(this.project).subscribe((response) => {
-      if (this.project) {
-        this.project.id = Number(response);
-        this.project.version++;
-        this.snackBarService.showSnackBar('Saved to database', 2000);
-      }
-    });
+  createProjectInDatabase(): Observable<boolean> {
+    this.apiService
+      .postProject(this.project)
+      .subscribe(this.createProjectObserver);
+    return this.subject.asObservable();
   }
 
-  updateProjectToDatabase() {
+  updateProjectToDatabase(): Observable<boolean> {
     this.apiService
       .putProject(this.project)
       .subscribe(this.updateProjectToDatabaseObserver);
+    return this.subject.asObservable();
   }
 
-  setVendorName(vendor_id: number) {
-    this.apiService.getVendors().subscribe((result: VendorDTO[]) => {
-      this.vendorName = result.find(
-        (vendor: VendorDTO) => vendor.id === vendor_id
+  setClientName(client_id: number) {
+    this.apiService.getClients().subscribe((result: ClientDTO[]) => {
+      this.clientName = result.find(
+        (client: ClientDTO) => client.id === client_id
       )!.name;
     });
   }
 
   compareBasicDetails(newDetails: ProjectBasicDetails): Boolean {
     var currentDetails = this.getBasicDetails;
-    if (currentDetails == undefined) {
+    if (currentDetails === undefined) {
       return false;
     }
     if (
@@ -199,8 +226,8 @@ export class TfrManagementService {
       currentDetails.start_date != newDetails.start_date ||
       currentDetails.end_date != newDetails.end_date ||
       currentDetails.status != newDetails.status ||
-      currentDetails.vendor_id != newDetails.vendor_id ||
-      currentDetails.vendor_specific != newDetails.vendor_specific
+      currentDetails.client_id != newDetails.client_id ||
+      currentDetails.client_specific != newDetails.client_specific
     ) {
       return false;
     }
@@ -275,10 +302,11 @@ export class TfrManagementService {
   /*
     pushes the changes to the resources for this project to the database
   */
-  updateProjectToResourceMapping() {
+  updateProjectToResourceMapping(): Observable<boolean> {
     this.apiService
       .postProjectResources(this.project)
       .subscribe(this.updateProjectToDatabaseObserver);
+    return this.subject.asObservable();
   }
 
   getFromDatabase(project_id: Number): Observable<HttpResponse<Project>> {
@@ -296,5 +324,13 @@ export class TfrManagementService {
       to update the status from DRAFT to AGREED.
     */
     return this.apiService.putStatus(this.project!.id, 'AGREED');
+  }
+
+  setNotes(notes: string) {
+    if (this.project) {
+      this.project.notes = notes;
+      console.log(this.project.notes);
+      this.updateProjectToDatabase();
+    }
   }
 }

@@ -1,10 +1,10 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MilestoneManagerService } from 'src/app/services/milestone-manager/milestone-manager.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Milestone, FormMilestone, Project } from 'src/app/shared/interfaces';
-import { HttpResponse } from '@angular/common/http';
+import { FormMilestone, Milestone, Project } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-milestones',
@@ -23,6 +23,8 @@ export class MilestonesComponent implements OnInit {
   isPristine: boolean = true;
   milestones: Milestone[] = this.milestoneManagerService.getMilestones;
   formMilestone: FormMilestone | null = null;
+
+  options = ['INTENT', 'IN PROGRESS', 'PENDING REVIEW', 'APPROVED'];
   milestoneForm = new FormGroup({
     name: new FormControl<string>('', {
       nonNullable: true,
@@ -50,6 +52,10 @@ export class MilestonesComponent implements OnInit {
         validators: [Validators.required],
       }
     ),
+    status: new FormControl<string>('INTENT', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
   updateObserver = {
     next: () => {
@@ -65,6 +71,9 @@ export class MilestonesComponent implements OnInit {
     this.formMilestone = milestone;
   }
   get submittable(): boolean {
+    // this.stepCompletedEmitter.emit(
+    //   this.milestoneManagerService.submittable && this.isPristine
+    // );
     return this.milestoneManagerService.submittable && this.isPristine;
   }
 
@@ -123,13 +132,21 @@ export class MilestonesComponent implements OnInit {
     acceptance_date: Date | null;
     start_date: Date | null;
     delivery_date: Date | null;
+    status: string;
   } {
     if (this.formMilestone != null) {
-      let { name, description, acceptance_date, start_date, delivery_date } =
-        this.formMilestone;
+      let {
+        name,
+        description,
+        acceptance_date,
+        start_date,
+        delivery_date,
+        status,
+      } = this.formMilestone;
       return {
         name,
         description,
+        status,
         acceptance_date: acceptance_date ?? null,
         start_date: start_date ?? null,
         delivery_date: delivery_date ?? null,
@@ -141,6 +158,7 @@ export class MilestonesComponent implements OnInit {
       acceptance_date: null,
       start_date: null,
       delivery_date: null,
+      status: 'INTENT',
     };
   }
 
@@ -154,7 +172,7 @@ export class MilestonesComponent implements OnInit {
     this.milestoneManagerService.selectNewMilestone(
       this.projectManagerService.getProjectId
     );
-    this.milestoneForm.markAsPristine();
+    this.milestoneForm.markAsUntouched();
   }
   discardSelected() {
     this.milestoneManagerService.setSelected(null);
@@ -175,7 +193,7 @@ export class MilestonesComponent implements OnInit {
   }
   selectMilestone(milestone: Milestone) {
     this.milestoneManagerService.setSelected(milestone);
-    this.milestoneForm.markAsPristine();
+    this.milestoneForm.markAsUntouched();
   }
   submitMilestones() {
     this.projectManagerService

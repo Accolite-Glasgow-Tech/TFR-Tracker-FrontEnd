@@ -1,3 +1,10 @@
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -8,18 +15,11 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import * as FileSaver from 'file-saver';
+import { ApiService } from 'src/app/services/api/api.service';
+import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
 import { statusList } from 'src/app/shared/constants';
 import { ProjectDTO } from 'src/app/shared/interfaces';
 import { getPDFReportURL } from 'src/app/shared/utils';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
-import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
-import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'app-tfrs',
@@ -45,15 +45,14 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     'link',
   ];
 
-  displayedColumnsWithExpand: string[] = [...this.displayedColumns, 'expand'];
-  expandedElement: any;
-  ELEMENT_DATA: ProjectDTO[] = [];
-
+  // displayedColumnsWithExpand: string[] = [...this.displayedColumns, 'expand'];
+  // expandedElement: any;
+  ELEMENT_DATA: any = [];
   projectList: MatTableDataSource<ProjectDTO> = new MatTableDataSource(
     this.ELEMENT_DATA
   );
-  selectedVendorName: any;
-  vendors: any;
+  selectedClientName: any;
+  clients: any;
   statusList = statusList;
   selectedStatus: any;
   startAfterDate: any = new FormControl();
@@ -93,8 +92,8 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     this.ApiService.getAllProjects().subscribe((allProjects) => {
       this.projectList.data = allProjects;
     });
-    this.ApiService.getAllVendors().subscribe((allVendors) => {
-      this.vendors = allVendors;
+    this.ApiService.getAllClients().subscribe((allClients) => {
+      this.clients = allClients;
     });
   }
 
@@ -112,8 +111,8 @@ export class TfrsComponent implements OnInit, AfterViewInit {
         'yyyy-MM-dd 23:59:59'
       );
     }
-    if (this.selectedVendorName != undefined) {
-      this.projectPostBody['vendor_name'] = this.selectedVendorName;
+    if (this.selectedClientName != undefined) {
+      this.projectPostBody['client_name'] = this.selectedClientName;
     }
     if (this.selectedStatus != undefined) {
       this.projectPostBody['status'] = this.selectedStatus;

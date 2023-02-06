@@ -1,21 +1,55 @@
-.title {
-  font-size: 220%;
-  font-family: ui-rounded;
-  background-color: rgb(32, 32, 148);
-  color: whitesmoke;
-  margin: auto;
+@media all 
+and (min-device-width: 800px)
+and (-webkit-min-device-pixel-ratio: 1) {
+  .title {
+    font-size: 2.5vw;
+    font-family: ui-rounded;
+    background-color: rgb(32, 32, 148);
+    color: whitesmoke;
+    margin: auto;
+  }
 
+  .isPresentstyle {
+    background-color: rgb(154, 154, 154);
+    color: rgb(89, 85, 85);
+    font-size: 1vw;
+  }
+  .notPresentstyle {
+    background-color: #507fc6;
+    color: white;
+    font-size: 1vw;
+  }
+  
 }
 
-.foot {
-  justify-content: right;
+@media all 
+and (max-width: 799px)
+and (-webkit-min-device-pixel-ratio: 1) {
+  
+  .title {
+    font-size: 6vw;
+    font-family: ui-rounded;
+    background-color: rgb(32, 32, 148);
+    color: whitesmoke;
+    margin: auto;
+  }
+
+  .isPresentstyle {
+    background-color: rgb(154, 154, 154);
+    color: rgb(89, 85, 85);
+    font-size: 3.5vw;
+  }
+  .notPresentstyle {
+    background-color: #507fc6;
+    color: white;
+    font-size: 3.5vw;
+  }
 }
 
-.isPresentstyle {
-  background-color: rgb(183, 183, 183);
-  color: black;
-}
-.notPresentstyle {
-  background-color: rgb(72, 72, 237);
-  color: white;
-}
+
+
+  .foot {
+    justify-content: right;
+  }
+  
+  

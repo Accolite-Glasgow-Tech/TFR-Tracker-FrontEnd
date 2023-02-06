@@ -10,7 +10,7 @@ import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
+import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-stepper',
@@ -49,7 +49,7 @@ export class StepperComponent implements OnInit {
 
     A value of true forces the user to complete its current step before moving to the next.
   */
-  isLinear = false;
+  isLinear = true;
 
   /*
     Listens to screen size changes. When the screen is small, the orientation of the stepper
@@ -65,19 +65,15 @@ export class StepperComponent implements OnInit {
 
   getProjectObserver = {
     next: (response: Data) => {
-      if (Object.keys(response).length !== 0) {
-        let status: number = response['project']['status'];
-        let project: Project = response['project']['body'];
-        if (status === 200) {
-          this.tfrManagementService.project = project;
-          this.apiService
-            .getResourcesNamesByProjectIdFromDatabase(project.id)
-            .subscribe(this.getResourceNameObserver);
-          this.tfrManagementService.setVendorName(project.vendor_id);
-        } else {
-          this.tfrManagementService.apiError = true;
-        }
-      }
+      let project = response['project'];
+      this.tfrManagementService.project = project;
+      this.apiService
+        .getResourcesNamesByProjectIdFromDatabase(project.id)
+        .subscribe(this.getResourceNameObserver);
+      this.tfrManagementService.setClientName(project.client_id);
+    },
+    error: () => {
+      this.tfrManagementService.apiError = true;
     },
   };
 
@@ -102,32 +98,28 @@ export class StepperComponent implements OnInit {
       .pipe(
         map(({ matches }) =>
           matches
-            ? ['TFR Basic Details', 'Milestones', 'Resources', 'Summary']
+            ? ['TFR Basic Details', 'Milestones', 'Resources', 'TFR Submission']
             : ['', '', '', '']
         )
       );
   }
 
   ngOnInit(): void {
-    let tfrId = Number(this.route.snapshot.paramMap.get('id'));
-
-    /*
-      Error validation for the path variable.
-      The path variable (the project_id) is expected to be a number.
-    */
-    if (!Number.isInteger(tfrId)) {
-      this.router.navigate(['/home']);
-    } else {
-      this.route.paramMap.subscribe((result) => {
-        tfrId = Number(result.get('id'));
-        this.route.data.subscribe(this.getProjectObserver);
-      });
+    if (this.route.snapshot.routeConfig?.path !== 'tfr/create') {
+      let tfrId = Number(this.route.snapshot.paramMap.get('id'));
 
       /*
-        The data that will be rendered in the screen is pre-fetched before the component
-        is loaded. This component has a resolver (refer to /services/project-resolver) that
-        fetches the project to be displayed.
+        Error validation for the path variable.
+        The path variable (the project_id) is expected to be a number.
       */
+      if (!Number.isInteger(tfrId)) {
+        this.router.navigate(['/home']);
+      } else {
+        this.route.paramMap.subscribe((result) => {
+          tfrId = Number(result.get('id'));
+          this.route.data.subscribe(this.getProjectObserver);
+        });
+      }
     }
   }
 

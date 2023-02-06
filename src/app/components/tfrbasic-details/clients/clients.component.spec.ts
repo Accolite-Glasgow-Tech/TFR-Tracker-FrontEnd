@@ -5,33 +5,33 @@ import { TfrManagementService } from 'src/app/services/tfr-management/tfr-manage
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 
-import { VendorsComponent } from './vendors.component';
+import { ClientsComponent } from './clients.component';
 import { of } from 'rxjs';
 import { EventEmitter } from '@angular/core';
 
-describe('VendorsComponent', () => {
-  let component: VendorsComponent;
-  let fixture: ComponentFixture<VendorsComponent>;
+describe('ClientsComponent', () => {
+  let component: ClientsComponent;
+  let fixture: ComponentFixture<ClientsComponent>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
   let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
 
   beforeEach(async () => {
     
     const apiSpy = jasmine.createSpyObj('ApiService', {
-      'getVendorData': of(''),
-      'getVendorAttributes': of(''),
+      'getClientData': of(''),
+      'getClientAttributes': of(''),
     },
     {
-      vendorReset: of({}),
-      getVendors: of([])
+      clientReset: of({}),
+      getClients: of([])
     });
     const tfrManagementSpy = jasmine.createSpyObj('TfrManagementService', [
-      'getVendorName',
+      'getClientName',
       'project',
       'getBasicDetails',
     ]);
     await TestBed.configureTestingModule({
-      declarations: [VendorsComponent],
+      declarations: [ClientsComponent],
       imports: [ HttpClientTestingModule, MatSnackBarModule, MatDialogModule ],
       providers: [
         { provide: ApiService, useValue: apiSpy },
@@ -39,7 +39,7 @@ describe('VendorsComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(VendorsComponent);
+    fixture = TestBed.createComponent(ClientsComponent);
     apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
     tfrManagementServiceSpy = TestBed.inject(
       TfrManagementService
@@ -50,8 +50,8 @@ describe('VendorsComponent', () => {
       name: 'Test Project',
       start_date: new Date('01/01/2023'),
       end_date: new Date('02/01/2023'),
-      vendor_id: 2,
-      vendor_specific: { Department: 'Finance', 'ED/MD': 'Lorem Ipsum' },
+      client_id: 2,
+      client_specific: { Department: 'Finance', 'ED/MD': 'Lorem Ipsum' },
       status: 'DRAFT',
     };
     component.editMode = false;

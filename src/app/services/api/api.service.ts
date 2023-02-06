@@ -3,26 +3,26 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   allProjectsURL,
+  clientsURL,
+  clientsURLdupe,
   projectSearchURL,
   projectsURL,
   resourceProjectsURL,
   seniorityLevelsURL,
   tasksURL,
   TFRCreationResourceURL,
-  vendorsURL,
-  vendorsURLdupe,
 } from '../../shared/constants';
 import {
   AllocatedResourceTypeDTO,
+  ClientAttributeDTO,
+  ClientDTO,
+  DisplaySkillDTO,
   Project,
   ProjectDTO,
   ProjectMilestoneDTO,
   ResourceDTO,
   ResourceListType,
-  ResourceSkillDTO,
   TaskCreationDTO,
-  VendorAttributeDTO,
-  VendorDTO,
 } from '../../shared/interfaces';
 
 import { getAllocatedResourcesURL, getSkillsURL } from 'src/app/shared/utils';
@@ -58,13 +58,12 @@ export class ApiService {
     );
   }
 
-  getVendorAttributes(vendorId: number): Observable<VendorAttributeDTO[]> {
-    return this.http.get<VendorAttributeDTO[]>(
-      `${environment.backendURL}/vendorAttributes/${vendorId}`
+  getClientAttributes(clientId: number): Observable<ClientAttributeDTO[]> {
+    return this.http.get<ClientAttributeDTO[]>(
+      `${environment.backendURL}/vendorAttributes/${clientId}`
     );
   }
 
-  // Is there a reason that we need to read the httpResponse rather than the project itself?
   getProject(projectId: Number): Observable<HttpResponse<Project>> {
     return this.http.get<Project>(`${projectsURL}/${projectId}`, {
       observe: 'response',
@@ -79,8 +78,8 @@ export class ApiService {
     return this.http.get<ProjectDTO[]>(allProjectsURL);
   }
 
-  getSkillsByResourceId(resourceId: number): Observable<ResourceSkillDTO[]> {
-    return this.http.get<ResourceSkillDTO[]>(getSkillsURL(resourceId));
+  getSkillsByResourceId(resourceId: number): Observable<DisplaySkillDTO[]> {
+    return this.http.get<DisplaySkillDTO[]>(getSkillsURL(resourceId));
   }
 
   getAllResources(): Observable<ResourceListType[]> {
@@ -113,14 +112,14 @@ export class ApiService {
   /////////////////////////////////// REFACTOR //////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
 
-  // Duplicate code (getVendors)
-  getAllVendors() {
-    return this.http.get(vendorsURLdupe);
+  // Duplicate code (getClients)
+  getAllClients() {
+    return this.http.get(clientsURLdupe);
   }
 
-  // Duplicate code (getAllVendors)
-  getVendors(): Observable<VendorDTO[]> {
-    return this.http.get<VendorDTO[]>(vendorsURL);
+  // Duplicate code (getAllClients)
+  getClients(): Observable<ClientDTO[]> {
+    return this.http.get<ClientDTO[]>(clientsURL);
   }
 
   // Rename to something like PostProjectSearch
@@ -137,10 +136,10 @@ export class ApiService {
   }
 
   // This is not an API
-  vendorReset = new EventEmitter<boolean>();
+  clientReset = new EventEmitter<boolean>();
 
   // This is not an API
-  resetVendorDetails() {
-    this.vendorReset.emit(true);
+  resetClientDetails() {
+    this.clientReset.emit(true);
   }
 }

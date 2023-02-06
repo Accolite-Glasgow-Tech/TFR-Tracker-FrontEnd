@@ -13,7 +13,7 @@ export function getPDFReportURL(projectId: number): string {
 }
 
 export function getSkillsURL(resourceId: number): string {
-  return `${environment.backendURL}/search/resource/resource_skill/${resourceId}`;
+  return `${environment.backendURL}/resources/${resourceId}/skills`;
 }
 
 export function range(start: number, end?: number) {

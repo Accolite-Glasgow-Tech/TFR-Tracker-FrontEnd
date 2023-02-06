@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
-import { WidgetVendorLocationService } from './widget-vendor-location.service';
+import { WidgetClientLocationService } from './widget-client-location.service';
 
 @Component({
-  selector: 'app-widget-vendor-location',
-  templateUrl: './widget-vendor-location.component.html',
-  styleUrls: ['./widget-vendor-location.component.scss'],
-  providers: [WidgetVendorLocationService],
+  selector: 'app-widget-client-location',
+  templateUrl: './widget-client-location.component.html',
+  styleUrls: ['./widget-client-location.component.scss'],
+  providers: [WidgetClientLocationService],
 })
-export class WidgetVendorLocationComponent {
+export class WidgetClientLocationComponent {
   dataPoints: any[] = [];
   constructor(
-    private widgetVendorLocationService: WidgetVendorLocationService
+    private widgetClientLocationService: WidgetClientLocationService
   ) {
-    this.widgetVendorLocationService
+    this.widgetClientLocationService
       .readTfrLocationCountUrl()
       .subscribe((response) => {
         this.chartOptions.data[0].dataPoints = response;

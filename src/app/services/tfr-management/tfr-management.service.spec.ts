@@ -12,12 +12,16 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import {
   AllocatedResourceTypeDTO,
+  ClientDTO,
   Milestone,
   Project,
   ProjectBasicDetails,
   ProjectResourceDTO,
-  VendorDTO,
 } from 'src/app/shared/interfaces';
+import {
+  DummyAllocatedResources,
+  DummyProject,
+} from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
 import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
@@ -35,9 +39,9 @@ describe('TfrManagementService', () => {
   let projectResources: ProjectResourceDTO[];
   let projectResourcesWithNames: AllocatedResourceTypeDTO[];
   let project: Project;
-  let vendorName: string;
+  let clientName: string;
   let basicDetails: ProjectBasicDetails;
-  let vendors: VendorDTO[];
+  let clients: ClientDTO[];
   let dialogSpy: jasmine.Spy;
   let dialogRefSpyObj = jasmine.createSpyObj({
     afterClosed: of('true'),
@@ -61,7 +65,7 @@ describe('TfrManagementService', () => {
         {
           provide: ApiService,
           useValue: jasmine.createSpyObj('ApiService', [
-            'getVendors',
+            'getClients',
             'postProject',
             'putStatus',
             'putProject',
@@ -86,91 +90,22 @@ describe('TfrManagementService', () => {
     );
     service = TestBed.inject(TfrManagementService);
 
-    milestones = [
-      {
-        id: 3,
-        name: 'deployment',
-        project_id: 1,
-        description: 'deployment',
-        start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: true,
-      },
-      {
-        id: 2,
-        name: 'frontend',
-        project_id: 1,
-        description: 'frontend',
-        start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-      {
-        id: 1,
-        name: 'backend',
-        project_id: 1,
-        description: 'backend',
-        start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-    ];
+    project = { ...DummyProject };
+    milestones = project.milestones;
+    projectResources = project.project_resources;
 
-    projectResources = [
-      {
-        project_id: 1,
-        resource_id: 1,
-        role: 'SCRUM_MASTER',
-        seniority: 'INTERMEDIATE',
-        is_deleted: false,
-      },
-      {
-        project_id: 1,
-        resource_id: 3,
-        role: 'SOFTWARE_DEVELOPER',
-        seniority: 'JUNIOR',
-        is_deleted: false,
-      },
-    ];
+    basicDetails = (({
+      name,
+      start_date,
+      end_date,
+      client_id,
+      client_specific,
+      status,
+    }) => ({ name, start_date, end_date, client_id, client_specific, status }))(
+      project
+    );
 
-    project = {
-      id: 1,
-      name: 'Bench Project',
-      vendor_id: 2,
-      start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-      end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-      status: 'DRAFT',
-      version: 1,
-      vendor_specific: {
-        Department: 'Finance',
-        'ED/MD': 'Julia Lee',
-      },
-      resources_count: 4,
-      milestones: milestones,
-      is_deleted: false,
-      created_by: 1,
-      modified_by: 2,
-      created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-      modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-      project_resources: projectResources,
-    };
-
-    basicDetails = {
-      name: 'Bench Project',
-      start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-      end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-      status: 'DRAFT',
-      vendor_id: 2,
-      vendor_specific: {
-        Department: 'Finance',
-        'ED/MD': 'Julia Lee',
-      },
-    };
-
-    vendors = [
+    clients = [
       {
         id: 1,
         name: 'JP Morgan',
@@ -193,26 +128,7 @@ describe('TfrManagementService', () => {
       },
     ];
 
-    projectResourcesWithNames = [
-      {
-        project_id: 1,
-        resource_id: 1,
-        resource_name: 'John Bowers',
-        resource_email: 'johnbowers@accolitedigital.com',
-        seniority: 'JUNIOR',
-        is_deleted: false,
-        role: 'SCRUM_MASTER',
-      },
-      {
-        project_id: 1,
-        resource_id: 3,
-        resource_name: 'Kimberly Gould',
-        resource_email: 'kimberlygould@accolitedigital.com',
-        seniority: 'SENIOR',
-        is_deleted: false,
-        role: 'SOFTWARE_DEVELOPER',
-      },
-    ];
+    projectResourcesWithNames = DummyAllocatedResources;
 
     service.project = project;
 
@@ -255,10 +171,10 @@ describe('TfrManagementService', () => {
     expect(service.getProject).toBe(project);
   });
 
-  it('should get Vendor Name', () => {
-    vendorName = 'Morgan Stanley';
-    service.vendorName = vendorName;
-    expect(service.getVendorName).toBe(vendorName);
+  it('should get Client Name', () => {
+    clientName = 'Morgan Stanley';
+    service.clientName = clientName;
+    expect(service.getClientName).toBe(clientName);
   });
 
   it('should get Resources Count', () => {
@@ -280,15 +196,37 @@ describe('TfrManagementService', () => {
     expect(service.getBasicDetails).toEqual(basicDetails);
   });
 
-  it('should set Basic Details', () => {
-    apiServiceSpy.putProject.and.returnValue(of(1));
-    apiServiceSpy.getVendors.and.returnValue(of(vendors));
+  it('should compareBasicDetails - same object', () => {
+    let result = service.compareBasicDetails(basicDetails);
 
-    service.project = project;
-    service.vendorName = 'Morgan Stanley';
-    service.setBasicDetails(basicDetails);
-
+    expect(service.project).toEqual(project);
     expect(service.getBasicDetails).toEqual(basicDetails);
+    expect(result).toBe(true);
+  });
+
+  it('should set Basic Details - Project already defined', () => {
+    apiServiceSpy.putProject.and.returnValue(of(1));
+    apiServiceSpy.getClients.and.returnValue(of(clients));
+    service.project = project;
+
+    basicDetails.name = 'Portfolio Management Project';
+    service.setBasicDetails(basicDetails, true);
+    expect(service.project?.name).toBe(basicDetails.name);
+  });
+
+  it('should set Basic Details ', () => {
+    service.project = project;
+    expect(service.compareBasicDetails(basicDetails)).toBe(true);
+    service.setBasicDetails(basicDetails, true).subscribe((response) => {
+      expect(response).toBe(true);
+    });
+  });
+
+  it('should update project to db - success', () => {
+    apiServiceSpy.putProject.and.returnValue(of(1));
+    service.project = project;
+    service.updateProjectToDatabase();
+    expect(service.project.version).toBe(1);
   });
 
   it('should update project to db - failure bad versioning', () => {
@@ -307,7 +245,21 @@ describe('TfrManagementService', () => {
     });
 
     service.updateProjectToDatabaseObserver.error(httpErrorResponse);
-    expect(dialogSpy).toHaveBeenCalled();
+    expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
+      'Save Unsuccessful. Server Error',
+      4000
+    );
+  });
+
+  it('should create project - error', () => {
+    service.createProjectObserver.error();
+    expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
+      'Save Unsuccessful. Server Error',
+      4000
+    );
+    service.subject.subscribe((response) => {
+      expect(response).toBe(false);
+    });
   });
 
   it('should make API call to create project in db', () => {
@@ -324,14 +276,14 @@ describe('TfrManagementService', () => {
 
   it('should create a new project by setting basic details', () => {
     service.project = undefined;
-    apiServiceSpy.getVendors.and.returnValue(of(vendors));
+    apiServiceSpy.getClients.and.returnValue(of(clients));
     apiServiceSpy.postProject.and.returnValue(of(2));
-    service.setBasicDetails(basicDetails);
-
+    service.setBasicDetails(basicDetails, true);
     expect(service.getBasicDetails).toEqual(basicDetails);
   });
 
   it('should compare basic details undefined project', () => {
+    service.project = undefined;
     let result = service.compareBasicDetails(basicDetails);
     expect(result).toBe(false);
   });
@@ -342,8 +294,8 @@ describe('TfrManagementService', () => {
       start_date: new Date('2022-12-24T09:00:00.000+00:00'),
       end_date: new Date('2022-12-09T23:59:59.000+00:00'),
       status: 'INPROGRESS',
-      vendor_id: 3,
-      vendor_specific: {
+      client_id: 3,
+      client_specific: {
         Department: 'Wealth Management',
         'ED/MD': 'Amy Phutty',
       },

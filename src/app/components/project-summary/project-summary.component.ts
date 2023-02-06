@@ -20,7 +20,7 @@ export class ProjectSummaryComponent {
 
   @Input() currentProject!: Project | undefined;
   @Input() resourcesWithNames!: AllocatedResourceTypeDTO[];
-  @Input() vendorName!: string;
+  @Input() clientName!: string;
 
   get currentProjectMilestones(): Milestone[] {
     return this.milestonesWithoutDeleted(this.currentProject?.milestones);

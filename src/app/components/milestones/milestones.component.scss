@@ -10,7 +10,6 @@
 }
 .inputdiv {
   display: flex;
-  flex-wrap: wrap;
   width: 100%;
   justify-content: space-between;
 }
@@ -18,13 +17,19 @@
   margin: 20px;
 }
 
+.chiplist {
+  display: flex;
+  justify-content: space-between;
+}
+
 .floating-btn-div {
   position: fixed;
   bottom: 5%;
   right: 5%;
-  width: 30%;
+  width: 50%;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
 .small-text {
@@ -70,5 +75,9 @@
   .form-field-date {
     width: 70%;
     margin: 0px;
+  }
+
+  .inputdiv {
+    flex-wrap: wrap;
   }
 }

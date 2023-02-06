@@ -3,8 +3,8 @@ import { GridsterComponent, IGridsterOptions } from 'angular2gridster';
 import { ChartsComponent } from '../charts/charts.component';
 import { WidgetApproachingProjectsComponent } from '../widget-approaching-projects/widget-approaching-projects.component';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
-import { WidgetVendorLocationComponent } from '../widget-vendor-location/widget-vendor-location.component';
-import { WidgetVendorProjectCountComponent } from '../widget-vendor-project-count/widget-vendor-project-count.component';
+import { WidgetClientLocationComponent } from '../widget-client-location/widget-client-location.component';
+import { WidgetClientProjectCountComponent } from '../widget-client-project-count/widget-client-project-count.component';
 import { ManageWidgetModalComponent } from '../manage-widget-modal/manage-widget-modal.component';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
@@ -15,10 +15,10 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class HomeComponent implements OnInit {
   @ViewChild(GridsterComponent) gridster!: GridsterComponent;
-  @ViewChild(WidgetVendorLocationComponent)
-  WidgetVendorLocationComponent!: WidgetVendorLocationComponent;
-  @ViewChild(WidgetVendorProjectCountComponent)
-  WidgetVendorProjectCountComponent!: WidgetVendorProjectCountComponent;
+  @ViewChild(WidgetClientLocationComponent)
+  WidgetClientLocationComponent!: WidgetClientLocationComponent;
+  @ViewChild(WidgetClientProjectCountComponent)
+  WidgetClientProjectCountComponent!: WidgetClientProjectCountComponent;
   @ViewChild(ChartsComponent) ChartsComponent!: ChartsComponent;
   @ViewChild(WidgetApproachingProjectsComponent)
   WidgetApproachingProjectsComponent!: WidgetApproachingProjectsComponent;
@@ -31,12 +31,12 @@ export class HomeComponent implements OnInit {
     this.widgets.push({
       componentName: 'Client Location',
       present: true,
-      componentType: WidgetVendorLocationComponent,
+      componentType: WidgetClientLocationComponent,
     });
     this.widgets.push({
       componentName: 'Our Clients',
       present: true,
-      componentType: WidgetVendorProjectCountComponent,
+      componentType: WidgetClientProjectCountComponent,
     });
     this.widgets.push({
       componentName: 'TFR Status',
@@ -110,8 +110,7 @@ export class HomeComponent implements OnInit {
 
   OpenPopup() {
     const popup = this.matdialog.open(ManageWidgetModalComponent, {
-      width: '35%',
-      height: '300px',
+      panelClass: 'popup-window', // class defined in global styles.scss
       enterAnimationDuration: '500ms',
       data: { widgetdata: this.widgetsfalse },
     });
@@ -186,7 +185,7 @@ export class HomeComponent implements OnInit {
             this.widgets.push({
               componentName: 'Our Clients',
               present: true,
-              componentType: WidgetVendorProjectCountComponent,
+              componentType: WidgetClientProjectCountComponent,
             });
           }
         }
@@ -210,7 +209,7 @@ export class HomeComponent implements OnInit {
             this.widgets.push({
               componentName: 'Client Location',
               present: true,
-              componentType: WidgetVendorLocationComponent,
+              componentType: WidgetClientLocationComponent,
             });
           }
         }

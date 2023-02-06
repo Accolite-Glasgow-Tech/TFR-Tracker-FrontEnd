@@ -9,6 +9,15 @@
       <mat-icon>edit</mat-icon>
       Edit
     </button>
+    <button
+      mat-raised-button
+      class="edit-btn"
+      color="primary"
+      (click)="openNotes()"
+    >
+      <mat-icon>book</mat-icon>
+      Add Notes
+    </button>
   </div>
   <div class="title">
     <h2>{{ tfrManagementService.getProjectName }}</h2>
@@ -17,7 +26,7 @@
   <app-project-summary
     [currentProject]="tfrManagementService.getProject"
     [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"
-    [vendorName]="tfrManagementService.getVendorName"
+    [clientName]="tfrManagementService.getClientName"
   ></app-project-summary>
 </div>
 <div *ngIf="tfrManagementService.apiError">

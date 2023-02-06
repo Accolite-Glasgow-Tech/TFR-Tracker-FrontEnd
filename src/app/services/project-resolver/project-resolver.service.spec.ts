@@ -1,8 +1,9 @@
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot } from '@angular/router';
-import { of } from 'rxjs';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
+import { DummyProject } from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
 
 import { ProjectResolverService } from './project-resolver.service';
@@ -10,6 +11,7 @@ import { ProjectResolverService } from './project-resolver.service';
 describe('ProjectResolverService', () => {
   let service: ProjectResolverService;
   let route: ActivatedRouteSnapshot;
+  let routerSpy: jasmine.SpyObj<Router>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
   beforeEach(() => {
@@ -20,9 +22,14 @@ describe('ProjectResolverService', () => {
       providers: [
         ProjectResolverService,
         { provide: ApiService, useValue: spy },
+        {
+          provide: Router,
+          useValue: jasmine.createSpyObj('Router', ['navigate']),
+        },
       ],
     });
     service = TestBed.inject(ProjectResolverService);
+    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
   });
 
@@ -30,82 +37,8 @@ describe('ProjectResolverService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should call resolve() and return project obj', () => {
-    const dummyProject: Project = {
-      id: 1,
-      name: 'Bench Project',
-      vendor_id: 2,
-      start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-      end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-      status: 'INPROGRESS',
-      version: 1,
-      vendor_specific: {
-        Department: 'Finance',
-        'ED/MD': 'Julia Lee',
-      },
-      resources_count: 4,
-      milestones: [
-        {
-          id: 3,
-          name: 'deployment',
-          project_id: 1,
-          description: 'deployment',
-          start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-          delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-          acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-          is_deleted: true,
-        },
-        {
-          id: 2,
-          name: 'frontend',
-          project_id: 1,
-          description: 'frontend',
-          start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-          delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-          acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-          is_deleted: false,
-        },
-        {
-          id: 1,
-          name: 'backend',
-          project_id: 1,
-          description: 'backend',
-          start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-          delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
-          acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-          is_deleted: false,
-        },
-      ],
-      is_deleted: false,
-      created_by: 1,
-      modified_by: 2,
-      created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-      modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-      project_resources: [
-        {
-          project_id: 1,
-          resource_id: 3,
-          role: 'SOFTWARE_DEVELOPER',
-          seniority: 'JUNIOR',
-          is_deleted: false,
-        },
-        {
-          project_id: 1,
-          resource_id: 1,
-          role: 'SCRUM_MASTER',
-          seniority: 'SENIOR',
-          is_deleted: false,
-        },
-        {
-          project_id: 1,
-          resource_id: 2,
-          role: 'PROJECT_MANAGER',
-          seniority: 'ADVANCED',
-          is_deleted: false,
-        },
-      ],
-    };
-
+  it('should call resolve() - return project', () => {
+    const dummyProject: Project = DummyProject;
     let httpResponseProject: HttpResponse<Project> = new HttpResponse({
       body: dummyProject,
     });
@@ -113,7 +46,31 @@ describe('ProjectResolverService', () => {
     apiServiceSpy.getProject.and.returnValue(of(httpResponseProject));
 
     service.resolve(route).subscribe((project) => {
-      expect(project).toEqual(httpResponseProject);
+      expect(project).toEqual(dummyProject);
+    });
+  });
+
+  it('should call resolve() - return server error', () => {
+    const dummyProject: Project = DummyProject;
+    let httpResponseProject: HttpResponse<Project> = new HttpResponse({
+      body: dummyProject,
+      status: 500,
+    });
+
+    apiServiceSpy.getProject.and.returnValue(of(httpResponseProject));
+
+    service.resolve(route).subscribe((response) => {
+      const expectedResponse = new HttpErrorResponse({ status: 500 });
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
+  it('should call resolve() - catch error', () => {
+    const err = new Error();
+    apiServiceSpy.getProject.and.returnValue(throwError(() => err));
+
+    service.resolve(route).subscribe((response) => {
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/tfrs']);
     });
   });
 });
