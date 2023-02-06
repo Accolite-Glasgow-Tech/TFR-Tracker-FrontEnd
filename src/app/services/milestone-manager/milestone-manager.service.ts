@@ -80,7 +80,7 @@ export class MilestoneManagerService {
       !!milestone?.acceptance_date &&
       !!milestone?.delivery_date &&
       !!milestone?.start_date &&
-      !!milestone?.description
+      !!milestone?.name
     );
   }
 
