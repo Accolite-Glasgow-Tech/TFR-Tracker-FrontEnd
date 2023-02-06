@@ -51,25 +51,25 @@
           ></mat-datepicker-toggle>
           <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
 
-  <div class="search-filters-container">
-    <mat-form-field class="single-search-filter name-search-field" appearance="fill">
-      <mat-label>Search by Name</mat-label>
-      <input [(ngModel)]="searchName" matInput />
-    </mat-form-field>
-
-    <button
+        <button
           class="search-button"
           mat-raised-button
           color="primary"
          
           (click)="getProjects()"
         >
-          Search
+          Apply
         </button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <div class="search-filters-container">
+    <mat-form-field class="single-search-filter name-search-field" appearance="fill">
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+    </mat-form-field>
   </div>
 </div>
 <h1 class="empty-list-message" *ngIf="projectList.data.length === 0">No Projects to Show</h1>
