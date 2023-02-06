@@ -1,29 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  LoginResponse,
-  RegisterResponse
-} from 'src/app/shared/interfaces';
+import { LoginResponse, RegisterResponse } from 'src/app/shared/interfaces';
 import { loginURL, registrationURL } from 'src/app/shared/constants';
-
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class userService {
+  public static user_id: any = undefined;
   constructor(public httpClient: HttpClient) {}
-
   register(body: any) {
     return this.httpClient.post<RegisterResponse>(registrationURL, body);
   }
-
   login(body: any) {
     return this.httpClient.post<LoginResponse>(loginURL, body);
   }
-
-  isLoggedIn(): boolean{
-    if (typeof sessionStorage.getItem('jwt_token') == 'string') {
-      return true;
-    }
-    return false;
+  isLoggedIn(): boolean {
+    return sessionStorage.getItem('jwt_token') !== null;
   }
 }

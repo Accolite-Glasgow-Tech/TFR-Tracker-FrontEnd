@@ -5,16 +5,17 @@ import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   ProjectBasicDetails,
-  VendorAttributeDTO,
-  VendorDTO,
+  ClientAttributeDTO,
+  ClientDTO,
 } from 'src/app/shared/interfaces';
 
 @Component({
-  selector: 'app-vendors',
-  templateUrl: './vendors.component.html',
-  styleUrls: ['./vendors.component.scss'],
+  selector: 'app-clients',
+  templateUrl: './clients.component.html',
+  styleUrls: ['./clients.component.scss'],
 })
-export class VendorsComponent implements OnInit {
+
+export class ClientsComponent implements OnInit {
   constructor(
     private api: ApiService,
     private tfrManagementService: TfrManagementService
@@ -23,35 +24,35 @@ export class VendorsComponent implements OnInit {
   @Input() editMode!: Boolean;
   @Input() existingDetails!: ProjectBasicDetails;
 
-  vendors!: VendorDTO[];
-  attributes!: VendorAttributeDTO[];
-  vendorGroup!: FormGroup;
+  clients!: ClientDTO[];
+  attributes!: ClientAttributeDTO[];
+  clientGroup!: FormGroup;
 
   @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
 
   ngOnInit() {
-    this.vendorGroup = new FormGroup({
+    this.clientGroup = new FormGroup({
       name: new FormControl(''),
     });
 
-    this.api.vendorReset.subscribe((result) => {
-      this.resetVendorControls();
+    this.api.clientReset.subscribe(() => {
+      this.resetClientControls();
     });
 
-    this.api.getVendors.subscribe((data) => {
-      this.vendors = data;
+    this.api.getClients().subscribe((data) => {
+      this.clients = data;
       if (this.editMode) {
-        // TODO fill in details of vendor and Attributes
-        // find vendor in list with existingDetails.vendor_id and call select method
-        this.vendors.forEach((vendor) => {
-          if (vendor.id == this.existingDetails.vendor_id) {
-            this.onSelectedVendor(vendor);
+        // TODO fill in details of client and Attributes
+        // find client in list with existingDetails.client_id and call select method
+        this.clients.forEach((client) => {
+          if (client.id == this.existingDetails.client_id) {
+            this.onSelectedClient(client);
           }
         });
       }
     });
 
-    this.vendorGroup = new FormGroup({
+    this.clientGroup = new FormGroup({
       name: new FormControl(''),
       attributeValues: new FormArray([]),
     });
@@ -59,28 +60,28 @@ export class VendorsComponent implements OnInit {
     this.getAttributes()
       .valueChanges.pipe(debounce(() => interval(500)))
       .subscribe(() => {
-        this.onAttributesUpdated.emit(this.vendorGroup);
+        this.onAttributesUpdated.emit(this.clientGroup);
       });
   }
 
-  resetVendorControls() {
+  resetClientControls() {
     if (
-      this.vendorGroup.value.name !== this.tfrManagementService.getVendorName
+      this.clientGroup.value.name !== this.tfrManagementService.getClientName
     ) {
-      this.vendorGroup
+      this.clientGroup
         .get('name')
-        ?.setValue(this.tfrManagementService.getVendorName);
-      let previousVendor: VendorDTO = this.vendors.find(
-        (vendor) => vendor.id === this.tfrManagementService.project?.vendor_id
+        ?.setValue(this.tfrManagementService.getClientName);
+      let previousClient: ClientDTO = this.clients.find(
+        (client) => client.id === this.tfrManagementService.project?.client_id
       )!;
-      this.onSelectedVendor(previousVendor);
+      this.onSelectedClient(previousClient);
     }
     this.existingDetails = this.tfrManagementService.getBasicDetails!;
     this.fillAttributesFromExisting();
   }
 
   fillAttributesFromExisting() {
-    // parse values from existingDetails.vendor_specific
+    // parse values from existingDetails.client_specific
     // use to set values of form array
 
     if (this.attributes) {
@@ -88,21 +89,21 @@ export class VendorsComponent implements OnInit {
         this.getAttributes()
           .at(index)
           .setValue(
-            this.existingDetails.vendor_specific[attribute.attribute_name]
+            this.existingDetails.client_specific[attribute.attribute_name]
           );
       });
     }
   }
 
-  @Output() onSelected = new EventEmitter<VendorDTO>();
-  @Output() attributesSelected = new EventEmitter<VendorAttributeDTO[]>();
-  onSelectedVendor(vendor: VendorDTO) {
+  @Output() onSelected = new EventEmitter<ClientDTO>();
+  @Output() attributesSelected = new EventEmitter<ClientAttributeDTO[]>();
+  onSelectedClient(client: ClientDTO) {
     this.getAttributes().reset();
-    this.vendorGroup.get('name')?.setValue(vendor.name);
+    this.clientGroup.get('name')?.setValue(client.name);
 
-    this.onSelected.emit(vendor);
+    this.onSelected.emit(client);
 
-    this.api.getVendorAttributes(vendor.id).subscribe((res) => {
+    this.api.getClientAttributes(client.id).subscribe((res) => {
       this.attributes = res;
 
       this.attributesSelected.emit(this.attributes);
@@ -115,7 +116,7 @@ export class VendorsComponent implements OnInit {
       });
 
       if (
-        this.vendorGroup.value.name === this.tfrManagementService.getVendorName
+        this.clientGroup.value.name === this.tfrManagementService.getClientName
       ) {
         this.fillAttributesFromExisting();
       }
@@ -123,6 +124,6 @@ export class VendorsComponent implements OnInit {
   }
 
   getAttributes(): FormArray {
-    return this.vendorGroup.controls['attributeValues'] as FormArray;
+    return this.clientGroup.controls['attributeValues'] as FormArray;
   }
 }

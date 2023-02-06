@@ -2,14 +2,13 @@ import { Injectable, Type } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
-import { UserService } from '../../user/user.service';
+import { userService } from '../../user/user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginGuardService implements CanActivate {
-  constructor(private router: Router,
-    private userService: UserService) {}
+  constructor(private router: Router, private userService: userService) {}
 
   /**
    * Allows activation if User is logged in OR if guarding is disabled
@@ -17,7 +16,6 @@ export class LoginGuardService implements CanActivate {
   canActivate(): boolean {
     let activated = this.checkIfComponentCanBeActivated();
     if (!activated) {
-      console.log('called');
       this.navigateToValid();
     }
     return activated;
@@ -32,10 +30,6 @@ export class LoginGuardService implements CanActivate {
   }
 
   checkIfComponentCanBeActivated(): boolean {
-    return (
-      this.userService.isLoggedIn() ||
-      environment.routeGuardingDisabled
-    );
+    return this.userService.isLoggedIn() || environment.routeGuardingDisabled;
   }
-
 }

@@ -9,6 +9,7 @@ export class MilestoneManagerService {
   selected: FormMilestone | null = null;
   @Output() Update: EventEmitter<any> = new EventEmitter();
   constructor() {}
+
   get getMilestones() {
     return this.milestones;
   }
@@ -16,12 +17,13 @@ export class MilestoneManagerService {
     this.milestones = milestones ? milestones : [];
     this.broadcastUpdate();
   }
+
+  get getSelected(): FormMilestone | null {
+    return this.selected;
+  }
   setSelected(milestone: FormMilestone | null) {
     this.selected = milestone;
     this.broadcastUpdate();
-  }
-  get getSelected(): FormMilestone | null {
-    return this.selected;
   }
 
   updateToRemove(milestone: Milestone) {
@@ -39,8 +41,11 @@ export class MilestoneManagerService {
     this.broadcastUpdate();
   }
 
+  get MilestonesNotDeletedLength(): number {
+    return this.milestones.filter((milestone) => !milestone.is_deleted).length;
+  }
   get submittable(): boolean {
-    return this.getMilestones.length >= 1;
+    return this.MilestonesNotDeletedLength >= 1;
   }
 
   selectNewMilestone(projectId: number | undefined) {
@@ -48,9 +53,11 @@ export class MilestoneManagerService {
     if (projectId != undefined) {
       this.setSelected({
         project_id: projectId,
+        name: '',
         description: '',
         id: idOfNew,
         is_deleted: false,
+        status: 'INTENT',
       });
     } else {
       throw new Error('bad project Id passed');
@@ -63,10 +70,7 @@ export class MilestoneManagerService {
       this.remove(milestone as Milestone);
       this.add(milestone as Milestone);
       this.setSelected(null);
-      console.log('Saved');
-      console.log(milestone);
     } else {
-      console.log(milestone);
       throw new Error('bad milestone save');
     }
   }
@@ -91,7 +95,7 @@ export class MilestoneManagerService {
   private broadcastUpdate() {
     this.Update.emit();
   }
-  private generateIdOfNew() {
+  generateIdOfNew() {
     return Math.min(0, ...this.milestones.map((milestone) => milestone.id)) - 1;
   }
 }

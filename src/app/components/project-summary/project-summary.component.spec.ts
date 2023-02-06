@@ -1,12 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
-import { Milestone } from 'src/app/shared/interfaces';
-
+import { AllocatedResourceTypeDTO, Milestone } from 'src/app/shared/interfaces';
+import {
+  DummyAllocatedResources,
+  DummyProject,
+} from 'src/app/types/dummy-data';
 import { ProjectSummaryComponent } from './project-summary.component';
 
 describe('ProjectSummaryComponent', () => {
   let component: ProjectSummaryComponent;
   let fixture: ComponentFixture<ProjectSummaryComponent>;
+  let resourceServiceSpy: jasmine.SpyObj<ResourceService>;
+  let dummyAllocatedResource: AllocatedResourceTypeDTO[] =
+    DummyAllocatedResources;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -14,12 +21,29 @@ describe('ProjectSummaryComponent', () => {
       providers: [
         {
           provide: ResourceService,
-          useValue: jasmine.createSpyObj(['']),
+          useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
+        },
+        {
+          provide: DateFormatterService,
+          useValue: jasmine.createSpyObj(['getShortDisplayDate']),
+        },
+        {
+          provide: DateFormatterService,
+          useValue: jasmine.createSpyObj('DateFormatterService', [
+            'getShortDisplayDate',
+          ]),
         },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProjectSummaryComponent);
+    resourceServiceSpy = TestBed.inject(
+      ResourceService
+    ) as jasmine.SpyObj<ResourceService>;
+    resourceServiceSpy.resourcesWithoutDeleted.and.returnValue(
+      dummyAllocatedResource
+    );
+
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -29,39 +53,12 @@ describe('ProjectSummaryComponent', () => {
   });
 
   it('should return not deleted milestones success', () => {
-    const dummyMilestones: Milestone[] = [
-      {
-        id: 3,
-        project_id: 1,
-        description: 'deployment',
-        start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: true,
-      },
-      {
-        id: 2,
-        project_id: 1,
-        description: 'frontend',
-        start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-    ];
     const expectedResults: Milestone[] = [
-      {
-        id: 2,
-        project_id: 1,
-        description: 'frontend',
-        start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
+      DummyProject.milestones[1],
+      DummyProject.milestones[2],
     ];
 
-    let results = component.milestonesWithoutDeleted(dummyMilestones);
+    let results = component.milestonesWithoutDeleted(DummyProject.milestones);
     expect(results).toEqual(expectedResults);
   });
 
@@ -70,5 +67,9 @@ describe('ProjectSummaryComponent', () => {
 
     let results = component.milestonesWithoutDeleted(dummyMilestones);
     expect(results).toEqual([]);
+  });
+
+  it('should return allocated resources without delete', () => {
+    expect(component.currentResourcesWithNames).toEqual(dummyAllocatedResource);
   });
 });

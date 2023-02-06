@@ -4,6 +4,7 @@
   flex-direction: row;
   justify-content: flex-start;
   width: 100%;
+  gap: 10px;
 }
 
 .form-field {
@@ -55,10 +56,31 @@
   right: 5%;
 }
 
+.label-padding {
+  padding-right: 10px;
+}
+
+.skill-div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 1rem;
+  width: 40%;
+}
+
+.progress-bar {
+  border-radius: 5px;
+  height: 7px;
+}
+
 @media screen and (max-width: 800px) {
   button {
     width: 1%;
     height: 0.5%;
     font-size: small;
+  }
+
+  .skill-div {
+    width: 80%;
   }
 }

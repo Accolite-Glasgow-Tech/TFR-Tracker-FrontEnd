@@ -1,9 +1,9 @@
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRouteSnapshot, Data, Resolve, Router } from '@angular/router';
+import { catchError, EMPTY, mergeMap, Observable, of } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
-import { TfrManagementService } from '../tfr-management/tfr-management.service';
+import { ApiService } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,15 +14,32 @@ import { TfrManagementService } from '../tfr-management/tfr-management.service';
   the component that requires this project body.
 */
 export class ProjectResolverService
-  implements Resolve<Observable<string | HttpResponse<Project>>>
+  implements Resolve<Observable<Project | HttpErrorResponse | never>>
 {
-  constructor(private tfrManagementService: TfrManagementService) {}
+  constructor(private apiService: ApiService, private router: Router) {}
 
   resolve(
     route: ActivatedRouteSnapshot
-  ): Observable<string | HttpResponse<Project>> {
-    return this.tfrManagementService.getFromDatabase(
-      Number(route.paramMap.get('id'))
+  ): Observable<Project | HttpErrorResponse | never> {
+    return this.apiService.getProject(Number(route.paramMap.get('id'))).pipe(
+      mergeMap((response: Data) => {
+        if (Object.keys(response).length !== 0) {
+          let status: number = response['status'];
+          let project: Project = response['body'];
+          if (status === 200) {
+            return of(project);
+          } else {
+            return of(new HttpErrorResponse({ status: 500 }));
+          }
+        } else {
+          this.router.navigate(['/tfrs']);
+          return EMPTY;
+        }
+      }),
+      catchError(() => {
+        this.router.navigate(['/tfrs']);
+        return EMPTY;
+      })
     );
   }
 }

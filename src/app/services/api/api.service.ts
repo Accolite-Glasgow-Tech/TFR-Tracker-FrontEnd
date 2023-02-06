@@ -3,97 +3,143 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   allProjectsURL,
+  clientsURL,
+  clientsURLdupe,
   projectSearchURL,
   projectsURL,
+  resourceProjectsURL,
+  seniorityLevelsURL,
   tasksURL,
-  vendorsURL,
-  vendorsURLdupe,
+  TFRCreationResourceURL,
 } from '../../shared/constants';
 import {
+  AllocatedResourceTypeDTO,
+  ClientAttributeDTO,
+  ClientDTO,
+  DisplaySkillDTO,
   Project,
   ProjectDTO,
   ProjectMilestoneDTO,
+  ResourceDTO,
+  ResourceListType,
   TaskCreationDTO,
-  VendorAttributeDTO,
-  VendorDTO,
 } from '../../shared/interfaces';
-import {
-  getProjectURL,
-  getResourcesByProjectIdURL,
-  getUpdateProjectStatusURL,
-  getUserTasksURL,
-  getVendorAttributesURL,
-} from '../../shared/utils';
+
+import { getAllocatedResourcesURL, getSkillsURL } from 'src/app/shared/utils';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  vendorReset = new EventEmitter<boolean>();
-
   constructor(private http: HttpClient) {}
 
-  resetVendorDetails() {
-    this.vendorReset.emit(true);
-  }
-
-  get getVendors(): Observable<VendorDTO[]> {
-    return this.http.get<VendorDTO[]>(vendorsURL);
-  }
-
-  getResourcesByProjectId(tfrId: number) {
-    return this.http.get(getResourcesByProjectIdURL(tfrId));
-  }
-
+  ///////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////// POST //////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
   postTask(taskObject: TaskCreationDTO) {
     return this.http.post(tasksURL, taskObject);
-  }
-
-  getVendorAttributes(vendor_id: number): Observable<VendorAttributeDTO[]> {
-    return this.http.get<VendorAttributeDTO[]>(
-      getVendorAttributesURL(vendor_id)
-    );
-  }
-
-  getProject(project_id: Number): Observable<HttpResponse<Project>> {
-    return this.http.get<Project>(getProjectURL(project_id), {
-      observe: 'response',
-    });
-  }
-
-  putStatusAgreed(projectId: number): Observable<boolean> {
-    return this.http.put<boolean>(
-      getUpdateProjectStatusURL(projectId, 'AGREED'),
-      null
-    );
   }
 
   postProject(project: Project | undefined | ProjectMilestoneDTO) {
     return this.http.post(projectsURL, project);
   }
 
-  putProject(project: Project | undefined | ProjectMilestoneDTO) {
-    return this.http.put(projectsURL, project);
+  postProjectResources(project: Project | undefined) {
+    return this.http.post(resourceProjectsURL, project);
+  }
+  ///////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////// GET ///////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
+
+  getResourcesByProjectId(projectId: number): Observable<ResourceDTO[]> {
+    return this.http.get<ResourceDTO[]>(
+      `${environment.backendURL}/search/resource/project/${projectId}`
+    );
   }
 
-  getUserTasksById(userId: number | undefined): Observable<{}> {
-    return userId
-      ? this.http.get(getUserTasksURL(userId))
-      : new Observable((subscriber) => {
-          subscriber.error('user Id undefined');
-          subscriber.complete;
-        });
+  getClientAttributes(clientId: number): Observable<ClientAttributeDTO[]> {
+    return this.http.get<ClientAttributeDTO[]>(
+      `${environment.backendURL}/vendorAttributes/${clientId}`
+    );
   }
 
-  get getAllProjects(): Observable<ProjectDTO[]> {
+  getProject(projectId: Number): Observable<HttpResponse<Project>> {
+    return this.http.get<Project>(`${projectsURL}/${projectId}`, {
+      observe: 'response',
+    });
+  }
+
+  getUserTasksById(userId: number): Observable<{}> {
+    return this.http.get(`${environment.backendURL}/tasks/${userId}`);
+  }
+
+  getAllProjects(): Observable<ProjectDTO[]> {
     return this.http.get<ProjectDTO[]>(allProjectsURL);
   }
 
-  get getAllVendors() {
-    return this.http.get(vendorsURLdupe);
+  getSkillsByResourceId(resourceId: number): Observable<DisplaySkillDTO[]> {
+    return this.http.get<DisplaySkillDTO[]>(getSkillsURL(resourceId));
   }
 
+  getAllResources(): Observable<ResourceListType[]> {
+    return this.http.get<ResourceListType[]>(TFRCreationResourceURL);
+  }
+
+  getAllSeniorityLevels(): Observable<string[]> {
+    return this.http.get<string[]>(seniorityLevelsURL);
+  }
+
+  getResourcesNamesByProjectIdFromDatabase(
+    projectId: Number
+  ): Observable<AllocatedResourceTypeDTO[]> {
+    return this.http.get<AllocatedResourceTypeDTO[]>(
+      getAllocatedResourcesURL(projectId)
+    );
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////// PUT ///////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
+  putProject(project: Project | undefined | ProjectMilestoneDTO) {
+    return this.http.put(projectsURL, project);
+  }
+  ///////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////// DELETE ////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
+
+  ///////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////// REFACTOR //////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
+
+  // Duplicate code (getClients)
+  getAllClients() {
+    return this.http.get(clientsURLdupe);
+  }
+
+  // Duplicate code (getAllClients)
+  getClients(): Observable<ClientDTO[]> {
+    return this.http.get<ClientDTO[]>(clientsURL);
+  }
+
+  // Rename to something like PostProjectSearch
   searchProjects(body: any): Observable<ProjectDTO[]> {
     return this.http.post<ProjectDTO[]>(projectSearchURL, body);
+  }
+
+  // Bad use of put request, instead of using the URL to update the status and passing null as data, use the data to update the status
+  putStatus(projectId: number, status: string): Observable<boolean> {
+    return this.http.put<boolean>(
+      `${projectsURL}/${projectId}/status/${status}`,
+      null
+    );
+  }
+
+  // This is not an API
+  clientReset = new EventEmitter<boolean>();
+
+  // This is not an API
+  resetClientDetails() {
+    this.clientReset.emit(true);
   }
 }

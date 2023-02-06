@@ -11,14 +11,16 @@
       ></app-tfr-basic-details>
     </mat-step>
 
-  <mat-step [completed]="stepsValid[1]" state="milestone-icon">
-    <ng-template matStepLabel>{{ (this.stepLabels | async)![1] }}</ng-template>
-    <app-milestones
-      (nextStepEmitter)="nextStep($event)"
-      (stepCompletedEmitter)="stepCompleted(1, $event)"
-    >
-    </app-milestones>
-  </mat-step>
+    <mat-step [completed]="stepsValid[1]" state="milestone-icon">
+      <ng-template matStepLabel>{{
+        (this.stepLabels | async)![1]
+      }}</ng-template>
+      <app-milestones
+        (nextStepEmitter)="nextStep($event)"
+        (stepCompletedEmitter)="stepCompleted(1, $event)"
+      >
+      </app-milestones>
+    </mat-step>
 
     <mat-step [completed]="stepsValid[2]" state="resources-icon">
       <ng-template matStepLabel>{{
@@ -37,11 +39,11 @@
         (this.stepLabels | async)![3]
       }}</ng-template>
 
-      <div id="title"><h2>Summary</h2></div>
+      <div id="title"><h2>TFR Submission</h2></div>
       <app-project-summary
         [currentProject]="tfrManagementService.getProject"
-        [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"
-        [vendorName]="tfrManagementService.getVendorName"
+        [resourcesWithNames]="currentResourcesWithNames"
+        [clientName]="tfrManagementService.getClientName"
       ></app-project-summary>
 
       <div class="floating-btn-div">

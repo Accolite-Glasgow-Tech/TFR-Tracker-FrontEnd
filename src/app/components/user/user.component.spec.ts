@@ -1,4 +1,8 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { userService } from 'src/app/services/user/user.service';
 
 import { UserComponent } from './user.component';
 
@@ -8,7 +12,18 @@ describe('UserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserComponent ]
+      declarations: [ UserComponent ],
+      imports: [ RouterTestingModule ],
+      providers: [
+        {
+          provide: SnackBarService,
+          useValue: jasmine.createSpyObj([''])
+        },
+        {
+          provide: userService,
+          useValue: jasmine.createSpyObj([''])
+        }
+      ]
     })
     .compileComponents();
 

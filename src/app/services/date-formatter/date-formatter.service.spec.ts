@@ -1,12 +1,14 @@
+import { DatePipe } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
-
 import { DateFormatterService } from './date-formatter.service';
 
 describe('DateFormatterService', () => {
   let service: DateFormatterService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [DatePipe]
+    });
     service = TestBed.inject(DateFormatterService);
   });
 

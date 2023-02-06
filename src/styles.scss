@@ -20,3 +20,16 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+// used to style the dynamic size of popup window e.g. Widget Manager
+.popup-window {
+  @media all
+  and (min-device-width: 800px)
+  and (-webkit-min-device-pixel-ratio: 1) {
+    width: 35vw;
+  }
+  @media all
+  and (max-width: 799px)
+  and (-webkit-min-device-pixel-ratio: 1) {
+    width: 80vw;
+  }
+}
