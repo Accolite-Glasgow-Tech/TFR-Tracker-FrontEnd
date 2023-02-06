@@ -51,68 +51,25 @@
           ></mat-datepicker-toggle>
           <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
 
-  <div class="search-filters-container">
-    <mat-form-field class="single-search-filter" appearance="fill">
-      <mat-label>Client</mat-label>
-      <mat-select [(ngModel)]="selectedClientName">
-        <mat-option>None</mat-option>
-        <mat-option *ngFor="let client of clients" [value]="client.name">{{
-          client.name
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field class="single-search-filter" appearance="fill">
-      <mat-label>Status</mat-label>
-      <mat-select [(ngModel)]="selectedStatus">
-        <mat-option>Any</mat-option>
-        <mat-option *ngFor="let status of statusList" [value]="status">{{
-          status
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field class="single-search-filter" appearance="fill">
-      <mat-label>Project Start After</mat-label>
-      <input
-        matInput
-        [matDatepicker]="picker1"
-        [formControl]="startAfterDate"
-      />
-      <mat-datepicker-toggle
-        matIconSuffix
-        [for]="picker1"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #picker1></mat-datepicker>
-    </mat-form-field>
-
-    <mat-form-field class="single-search-filter" appearance="fill">
-      <mat-label>Project End Before</mat-label>
-      <input matInput [matDatepicker]="picker2" [formControl]="endBeforeDate" />
-      <mat-datepicker-toggle
-        matIconSuffix
-        [for]="picker2"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #picker2></mat-datepicker>
-    </mat-form-field>
-
-    <mat-form-field class="single-search-filter name-search-field" appearance="fill">
-      <mat-label>Filter contents</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-      <!-- <input [(ngModel)]="searchName" matInput /> -->
-    </mat-form-field>
-
-    <button
+        <button
           class="search-button"
           mat-raised-button
           color="primary"
          
           (click)="getProjects()"
         >
-          Search
+          Apply
         </button>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <div class="search-filters-container">
+    <mat-form-field class="single-search-filter name-search-field" appearance="fill">
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+    </mat-form-field>
   </div>
 </div>
 <h1 class="empty-list-message" *ngIf="projectList.data.length === 0">No Projects to Show</h1>
