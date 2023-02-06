@@ -58,7 +58,7 @@
   <div class="search-filters-container">
     <mat-form-field class="single-search-filter name-search-field" appearance="fill">
       <mat-label>Search by Name</mat-label>
-      <input matInput formControlName="name" />
+      <input [(ngModel)]="searchName" matInput />
     </mat-form-field>
 
     <button

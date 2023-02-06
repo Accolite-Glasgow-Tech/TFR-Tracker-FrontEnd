@@ -48,6 +48,7 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   selectedStatus: any;
   startAfterDate: any = new FormControl();
   endBeforeDate: any = new FormControl();
+  searchName!: string;
   pageSize = [3, 5, 10, 15];
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
@@ -110,6 +111,9 @@ export class TfrsComponent implements OnInit, AfterViewInit {
 
       this.projectPostBody['status'] = this.selectedStatus==='IN PROGRESS'? 'IN_PROGRESS':this.selectedStatus;
       
+    }
+    if (this.searchName != undefined) {
+      this.projectPostBody['project_name'] = this.searchName;
     }
     this.ApiService.searchProjects(this.projectPostBody).subscribe(
       (projects) => {
