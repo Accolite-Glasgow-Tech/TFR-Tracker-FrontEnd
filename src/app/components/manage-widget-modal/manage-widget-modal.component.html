@@ -1,13 +1,27 @@
-<h1 class="title" mat-dialog-title><marquee behavior="alternate"><strong> Add Widgets </strong></marquee></h1>
+<!-- <h1 class="title" mat-dialog-title><marquee behavior="alternate"><strong> Add Widgets </strong></marquee></h1>
 <div  *ngFor="let wid of widgets" style="    padding: 5px 20px 5px 20px;">
   <mat-card> 
-      <button mat-raised-button  type="button" class="btn btn-success top-btn-left" (click)="pushWidget(wid.componentName)"     [ngClass]="isempty(wid.present)"  [disabled]="wid.present"   >
+      <button mat-raised-button  type="button" class="btn btn-success top-btn-left" (click)="closeWidget(wid.componentName)"     [ngClass]="isempty(wid.present)"  [disabled]="wid.present"   >
         <i class="fa fa-plus-circle" aria-hidden="true" *ngIf="!wid.present"></i><b> {{wid.componentName}} Widget </b></button>
-      </mat-card>
+    </mat-card>
 </div>
 
 <div  class= "foot" mat-dialog-actions>
  <h1 *ngIf="widgets.length===0" style="  background-color: rgb(0 0 0 / 4%); color: rgb(212 39 27 / 83%); font-weight: 500;">No Widgets to Add!</h1>
+</div> -->
+
+<h1 class="title" mat-dialog-title><marquee behavior="alternate"><strong> Add Widgets </strong></marquee></h1>
+
+<div style="margin: 0px;">
+  <mat-button-toggle-group #toggleBtn="matButtonToggleGroup" multiple style="display: block;">
+      <mat-card  *ngFor="let wid of widgets" style="   padding: 5px 20px 5px 20px; ">
+            <mat-button-toggle  value="{{wid.componentName}}" type="button" class="btn btn-success top-btn-left" style="  font-size: 102%; white-space: pre-wrap;" >
+              <i class="fa fa-plus-circle" aria-hidden="true" *ngIf="!wid.present"></i><b> {{wid.componentName}} Widget </b></mat-button-toggle>
+      </mat-card>
+  </mat-button-toggle-group>
+</div>
+<div  class= "foot" mat-dialog-actions>
+  <button mat-raised-button  type="button" color="warn" (click)="onClick(toggleBtn.value)">Okay</button>
 </div>
 
 

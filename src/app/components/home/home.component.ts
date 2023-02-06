@@ -52,6 +52,8 @@ export class HomeComponent implements OnInit {
 
   widgetsfalse: any[] = [];
 
+  flag = 0;
+
   gridsterOptions: IGridsterOptions = {
     lanes: this.getLaneCount(),
     floating: true,
@@ -115,56 +117,103 @@ export class HomeComponent implements OnInit {
     });
 
     popup.afterClosed().subscribe((item) => {
-      if (item === 'TFR Status') {
-        this.widgetsfalse.splice(
-          this.widgetsfalse.findIndex((x) => x.componentName === 'TFR Status'),
-          1
-        );
-        this.widgets.push({
-          componentName: 'TFR Status',
-          present: true,
-          componentType: ChartsComponent,
-        });
-      }
+      for (let i = 0; i < item.length; i++) {
+        this.flag = 0;
 
-      if (item === 'Upcoming Projects') {
-        this.widgetsfalse.splice(
-          this.widgetsfalse.findIndex(
-            (x) => x.componentName === 'Upcoming Projects'
-          ),
-          1
-        );
-        this.widgets.push({
-          componentName: 'Upcoming Projects',
-          present: true,
-          componentType: WidgetApproachingProjectsComponent,
-        });
-      }
+        if (item[i] === 'TFR Status') {
+          this.widgetsfalse.splice(
+            this.widgetsfalse.findIndex(
+              (x) => x.componentName === 'TFR Status'
+            ),
+            1
+          );
+          //check if the widget clicked is already present in the home page
+          for (let j = 0; j < this.widgets.length; j++) {
+            if (this.widgets[j].componentName === item[i]) {
+              this.flag = 1;
+            }
+          }
+          // if widget is not present in home screen then show the widget.
+          if (this.flag === 0) {
+            this.widgets.push({
+              componentName: 'TFR Status',
+              present: true,
+              componentType: ChartsComponent,
+            });
+          }
+        }
 
-      if (item === 'Our Clients') {
-        this.widgetsfalse.splice(
-          this.widgetsfalse.findIndex((x) => x.componentName === 'Our Clients'),
-          1
-        );
-        this.widgets.push({
-          componentName: 'Our Clients',
-          present: true,
-          componentType: WidgetVendorProjectCountComponent,
-        });
-      }
 
-      if (item === 'Client Location') {
-        this.widgetsfalse.splice(
-          this.widgetsfalse.findIndex(
-            (x) => x.componentName === 'Client Location'
-          ),
-          1
-        );
-        this.widgets.push({
-          componentName: 'Client Location',
-          present: true,
-          componentType: WidgetVendorLocationComponent,
-        });
+        if (item[i] === 'Upcoming Projects') {
+          this.widgetsfalse.splice(
+            this.widgetsfalse.findIndex(
+              (x) => x.componentName === 'Upcoming Projects'
+            ),
+            1
+          );
+          //check if the widget clicked is already present in the home page
+          for (let j = 0; j < this.widgets.length; j++) {
+            if (this.widgets[j].componentName === item[i]) {
+              this.flag = 1;
+            }
+          }
+          // if widget is not present in home screen then show the widget.
+          if (this.flag === 0) {
+            this.widgets.push({
+              componentName: 'Upcoming Projects',
+              present: true,
+              componentType: WidgetApproachingProjectsComponent,
+            });
+          }
+        }
+
+
+        if (item[i] === 'Our Clients') {
+          this.widgetsfalse.splice(
+            this.widgetsfalse.findIndex(
+              (x) => x.componentName === 'Our Clients'
+            ),
+            1
+          );
+          //check if the widget clicked is already present in the home page
+          for (let j = 0; j < this.widgets.length; j++) {
+            if (this.widgets[j].componentName === item[i]) {
+              this.flag = 1;
+            }
+          }
+          // if widget is not present in home screen then show the widget.
+          if (this.flag === 0) {
+            this.widgets.push({
+              componentName: 'Our Clients',
+              present: true,
+              componentType: WidgetVendorProjectCountComponent,
+            });
+          }
+        }
+
+
+        if (item[i] === 'Client Location') {
+          this.widgetsfalse.splice(
+            this.widgetsfalse.findIndex(
+              (x) => x.componentName === 'Client Location'
+            ),
+            1
+          );
+          //check if the widget clicked is already present in the home page
+          for (let j = 0; j < this.widgets.length; j++) {
+            if (this.widgets[j].componentName === item[i]) {
+              this.flag = 1;
+            }
+          }
+          // if widget is not present in home screen then show the widget.
+          if (this.flag === 0) {
+            this.widgets.push({
+              componentName: 'Client Location',
+              present: true,
+              componentType: WidgetVendorLocationComponent,
+            });
+          }
+        }
       }
     });
   }

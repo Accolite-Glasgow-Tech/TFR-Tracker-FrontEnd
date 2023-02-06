@@ -1,19 +1,21 @@
 .title {
   font-size: 220%;
   font-family: ui-rounded;
-  background-color: black;
+  background-color: rgb(32, 32, 148);
   color: whitesmoke;
+  margin: auto;
+
 }
 
 .foot {
-  text-align: -webkit-center;
+  justify-content: right;
 }
 
 .isPresentstyle {
-  background-color: orange;
+  background-color: rgb(183, 183, 183);
   color: black;
 }
 .notPresentstyle {
-  background-color: green;
-  color: black;
+  background-color: rgb(72, 72, 237);
+  color: white;
 }
