@@ -89,7 +89,6 @@ export interface MilestoneDTO {
 
 export interface TFRRoute extends Route {
   navigationLabel?: String;
-  isGuarded?: boolean;
 }
 
 export interface TaskDTO {
@@ -168,4 +167,22 @@ export interface ResourceListType {
   resource_email: string;
   resource_id: number;
   selected: boolean;
+}
+
+export interface RegisterResponse {
+  msg: string;
+  status: boolean;
+}
+
+export interface LoginResponse {
+  msg: string;
+  status: boolean;
+  token: string;
+}
+
+export interface dialogContent {
+  title: string;
+  content: string;
+  confirmText: string;
+  cancelText: string;
 }

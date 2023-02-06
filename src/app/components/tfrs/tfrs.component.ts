@@ -7,11 +7,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { saveAs } from 'file-saver';
-import { tfrService } from 'src/app/service/tfrs/tfr.service';
-import { dateFormat, statusList } from 'src/app/shared/constants';
+import * as FileSaver from 'file-saver';
+import { tfrService } from 'src/app/services/tfrs/tfr.service';
+import { statusList } from 'src/app/shared/constants';
 import { ProjectDTO } from 'src/app/shared/interfaces';
 import { getPDFReportURL } from 'src/app/shared/utils';
+import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service'
 
 @Component({
   selector: 'app-tfrs',
@@ -37,7 +38,6 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   startAfterDate: any = new FormControl();
   endBeforeDate: any = new FormControl();
   pageSize = [3, 5, 10, 15];
-  dateFormat = dateFormat;
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -64,7 +64,8 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     private liveAnnouncer: LiveAnnouncer,
     private datePipe: DatePipe,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    public dateFormatterService: DateFormatterService,
   ) {}
 
   ngOnInit(): void {
@@ -105,15 +106,22 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl(`/tfr/${tfrId}`);
   }
 
-  download(projectId: number): void {
-    this.http.get<Blob>(getPDFReportURL(projectId)).subscribe((data) => {});
+  download(project: ProjectDTO): void {
+    this.http
+      .get(getPDFReportURL(project.id!), { responseType: 'blob' })
+      .subscribe((data) => {
+        FileSaver.saveAs(
+          data,
+          `${project.name}_Report_${this.datePipe.transform(
+            new Date(),
+            'yyyy-MM-ddThh:mm'
+          )}.pdf`
+        );
+      });
   }
 
   scheduleReports(tfrId: number): void {
     this.router.navigateByUrl(`/tfr/${tfrId}/reports`);
   }
 
-  displayDate(date: Date) {
-    return this.datePipe.transform(date, 'MM/dd/yyyy');
-  }
 }

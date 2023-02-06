@@ -1,9 +1,3 @@
-.rangepicker {
-  width: 300px;
-}
-.datepicker {
-  width: 200px;
-}
 #datediv {
   margin: 20px;
 }
@@ -14,6 +8,7 @@
 .inputdiv {
   margin: 20px;
   display: flex;
+  flex-wrap: wrap;
 }
 #buttons {
   margin: 20px;

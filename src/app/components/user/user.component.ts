@@ -1,18 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { userService } from 'src/app/service/user/user.service';
-
-export interface registerResponse {
-  msg: string;
-  status: boolean;
-}
-
-export interface loginResponse {
-  msg: string;
-  status: boolean;
-  token: string;
-}
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-user',
@@ -25,12 +15,16 @@ export class UserComponent implements OnInit {
   registering: any = true;
   logging: any = false;
 
-  constructor(private userService: userService,private router:Router, private route: ActivatedRoute) {}
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private snackBarService: SnackBarService
+  ) {}
 
   ngOnInit(): void {
-
     // uses route path to determine whether registering or logging in
-    this.route.url.subscribe(url => {
+    this.route.url.subscribe((url) => {
       let path = url[0].path;
       this.registering = path === 'register';
     });
@@ -81,9 +75,9 @@ export class UserComponent implements OnInit {
     };
     this.userService.register(registerRequestBody).subscribe((info) => {
       if (info === undefined) {
-        alert('Failure, please try again');
+        this.snackBarService.showSnackBar('Failure, please try again', 3000);
       } else {
-        alert(info.msg);
+        this.snackBarService.showSnackBar('successfully registered!', 3000);
         if (info.status == true) {
           this.goLogin();
         }
@@ -98,14 +92,14 @@ export class UserComponent implements OnInit {
     };
     this.userService.login(loginBody).subscribe((info) => {
       if (info == undefined) {
-        alert('Failure, please try again');
+        this.snackBarService.showSnackBar('Failure, please try again', 3000);
       }
       if (info.status == true) {
         sessionStorage.setItem('jwt_token', info.token);
         this.jumpToHome();
       } else {
         sessionStorage.removeItem('jwt_token');
-        alert(info.msg);
+        this.snackBarService.showSnackBar(info.msg, 3000);
       }
     });
   }
@@ -118,7 +112,7 @@ export class UserComponent implements OnInit {
     this.router.navigateByUrl('/register');
   }
 
-  jumpToHome():void{
+  jumpToHome(): void {
     this.router.navigateByUrl('/home');
   }
 }

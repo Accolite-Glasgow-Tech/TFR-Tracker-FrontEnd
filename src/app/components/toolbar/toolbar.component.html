@@ -9,11 +9,11 @@
     <span style="color: white">TFR Management</span>
   </a>
   <span class="example-spacer"></span>
-  <div *ngFor="let route of RoutesList" fxShow="true" fxHide.lt-md="true">
+  <div *ngFor="let route of appRoutes" fxShow="true" fxHide.lt-md="true">
     <a
       mat-button
       style="color: white"
-      *ngIf="route.navigationLabel && checkRouting(route.component)"
+      *ngIf="route.navigationLabel && routeGuardManager.checkRouting(route.component)"
       routerLink="{{ route.path }}"
       routerLinkActive="active-route"
       >{{ route.navigationLabel }}</a

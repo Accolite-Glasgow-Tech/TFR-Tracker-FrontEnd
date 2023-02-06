@@ -18,7 +18,9 @@ export class ProjectResolverService
 {
   constructor(private tfrManagementService: TfrManagementService) {}
 
-  resolve(route: ActivatedRouteSnapshot) {
+  resolve(
+    route: ActivatedRouteSnapshot
+  ): Observable<string | HttpResponse<Project>> {
     return this.tfrManagementService.getFromDatabase(
       Number(route.paramMap.get('id'))
     );

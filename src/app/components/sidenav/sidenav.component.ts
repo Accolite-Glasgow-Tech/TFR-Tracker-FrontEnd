@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Type } from '@angular/core';
-import { LoginGuardService } from 'src/app/services/login-guard/login-guard.service';
 import { SidenavToggleService } from 'src/app/services/sidenav-toggle/sidenav-toggle.service';
-import { RoutesList } from 'src/app/app-routing.module';
+import { appRoutes } from 'src/app/app-routes';
+import { RouteGuardManagerService } from 'src/app/services/route-guard-manager/route-guard-manager.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -11,20 +11,15 @@ import { RoutesList } from 'src/app/app-routing.module';
 export class SidenavComponent implements OnInit {
   constructor(
     private sidenavToggleService: SidenavToggleService,
-    private loginGuardService: LoginGuardService
+    public routeGuardManager: RouteGuardManagerService,
   ) {}
   @Input()
-  RoutesList = RoutesList;
+  appRoutes = appRoutes;
   isOpen = false;
   ngOnInit(): void {
     this.sidenavToggleService.toggleEmitter.subscribe(() => {
       this.isOpen = !this.isOpen;
     });
   }
-  checkRouting(component: Type<any> | undefined): boolean {
-    if (component) {
-      return this.loginGuardService.checkIfComponentCanBeActivated(component);
-    }
-    return false;
-  }
+
 }
