@@ -34,7 +34,22 @@
 }
 .single-search-filter {
   margin: 3px;
+  width: 250px;
 }
+
+.name-search-field {
+  @media all
+  and (min-width: 800px)
+  and (-webkit-min-device-pixel-ratio: 1) {
+    width: 80vw;
+  }
+  @media all
+  and (max-width: 799px)
+  and (-webkit-min-device-pixel-ratio: 1) {
+    width: 55vw;
+  }
+}
+
 .delivered {
   color: rgb(25, 215, 25);
 }

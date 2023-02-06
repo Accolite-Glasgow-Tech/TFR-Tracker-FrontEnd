@@ -27,6 +27,9 @@ import { getPDFReportURL } from 'src/app/shared/utils';
   styleUrls: ['./tfrs.component.scss'],
 })
 export class TfrsComponent implements OnInit, AfterViewInit {
+
+  panelOpenState!: boolean;
+
   displayedColumns: string[] = [
     'name',
     'start_date',

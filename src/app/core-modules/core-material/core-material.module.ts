@@ -28,6 +28,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
@@ -58,6 +59,7 @@ const materialModules = [
   MatCheckboxModule,
   MatButtonToggleModule,
   MatProgressBarModule,
+  MatExpansionModule,
 ];
 
 @NgModule({
