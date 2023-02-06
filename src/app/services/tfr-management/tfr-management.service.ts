@@ -178,7 +178,7 @@ export class TfrManagementService {
           milestones: [],
           project_resources: [],
           is_deleted: false,
-          created_by: 1,
+          created_by: NaN,
           modified_by: NaN,
           created_at: new Date('2022-12-05T10:00:00.000+00:00'),
           modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
