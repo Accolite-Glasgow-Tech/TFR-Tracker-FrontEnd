@@ -7,10 +7,10 @@ import { FormMilestone, Milestone } from 'src/app/shared/interfaces';
 export class MilestoneManagerService {
   milestones: Milestone[] = [];
   selected: FormMilestone | null = null;
-  @Output() Update: EventEmitter<any> = new EventEmitter();
+  @Output() Update: EventEmitter<void> = new EventEmitter();
   constructor() {}
 
-  get getMilestones() {
+  get getMilestones(): Milestone[] {
     return this.milestones;
   }
   setMilestones(milestones: Milestone[] | undefined) {
@@ -80,7 +80,7 @@ export class MilestoneManagerService {
       !!milestone?.acceptance_date &&
       !!milestone?.delivery_date &&
       !!milestone?.start_date &&
-      !!milestone?.description
+      !!milestone?.name
     );
   }
 
