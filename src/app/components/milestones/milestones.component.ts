@@ -186,7 +186,6 @@ export class MilestonesComponent implements OnInit {
   }
   selectMilestone(milestone: Milestone) {
     this.milestoneManagerService.setSelected(milestone);
-    this.milestoneForm.markAsUntouched();
   }
   submitMilestones() {
     this.projectManagerService
