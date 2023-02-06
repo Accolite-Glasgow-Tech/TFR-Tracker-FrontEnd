@@ -19,7 +19,7 @@
 
 .chiplist {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .floating-btn-div {
@@ -73,7 +73,7 @@
     margin: 0px;
   }
   .form-field-date {
-    width: 70%;
+    width: 100%;
     margin: 0px;
   }
 
