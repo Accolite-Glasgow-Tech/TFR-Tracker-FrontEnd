@@ -19,7 +19,7 @@ export const clientProjectCountURL = `${backendURL}/VendorProjectCount`;
 export const seniorityLevelsURL = `${backendURL}/resources/seniorityLevels`;
 
 export const dateFormat = 'MM/dd/YY';
-export const statusList = ['DRAFT', 'INPROGRESS', 'ARCHIVED', 'DELIVERED'];
+export const statusList = ['DRAFT','AGREED', 'IN PROGRESS', 'ARCHIVED', 'DELIVERED'];
 
 export const daysOfWeek: string[] = [
   'Sunday',

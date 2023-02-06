@@ -63,6 +63,7 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   ngAfterViewInit() {
+      
     setTimeout(() => {
       this.projectList.paginator = this.paginator;
       this.projectList.sort = this.sort;
@@ -116,7 +117,9 @@ export class TfrsComponent implements OnInit, AfterViewInit {
       this.projectPostBody['client_name'] = this.selectedClientName;
     }
     if (this.selectedStatus != undefined) {
-      this.projectPostBody['status'] = this.selectedStatus;
+
+      this.projectPostBody['status'] = this.selectedStatus==='IN PROGRESS'? 'IN_PROGRESS':this.selectedStatus;
+      
     }
     this.ApiService.searchProjects(this.projectPostBody).subscribe(
       (projects) => {
