@@ -4,7 +4,9 @@
   <mat-button-toggle-group #toggleBtn="matButtonToggleGroup" multiple style="display: block;">
       <mat-card  *ngFor="let wid of widgets" style="   padding: 5px 20px 5px 20px; ">
             <mat-button-toggle  value="{{wid.componentName}}" type="button" class="btn btn-success top-btn-left" style="  font-size: 102%; white-space: pre-wrap;" >
-              <i class="fa fa-plus-circle" aria-hidden="true" *ngIf="!wid.present"></i><b> {{wid.componentName}} Widget </b></mat-button-toggle>
+              <i class="fa fa-plus-circle" aria-hidden="true" *ngIf="!wid.present"></i>
+              <i class="fa fa-minus-circle" aria-hidden="true" *ngIf="wid.present"></i>
+              <b> {{wid.componentName}} Widget </b></mat-button-toggle>
       </mat-card>
   </mat-button-toggle-group>
 </div>

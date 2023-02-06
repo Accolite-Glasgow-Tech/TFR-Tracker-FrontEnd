@@ -329,7 +329,6 @@ export class TfrManagementService {
   setNotes(notes: string) {
     if (this.project) {
       this.project.notes = notes;
-      console.log(this.project.notes);
       this.updateProjectToDatabase();
     }
   }

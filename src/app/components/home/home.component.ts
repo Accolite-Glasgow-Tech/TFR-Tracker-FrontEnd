@@ -113,30 +113,47 @@ export class HomeComponent implements OnInit {
       panelClass: 'popup-window', // class defined in global styles.scss
       enterAnimationDuration: '500ms',
       data: { widgetdata: this.widgetsfalse },
-    });
-
+    }
+    );
+        
     popup.afterClosed().subscribe((item) => {
       for (let i = 0; i < item.length; i++) {
         this.flag = 0;
 
         if (item[i] === 'TFR Status') {
-          this.widgetsfalse.splice(
-            this.widgetsfalse.findIndex(
-              (x) => x.componentName === 'TFR Status'
-            ),
-            1
-          );
-          //check if the widget clicked is already present in the home page
+         
+          //check if the widget clicked is already present in the home page : to avoid duplicate copy of widgets in home page
           for (let j = 0; j < this.widgets.length; j++) {
             if (this.widgets[j].componentName === item[i]) {
               this.flag = 1;
             }
           }
-          // if widget is not present in home screen then show the widget.
+          // if widget is not present in home screen then add the widget in the home page
           if (this.flag === 0) {
             this.widgets.push({
               componentName: 'TFR Status',
               present: true,
+              componentType: ChartsComponent,
+            });
+
+            this.widgetsfalse.splice(
+              this.widgetsfalse.findIndex(
+                (x) => x.componentName === 'TFR Status'
+              ),
+              1
+            );
+          }
+          // if widget is present in the home page, then remove it from widgets and add in widgetsfalse list
+          else{
+            this.widgets.splice(
+              this.widgets.findIndex(
+                (x) => x.componentName === 'TFR Status'
+              ),
+              1
+            );
+            this.widgetsfalse.push({
+              componentName: 'TFR Status',
+              present: false,
               componentType: ChartsComponent,
             });
           }
@@ -144,12 +161,6 @@ export class HomeComponent implements OnInit {
 
 
         if (item[i] === 'Upcoming Projects') {
-          this.widgetsfalse.splice(
-            this.widgetsfalse.findIndex(
-              (x) => x.componentName === 'Upcoming Projects'
-            ),
-            1
-          );
           //check if the widget clicked is already present in the home page
           for (let j = 0; j < this.widgets.length; j++) {
             if (this.widgets[j].componentName === item[i]) {
@@ -163,17 +174,32 @@ export class HomeComponent implements OnInit {
               present: true,
               componentType: WidgetApproachingProjectsComponent,
             });
+            
+            this.widgetsfalse.splice(
+              this.widgetsfalse.findIndex(
+                (x) => x.componentName === 'Upcoming Projects'
+              ),
+              1
+            );
           }
+            // if widget is present in the home page, then remove it from widgets and add in widgetsfalse list
+            else{
+              this.widgets.splice(
+                this.widgets.findIndex(
+                  (x) => x.componentName === 'Upcoming Projects'
+                ),
+                1
+              );
+              this.widgetsfalse.push({
+                componentName: 'Upcoming Projects',
+                present: false,
+                componentType: WidgetApproachingProjectsComponent,
+              });
+            }
         }
 
 
-        if (item[i] === 'Our Clients') {
-          this.widgetsfalse.splice(
-            this.widgetsfalse.findIndex(
-              (x) => x.componentName === 'Our Clients'
-            ),
-            1
-          );
+        if (item[i] === 'Our Clients') {  
           //check if the widget clicked is already present in the home page
           for (let j = 0; j < this.widgets.length; j++) {
             if (this.widgets[j].componentName === item[i]) {
@@ -187,17 +213,30 @@ export class HomeComponent implements OnInit {
               present: true,
               componentType: WidgetClientProjectCountComponent,
             });
+            this.widgetsfalse.splice(
+              this.widgetsfalse.findIndex(
+                (x) => x.componentName === 'Our Clients'
+              ),
+              1
+            );
+          }
+          else{
+            this.widgets.splice(
+              this.widgets.findIndex(
+                (x) => x.componentName === 'Our Clients'
+              ),
+              1
+            );
+            this.widgetsfalse.push({
+              componentName: 'Our Clients',
+              present: false,
+              componentType: WidgetClientProjectCountComponent,
+            });
           }
         }
 
 
         if (item[i] === 'Client Location') {
-          this.widgetsfalse.splice(
-            this.widgetsfalse.findIndex(
-              (x) => x.componentName === 'Client Location'
-            ),
-            1
-          );
           //check if the widget clicked is already present in the home page
           for (let j = 0; j < this.widgets.length; j++) {
             if (this.widgets[j].componentName === item[i]) {
@@ -209,6 +248,26 @@ export class HomeComponent implements OnInit {
             this.widgets.push({
               componentName: 'Client Location',
               present: true,
+              componentType: WidgetClientLocationComponent,
+            });
+
+            this.widgetsfalse.splice(
+              this.widgetsfalse.findIndex(
+                (x) => x.componentName === 'Client Location'
+              ),
+              1
+            );
+          }
+          else{
+            this.widgets.splice(
+              this.widgets.findIndex(
+                (x) => x.componentName === 'Client Location'
+              ),
+              1
+            );
+            this.widgetsfalse.push({
+              componentName: 'Client Location',
+              present: false,
               componentType: WidgetClientLocationComponent,
             });
           }
