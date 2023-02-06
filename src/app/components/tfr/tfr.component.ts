@@ -3,6 +3,9 @@ import { ActivatedRoute, Data, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
+import { NotesDialogComponent } from '../notes-dialog/notes-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { log } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-tfr',
@@ -13,18 +16,11 @@ import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 export class TfrComponent implements OnInit {
   TfrId!: Number;
   errorMessage: string = '';
+  notes: string = '';
 
   getResourceNameObserver = {
     next: (data: AllocatedResourceTypeDTO[]) => {
       this.tfrManagementService.projectResourcesWithNames = data;
-      this.tfrManagementService.projectResourcesWithNames.forEach(
-        (project_resourceWithName: AllocatedResourceTypeDTO) => {
-          project_resourceWithName.role = project_resourceWithName.role.replace(
-            /_/g,
-            ' '
-          );
-        }
-      );
     },
   };
 
@@ -36,6 +32,9 @@ export class TfrComponent implements OnInit {
         .getResourcesNamesByProjectIdFromDatabase(project.id)
         .subscribe(this.getResourceNameObserver);
       this.tfrManagementService.setClientName(project.client_id);
+      console.log(project.notes);
+      console.log(project);
+      this.notes = this.tfrManagementService.project?.notes ?? '';
     },
     error: () => {
       this.tfrManagementService.apiError = true;
@@ -45,6 +44,7 @@ export class TfrComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private dialog: MatDialog,
     @Inject(TfrManagementService)
     protected tfrManagementService: TfrManagementService,
     @Inject(ApiService) private apiService: ApiService
@@ -79,5 +79,19 @@ export class TfrComponent implements OnInit {
   */
   redirectToEditTfr() {
     this.router.navigate(['/tfr/' + this.TfrId + '/edit']);
+  }
+
+  openNotes() {
+    const dialogRef = this.dialog.open(NotesDialogComponent, {
+      width: '250px',
+      data: this.notes,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.notes = result ?? this.notes;
+        this.tfrManagementService.setNotes(this.notes);
+      }
+    });
   }
 }

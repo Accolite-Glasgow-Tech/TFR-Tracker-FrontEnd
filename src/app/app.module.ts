@@ -48,6 +48,7 @@ import { UserSchedulesComponent } from './components/user-schedules/user-schedul
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { ManageWidgetModalComponent } from './components/manage-widget-modal/manage-widget-modal.component';
+import { NotesDialogComponent } from './components/notes-dialog/notes-dialog.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { ManageWidgetModalComponent } from './components/manage-widget-modal/man
     ChipComponent,
     PageNotFoundComponent,
     LogOutComponent,
-    ManageWidgetModalComponent
+    ManageWidgetModalComponent,
+    NotesDialogComponent
   ],
 
   providers: [

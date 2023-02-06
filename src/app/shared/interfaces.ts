@@ -20,6 +20,7 @@ export interface ProjectDTO {
 
 export interface Project {
   id: number;
+  notes: string;
   name: string;
   client_id: number;
   start_date: Date;
@@ -39,6 +40,7 @@ export interface Project {
 
 export interface ProjectMilestoneDTO {
   id: number;
+  notes: string;
   name: string;
   client_id: number;
   start_date: Date;
@@ -185,8 +187,8 @@ export interface dialogContent {
   cancelText: string;
 }
 
-export interface ResourceSkillDTO {
-  resource_id: number;
+export interface DisplaySkillDTO {
   skill: string;
   experience: number;
+  percentage: number;
 }
