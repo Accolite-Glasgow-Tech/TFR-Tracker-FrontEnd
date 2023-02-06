@@ -28,6 +28,10 @@ import { SnackBarService } from '../snack-bar/snack-bar.service';
 
 import { TfrManagementService } from './tfr-management.service';
 
+import { InjectionToken } from '@angular/core';
+
+export const WINDOW = new InjectionToken('Window');
+
 describe('TfrManagementService', () => {
   let service: TfrManagementService;
   let http: HttpClient;
@@ -47,6 +51,11 @@ describe('TfrManagementService', () => {
     afterClosed: of('true'),
     close: of('true'),
   });
+  let windowMock = {
+    location: {
+      reload: jasmine.createSpy('reload')
+    }
+  }
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -73,6 +82,7 @@ describe('TfrManagementService', () => {
             'postProjectResources',
           ]),
         },
+        {provide: WINDOW, useValue: windowMock}
       ],
     });
 
@@ -234,8 +244,10 @@ describe('TfrManagementService', () => {
       status: 412,
     });
     dialogRefSpyObj.afterClosed.and.returnValue(of('true'));
+    spyOn(window.location, 'reload');
 
     service.updateProjectToDatabaseObserver.error(httpErrorResponse);
+    expect(window.location.reload).toHaveBeenCalled(); 
     expect(dialogSpy).toHaveBeenCalled();
   });
 
@@ -245,6 +257,7 @@ describe('TfrManagementService', () => {
     });
 
     service.updateProjectToDatabaseObserver.error(httpErrorResponse);
+    
     expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
       'Save Unsuccessful. Server Error',
       4000

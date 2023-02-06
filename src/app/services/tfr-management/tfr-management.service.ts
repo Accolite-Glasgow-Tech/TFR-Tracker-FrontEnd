@@ -32,6 +32,7 @@ export class TfrManagementService {
 
   clientName: string = '';
   apiError: boolean = false;
+  serverDown: boolean = false;
 
   updateProjectToDatabaseObserver = {
     next: (response: Data) => {
@@ -50,14 +51,14 @@ export class TfrManagementService {
             title: 'Save unsuccessful',
             content:
               'Updating an older version of project. Please see the new changes',
-            confirmText: 'Redirect',
+            confirmText: 'Refresh',
             cancelText: '',
           },
         });
 
         dialogRef.afterClosed().subscribe((result: string) => {
           if (result === 'true') {
-            this.router.navigate([`/tfr/${this.getProjectId}`]);
+            window.location.reload();
           }
         });
       } else {

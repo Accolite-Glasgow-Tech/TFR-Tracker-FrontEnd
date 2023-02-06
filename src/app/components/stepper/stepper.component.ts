@@ -1,5 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
@@ -65,15 +66,19 @@ export class StepperComponent implements OnInit {
 
   getProjectObserver = {
     next: (response: Data) => {
+      let status = response['project']['status'];
+      if (status === 500) {
+        this.tfrManagementService.apiError = true;
+      } else if (status === 503) {
+        this.tfrManagementService.serverDown = true;
+      } else {
       let project = response['project'];
       this.tfrManagementService.project = project;
       this.apiService
         .getResourcesNamesByProjectIdFromDatabase(project.id)
         .subscribe(this.getResourceNameObserver);
       this.tfrManagementService.setClientName(project.client_id);
-    },
-    error: () => {
-      this.tfrManagementService.apiError = true;
+      }
     },
   };
 

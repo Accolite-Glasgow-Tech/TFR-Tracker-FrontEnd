@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Data, Resolve, Router } from '@angular/router';
-import { catchError, EMPTY, mergeMap, Observable, of } from 'rxjs';
+import { catchError, EMPTY, mergeMap, Observable, of, throwError } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
 import { ApiService } from '../api/api.service';
+import { SnackBarService } from '../snack-bar/snack-bar.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,31 +15,24 @@ import { ApiService } from '../api/api.service';
   the component that requires this project body.
 */
 export class ProjectResolverService
-  implements Resolve<Observable<Project | HttpErrorResponse | never>>
+  implements Resolve<Observable<Project | HttpErrorResponse>>
 {
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(private apiService: ApiService) {}
 
   resolve(
     route: ActivatedRouteSnapshot
-  ): Observable<Project | HttpErrorResponse | never> {
+  ): Observable<Project | HttpErrorResponse> {
     return this.apiService.getProject(Number(route.paramMap.get('id'))).pipe(
       mergeMap((response: Data) => {
-        if (Object.keys(response).length !== 0) {
-          let status: number = response['status'];
-          let project: Project = response['body'];
-          if (status === 200) {
-            return of(project);
-          } else {
-            return of(new HttpErrorResponse({ status: 500 }));
-          }
-        } else {
-          this.router.navigate(['/tfrs']);
-          return EMPTY;
-        }
+        let project: Project = response['body'];
+        return of(project);
       }),
-      catchError(() => {
-        this.router.navigate(['/tfrs']);
-        return EMPTY;
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 0) {
+          return of(new HttpErrorResponse({ status: 503 }));
+        } else {
+          return of(new HttpErrorResponse({ status: 500 }));
+        }
       })
     );
   }
