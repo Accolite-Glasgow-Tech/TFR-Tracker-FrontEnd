@@ -29,6 +29,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+
+
 const materialModules = [
   MatIconModule,
   MatButtonModule,
@@ -41,7 +44,6 @@ const materialModules = [
   MatFormFieldModule,
   MatInputModule,
   MatCardModule,
-  MatDialogModule,
   MatRadioModule,
   MatChipsModule,
   MatSlideToggleModule,
@@ -54,6 +56,7 @@ const materialModules = [
   MatSortModule,
   MatMenuModule,
   MatCheckboxModule,
+  MatButtonToggleModule,
   MatProgressBarModule,
 ];
 
