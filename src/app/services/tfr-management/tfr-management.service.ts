@@ -78,6 +78,9 @@ export class TfrManagementService {
         this.project.version++;
         this.snackBarService.showSnackBar('Saved to database', 2000);
         this.subject.next(true);
+        this.getFromDatabase(Number(response)).subscribe((res)=> {
+          this.extractProject(res);
+        })
       }
     },
     error: () => {
