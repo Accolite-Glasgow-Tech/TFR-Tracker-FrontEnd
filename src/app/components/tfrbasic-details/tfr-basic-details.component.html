@@ -63,11 +63,7 @@
   <button
     mat-raised-button
     [disabled]="
-      !(
-        this.tfrManager.getBasicDetails &&
-        this.clientGroup &&
-          (this.clientGroup.dirty || this.tfrDetails.dirty)
-      )
+      !((this.clientGroup && this.clientGroup.dirty) || this.tfrDetails.dirty)
     "
     class="navigation-btn"
     (click)="resetInputFields()"
@@ -76,7 +72,13 @@
   </button>
   <button
     mat-raised-button
-    [disabled]="!isFormValid() || this.tfrManager.project === undefined"
+    [disabled]="
+      !(
+        isFormValid() &&
+        this.tfrManager.project &&
+        (previousUpdateSuccessful || editMode)
+      )
+    "
     class="navigation-btn"
     color="primary"
     (click)="next()"

@@ -4,9 +4,9 @@ import { debounce, interval } from 'rxjs';
 import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
-  ProjectBasicDetails,
   ClientAttributeDTO,
   ClientDTO,
+  ProjectBasicDetails,
 } from 'src/app/shared/interfaces';
 
 @Component({
@@ -14,7 +14,6 @@ import {
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.scss'],
 })
-
 export class ClientsComponent implements OnInit {
   constructor(
     private api: ApiService,
@@ -83,8 +82,7 @@ export class ClientsComponent implements OnInit {
   fillAttributesFromExisting() {
     // parse values from existingDetails.client_specific
     // use to set values of form array
-
-    if (this.attributes) {
+    if (this.attributes && this.existingDetails) {
       this.attributes.forEach((attribute, index) => {
         this.getAttributes()
           .at(index)
@@ -99,28 +97,32 @@ export class ClientsComponent implements OnInit {
   @Output() attributesSelected = new EventEmitter<ClientAttributeDTO[]>();
   onSelectedClient(client: ClientDTO) {
     this.getAttributes().reset();
-    this.clientGroup.get('name')?.setValue(client.name);
 
-    this.onSelected.emit(client);
+    if (client) {
+      this.clientGroup.get('name')?.setValue(client.name);
 
-    this.api.getClientAttributes(client.id).subscribe((res) => {
-      this.attributes = res;
+      this.onSelected.emit(client);
 
-      this.attributesSelected.emit(this.attributes);
+      this.api.getClientAttributes(client.id).subscribe((res) => {
+        this.attributes = res;
 
-      this.getAttributes().clear();
+        this.attributesSelected.emit(this.attributes);
 
-      //add a form control to form array for each attribute
-      this.attributes.forEach((res) => {
-        this.getAttributes().push(new FormControl('', [Validators.required]));
+        this.getAttributes().clear();
+
+        //add a form control to form array for each attribute
+        this.attributes.forEach((res) => {
+          this.getAttributes().push(new FormControl('', [Validators.required]));
+        });
+
+        if (
+          this.clientGroup.value.name ===
+          this.tfrManagementService.getClientName
+        ) {
+          this.fillAttributesFromExisting();
+        }
       });
-
-      if (
-        this.clientGroup.value.name === this.tfrManagementService.getClientName
-      ) {
-        this.fillAttributesFromExisting();
-      }
-    });
+    }
   }
 
   getAttributes(): FormArray {

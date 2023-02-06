@@ -30,6 +30,7 @@
       <app-tfr-creation-resource
         (nextStepEmitter)="nextStep($event)"
         (stepCompletedEmitter)="stepCompleted(2, $event)"
+        [editMode]="editMode"
       ></app-tfr-creation-resource>
       <!--  -->
     </mat-step>

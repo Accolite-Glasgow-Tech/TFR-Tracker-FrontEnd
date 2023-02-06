@@ -34,7 +34,7 @@ export class TfrBasicDetailsComponent implements OnInit {
   client_specificData: { [key: string]: string } = {};
   editMode: Boolean = false;
   projectToEdit!: ProjectBasicDetails;
-  previousUpdateSuccessful: boolean = true;
+  previousUpdateSuccessful: boolean = false;
   @Output() editModeEmitter = new EventEmitter<boolean>();
 
   ngOnInit(): void {
@@ -108,7 +108,7 @@ export class TfrBasicDetailsComponent implements OnInit {
     Move onto the next step of the stepper
   */
   next() {
-    if (this.isFormDirty()) {
+    if (this.isFormDirty() && this.previousUpdateSuccessful) {
       let dialogRef = this.matDialog.open(TfrCreationDialogComponent, {
         data: {
           title: 'Discard Changes',
@@ -139,27 +139,39 @@ export class TfrBasicDetailsComponent implements OnInit {
     let previousStateBasicDetails: ProjectBasicDetails =
       this.tfrManager.getBasicDetails!;
 
-    this.tfrDetails.get('name')?.setValue(previousStateBasicDetails.name);
+    this.tfrDetails
+      .get('name')
+      ?.setValue(
+        previousStateBasicDetails ? previousStateBasicDetails.name : ''
+      );
     this.tfrDetails
       .get('start_date')
-      ?.setValue(previousStateBasicDetails.start_date);
+      ?.setValue(
+        previousStateBasicDetails ? previousStateBasicDetails.start_date : null
+      );
     this.tfrDetails
       .get('end_date')
-      ?.setValue(previousStateBasicDetails.end_date);
+      ?.setValue(
+        previousStateBasicDetails ? previousStateBasicDetails.end_date : null
+      );
     this.tfrDetails
       .get('client_id')
-      ?.setValue(previousStateBasicDetails.client_id);
+      ?.setValue(
+        previousStateBasicDetails ? previousStateBasicDetails.client_id : ''
+      );
 
     !this.projectToEdit ??
       (this.projectToEdit.client_id = previousStateBasicDetails.client_id);
 
-    /*
-      Trigger event to Client component through the api.service
-    */
-    this.apiService.resetClientDetails();
+    if (this.clientGroup) {
+      /*
+        Trigger event to Client component through the api.service
+      */
+      this.apiService.resetClientDetails();
+      this.clientGroup.markAsPristine();
+    }
 
     this.tfrDetails.markAsPristine();
-    this.clientGroup.markAsPristine();
   }
 
   onAttributesSelected(attributes: ClientAttributeDTO[]) {
@@ -183,6 +195,7 @@ export class TfrBasicDetailsComponent implements OnInit {
         this.client_specificData[this.attributeNames[i]] =
           this.getAttributesArray().controls[i].value;
         i++;
+        console.log(this.client_specificData);
       }
     }
   }
