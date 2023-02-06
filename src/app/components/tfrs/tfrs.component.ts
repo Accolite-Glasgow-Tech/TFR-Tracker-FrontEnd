@@ -27,6 +27,9 @@ import { getPDFReportURL } from 'src/app/shared/utils';
   styleUrls: ['./tfrs.component.scss'],
 })
 export class TfrsComponent implements OnInit, AfterViewInit {
+
+  panelOpenState!: boolean;
+
   displayedColumns: string[] = [
     'name',
     'start_date',
@@ -45,14 +48,15 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   selectedStatus: any;
   startAfterDate: any = new FormControl();
   endBeforeDate: any = new FormControl();
+  searchName!: string;
   pageSize = [3, 5, 10, 15];
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   ngAfterViewInit() {
-      
     setTimeout(() => {
+      console.log('executed')
       this.projectList.paginator = this.paginator;
       this.projectList.sort = this.sort;
     });
@@ -108,6 +112,9 @@ export class TfrsComponent implements OnInit, AfterViewInit {
       this.projectPostBody['status'] = this.selectedStatus==='IN PROGRESS'? 'IN_PROGRESS':this.selectedStatus;
       
     }
+    // if (this.searchName != undefined) {
+    //   this.projectPostBody['project_name'] = this.searchName;
+    // }
     this.ApiService.searchProjects(this.projectPostBody).subscribe(
       (projects) => {
         this.projectList.data = projects;
@@ -139,5 +146,10 @@ export class TfrsComponent implements OnInit, AfterViewInit {
 
   displayDate(date: Date) {
     return this.dateFormatterService.getShortDisplayDate(date);
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.projectList.filter = filterValue.trim().toLowerCase();
   }
 }

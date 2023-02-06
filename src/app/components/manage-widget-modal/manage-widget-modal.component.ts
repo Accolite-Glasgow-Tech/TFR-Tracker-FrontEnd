@@ -4,6 +4,7 @@ import {
   Inject,
   Optional,
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -17,7 +18,7 @@ export class ManageWidgetModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     @Optional() public ref: MatDialogRef<ManageWidgetModalComponent>
   ) {}
-//======
+
   widgetsfalse:any
   widgets: any=[
     {
@@ -42,7 +43,6 @@ export class ManageWidgetModalComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    // this.widgets = this.data.widgetdata;
     this.widgetsfalse = this.data.widgetdata;
 
     for(let i=0;i<this.widgetsfalse.length;i++){
@@ -60,15 +60,18 @@ export class ManageWidgetModalComponent implements OnInit {
       }
       }
   }
-//====
-  pushWidget(componentName: string) {
-    this.ref.close(componentName);
-  }
+  // closeWidget(componentName: string) {
+  //   this.ref.close(componentName);
+  // }
 
 
+  onClick(dat:any){
+  this.ref.close(dat);
+}
 
   isempty(present: boolean) {
     if (present === true) return ['isPresentstyle'];
     return ['notPresentstyle'];
   }
+
 }

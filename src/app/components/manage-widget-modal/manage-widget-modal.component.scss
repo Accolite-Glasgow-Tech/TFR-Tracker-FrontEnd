@@ -1,12 +1,12 @@
-
 @media all 
 and (min-device-width: 800px)
 and (-webkit-min-device-pixel-ratio: 1) {
   .title {
     font-size: 2.5vw;
-    font-family: Roboto;
-    background-color: #507fc6;
+    font-family: ui-rounded;
+    background-color: rgb(32, 32, 148);
     color: whitesmoke;
+    margin: auto;
   }
 
   .isPresentstyle {
@@ -28,9 +28,10 @@ and (-webkit-min-device-pixel-ratio: 1) {
   
   .title {
     font-size: 6vw;
-    font-family: Roboto;
-    background-color: #507fc6;
+    font-family: ui-rounded;
+    background-color: rgb(32, 32, 148);
     color: whitesmoke;
+    margin: auto;
   }
 
   .isPresentstyle {
@@ -48,7 +49,7 @@ and (-webkit-min-device-pixel-ratio: 1) {
 
 
   .foot {
-    text-align: -webkit-center;
+    justify-content: right;
   }
   
   
