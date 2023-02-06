@@ -15,13 +15,13 @@ export class MilestoneStatusService {
   getNextStatus(currentStatus: string): status[] {
     switch (currentStatus) {
       case status.INTENT:
-        return [status.IN_PROGRESS];
+        return [status.INTENT, status.IN_PROGRESS];
       case status.IN_PROGRESS:
-        return [status.PENDING_REVIEW];
+        return [status.IN_PROGRESS, status.PENDING_REVIEW];
       case status.PENDING_REVIEW:
-        return [status.REVIEW_FAILED, status.APPROVED];
+        return [status.PENDING_REVIEW, status.REVIEW_FAILED, status.APPROVED];
       case status.REVIEW_FAILED:
-        return [status.IN_PROGRESS];
+        return [status.REVIEW_FAILED, status.IN_PROGRESS];
       case status.APPROVED:
         return [];
       default:
