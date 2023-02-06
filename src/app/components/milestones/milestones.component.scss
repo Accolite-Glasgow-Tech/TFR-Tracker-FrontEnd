@@ -19,7 +19,8 @@
 
 .chiplist {
   display: flex;
-  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .floating-btn-div {
@@ -49,6 +50,12 @@
   justify-content: space-between;
 }
 
+.acceptedNote {
+  font-style: italic;
+  font-weight: bold;
+  color: rgb(63, 81, 181);
+}
+
 .milestones {
   margin: 1rem;
 }
@@ -73,7 +80,7 @@
     margin: 0px;
   }
   .form-field-date {
-    width: 70%;
+    width: 100%;
     margin: 0px;
   }
 
