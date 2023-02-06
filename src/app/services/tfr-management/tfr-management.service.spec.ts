@@ -210,8 +210,16 @@ describe('TfrManagementService', () => {
     service.project = project;
 
     basicDetails.name = 'Portfolio Management Project';
-    service.setBasicDetails(basicDetails);
+    service.setBasicDetails(basicDetails, true);
     expect(service.project?.name).toBe(basicDetails.name);
+  });
+
+  it('should set Basic Details ', () => {
+    service.project = project;
+    expect(service.compareBasicDetails(basicDetails)).toBe(true);
+    service.setBasicDetails(basicDetails, true).subscribe((response) => {
+      expect(response).toBe(true);
+    });
   });
 
   it('should update project to db - success', () => {
@@ -237,7 +245,21 @@ describe('TfrManagementService', () => {
     });
 
     service.updateProjectToDatabaseObserver.error(httpErrorResponse);
-    expect(dialogSpy).toHaveBeenCalled();
+    expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
+      'Save Unsuccessful. Server Error',
+      4000
+    );
+  });
+
+  it('should create project - error', () => {
+    service.createProjectObserver.error();
+    expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
+      'Save Unsuccessful. Server Error',
+      4000
+    );
+    service.subject.subscribe((response) => {
+      expect(response).toBe(false);
+    });
   });
 
   it('should make API call to create project in db', () => {
@@ -256,7 +278,7 @@ describe('TfrManagementService', () => {
     service.project = undefined;
     apiServiceSpy.getClients.and.returnValue(of(clients));
     apiServiceSpy.postProject.and.returnValue(of(2));
-    service.setBasicDetails(basicDetails);
+    service.setBasicDetails(basicDetails, true);
     expect(service.getBasicDetails).toEqual(basicDetails);
   });
 

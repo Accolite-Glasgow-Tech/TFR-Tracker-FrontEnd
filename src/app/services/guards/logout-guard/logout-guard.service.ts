@@ -5,12 +5,10 @@ import { Router } from '@angular/router';
 import { userService } from '../../user/user.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LogoutGuardService implements CanActivate {
-
-  constructor(private router: Router,
-    private userService: userService) {}
+  constructor(private router: Router, private userService: userService) {}
 
   /**
    * Allows activation if User is logged out OR if guarding is disabled
@@ -18,7 +16,6 @@ export class LogoutGuardService implements CanActivate {
   canActivate(): boolean {
     let activated = this.checkIfComponentCanBeActivated();
     if (!activated) {
-      console.log('called');
       this.navigateToValid();
     }
     return activated;
@@ -33,10 +30,7 @@ export class LogoutGuardService implements CanActivate {
   }
 
   checkIfComponentCanBeActivated(): boolean {
-    return (
-      !this.userService.isLoggedIn() ||
-      environment.routeGuardingDisabled
-    );
+    return !this.userService.isLoggedIn() || environment.routeGuardingDisabled;
   }
 
   get isLoggedIn(): boolean {

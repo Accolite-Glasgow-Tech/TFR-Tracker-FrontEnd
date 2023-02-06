@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { ApiService } from 'src/app/services/api/api.service';
@@ -9,8 +10,17 @@ import {
   DummyAllocatedResources,
   DummyProject,
 } from 'src/app/types/dummy-data';
+import { NotesDialogComponent } from '../notes-dialog/notes-dialog.component';
 
 import { TfrComponent } from './tfr.component';
+
+export class MatDialogMock {
+  open(component: NotesDialogComponent) {
+    return {
+      afterClosed: () => of('true'),
+    };
+  }
+}
 
 describe('TfrComponent', () => {
   let component: TfrComponent;
@@ -57,6 +67,10 @@ describe('TfrComponent', () => {
             'getResourcesNamesByProjectIdFromDatabase',
           ]),
         },
+        {
+          provide: MatDialog,
+          useClass: MatDialogMock,
+        },
       ],
     }).compileComponents();
 
@@ -90,6 +104,10 @@ describe('TfrComponent', () => {
           useValue: jasmine.createSpyObj('ApiService', [
             'getResourcesNamesByProjectIdFromDatabase',
           ]),
+        },
+        {
+          provide: MatDialog,
+          useClass: MatDialogMock,
         },
       ],
     }).compileComponents();
@@ -131,6 +149,10 @@ describe('TfrComponent', () => {
             'getResourcesNamesByProjectIdFromDatabase',
           ]),
         },
+        {
+          provide: MatDialog,
+          useClass: MatDialogMock,
+        },
       ],
     }).compileComponents();
 
@@ -168,6 +190,7 @@ describe('TfrComponent', () => {
             provide: TfrManagementService,
             useValue: jasmine.createSpyObj('TfrManagementService', [
               'setClientName',
+              'setNotes',
             ]),
           },
         ],

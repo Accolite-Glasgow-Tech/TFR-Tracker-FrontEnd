@@ -67,7 +67,7 @@
               *ngFor="let filteredResource of filteredResourceOption | async"
               [value]="filteredResource.resource_name"
               class="small-font"
-              (click)="getSkills(filteredResource.resource_id)"
+              (click)="getSkills(filteredResource)"
             >
               {{ filteredResource.resource_name }}
             </mat-option>
@@ -189,13 +189,15 @@
   <br />
 
   <div class="resource-skill-div" *ngIf="currentResourceSkills.length !== 0">
-    <label>{{ resource.value }}'s skillset:</label>
-    <ul>
-      <li *ngFor="let resourceSkill of currentResourceSkills">
-        {{ resourceSkill.skill }} with {{ resourceSkill.experience }} years of
-        experience
-      </li>
-    </ul>
+    <label>{{ currentResourceName }}'s skillset:</label>
+    <div class="skill-div" *ngFor="let resourceSkill of currentResourceSkills">
+      <li>{{ resourceSkill.skill }} - {{ resourceSkill.experience }} yrs</li>
+      <mat-progress-bar
+        mode="determinate"
+        value="{{ resourceSkill.percentage }}"
+        class="progress-bar"
+      ></mat-progress-bar>
+    </div>
   </div>
 
   <br />

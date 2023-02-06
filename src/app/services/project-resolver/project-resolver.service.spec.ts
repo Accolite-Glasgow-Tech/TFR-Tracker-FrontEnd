@@ -1,7 +1,7 @@
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
 import { DummyProject } from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
@@ -37,7 +37,7 @@ describe('ProjectResolverService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should call resolve() and return project obj', () => {
+  it('should call resolve() - return project', () => {
     const dummyProject: Project = DummyProject;
     let httpResponseProject: HttpResponse<Project> = new HttpResponse({
       body: dummyProject,
@@ -47,6 +47,30 @@ describe('ProjectResolverService', () => {
 
     service.resolve(route).subscribe((project) => {
       expect(project).toEqual(dummyProject);
+    });
+  });
+
+  it('should call resolve() - return server error', () => {
+    const dummyProject: Project = DummyProject;
+    let httpResponseProject: HttpResponse<Project> = new HttpResponse({
+      body: dummyProject,
+      status: 500,
+    });
+
+    apiServiceSpy.getProject.and.returnValue(of(httpResponseProject));
+
+    service.resolve(route).subscribe((response) => {
+      const expectedResponse = new HttpErrorResponse({ status: 500 });
+      expect(response).toEqual(expectedResponse);
+    });
+  });
+
+  it('should call resolve() - catch error', () => {
+    const err = new Error();
+    apiServiceSpy.getProject.and.returnValue(throwError(() => err));
+
+    service.resolve(route).subscribe((response) => {
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/tfrs']);
     });
   });
 });
