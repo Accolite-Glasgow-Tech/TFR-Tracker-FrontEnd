@@ -22,7 +22,7 @@ export class MilestonesComponent implements OnInit {
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
   isPristine: boolean = true;
-  milestones: Milestone[] = this.milestoneManagerService.getMilestones;
+  milestones: Milestone[] = [];
   formMilestone: FormMilestone | null = null;
   statusOptions: string[] = [];
   milestoneForm = new FormGroup({
@@ -57,16 +57,7 @@ export class MilestonesComponent implements OnInit {
     }),
   });
   updateObserver = {
-    next: () => {
-      this.milestones = this.milestoneManagerService.getMilestones;
-      this.formMilestone = this.milestoneManagerService.getSelected;
-      this.milestoneForm.setValue(this.ConvertMilestoneToFormData());
-      if (this.formMilestone) {
-        this.statusOptions = this.milestoneStatusService.getNextStatus(
-          this.formMilestone.status
-        );
-      }
-    },
+    next: () => this.update(),
   };
   get selectedMilestone(): Milestone | null {
     return this.formMilestone as Milestone | null;
@@ -114,7 +105,12 @@ export class MilestonesComponent implements OnInit {
   update() {
     this.milestones = this.milestoneManagerService.getMilestones;
     this.formMilestone = this.milestoneManagerService.getSelected;
-    this.milestoneForm.setValue(this.ConvertMilestoneToFormData());
+    if (this.formMilestone) {
+      this.statusOptions = this.milestoneStatusService.getNextStatus(
+        this.formMilestone.status
+      );
+      this.milestoneForm.setValue(this.ConvertMilestoneToFormData());
+    }
   }
 
   ngOnInit(): void {

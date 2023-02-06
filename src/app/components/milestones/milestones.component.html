@@ -19,6 +19,9 @@
     appearance="fill"
     class="container"
   >
+    <div *ngIf="statusOptions.length == 0" class="acceptedNote">
+      <label>Accepted</label>
+    </div>
     <div class="inputdiv">
       <mat-form-field class="form-field">
         <input
@@ -39,7 +42,11 @@
         <mat-error>Description Required</mat-error>
       </mat-form-field>
       <mat-form-field
-        *ngIf="projectStatus != 'DRAFT' && (formMilestone?.id ?? -1) > 0"
+        *ngIf="
+          projectStatus != 'DRAFT' &&
+          (formMilestone?.id ?? -1) > 0 &&
+          statusOptions.length > 0
+        "
         class="form-field"
       >
         <mat-label>Status</mat-label>
