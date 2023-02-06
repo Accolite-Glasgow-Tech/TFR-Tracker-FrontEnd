@@ -1,8 +1,4 @@
-
-@media all 
-and (min-device-width: 800px) 
-and (-webkit-min-device-pixel-ratio: 1) { 
-  
+@media all and (min-device-width: 800px) and (-webkit-min-device-pixel-ratio: 1) {
   .example-button-row {
     display: block;
     text-align: right;
@@ -15,7 +11,7 @@ and (-webkit-min-device-pixel-ratio: 1) {
     font-family: Roboto;
     font-size: 3vw;
     color: #000000;
-    font-weight: bold;
+    font-weight: 500;
     vertical-align: -webkit-baseline-middle;
     margin: 14px;
   }
@@ -24,7 +20,7 @@ and (-webkit-min-device-pixel-ratio: 1) {
     background: #507fc6;
     border: 1px solid #ffffff;
     display: flexbox;
-    flex-wrap: wrap ;
+    flex-wrap: wrap;
     height: 13%;
     padding-right: 2vw;
     padding-top: 1vw;
@@ -42,7 +38,7 @@ and (-webkit-min-device-pixel-ratio: 1) {
     border: none;
     margin-right: 1vw;
   }
-  
+
   .geariconbtn {
     max-width: 2vw;
     background-color: #507fc6;
@@ -54,11 +50,7 @@ and (-webkit-min-device-pixel-ratio: 1) {
   }
 }
 
-@media all 
-and (min-device-width: 0px) 
-and (max-width: 799px) 
-and (-webkit-min-device-pixel-ratio: 1) { 
-
+@media all and (min-device-width: 0px) and (max-width: 799px) and (-webkit-min-device-pixel-ratio: 1) {
   .example-button-row {
     display: block;
     text-align: center;
@@ -70,7 +62,7 @@ and (-webkit-min-device-pixel-ratio: 1) {
     font-family: Roboto;
     font-size: 5vw;
     color: #000000;
-    font-weight: bold;
+    font-weight: 500;
     vertical-align: -webkit-baseline-middle;
     margin: 14px;
   }
@@ -95,7 +87,7 @@ and (-webkit-min-device-pixel-ratio: 1) {
     border: none;
     margin-right: 3vw;
   }
-  
+
   .geariconbtn {
     max-width: 2vw;
     background-color: #507fc6;
@@ -112,7 +104,6 @@ and (-webkit-min-device-pixel-ratio: 1) {
   margin: 5px;
   height: 40px;
 }
-
 
 section {
   display: table;
@@ -133,6 +124,14 @@ section {
   inline-size: auto;
 }
 
-
-
-
+@media all and (min-device-width: 1700px) and (-webkit-min-device-pixel-ratio: 1) {
+  .widget {
+    border: 8px solid #fbfbfb;
+    background-color: #1e0c0c;
+    width: inherit;
+    height: 140%;
+    position: relative;
+    margin: 8px;
+    inline-size: auto;
+  }
+}
