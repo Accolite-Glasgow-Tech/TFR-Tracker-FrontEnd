@@ -14,7 +14,6 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import {
   debounceTime,
@@ -24,7 +23,7 @@ import {
 } from 'rxjs/operators';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
-import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   AllocatedResourceTypeDTO,
@@ -33,7 +32,6 @@ import {
   ProjectResourceDTO,
   ResourceListType,
 } from 'src/app/shared/interfaces';
-import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
 export function autoCompleteResourceNameValidator(
   validOptions: ResourceListType[]
@@ -55,8 +53,7 @@ export class TfrCreationResourceComponent implements OnInit {
   constructor(
     protected resourceService: ResourceService,
     protected tfrManagementService: TfrManagementService,
-    private matDialog: MatDialog,
-    private snackBarService: SnackBarService,
+    private responseHandlerService: ResponseHandlerService,
     @Inject(ApiService) private apiService: ApiService
   ) {}
 
@@ -88,7 +85,7 @@ export class TfrCreationResourceComponent implements OnInit {
     },
     error: () => {
       this.stepCompletedEmitter.emit(false);
-      this.snackBarService.showSnackBar('Server Error. Try again', 4000);
+      this.responseHandlerService.badGet();
     },
   };
 
@@ -121,7 +118,7 @@ export class TfrCreationResourceComponent implements OnInit {
     },
     error: () => {
       this.stepCompletedEmitter.emit(false);
-      this.snackBarService.showSnackBar('Server Error. Try again', 4000);
+      this.responseHandlerService.badGet();
     },
   };
 
@@ -314,21 +311,10 @@ export class TfrCreationResourceComponent implements OnInit {
 
   triggerStep(forward: boolean) {
     if (this.resourceDetailsUpdated) {
-      this.showDialog();
+      this.responseHandlerService.unsavedChangesDialogue();
     } else {
       this.nextStep(forward);
     }
-  }
-
-  showDialog() {
-    this.matDialog.open(TfrCreationDialogComponent, {
-      data: {
-        title: 'Unsaved changes',
-        content: 'Save or reset before moving on',
-        confirmText: 'OK',
-        cancelText: '',
-      },
-    });
   }
 
   nextStep(forward: boolean) {

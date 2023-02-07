@@ -1,9 +1,7 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Data } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
-import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
 import {
   AllocatedResourceTypeDTO,
   ClientDTO,
@@ -15,7 +13,7 @@ import {
   ProjectResourceDTO,
 } from 'src/app/shared/interfaces';
 import { ApiService } from '../api/api.service';
-import { SnackBarService } from '../snack-bar/snack-bar.service';
+import { ResponseHandlerService } from '../response-handler/response-handler.service';
 
 @Injectable({
   providedIn: 'root',
@@ -34,34 +32,11 @@ export class TfrManagementService {
       if (this.project) {
         this.project.version = Number(response);
       }
-      this.snackBarService.showSnackBar('Updates saved to database', 2000);
+      this.responseHandlerService.goodSave();
       this.subject.next(true);
     },
     error: (err: HttpErrorResponse) => {
-      if (err.status === 412) {
-        let dialogRef!: MatDialogRef<TfrCreationDialogComponent, any>;
-
-        dialogRef = this.dialog.open(TfrCreationDialogComponent, {
-          data: {
-            title: 'Save unsuccessful',
-            content:
-              'Updating an older version of project. Please see the new changes',
-            confirmText: 'Refresh',
-            cancelText: '',
-          },
-        });
-
-        dialogRef.afterClosed().subscribe((result: string) => {
-          if (result === 'true') {
-            window.location.reload();
-          }
-        });
-      } else {
-        this.snackBarService.showSnackBar(
-          'Save Unsuccessful. Server Error',
-          4000
-        );
-      }
+      this.responseHandlerService.handleBadProjectUpdate(err);
       this.subject.next(false);
     },
   };
@@ -71,26 +46,22 @@ export class TfrManagementService {
       if (this.project) {
         this.project.id = Number(response);
         this.project.version++;
-        this.snackBarService.showSnackBar('Saved to database', 2000);
+        this.responseHandlerService.goodSave();
         this.subject.next(true);
-        this.getFromDatabase(Number(response)).subscribe((res)=> {
+        this.getFromDatabase(Number(response)).subscribe((res) => {
           this.extractProject(res);
-        })
+        });
       }
     },
     error: () => {
-      this.snackBarService.showSnackBar(
-        'Save Unsuccessful. Server Error',
-        4000
-      );
+      this.responseHandlerService.badSave();
       this.subject.next(false);
     },
   };
 
   constructor(
-    private snackBarService: SnackBarService,
     private apiService: ApiService,
-    private dialog: MatDialog
+    private responseHandlerService: ResponseHandlerService
   ) {}
 
   get getProjectId(): number | undefined {

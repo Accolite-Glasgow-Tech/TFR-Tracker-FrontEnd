@@ -1,10 +1,3 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -27,7 +20,6 @@ import { getPDFReportURL } from 'src/app/shared/utils';
   styleUrls: ['./tfrs.component.scss'],
 })
 export class TfrsComponent implements OnInit, AfterViewInit {
-
   panelOpenState!: boolean;
 
   displayedColumns: string[] = [
@@ -50,12 +42,13 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   endBeforeDate: any = new FormControl();
   pageSize = [3, 5, 10, 15];
 
-  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      console.log('executed')
+    this.ApiService.getAllProjects().subscribe((allProjects) => {
+      this.projectList = new MatTableDataSource(allProjects);
+
       this.projectList.paginator = this.paginator;
       this.projectList.sort = this.sort;
     });
@@ -82,7 +75,9 @@ export class TfrsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.ApiService.getAllProjects().subscribe((allProjects) => {
-      this.projectList.data = allProjects;
+      this.projectList = new MatTableDataSource(allProjects);
+      this.projectList.paginator = this.paginator;
+      this.projectList.sort = this.sort;
     });
     this.ApiService.getAllClients().subscribe((allClients) => {
       this.clients = allClients;
@@ -107,9 +102,10 @@ export class TfrsComponent implements OnInit, AfterViewInit {
       this.projectPostBody['client_name'] = this.selectedClientName;
     }
     if (this.selectedStatus != undefined) {
-
-      this.projectPostBody['status'] = this.selectedStatus==='IN PROGRESS'? 'IN_PROGRESS':this.selectedStatus;
-      
+      this.projectPostBody['status'] =
+        this.selectedStatus === 'IN PROGRESS'
+          ? 'IN_PROGRESS'
+          : this.selectedStatus;
     }
     this.ApiService.searchProjects(this.projectPostBody).subscribe(
       (projects) => {
@@ -147,5 +143,23 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.projectList.filter = filterValue.trim().toLowerCase();
+  }
+
+  clearFilters() {
+    this.selectedStatus = undefined;
+    this.startAfterDate.reset();
+    this.endBeforeDate.reset();
+    this.selectedClientName = undefined;
+
+    this.getProjects();
+  }
+
+  isFilterPresent(): boolean {
+    return (
+      this.selectedStatus != undefined ||
+      this.startAfterDate.dirty ||
+      this.endBeforeDate.dirty ||
+      this.selectedClientName != undefined
+    );
   }
 }

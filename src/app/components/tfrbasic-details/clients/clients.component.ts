@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
 import { ApiService } from 'src/app/services/api/api.service';
-import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   ClientAttributeDTO,
@@ -20,7 +20,7 @@ export class ClientsComponent implements OnInit {
   constructor(
     private api: ApiService,
     private tfrManagementService: TfrManagementService,
-    private snackBarService: SnackBarService
+    private responseHandler: ResponseHandlerService
   ) {}
 
   @Input() editMode!: Boolean;
@@ -30,10 +30,25 @@ export class ClientsComponent implements OnInit {
   clients!: ClientDTO[];
   attributes!: ClientAttributeDTO[];
   clientGroup!: FormGroup;
+  allAttributes!: ClientAttributeDTO[][];
 
   getClientsObserver = {
     next: (data: ClientDTO[]) => {
       this.clients = data;
+
+      this.api
+        .getAllClientAttributes()
+        .subscribe(this.getAllClientAttributesObserver);
+    },
+    error: () => {
+      this.tfrManagementService.serverDown = true;
+    },
+  };
+
+  getAllClientAttributesObserver = {
+    next: (res: ClientAttributeDTO[][]) => {
+      this.allAttributes = res;
+
       if (this.editMode) {
         this.clients.forEach((client) => {
           if (client.id == this.existingDetails.client_id) {
@@ -42,33 +57,10 @@ export class ClientsComponent implements OnInit {
         });
       }
     },
-    error: () => {
-      this.tfrManagementService.serverDown = true;
-    },
-  };
-
-  getClientAttributesObserver = {
-    next: (res: ClientAttributeDTO[]) => {
-      this.attributes = res;
-
-      this.attributesSelected.emit(this.attributes);
-
-      this.getAttributes().clear();
-
-      this.attributes.forEach((res) => {
-        this.getAttributes().push(new FormControl('', [Validators.required]));
-      });
-
-      if (
-        this.clientGroup.value.name === this.tfrManagementService.getClientName
-      ) {
-        this.fillAttributesFromExisting();
-      }
-    },
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
+        this.responseHandler.badGet();
         // this.tfrManagementService.serverDown = true;
-        this.snackBarService.showSnackBar('Server Error. Try again', 4000);
       }
     },
   };
@@ -134,9 +126,23 @@ export class ClientsComponent implements OnInit {
 
       this.onSelected.emit(client);
 
-      this.api
-        .getClientAttributes(client.id)
-        .subscribe(this.getClientAttributesObserver);
+      this.attributes = this.allAttributes[client.id - 1];
+
+      this.attributesSelected.emit(this.attributes);
+
+      this.getAttributes().clear();
+
+      this.attributes.forEach((res) => {
+        this.getAttributes().push(new FormControl('', [Validators.required]));
+      });
+
+      if (
+        this.clientGroup.value.name === this.tfrManagementService.getClientName
+      ) {
+        this.fillAttributesFromExisting();
+      }
+    } else {
+      this.attributes = [];
     }
   }
 
