@@ -312,26 +312,20 @@ export class TfrCreationResourceComponent implements OnInit {
 
   triggerStep(forward: boolean) {
     if (this.resourceDetailsUpdated && this.previousUpdateSuccessful) {
-      this.showDialog(forward);
+      this.showDialog();
     } else {
       this.nextStep(forward);
     }
   }
 
-  showDialog(forward: boolean) {
-    let dialogRef = this.matDialog.open(TfrCreationDialogComponent, {
+  showDialog() {
+    this.matDialog.open(TfrCreationDialogComponent, {
       data: {
         title: 'Discard Changes',
-        content: 'Would you like to discard your changes and continue?',
-        confirmText: 'Yes',
-        cancelText: 'No',
+        content: 'You have unsaved changes.',
+        confirmText: 'OK',
+        cancelText: '',
       },
-    });
-    dialogRef.afterClosed().subscribe((result: string) => {
-      if (result === 'true') {
-        this.nextStep(forward);
-        this.resetResources();
-      }
     });
   }
 
