@@ -35,16 +35,10 @@ export class ClientsComponent implements OnInit {
   getClientsObserver = {
     next: (data: ClientDTO[]) => {
       this.clients = data;
-      if (this.editMode) {
-        this.clients.forEach((client) => {
-          if (client.id == this.existingDetails.client_id) {
-            this.onSelectedClient(client);
-          }
-        });
-      }
 
-      // getting all attributes
-      this.clients.forEach((client) => {});
+      this.api
+        .getAllClientAttributes()
+        .subscribe(this.getAllClientAttributesObserver);
     },
     error: () => {
       this.tfrManagementService.serverDown = true;
@@ -54,6 +48,14 @@ export class ClientsComponent implements OnInit {
   getAllClientAttributesObserver = {
     next: (res: ClientAttributeDTO[][]) => {
       this.allAttributes = res;
+
+      if (this.editMode) {
+        this.clients.forEach((client) => {
+          if (client.id == this.existingDetails.client_id) {
+            this.onSelectedClient(client);
+          }
+        });
+      }
     },
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
@@ -73,10 +75,6 @@ export class ClientsComponent implements OnInit {
     });
 
     this.api.getClients().subscribe(this.getClientsObserver);
-
-    this.api
-      .getAllClientAttributes()
-      .subscribe(this.getAllClientAttributesObserver);
 
     this.clientGroup = new FormGroup({
       name: new FormControl(''),
