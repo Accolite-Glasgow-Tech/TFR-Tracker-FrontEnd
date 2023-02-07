@@ -1,12 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 import { NotesDialogComponent } from '../notes-dialog/notes-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { log } from 'src/app/shared/utils';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-tfr',

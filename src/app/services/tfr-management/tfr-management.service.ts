@@ -1,12 +1,8 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Data, Router } from '@angular/router';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Data } from '@angular/router';
+import { Observable, of, Subject } from 'rxjs';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
 import {
   AllocatedResourceTypeDTO,
@@ -19,7 +15,6 @@ import {
   ProjectResourceDTO,
 } from 'src/app/shared/interfaces';
 import { ApiService } from '../api/api.service';
-import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
 
 @Injectable({
@@ -28,7 +23,7 @@ import { SnackBarService } from '../snack-bar/snack-bar.service';
 export class TfrManagementService {
   public project!: Project | undefined;
   projectResourcesWithNames!: AllocatedResourceTypeDTO[];
-  subject = new BehaviorSubject<boolean>(true);
+  subject = new Subject<boolean>();
 
   clientName: string = '';
   apiError: boolean = false;
@@ -93,12 +88,9 @@ export class TfrManagementService {
   };
 
   constructor(
-    private http: HttpClient,
-    private resourceService: ResourceService,
     private snackBarService: SnackBarService,
     private apiService: ApiService,
-    private dialog: MatDialog,
-    private router: Router
+    private dialog: MatDialog
   ) {}
 
   get getProjectId(): number | undefined {
@@ -303,9 +295,6 @@ export class TfrManagementService {
     this.setProjectResources(newArray);
   }
 
-  /*
-    pushes the changes to the resources for this project to the database
-  */
   updateProjectToResourceMapping(): Observable<boolean> {
     this.apiService
       .postProjectResources(this.project)
@@ -323,10 +312,6 @@ export class TfrManagementService {
   }
 
   updateStatusToDatabase(): Observable<boolean> {
-    /*
-      When API is ready, need to make a put request to the database
-      to update the status from DRAFT to AGREED.
-    */
     return this.apiService.putStatus(this.project!.id, 'AGREED');
   }
 

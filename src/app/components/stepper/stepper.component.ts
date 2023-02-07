@@ -1,6 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
@@ -72,13 +71,23 @@ export class StepperComponent implements OnInit {
       } else if (status === 503) {
         this.tfrManagementService.serverDown = true;
       } else {
-      let project = response['project'];
-      this.tfrManagementService.project = project;
-      this.apiService
-        .getResourcesNamesByProjectIdFromDatabase(project.id)
-        .subscribe(this.getResourceNameObserver);
-      this.tfrManagementService.setClientName(project.client_id);
+        let project = response['project'];
+        this.tfrManagementService.project = project;
+        this.apiService
+          .getResourcesNamesByProjectIdFromDatabase(project.id)
+          .subscribe(this.getResourceNameObserver);
+        this.tfrManagementService.setClientName(project.client_id);
       }
+    },
+  };
+
+  submitTFRObserver = {
+    next: () => {
+      this.router.navigate(['/tfrs']);
+      this.snackBarService.showSnackBar('TFR submitted.', 3000);
+    },
+    error: () => {
+      this.snackBarService.showSnackBar('Server Error. Try again', 5000);
     },
   };
 
@@ -167,17 +176,7 @@ export class StepperComponent implements OnInit {
     if (update || this.tfrManagementService.project?.status === 'DRAFT') {
       this.tfrManagementService
         .updateStatusToDatabase()
-        .subscribe((response) => {
-          if (response) {
-            this.router.navigate(['/tfrs']);
-            this.snackBarService.showSnackBar('TFR submitted.', 3000);
-          } else {
-            this.snackBarService.showSnackBar(
-              'TFR not submitted. Error occured',
-              5000
-            );
-          }
-        });
+        .subscribe(this.submitTFRObserver);
     } else {
       this.router.navigate(['/tfrs']);
     }

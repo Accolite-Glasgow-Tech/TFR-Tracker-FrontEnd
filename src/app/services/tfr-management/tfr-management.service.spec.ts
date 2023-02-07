@@ -1,12 +1,4 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpResponse,
-} from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
@@ -23,7 +15,6 @@ import {
   DummyProject,
 } from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
-import { ResourceService } from '../resource/resource.service';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
 
 import { TfrManagementService } from './tfr-management.service';
@@ -34,9 +25,6 @@ export const WINDOW = new InjectionToken('Window');
 
 describe('TfrManagementService', () => {
   let service: TfrManagementService;
-  let http: HttpClient;
-  let httpMock: HttpTestingController;
-  let resourceServiceSpy: jasmine.SpyObj<ResourceService>;
   let snackBarServiceSpy: jasmine.SpyObj<SnackBarService>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
   let milestones: Milestone[];
@@ -53,20 +41,14 @@ describe('TfrManagementService', () => {
   });
   let windowMock = {
     location: {
-      reload: jasmine.createSpy('reload')
-    }
-  }
+      reload: jasmine.createSpy('reload'),
+    },
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MatDialogModule],
+      imports: [MatDialogModule],
       providers: [
-        {
-          provide: ResourceService,
-          useValue: jasmine.createSpyObj('ResourceService', [
-            'getAssociatedEnumRole',
-          ]),
-        },
         {
           provide: SnackBarService,
           useValue: jasmine.createSpyObj('SnackBarService', ['showSnackBar']),
@@ -82,19 +64,14 @@ describe('TfrManagementService', () => {
             'postProjectResources',
           ]),
         },
-        {provide: WINDOW, useValue: windowMock}
+        { provide: WINDOW, useValue: windowMock },
       ],
     });
 
-    resourceServiceSpy = TestBed.inject(
-      ResourceService
-    ) as jasmine.SpyObj<ResourceService>;
     snackBarServiceSpy = TestBed.inject(
       SnackBarService
     ) as jasmine.SpyObj<SnackBarService>;
     apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
-    http = TestBed.inject(HttpClient);
-    httpMock = TestBed.inject(HttpTestingController);
     dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(
       dialogRefSpyObj
     );
@@ -143,10 +120,6 @@ describe('TfrManagementService', () => {
     service.project = project;
 
     apiServiceSpy.postProject.and.returnValue(of(1));
-  });
-
-  afterEach(() => {
-    httpMock.verify();
   });
 
   it('should be created', () => {
@@ -247,7 +220,7 @@ describe('TfrManagementService', () => {
     spyOn(window.location, 'reload');
 
     service.updateProjectToDatabaseObserver.error(httpErrorResponse);
-    expect(window.location.reload).toHaveBeenCalled(); 
+    expect(window.location.reload).toHaveBeenCalled();
     expect(dialogSpy).toHaveBeenCalled();
   });
 
@@ -257,7 +230,7 @@ describe('TfrManagementService', () => {
     });
 
     service.updateProjectToDatabaseObserver.error(httpErrorResponse);
-    
+
     expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
       'Save Unsuccessful. Server Error',
       4000
