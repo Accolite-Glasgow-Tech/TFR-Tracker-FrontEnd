@@ -141,6 +141,8 @@ export class ClientsComponent implements OnInit {
       ) {
         this.fillAttributesFromExisting();
       }
+    } else {
+      this.attributes = [];
     }
   }
 
