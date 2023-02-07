@@ -1,10 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Data, Resolve, Router } from '@angular/router';
-import { catchError, EMPTY, mergeMap, Observable, of, throwError } from 'rxjs';
+import { ActivatedRouteSnapshot, Data, Resolve } from '@angular/router';
+import { catchError, mergeMap, Observable, of } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
 import { ApiService } from '../api/api.service';
-import { SnackBarService } from '../snack-bar/snack-bar.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,8 +23,7 @@ export class ProjectResolverService
   ): Observable<Project | HttpErrorResponse> {
     return this.apiService.getProject(Number(route.paramMap.get('id'))).pipe(
       mergeMap((response: Data) => {
-        let project: Project = response['body'];
-        return of(project);
+        return of(response['body']);
       }),
       catchError((err: HttpErrorResponse) => {
         if (err.status === 0) {
