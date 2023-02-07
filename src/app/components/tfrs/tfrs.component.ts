@@ -42,12 +42,14 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   endBeforeDate: any = new FormControl();
   pageSize = [3, 5, 10, 15];
 
-  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      console.log('executed');
+
+    this.ApiService.getAllProjects().subscribe((allProjects) => {
+      this.projectList = new MatTableDataSource(allProjects);
+
       this.projectList.paginator = this.paginator;
       this.projectList.sort = this.sort;
     });
@@ -74,7 +76,9 @@ export class TfrsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.ApiService.getAllProjects().subscribe((allProjects) => {
-      this.projectList.data = allProjects;
+      this.projectList = new MatTableDataSource(allProjects);
+      this.projectList.paginator = this.paginator;
+      this.projectList.sort = this.sort;
     });
     this.ApiService.getAllClients().subscribe((allClients) => {
       this.clients = allClients;
