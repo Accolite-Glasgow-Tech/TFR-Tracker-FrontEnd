@@ -1,5 +1,5 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
@@ -197,8 +197,16 @@ describe('StepperComponent', () => {
   it('load fail, project does not exist', async () => {
     await setUpSuccess();
     fixture.detectChanges();
-    component.getProjectObserver.error();
+    component.getProjectObserver.next({ project: new HttpErrorResponse({status: 500})});
     expect(tfrManagementServiceSpy.apiError).toBe(true);
+    expect(component).toBeTruthy();
+  });
+
+  it('load fail, server down', async () => {
+    await setUpSuccess();
+    fixture.detectChanges();
+    component.getProjectObserver.next({ project: new HttpErrorResponse({status: 503})});
+    expect(tfrManagementServiceSpy.serverDown).toBe(true);
     expect(component).toBeTruthy();
   });
 

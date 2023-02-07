@@ -3,7 +3,7 @@ and (min-device-width: 800px)
 and (-webkit-min-device-pixel-ratio: 1) { 
   .heading {
     color: white;
-    font-size: 4vw;
+    font-size: 3vw;
   }
 }
 
@@ -17,10 +17,8 @@ and (-webkit-min-device-pixel-ratio: 1) {
 }
 
 .acc-tfr {
-  font-size: 150%;
+  font-size: 100%;
 }
-
-
 
 div {
   overflow: inherit;

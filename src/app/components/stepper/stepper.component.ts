@@ -65,15 +65,29 @@ export class StepperComponent implements OnInit {
 
   getProjectObserver = {
     next: (response: Data) => {
-      let project = response['project'];
-      this.tfrManagementService.project = project;
-      this.apiService
-        .getResourcesNamesByProjectIdFromDatabase(project.id)
-        .subscribe(this.getResourceNameObserver);
-      this.tfrManagementService.setClientName(project.client_id);
+      let status = response['project']['status'];
+      if (status === 500) {
+        this.tfrManagementService.apiError = true;
+      } else if (status === 503) {
+        this.tfrManagementService.serverDown = true;
+      } else {
+        let project = response['project'];
+        this.tfrManagementService.project = project;
+        this.apiService
+          .getResourcesNamesByProjectIdFromDatabase(project.id)
+          .subscribe(this.getResourceNameObserver);
+        this.tfrManagementService.setClientName(project.client_id);
+      }
+    },
+  };
+
+  submitTFRObserver = {
+    next: () => {
+      this.router.navigate(['/tfrs']);
+      this.snackBarService.showSnackBar('TFR submitted.', 3000);
     },
     error: () => {
-      this.tfrManagementService.apiError = true;
+      this.snackBarService.showSnackBar('Server Error. Try again', 5000);
     },
   };
 
@@ -162,17 +176,7 @@ export class StepperComponent implements OnInit {
     if (update || this.tfrManagementService.project?.status === 'DRAFT') {
       this.tfrManagementService
         .updateStatusToDatabase()
-        .subscribe((response) => {
-          if (response) {
-            this.router.navigate(['/tfrs']);
-            this.snackBarService.showSnackBar('TFR submitted.', 3000);
-          } else {
-            this.snackBarService.showSnackBar(
-              'TFR not submitted. Error occured',
-              5000
-            );
-          }
-        });
+        .subscribe(this.submitTFRObserver);
     } else {
       this.router.navigate(['/tfrs']);
     }

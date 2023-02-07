@@ -27,10 +27,13 @@
   position: fixed;
   bottom: 5%;
   right: 5%;
-  width: 50%;
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
+
+  @media screen  and (min-width: 800px) {
+    width:50%;
+  }
 }
 
 .small-text {
@@ -66,6 +69,12 @@
 
 .navigation-btn {
   margin: 5px;
+}
+
+.discard-changes-btn {
+  @media screen and (max-width: 800px) {
+    width: 60%;
+  }
 }
 
 @media screen and (max-width: 800px) {

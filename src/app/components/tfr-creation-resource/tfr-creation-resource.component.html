@@ -267,7 +267,8 @@
     color="primary"
     [disabled]="
       resourceService.resourcesWithoutDeleted(allocatedResources).length ===
-        0 || this.tfrManagementService.getProjectResources?.length === 0
+        0 ||
+      (!editMode && resourceDetailsUpdated)
     "
     (click)="triggerStep(true)"
   >

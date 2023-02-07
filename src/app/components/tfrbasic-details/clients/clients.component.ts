@@ -1,12 +1,14 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
 import { ApiService } from 'src/app/services/api/api.service';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
-  ProjectBasicDetails,
   ClientAttributeDTO,
   ClientDTO,
+  ProjectBasicDetails,
 } from 'src/app/shared/interfaces';
 
 @Component({
@@ -14,21 +16,62 @@ import {
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.scss'],
 })
-
 export class ClientsComponent implements OnInit {
   constructor(
     private api: ApiService,
-    private tfrManagementService: TfrManagementService
+    private tfrManagementService: TfrManagementService,
+    private snackBarService: SnackBarService
   ) {}
 
   @Input() editMode!: Boolean;
   @Input() existingDetails!: ProjectBasicDetails;
+  @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
 
   clients!: ClientDTO[];
   attributes!: ClientAttributeDTO[];
   clientGroup!: FormGroup;
 
-  @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
+  getClientsObserver = {
+    next: (data: ClientDTO[]) => {
+      this.clients = data;
+      if (this.editMode) {
+        this.clients.forEach((client) => {
+          if (client.id == this.existingDetails.client_id) {
+            this.onSelectedClient(client);
+          }
+        });
+      }
+    },
+    error: () => {
+      this.tfrManagementService.serverDown = true;
+    },
+  };
+
+  getClientAttributesObserver = {
+    next: (res: ClientAttributeDTO[]) => {
+      this.attributes = res;
+
+      this.attributesSelected.emit(this.attributes);
+
+      this.getAttributes().clear();
+
+      this.attributes.forEach((res) => {
+        this.getAttributes().push(new FormControl('', [Validators.required]));
+      });
+
+      if (
+        this.clientGroup.value.name === this.tfrManagementService.getClientName
+      ) {
+        this.fillAttributesFromExisting();
+      }
+    },
+    error: (err: HttpErrorResponse) => {
+      if (err.status === 0) {
+        // this.tfrManagementService.serverDown = true;
+        this.snackBarService.showSnackBar('Server Error. Try again', 4000);
+      }
+    },
+  };
 
   ngOnInit() {
     this.clientGroup = new FormGroup({
@@ -39,18 +82,7 @@ export class ClientsComponent implements OnInit {
       this.resetClientControls();
     });
 
-    this.api.getClients().subscribe((data) => {
-      this.clients = data;
-      if (this.editMode) {
-        // TODO fill in details of client and Attributes
-        // find client in list with existingDetails.client_id and call select method
-        this.clients.forEach((client) => {
-          if (client.id == this.existingDetails.client_id) {
-            this.onSelectedClient(client);
-          }
-        });
-      }
-    });
+    this.api.getClients().subscribe(this.getClientsObserver);
 
     this.clientGroup = new FormGroup({
       name: new FormControl(''),
@@ -81,10 +113,7 @@ export class ClientsComponent implements OnInit {
   }
 
   fillAttributesFromExisting() {
-    // parse values from existingDetails.client_specific
-    // use to set values of form array
-
-    if (this.attributes) {
+    if (this.attributes && this.existingDetails) {
       this.attributes.forEach((attribute, index) => {
         this.getAttributes()
           .at(index)
@@ -99,28 +128,16 @@ export class ClientsComponent implements OnInit {
   @Output() attributesSelected = new EventEmitter<ClientAttributeDTO[]>();
   onSelectedClient(client: ClientDTO) {
     this.getAttributes().reset();
-    this.clientGroup.get('name')?.setValue(client.name);
 
-    this.onSelected.emit(client);
+    if (client) {
+      this.clientGroup.get('name')?.setValue(client.name);
 
-    this.api.getClientAttributes(client.id).subscribe((res) => {
-      this.attributes = res;
+      this.onSelected.emit(client);
 
-      this.attributesSelected.emit(this.attributes);
-
-      this.getAttributes().clear();
-
-      //add a form control to form array for each attribute
-      this.attributes.forEach((res) => {
-        this.getAttributes().push(new FormControl('', [Validators.required]));
-      });
-
-      if (
-        this.clientGroup.value.name === this.tfrManagementService.getClientName
-      ) {
-        this.fillAttributesFromExisting();
-      }
-    });
+      this.api
+        .getClientAttributes(client.id)
+        .subscribe(this.getClientAttributesObserver);
+    }
   }
 
   getAttributes(): FormArray {
