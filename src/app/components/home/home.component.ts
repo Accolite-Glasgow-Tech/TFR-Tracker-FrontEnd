@@ -1,12 +1,12 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { GridsterComponent, IGridsterOptions } from 'angular2gridster';
+import { MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ChartsComponent } from '../charts/charts.component';
+import { ManageWidgetModalComponent } from '../manage-widget-modal/manage-widget-modal.component';
 import { WidgetApproachingProjectsComponent } from '../widget-approaching-projects/widget-approaching-projects.component';
-import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { WidgetClientLocationComponent } from '../widget-client-location/widget-client-location.component';
 import { WidgetClientProjectCountComponent } from '../widget-client-project-count/widget-client-project-count.component';
-import { ManageWidgetModalComponent } from '../manage-widget-modal/manage-widget-modal.component';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
       componentType: ChartsComponent,
     });
     this.widgets.push({
-      componentName: 'Upcoming Projects',
+      componentName: 'Upcoming TFRs',
       present: true,
       componentType: WidgetApproachingProjectsComponent,
     });
@@ -153,7 +153,7 @@ export class HomeComponent implements OnInit {
           }
         }
 
-        if (item[i] === 'Upcoming Projects') {
+        if (item[i] === 'Upcoming TFRs') {
           //check if the widget clicked is already present in the home page
           for (let j = 0; j < this.widgets.length; j++) {
             if (this.widgets[j].componentName === item[i]) {
@@ -163,14 +163,14 @@ export class HomeComponent implements OnInit {
           // if widget is not present in home screen then show the widget.
           if (this.flag === 0) {
             this.widgets.push({
-              componentName: 'Upcoming Projects',
+              componentName: 'Upcoming TFRs',
               present: true,
               componentType: WidgetApproachingProjectsComponent,
             });
 
             this.widgetsfalse.splice(
               this.widgetsfalse.findIndex(
-                (x) => x.componentName === 'Upcoming Projects'
+                (x) => x.componentName === 'Upcoming TFRs'
               ),
               1
             );
@@ -179,12 +179,12 @@ export class HomeComponent implements OnInit {
           else {
             this.widgets.splice(
               this.widgets.findIndex(
-                (x) => x.componentName === 'Upcoming Projects'
+                (x) => x.componentName === 'Upcoming TFRs'
               ),
               1
             );
             this.widgetsfalse.push({
-              componentName: 'Upcoming Projects',
+              componentName: 'Upcoming TFRs',
               present: false,
               componentType: WidgetApproachingProjectsComponent,
             });
