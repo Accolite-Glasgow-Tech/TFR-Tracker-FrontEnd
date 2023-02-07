@@ -106,7 +106,7 @@
   <button
     mat-raised-button
     type="button"
-    class="navigation-btn"
+    class="navigation-btn discard-changes-btn"
     color="secondary"
     (click)="discardSelected()"
     *ngIf="selectedMilestone"
@@ -125,6 +125,18 @@
     Accept
   </button>
 
+  <button
+    class="navigation-btn"
+    color="primary"
+    *ngIf="!selectedMilestone"
+    type="button"
+    mat-raised-button
+    [disabled]="!(submittable && !selectedMilestone)"
+    (click)="previousStep()"
+  >
+    Back
+  </button>
+  
   <button
     *ngIf="!selectedMilestone"
     type="button"
@@ -148,17 +160,7 @@
   >
     Reset
   </button>
-  <button
-    class="navigation-btn"
-    color="primary"
-    *ngIf="!selectedMilestone"
-    type="button"
-    mat-raised-button
-    [disabled]="!(submittable && !selectedMilestone)"
-    (click)="previousStep()"
-  >
-    Back
-  </button>
+  
   <button
     class="navigation-btn"
     color="primary"

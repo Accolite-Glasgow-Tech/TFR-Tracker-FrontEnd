@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
-import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 
@@ -65,15 +65,29 @@ export class StepperComponent implements OnInit {
 
   getProjectObserver = {
     next: (response: Data) => {
-      let project = response['project'];
-      this.tfrManagementService.project = project;
-      this.apiService
-        .getResourcesNamesByProjectIdFromDatabase(project.id)
-        .subscribe(this.getResourceNameObserver);
-      this.tfrManagementService.setClientName(project.client_id);
+      let status = response['project']['status'];
+      if (status === 500) {
+        this.tfrManagementService.apiError = true;
+      } else if (status === 503) {
+        this.tfrManagementService.serverDown = true;
+      } else {
+        let project = response['project'];
+        this.tfrManagementService.project = project;
+        this.apiService
+          .getResourcesNamesByProjectIdFromDatabase(project.id)
+          .subscribe(this.getResourceNameObserver);
+        this.tfrManagementService.setClientName(project.client_id);
+      }
+    },
+  };
+
+  submitTFRObserver = {
+    next: () => {
+      this.router.navigate(['/tfrs']);
+      this.responseHandlerService.goodSave();
     },
     error: () => {
-      this.tfrManagementService.apiError = true;
+      this.responseHandlerService.badSave();
     },
   };
 
@@ -82,11 +96,11 @@ export class StepperComponent implements OnInit {
     @Inject(TfrManagementService)
     protected tfrManagementService: TfrManagementService,
     protected breakpointObserver: BreakpointObserver,
-    private snackBarService: SnackBarService,
     private router: Router,
     private route: ActivatedRoute,
     private resourceService: ResourceService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private responseHandlerService: ResponseHandlerService
   ) {
     /*
       Listener for the screen size.
@@ -162,17 +176,7 @@ export class StepperComponent implements OnInit {
     if (update || this.tfrManagementService.project?.status === 'DRAFT') {
       this.tfrManagementService
         .updateStatusToDatabase()
-        .subscribe((response) => {
-          if (response) {
-            this.router.navigate(['/tfrs']);
-            this.snackBarService.showSnackBar('TFR submitted.', 3000);
-          } else {
-            this.snackBarService.showSnackBar(
-              'TFR not submitted. Error occured',
-              5000
-            );
-          }
-        });
+        .subscribe(this.submitTFRObserver);
     } else {
       this.router.navigate(['/tfrs']);
     }

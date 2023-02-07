@@ -1,10 +1,3 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -53,8 +46,10 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   ngAfterViewInit() {
+
     this.ApiService.getAllProjects().subscribe((allProjects) => {
       this.projectList = new MatTableDataSource(allProjects);
+
       this.projectList.paginator = this.paginator;
       this.projectList.sort = this.sort;
     });
@@ -149,5 +144,23 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.projectList.filter = filterValue.trim().toLowerCase();
+  }
+
+  clearFilters() {
+    this.selectedStatus = undefined;
+    this.startAfterDate.reset();
+    this.endBeforeDate.reset();
+    this.selectedClientName = undefined;
+
+    this.getProjects();
+  }
+
+  isFilterPresent(): boolean {
+    return (
+      this.selectedStatus != undefined ||
+      this.startAfterDate.dirty ||
+      this.endBeforeDate.dirty ||
+      this.selectedClientName != undefined
+    );
   }
 }

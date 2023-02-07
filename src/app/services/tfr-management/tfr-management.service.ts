@@ -1,13 +1,7 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Data, Router } from '@angular/router';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
+import { Data } from '@angular/router';
+import { Observable, of, Subject } from 'rxjs';
 import {
   AllocatedResourceTypeDTO,
   ClientDTO,
@@ -19,8 +13,7 @@ import {
   ProjectResourceDTO,
 } from 'src/app/shared/interfaces';
 import { ApiService } from '../api/api.service';
-import { ResourceService } from '../resource/resource.service';
-import { SnackBarService } from '../snack-bar/snack-bar.service';
+import { ResponseHandlerService } from '../response-handler/response-handler.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,44 +21,22 @@ import { SnackBarService } from '../snack-bar/snack-bar.service';
 export class TfrManagementService {
   public project!: Project | undefined;
   projectResourcesWithNames!: AllocatedResourceTypeDTO[];
-  subject = new BehaviorSubject<boolean>(true);
+  subject = new Subject<boolean>();
 
   clientName: string = '';
   apiError: boolean = false;
+  serverDown: boolean = false;
 
   updateProjectToDatabaseObserver = {
     next: (response: Data) => {
       if (this.project) {
         this.project.version = Number(response);
       }
-      this.snackBarService.showSnackBar('Updates saved to database', 2000);
+      this.responseHandlerService.goodSave();
       this.subject.next(true);
     },
     error: (err: HttpErrorResponse) => {
-      if (err.status === 412) {
-        let dialogRef!: MatDialogRef<TfrCreationDialogComponent, any>;
-
-        dialogRef = this.dialog.open(TfrCreationDialogComponent, {
-          data: {
-            title: 'Save unsuccessful',
-            content:
-              'Updating an older version of project. Please see the new changes',
-            confirmText: 'Redirect',
-            cancelText: '',
-          },
-        });
-
-        dialogRef.afterClosed().subscribe((result: string) => {
-          if (result === 'true') {
-            this.router.navigate([`/tfr/${this.getProjectId}`]);
-          }
-        });
-      } else {
-        this.snackBarService.showSnackBar(
-          'Save Unsuccessful. Server Error',
-          4000
-        );
-      }
+      this.responseHandlerService.handleBadProjectUpdate(err);
       this.subject.next(false);
     },
   };
@@ -75,26 +46,22 @@ export class TfrManagementService {
       if (this.project) {
         this.project.id = Number(response);
         this.project.version++;
-        this.snackBarService.showSnackBar('Saved to database', 2000);
+        this.responseHandlerService.goodSave();
         this.subject.next(true);
+        this.getFromDatabase(Number(response)).subscribe((res) => {
+          this.extractProject(res);
+        });
       }
     },
     error: () => {
-      this.snackBarService.showSnackBar(
-        'Save Unsuccessful. Server Error',
-        4000
-      );
+      this.responseHandlerService.badSave();
       this.subject.next(false);
     },
   };
 
   constructor(
-    private http: HttpClient,
-    private resourceService: ResourceService,
-    private snackBarService: SnackBarService,
     private apiService: ApiService,
-    private dialog: MatDialog,
-    private router: Router
+    private responseHandlerService: ResponseHandlerService
   ) {}
 
   get getProjectId(): number | undefined {
@@ -174,7 +141,7 @@ export class TfrManagementService {
           milestones: [],
           project_resources: [],
           is_deleted: false,
-          created_by: 1,
+          created_by: NaN,
           modified_by: NaN,
           created_at: new Date('2022-12-05T10:00:00.000+00:00'),
           modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
@@ -299,9 +266,6 @@ export class TfrManagementService {
     this.setProjectResources(newArray);
   }
 
-  /*
-    pushes the changes to the resources for this project to the database
-  */
   updateProjectToResourceMapping(): Observable<boolean> {
     this.apiService
       .postProjectResources(this.project)
@@ -319,10 +283,6 @@ export class TfrManagementService {
   }
 
   updateStatusToDatabase(): Observable<boolean> {
-    /*
-      When API is ready, need to make a put request to the database
-      to update the status from DRAFT to AGREED.
-    */
     return this.apiService.putStatus(this.project!.id, 'AGREED');
   }
 

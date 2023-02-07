@@ -1,11 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 import { NotesDialogComponent } from '../notes-dialog/notes-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { log } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-tfr',
@@ -26,18 +25,20 @@ export class TfrComponent implements OnInit {
 
   getProjectObserver = {
     next: (response: Data) => {
-      let project = response['project'];
-      this.tfrManagementService.project = project;
-      this.apiService
-        .getResourcesNamesByProjectIdFromDatabase(project.id)
-        .subscribe(this.getResourceNameObserver);
-      this.tfrManagementService.setClientName(project.client_id);
-      console.log(project.notes);
-      console.log(project);
-      this.notes = this.tfrManagementService.project?.notes ?? '';
-    },
-    error: () => {
-      this.tfrManagementService.apiError = true;
+      let status = response['project']['status'];
+      if (status === 500) {
+        this.tfrManagementService.apiError = true;
+      } else if (status === 503) {
+        this.tfrManagementService.serverDown = true;
+      } else {
+        let project = response['project'];
+        this.tfrManagementService.project = project;
+        this.apiService
+          .getResourcesNamesByProjectIdFromDatabase(project.id)
+          .subscribe(this.getResourceNameObserver);
+        this.tfrManagementService.setClientName(project.client_id);
+        this.notes = this.tfrManagementService.project?.notes ?? '';
+      }
     },
   };
 

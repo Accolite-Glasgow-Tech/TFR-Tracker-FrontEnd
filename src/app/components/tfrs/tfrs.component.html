@@ -1,15 +1,14 @@
 <div>
   <mat-accordion>
-    <mat-expansion-panel (opened)="panelOpenState = true"
-                         (closed)="panelOpenState = false">
+    <mat-expansion-panel
+      (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false"
+    >
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          Filters
-        </mat-panel-title>
-        <mat-panel-description>
-          
-        </mat-panel-description>
+        <mat-panel-title> Filters </mat-panel-title>
+        <mat-panel-description> </mat-panel-description>
       </mat-expansion-panel-header>
+      <!-- search filters start -->
       <div class="search-filters-container">
         <mat-form-field class="single-search-filter" appearance="fill">
           <mat-label>Client</mat-label>
@@ -44,35 +43,59 @@
         </mat-form-field>
         <mat-form-field class="single-search-filter" appearance="fill">
           <mat-label>Project End Before</mat-label>
-          <input matInput [matDatepicker]="picker2" [formControl]="endBeforeDate" />
+          <input
+            matInput
+            [matDatepicker]="picker2"
+            [formControl]="endBeforeDate"
+          />
           <mat-datepicker-toggle
             matIconSuffix
             [for]="picker2"
           ></mat-datepicker-toggle>
           <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field>
+        <!-- search filters end -->
 
+        <!-- buttons start -->
         <button
           class="search-button"
           mat-raised-button
           color="primary"
-         
           (click)="getProjects()"
         >
           Apply
         </button>
+
+        <button
+          *ngIf="isFilterPresent()"
+          mat-icon-button
+          class="undo-btn"
+          (click)="clearFilters()"
+          #tooltip="matTooltip"
+          matTooltip="Reset Filters"
+          [matTooltipPosition]="'above'"
+          matTooltipHideDelay="120"
+        >
+          <mat-icon>undo</mat-icon>
+        </button>
+        <!-- buttons end -->
       </div>
     </mat-expansion-panel>
   </mat-accordion>
 
   <div class="search-filters-container">
-    <mat-form-field class="single-search-filter name-search-field" appearance="fill">
+    <mat-form-field
+      class="single-search-filter name-search-field"
+      appearance="fill"
+    >
       <mat-label>Search</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+      <input matInput (keyup)="applyFilter($event)" placeholder="" #input />
     </mat-form-field>
   </div>
 </div>
-<h1 class="empty-list-message" *ngIf="projectList.data.length === 0">No Projects to Show</h1>
+<h1 class="empty-list-message" *ngIf="projectList.data.length === 0">
+  No Projects to Show
+</h1>
 <div class="tfrs-table-container" *ngIf="projectList.data.length > 0">
   <table
     mat-table

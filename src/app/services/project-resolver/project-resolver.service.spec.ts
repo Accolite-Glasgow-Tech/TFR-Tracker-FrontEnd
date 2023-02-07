@@ -11,7 +11,6 @@ import { ProjectResolverService } from './project-resolver.service';
 describe('ProjectResolverService', () => {
   let service: ProjectResolverService;
   let route: ActivatedRouteSnapshot;
-  let routerSpy: jasmine.SpyObj<Router>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
   beforeEach(() => {
@@ -22,14 +21,9 @@ describe('ProjectResolverService', () => {
       providers: [
         ProjectResolverService,
         { provide: ApiService, useValue: spy },
-        {
-          provide: Router,
-          useValue: jasmine.createSpyObj('Router', ['navigate']),
-        },
       ],
     });
     service = TestBed.inject(ProjectResolverService);
-    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
   });
 
@@ -50,27 +44,22 @@ describe('ProjectResolverService', () => {
     });
   });
 
-  it('should call resolve() - return server error', () => {
-    const dummyProject: Project = DummyProject;
-    let httpResponseProject: HttpResponse<Project> = new HttpResponse({
-      body: dummyProject,
-      status: 500,
-    });
-
-    apiServiceSpy.getProject.and.returnValue(of(httpResponseProject));
+  it('should call resolve() - catch error - server error', () => {
+    const err = new HttpErrorResponse({status:0});
+    apiServiceSpy.getProject.and.returnValue(throwError(() => err));
 
     service.resolve(route).subscribe((response) => {
-      const expectedResponse = new HttpErrorResponse({ status: 500 });
+      const expectedResponse = new HttpErrorResponse({ status: 503 });
       expect(response).toEqual(expectedResponse);
     });
   });
 
-  it('should call resolve() - catch error', () => {
-    const err = new Error();
+  it('should call resolve() - catch error - project does not exist', () => {
+    const err = new HttpErrorResponse({status:500});
     apiServiceSpy.getProject.and.returnValue(throwError(() => err));
 
     service.resolve(route).subscribe((response) => {
-      expect(routerSpy.navigate).toHaveBeenCalledWith(['/tfrs']);
+      expect(response).toEqual(err);
     });
   });
 });

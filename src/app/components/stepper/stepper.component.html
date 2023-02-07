@@ -1,4 +1,4 @@
-<div *ngIf="!tfrManagementService.apiError">
+<div *ngIf="!tfrManagementService.apiError && !tfrManagementService.serverDown">
   <mat-stepper [linear]="isLinear" #stepper [labelPosition]="'bottom'">
     <mat-step [completed]="stepsValid[0]" state="basic-details-icon">
       <ng-template matStepLabel>{{
@@ -30,6 +30,7 @@
       <app-tfr-creation-resource
         (nextStepEmitter)="nextStep($event)"
         (stepCompletedEmitter)="stepCompleted(2, $event)"
+        [editMode]="editMode"
       ></app-tfr-creation-resource>
       <!--  -->
     </mat-step>
@@ -111,4 +112,9 @@
 
 <div *ngIf="tfrManagementService.apiError">
   <app-page-not-found></app-page-not-found>
+</div>
+
+<div *ngIf="tfrManagementService.serverDown" class="server-down-div">
+  Service unavailable. Try again.
+  <a class="refresh-link" onclick="window.location.reload();"><u>Refresh</u></a>
 </div>
