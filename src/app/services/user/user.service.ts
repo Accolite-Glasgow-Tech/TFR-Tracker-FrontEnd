@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoginResponse, RegisterResponse } from 'src/app/shared/interfaces';
 import { loginURL, registrationURL } from 'src/app/shared/constants';
+import { LoginResponse, RegisterResponse } from 'src/app/shared/interfaces';
 @Injectable({
   providedIn: 'root',
 })
 export class userService {
-  public static user_id: any = undefined;
+  public user_id: any = undefined;
   constructor(public httpClient: HttpClient) {}
   register(body: any) {
     return this.httpClient.post<RegisterResponse>(registrationURL, body);

@@ -1,18 +1,15 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api/api.service';
-import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-
 import {
   ClientAttributeDTO,
   ClientDTO,
   Project,
   ProjectBasicDetails,
 } from 'src/app/shared/interfaces';
-import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
 @Component({
   selector: 'app-tfr-basic-details',
@@ -22,9 +19,8 @@ import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-
 export class TfrBasicDetailsComponent implements OnInit {
   constructor(
     protected tfrManager: TfrManagementService,
-    private matDialog: MatDialog,
     private apiService: ApiService,
-    private snackBarService: SnackBarService
+    private responseHandlerService: ResponseHandlerService
   ) {}
 
   getProjectObserver = {
@@ -64,7 +60,7 @@ export class TfrBasicDetailsComponent implements OnInit {
         }
         this.tfrDetails.markAsPristine();
       } else {
-        this.snackBarService.showSnackBar('Server Error. Try again', 4000);
+        this.responseHandlerService.badGet();
       }
       this.stepCompletedEmitter.emit(false);
     },
@@ -156,14 +152,7 @@ export class TfrBasicDetailsComponent implements OnInit {
 
   next() {
     if (this.isFormDirty()) {
-      this.matDialog.open(TfrCreationDialogComponent, {
-        data: {
-          title: 'Unsaved Changes',
-          content: 'Save or reset before moving on',
-          confirmText: 'OK',
-          cancelText: '',
-        },
-      });
+      this.responseHandlerService.unsavedChangesDialogue();
     } else {
       this.stepCompletedEmitter.emit(true);
       this.nextStepEmitter.emit(true);
