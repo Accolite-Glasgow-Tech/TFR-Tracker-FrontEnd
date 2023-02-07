@@ -1,5 +1,5 @@
 <h1 class="title" mat-dialog-title>
-  <marquee behavior="alternate"><strong> Add Widgets </strong></marquee>
+ <strong> Add Widgets </strong>
 </h1>
 
 <div style="margin: 0px">
@@ -13,17 +13,19 @@
         value="{{ wid.componentName }}"
         type="button"
         class="btn btn-success top-btn-left"
-        style="font-size: 102%; white-space: pre-wrap"
+        style="font-size: 120%; white-space: pre-wrap"
       >
         <i
           class="fa fa-plus-circle"
           aria-hidden="true"
           *ngIf="!wid.present"
+          style="color : green ;    margin-right: 10px;   "
         ></i>
         <i
           class="fa fa-minus-circle"
           aria-hidden="true"
           *ngIf="wid.present"
+          style="color : red ;    margin-right: 10px;   "
         ></i>
         <b> {{ wid.componentName }} Widget </b></mat-button-toggle
       >
@@ -34,8 +36,8 @@
   <button
     mat-raised-button
     type="button"
-    color="warn"
     (click)="onClick(toggleBtn.value)"
+    style="background-color:rgb(32, 32, 148); color:whitesmoke"
   >
     Okay
   </button>
