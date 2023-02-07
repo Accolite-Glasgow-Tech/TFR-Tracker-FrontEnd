@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
 import { ApiService } from 'src/app/services/api/api.service';
-import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   ClientAttributeDTO,
@@ -20,7 +20,7 @@ export class ClientsComponent implements OnInit {
   constructor(
     private api: ApiService,
     private tfrManagementService: TfrManagementService,
-    private snackBarService: SnackBarService
+    private responseHandler: ResponseHandlerService
   ) {}
 
   @Input() editMode!: Boolean;
@@ -57,7 +57,7 @@ export class ClientsComponent implements OnInit {
     },
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
-        this.snackBarService.showSnackBar('Server Error. Try again', 4000);
+        this.responseHandler.badGet();
         // this.tfrManagementService.serverDown = true;
       }
     },
