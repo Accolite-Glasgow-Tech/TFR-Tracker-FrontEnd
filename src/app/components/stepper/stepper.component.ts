@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
-import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 
@@ -84,10 +84,10 @@ export class StepperComponent implements OnInit {
   submitTFRObserver = {
     next: () => {
       this.router.navigate(['/tfrs']);
-      this.snackBarService.showSnackBar('TFR submitted.', 3000);
+      this.responseHandlerService.goodSave();
     },
     error: () => {
-      this.snackBarService.showSnackBar('Server Error. Try again', 5000);
+      this.responseHandlerService.badSave();
     },
   };
 
@@ -96,11 +96,11 @@ export class StepperComponent implements OnInit {
     @Inject(TfrManagementService)
     protected tfrManagementService: TfrManagementService,
     protected breakpointObserver: BreakpointObserver,
-    private snackBarService: SnackBarService,
     private router: Router,
     private route: ActivatedRoute,
     private resourceService: ResourceService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private responseHandlerService: ResponseHandlerService
   ) {
     /*
       Listener for the screen size.
