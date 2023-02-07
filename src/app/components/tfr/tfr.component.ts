@@ -84,7 +84,7 @@ export class TfrComponent implements OnInit {
 
   openNotes() {
     const dialogRef = this.dialog.open(NotesDialogComponent, {
-      width: '250px',
+      panelClass: 'notes-popup-window', // class defined in global styles.scss
       data: this.notes,
     });
 
