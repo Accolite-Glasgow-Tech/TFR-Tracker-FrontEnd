@@ -323,8 +323,8 @@ export class TfrCreationResourceComponent implements OnInit {
   showDialog() {
     this.matDialog.open(TfrCreationDialogComponent, {
       data: {
-        title: 'Discard Changes',
-        content: 'You have unsaved changes.',
+        title: 'Unsaved changes',
+        content: 'Save or reset before moving on',
         confirmText: 'OK',
         cancelText: '',
       },
