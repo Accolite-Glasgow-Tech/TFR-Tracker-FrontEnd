@@ -66,6 +66,7 @@ export class TfrBasicDetailsComponent implements OnInit {
       } else {
         this.snackBarService.showSnackBar('Server Error. Try again', 4000);
       }
+      this.stepCompletedEmitter.emit(false);
     },
   };
 
@@ -78,9 +79,9 @@ export class TfrBasicDetailsComponent implements OnInit {
   clientGroup!: FormGroup;
   attributeNames: string[] = [];
   client_specificData: { [key: string]: string } = {};
-  editMode: Boolean = false;
+  editMode: boolean = false;
   projectToEdit!: ProjectBasicDetails;
-  previousUpdateSuccessful: boolean = false;
+  previousUpdateSuccessful!: boolean;
   @Output() editModeEmitter = new EventEmitter<boolean>();
 
   ngOnInit(): void {
@@ -101,6 +102,7 @@ export class TfrBasicDetailsComponent implements OnInit {
       // set form group details to existing details
       this.setDetailsToExistingProject();
     }
+    this.previousUpdateSuccessful = this.editMode;
   }
 
   isFormValid() {
@@ -141,6 +143,8 @@ export class TfrBasicDetailsComponent implements OnInit {
         if (response) {
           this.tfrDetails.markAsPristine();
           this.clientGroup.markAsPristine();
+        } else {
+          this.stepCompletedEmitter.emit(false);
         }
       });
   }
@@ -150,11 +154,8 @@ export class TfrBasicDetailsComponent implements OnInit {
     this.tfrDetails.get('client_id')?.markAsDirty;
   }
 
-  /*
-    Move onto the next step of the stepper
-  */
   next() {
-    if (this.isFormDirty() && this.previousUpdateSuccessful) {
+    if (this.isFormDirty()) {
       this.matDialog.open(TfrCreationDialogComponent, {
         data: {
           title: 'Discard Changes',
@@ -169,9 +170,6 @@ export class TfrBasicDetailsComponent implements OnInit {
     }
   }
 
-  /*
-    Resets the input fields to the most recent state of the database
-  */
   resetInputFields() {
     this.tfrManager
       .getFromDatabase(this.tfrManager.getProjectId as Number)

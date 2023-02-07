@@ -73,11 +73,7 @@
   <button
     mat-raised-button
     [disabled]="
-      !(
-        isFormValid() &&
-        this.tfrManager.project &&
-        (previousUpdateSuccessful || editMode)
-      )
+      !(isFormValid() && this.tfrManager.project && previousUpdateSuccessful)
     "
     class="navigation-btn"
     color="primary"

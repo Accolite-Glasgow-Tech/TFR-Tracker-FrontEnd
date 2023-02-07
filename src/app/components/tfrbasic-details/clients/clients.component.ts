@@ -27,6 +27,22 @@ export class ClientsComponent implements OnInit {
   attributes!: ClientAttributeDTO[];
   clientGroup!: FormGroup;
 
+  getClientsObserver = {
+    next: (data: ClientDTO[]) => {
+      this.clients = data;
+      if (this.editMode) {
+        this.clients.forEach((client) => {
+          if (client.id == this.existingDetails.client_id) {
+            this.onSelectedClient(client);
+          }
+        });
+      }
+    },
+    error: () => {
+      this.tfrManagementService.serverDown = true;
+    },
+  };
+
   @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
 
   ngOnInit() {
@@ -38,18 +54,7 @@ export class ClientsComponent implements OnInit {
       this.resetClientControls();
     });
 
-    this.api.getClients().subscribe((data) => {
-      this.clients = data;
-      if (this.editMode) {
-        // TODO fill in details of client and Attributes
-        // find client in list with existingDetails.client_id and call select method
-        this.clients.forEach((client) => {
-          if (client.id == this.existingDetails.client_id) {
-            this.onSelectedClient(client);
-          }
-        });
-      }
-    });
+    this.api.getClients().subscribe(this.getClientsObserver);
 
     this.clientGroup = new FormGroup({
       name: new FormControl(''),
@@ -80,8 +85,6 @@ export class ClientsComponent implements OnInit {
   }
 
   fillAttributesFromExisting() {
-    // parse values from existingDetails.client_specific
-    // use to set values of form array
     if (this.attributes && this.existingDetails) {
       this.attributes.forEach((attribute, index) => {
         this.getAttributes()
@@ -110,7 +113,6 @@ export class ClientsComponent implements OnInit {
 
         this.getAttributes().clear();
 
-        //add a form control to form array for each attribute
         this.attributes.forEach((res) => {
           this.getAttributes().push(new FormControl('', [Validators.required]));
         });

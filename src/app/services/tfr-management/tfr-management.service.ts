@@ -292,9 +292,6 @@ export class TfrManagementService {
     this.setProjectResources(newArray);
   }
 
-  /*
-    pushes the changes to the resources for this project to the database
-  */
   updateProjectToResourceMapping(): Observable<boolean> {
     this.apiService
       .postProjectResources(this.project)
@@ -312,10 +309,6 @@ export class TfrManagementService {
   }
 
   updateStatusToDatabase(): Observable<boolean> {
-    /*
-      When API is ready, need to make a put request to the database
-      to update the status from DRAFT to AGREED.
-    */
     return this.apiService.putStatus(this.project!.id, 'AGREED');
   }
 

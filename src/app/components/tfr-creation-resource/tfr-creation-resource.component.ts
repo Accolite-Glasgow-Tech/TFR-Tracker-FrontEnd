@@ -87,6 +87,7 @@ export class TfrCreationResourceComponent implements OnInit {
         .subscribe(this.getResourceNameObserver);
     },
     error: () => {
+      this.stepCompletedEmitter.emit(false);
       this.snackBarService.showSnackBar('Server Error. Try again', 4000);
     },
   };
@@ -119,6 +120,7 @@ export class TfrCreationResourceComponent implements OnInit {
       this.resourceDetailsUpdated = false;
     },
     error: () => {
+      this.stepCompletedEmitter.emit(false);
       this.snackBarService.showSnackBar('Server Error. Try again', 4000);
     },
   };
@@ -311,7 +313,7 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   triggerStep(forward: boolean) {
-    if (this.resourceDetailsUpdated && this.previousUpdateSuccessful) {
+    if (this.resourceDetailsUpdated) {
       this.showDialog();
     } else {
       this.nextStep(forward);
@@ -350,6 +352,7 @@ export class TfrCreationResourceComponent implements OnInit {
       .subscribe((updateSuccessful) => {
         this.resourceDetailsUpdated = !updateSuccessful;
         this.previousUpdateSuccessful = updateSuccessful;
+        if (!updateSuccessful) this.stepCompletedEmitter.emit(false);
       });
   }
 
