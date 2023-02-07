@@ -1,0 +1,55 @@
+.window-heading {
+  text-align: center;
+}
+
+@media all and (min-width: 800px) and (min-resolution: 1dppx) {
+  .notes-input-area {
+    display: flex;
+    min-width: 400px;
+    min-height: 200px;
+  }
+
+  .dialog-content-area {
+    justify-content: center;
+    min-width: 400px;
+    min-height: 200px;
+  }
+
+  .text-area {
+    min-width: 400px;
+    min-height: 190px;
+  }
+
+  .button-row {
+    font-family: Roboto;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+}
+
+@media all and (max-width: 799px) and (min-resolution: 1dppx) {
+  .notes-input-area {
+    display: flex;
+    min-width: 200px;
+    min-height: 200px;
+  }
+
+  .dialog-content-area {
+    justify-content: center;
+    min-width: 200px;
+    min-height: 200px;
+  }
+
+  .text-area {
+    min-width: 200px;
+    min-height: 190px;
+  }
+
+  .button-row {
+    font-family: Roboto;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+}
