@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
   EventEmitter,
@@ -71,6 +70,7 @@ export class TfrCreationResourceComponent implements OnInit {
   allocatedResources: AllocatedResourceTypeDTO[] = [];
   savedAllocatedResource: ProjectResourceDTO[] = [];
   resourceDetailsUpdated: boolean = false;
+  previousUpdateSuccessful: boolean = true;
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
   @Input() editMode = false;
@@ -295,7 +295,7 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   triggerStep(forward: boolean) {
-    if (this.resourceDetailsUpdated) {
+    if (this.resourceDetailsUpdated && this.previousUpdateSuccessful) {
       this.showDialog(forward);
     } else {
       this.nextStep(forward);
@@ -341,6 +341,7 @@ export class TfrCreationResourceComponent implements OnInit {
       .updateProjectToResourceMapping()
       .subscribe((updateSuccessful) => {
         this.resourceDetailsUpdated = !updateSuccessful;
+        this.previousUpdateSuccessful = updateSuccessful;
       });
   }
 
