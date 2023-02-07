@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounce, interval } from 'rxjs';
 import { ApiService } from 'src/app/services/api/api.service';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   ClientAttributeDTO,
@@ -17,11 +19,13 @@ import {
 export class ClientsComponent implements OnInit {
   constructor(
     private api: ApiService,
-    private tfrManagementService: TfrManagementService
+    private tfrManagementService: TfrManagementService,
+    private snackBarService: SnackBarService
   ) {}
 
   @Input() editMode!: Boolean;
   @Input() existingDetails!: ProjectBasicDetails;
+  @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
 
   clients!: ClientDTO[];
   attributes!: ClientAttributeDTO[];
@@ -43,7 +47,31 @@ export class ClientsComponent implements OnInit {
     },
   };
 
-  @Output() onAttributesUpdated = new EventEmitter<FormGroup>();
+  getClientAttributesObserver = {
+    next: (res: ClientAttributeDTO[]) => {
+      this.attributes = res;
+
+      this.attributesSelected.emit(this.attributes);
+
+      this.getAttributes().clear();
+
+      this.attributes.forEach((res) => {
+        this.getAttributes().push(new FormControl('', [Validators.required]));
+      });
+
+      if (
+        this.clientGroup.value.name === this.tfrManagementService.getClientName
+      ) {
+        this.fillAttributesFromExisting();
+      }
+    },
+    error: (err: HttpErrorResponse) => {
+      if (err.status === 0) {
+        // this.tfrManagementService.serverDown = true;
+        this.snackBarService.showSnackBar('Server Error. Try again', 4000);
+      }
+    },
+  };
 
   ngOnInit() {
     this.clientGroup = new FormGroup({
@@ -106,24 +134,9 @@ export class ClientsComponent implements OnInit {
 
       this.onSelected.emit(client);
 
-      this.api.getClientAttributes(client.id).subscribe((res) => {
-        this.attributes = res;
-
-        this.attributesSelected.emit(this.attributes);
-
-        this.getAttributes().clear();
-
-        this.attributes.forEach((res) => {
-          this.getAttributes().push(new FormControl('', [Validators.required]));
-        });
-
-        if (
-          this.clientGroup.value.name ===
-          this.tfrManagementService.getClientName
-        ) {
-          this.fillAttributesFromExisting();
-        }
-      });
+      this.api
+        .getClientAttributes(client.id)
+        .subscribe(this.getClientAttributesObserver);
     }
   }
 
