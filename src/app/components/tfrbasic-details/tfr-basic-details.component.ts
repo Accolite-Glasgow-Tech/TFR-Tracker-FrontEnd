@@ -158,8 +158,8 @@ export class TfrBasicDetailsComponent implements OnInit {
     if (this.isFormDirty()) {
       this.matDialog.open(TfrCreationDialogComponent, {
         data: {
-          title: 'Discard Changes',
-          content: 'You have unsaved changes.',
+          title: 'Unsaved Changes',
+          content: 'Save or reset before moving on',
           confirmText: 'OK',
           cancelText: '',
         },
