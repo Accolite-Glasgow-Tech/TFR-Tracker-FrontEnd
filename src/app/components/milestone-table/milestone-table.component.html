@@ -12,7 +12,17 @@
     <td class="data-cell">{{ i + 1 }}</td>
     <td class="data-cell">{{ milestone.name }}</td>
     <td class="data-cell">{{ milestone.description }}</td>
-    <td class="data-cell">{{ milestone.status }}</td>
+    <td
+      class="data-cell"
+      [ngClass]="{
+        approved: milestone.status == 'APPROVED',
+        inprogress: milestone.status == 'IN PROGRESS',
+        pending_review: milestone.status == 'PENDING REVIEW',
+        intent: milestone.status == 'INTENT'
+      }"
+    >
+      {{ milestone.status }}
+    </td>
     <td class="data-cell">
       {{ dateFormatterService.getShortDisplayDate(milestone.start_date) }}
     </td>
@@ -36,8 +46,16 @@
         <div class="data-cell-div-mobile">
           <strong>Description: </strong>{{ milestone.description }}
         </div>
-        <div class="data-cell-div-mobile">
-          <strong>Status: </strong>{{ milestone.status }}
+        <div
+          class="data-cell-div-mobile"
+          [ngClass]="{
+            approved: milestone.status == 'APPROVED',
+            inprogress: milestone.status == 'IN PROGRESS',
+            pending_review: milestone.status == 'PENDING REVIEW',
+            intent: milestone.status == 'INTENT'
+          }"
+        >
+          <strong style="color: black">Status: </strong>{{ milestone.status }}
         </div>
         <div class="data-cell-div-mobile">
           <strong>Start Date: </strong
