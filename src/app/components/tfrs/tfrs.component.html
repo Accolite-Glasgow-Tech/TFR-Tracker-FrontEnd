@@ -96,7 +96,10 @@
 <h1 class="empty-list-message" *ngIf="projectList.data.length === 0">
   No Projects to Show
 </h1>
-<div class="tfrs-table-container" *ngIf="projectList.data.length > 0">
+<div
+  class="tfrs-table-container"
+  [ngClass]="{ hidden: projectList.data.length === 0 }"
+>
   <table
     mat-table
     [dataSource]="projectList"

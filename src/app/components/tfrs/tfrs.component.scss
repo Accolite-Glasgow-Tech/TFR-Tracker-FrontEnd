@@ -67,7 +67,7 @@
   font-family: Roboto;
   font-weight: lighter;
   text-align: center;
-  margin-top: 25vh;
+  margin-top: 5vh;
   font-size: 8vw;
 
   @media all and (min-width: 800px) and (-webkit-min-device-pixel-ratio: 1) {
@@ -117,4 +117,8 @@ tr.detail-row {
 
 .undo-btn {
   margin: 10px;
+}
+
+.hidden {
+  display: none;
 }

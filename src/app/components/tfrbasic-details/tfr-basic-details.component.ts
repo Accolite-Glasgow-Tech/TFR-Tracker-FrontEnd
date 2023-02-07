@@ -38,8 +38,9 @@ export class TfrBasicDetailsComponent implements OnInit {
         .get('client_id')
         ?.setValue(this.tfrManager.project!.client_id);
 
-      !this.projectToEdit ??
-        (this.projectToEdit.client_id = this.tfrManager.project!.client_id);
+      if (this.projectToEdit !== undefined) {
+        this.projectToEdit.client_id = this.tfrManager.project!.client_id;
+      }
 
       this.tfrManager.resetClientDetails();
       this.clientGroup.markAsPristine();
@@ -96,6 +97,7 @@ export class TfrBasicDetailsComponent implements OnInit {
       // set form group details to existing details
       this.setDetailsToExistingProject();
     }
+
     this.previousUpdateSuccessful = this.editMode;
   }
 

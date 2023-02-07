@@ -18,12 +18,6 @@ export const appRoutes: TFRRoute[] = [
     canActivate: [LoginGuardService],
   },
   {
-    navigationLabel: 'Log out',
-    path: 'logout',
-    component: LogOutComponent,
-    canActivate: [LoginGuardService],
-  },
-  {
     path: 'login',
     navigationLabel: 'Login',
     component: UserComponent,
@@ -45,6 +39,12 @@ export const appRoutes: TFRRoute[] = [
     path: 'tfr/create',
     component: StepperComponent,
     navigationLabel: 'Create TFR',
+    canActivate: [LoginGuardService],
+  },
+  {
+    navigationLabel: 'Log out',
+    path: 'logout',
+    component: LogOutComponent,
     canActivate: [LoginGuardService],
   },
   {

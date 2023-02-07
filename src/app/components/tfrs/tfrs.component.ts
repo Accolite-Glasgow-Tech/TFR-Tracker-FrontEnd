@@ -46,7 +46,6 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   ngAfterViewInit() {
-
     this.ApiService.getAllProjects().subscribe((allProjects) => {
       this.projectList = new MatTableDataSource(allProjects);
 
