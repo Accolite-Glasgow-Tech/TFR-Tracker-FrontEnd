@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import {
   Component,
   EventEmitter,
@@ -28,6 +29,7 @@ import { TfrManagementService } from 'src/app/services/tfr-management/tfr-manage
 import {
   AllocatedResourceTypeDTO,
   DisplaySkillDTO,
+  Project,
   ProjectResourceDTO,
   ResourceListType,
 } from 'src/app/shared/interfaces';
@@ -74,6 +76,20 @@ export class TfrCreationResourceComponent implements OnInit {
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
   @Input() editMode = false;
+
+  getProjectObserver = {
+    next: (projectResponse: HttpResponse<Project>) => {
+      this.tfrManagementService.extractProject(projectResponse);
+      this.apiService
+        .getResourcesNamesByProjectIdFromDatabase(
+          this.tfrManagementService.getProjectId as Number
+        )
+        .subscribe(this.getResourceNameObserver);
+    },
+    error: () => {
+      this.snackBarService.showSnackBar('Server Error. Try again', 4000);
+    },
+  };
 
   getResourceNameObserver = {
     next: (data: AllocatedResourceTypeDTO[]) => {
@@ -325,11 +341,9 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   resetResources() {
-    this.apiService
-      .getResourcesNamesByProjectIdFromDatabase(
-        this.tfrManagementService.getProjectId as Number
-      )
-      .subscribe(this.getResourceNameObserver);
+    this.tfrManagementService
+      .getFromDatabase(this.tfrManagementService.getProjectId as Number)
+      .subscribe(this.getProjectObserver);
   }
 
   saveToDatabase() {
