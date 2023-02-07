@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WidgetClientProjectCountService } from './widget-client-project-count.service';
+import { WidgetClientProjectCountService } from '../../services/service-widget-client-project-count/widget-client-project-count.service';
 
 @Component({
   selector: 'app-widget-client-project-count',
