@@ -40,9 +40,12 @@
   margin-top: 25vh;
   font-size: 5vw;
 
-  @media all
-  and (min-width: 800px)
-  and (-webkit-min-device-pixel-ratio: 1) {
-    font-size: 3vw;
+  @media all and (min-width: 800px) and (-webkit-min-device-pixel-ratio: 1) {
+    font-size: 2vw;
   }
+}
+
+.refresh-link {
+  cursor: pointer;
+  color: blue;
 }
