@@ -58,16 +58,13 @@ export class TfrCreationResourceComponent implements OnInit {
   ) {}
 
   resourceFormGroup!: FormGroup;
-  resourcesCountFormGroup!: FormGroup;
   resourcesCount: number = 1;
   resources!: ResourceListType[];
   currentResourceSkills: DisplaySkillDTO[] = [];
   currentResourceName!: string;
   seniorityLevels!: string[];
   filteredResourceOption!: Observable<ResourceListType[]>;
-  filteredRoleOption!: Observable<string[]>;
   allocatedResources: AllocatedResourceTypeDTO[] = [];
-  savedAllocatedResource: ProjectResourceDTO[] = [];
   resourceDetailsUpdated: boolean = false;
   previousUpdateSuccessful: boolean = true;
   @Output() nextStepEmitter = new EventEmitter<boolean>();
@@ -163,7 +160,7 @@ export class TfrCreationResourceComponent implements OnInit {
     });
 
     if (this.tfrManagementService.getResourcesCount === 0) {
-      this.resourceFormGroup.get('resources_count')?.setValue('');
+      this.resourceFormGroup.get('resources_count')?.setValue(1);
       this.resourcesCount = 1;
     } else {
       this.resourceFormGroup
@@ -195,12 +192,9 @@ export class TfrCreationResourceComponent implements OnInit {
       let temp: ProjectResourceDTO[] | undefined =
         this.tfrManagementService.getProjectResources;
 
-      if (temp !== undefined) {
+      if (temp) {
         this.stepCompletedEmitter.emit(true);
-        this.savedAllocatedResource = temp;
-
-        this.updateResourceList();
-
+        this.updateResourceList(temp);
         this.tfrManagementService.setProjectResourcesWithNames(
           this.allocatedResources
         );
@@ -285,8 +279,8 @@ export class TfrCreationResourceComponent implements OnInit {
     this.addEventListener();
   }
 
-  updateResourceList() {
-    this.savedAllocatedResource.forEach((resource) => {
+  updateResourceList(projectResources: ProjectResourceDTO[]) {
+    projectResources.forEach((resource: ProjectResourceDTO) => {
       let indexOfResource = this.resources.findIndex(
         (val) => val.resource_id === resource.resource_id
       );

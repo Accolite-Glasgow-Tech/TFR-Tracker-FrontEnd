@@ -68,7 +68,7 @@ export class ClientsComponent implements OnInit {
       name: new FormControl(''),
     });
 
-    this.api.clientReset.subscribe(() => {
+    this.tfrManagementService.clientReset.subscribe(() => {
       this.resetClientControls();
     });
 

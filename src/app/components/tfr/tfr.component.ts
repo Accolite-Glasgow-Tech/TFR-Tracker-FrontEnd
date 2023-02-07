@@ -1,9 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 import { NotesDialogComponent } from '../notes-dialog/notes-dialog.component';
 
 @Component({
@@ -16,31 +15,6 @@ export class TfrComponent implements OnInit {
   TfrId!: Number;
   errorMessage: string = '';
   notes: string = '';
-
-  getResourceNameObserver = {
-    next: (data: AllocatedResourceTypeDTO[]) => {
-      this.tfrManagementService.projectResourcesWithNames = data;
-    },
-  };
-
-  getProjectObserver = {
-    next: (response: Data) => {
-      let status = response['project']['status'];
-      if (status === 500) {
-        this.tfrManagementService.apiError = true;
-      } else if (status === 503) {
-        this.tfrManagementService.serverDown = true;
-      } else {
-        let project = response['project'];
-        this.tfrManagementService.project = project;
-        this.apiService
-          .getResourcesNamesByProjectIdFromDatabase(project.id)
-          .subscribe(this.getResourceNameObserver);
-        this.tfrManagementService.setClientName(project.client_id);
-        this.notes = this.tfrManagementService.project?.notes ?? '';
-      }
-    },
-  };
 
   constructor(
     private route: ActivatedRoute,
@@ -70,7 +44,7 @@ export class TfrComponent implements OnInit {
         is loaded. This component has a resolver (refer to /services/project-resolver) that
         fetches the project to be displayed.
       */
-      this.route.data.subscribe(this.getProjectObserver);
+      this.route.data.subscribe(this.tfrManagementService.getProjectObserver);
     }
   }
 
@@ -83,6 +57,7 @@ export class TfrComponent implements OnInit {
   }
 
   openNotes() {
+    this.notes = this.tfrManagementService.project?.notes ?? '';
     const dialogRef = this.dialog.open(NotesDialogComponent, {
       width: '250px',
       data: this.notes,

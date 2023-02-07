@@ -1,5 +1,5 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   allProjectsURL,
@@ -139,13 +139,5 @@ export class ApiService {
       `${projectsURL}/${projectId}/status/${status}`,
       null
     );
-  }
-
-  // This is not an API
-  clientReset = new EventEmitter<boolean>();
-
-  // This is not an API
-  resetClientDetails() {
-    this.clientReset.emit(true);
   }
 }

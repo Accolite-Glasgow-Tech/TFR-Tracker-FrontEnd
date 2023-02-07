@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Data } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
 import {
@@ -22,6 +22,7 @@ export class TfrManagementService {
   public project!: Project | undefined;
   projectResourcesWithNames!: AllocatedResourceTypeDTO[];
   subject = new Subject<boolean>();
+  clientReset = new EventEmitter<boolean>();
 
   clientName: string = '';
   apiError: boolean = false;
@@ -56,6 +57,30 @@ export class TfrManagementService {
     error: () => {
       this.responseHandlerService.badSave();
       this.subject.next(false);
+    },
+  };
+
+  getResourceNameObserver = {
+    next: (data: AllocatedResourceTypeDTO[]) => {
+      this.projectResourcesWithNames = data;
+    },
+  };
+
+  getProjectObserver = {
+    next: (response: Data) => {
+      let status = response['project']['status'];
+      if (status === 500) {
+        this.apiError = true;
+      } else if (status === 503) {
+        this.serverDown = true;
+      } else {
+        let project = response['project'];
+        this.project = project;
+        this.apiService
+          .getResourcesNamesByProjectIdFromDatabase(project.id)
+          .subscribe(this.getResourceNameObserver);
+        this.setClientName(project.client_id);
+      }
     },
   };
 
@@ -291,5 +316,9 @@ export class TfrManagementService {
       this.project.notes = notes;
       this.updateProjectToDatabase();
     }
+  }
+
+  resetClientDetails() {
+    this.clientReset.emit(true);
   }
 }
