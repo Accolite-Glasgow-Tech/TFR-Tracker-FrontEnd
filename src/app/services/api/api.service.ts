@@ -64,6 +64,12 @@ export class ApiService {
     );
   }
 
+  getAllClientAttributes(): Observable<ClientAttributeDTO[][]> {
+    return this.http.get<ClientAttributeDTO[][]>(
+      `${environment.backendURL}/vendorAttributes`
+    );
+  }
+
   getProject(projectId: Number): Observable<HttpResponse<Project>> {
     return this.http.get<Project>(`${projectsURL}/${projectId}`, {
       observe: 'response',

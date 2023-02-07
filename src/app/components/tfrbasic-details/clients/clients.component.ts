@@ -30,6 +30,7 @@ export class ClientsComponent implements OnInit {
   clients!: ClientDTO[];
   attributes!: ClientAttributeDTO[];
   clientGroup!: FormGroup;
+  allAttributes!: ClientAttributeDTO[][];
 
   getClientsObserver = {
     next: (data: ClientDTO[]) => {
@@ -41,34 +42,23 @@ export class ClientsComponent implements OnInit {
           }
         });
       }
+
+      // getting all attributes
+      this.clients.forEach((client) => {});
     },
     error: () => {
       this.tfrManagementService.serverDown = true;
     },
   };
 
-  getClientAttributesObserver = {
-    next: (res: ClientAttributeDTO[]) => {
-      this.attributes = res;
-
-      this.attributesSelected.emit(this.attributes);
-
-      this.getAttributes().clear();
-
-      this.attributes.forEach((res) => {
-        this.getAttributes().push(new FormControl('', [Validators.required]));
-      });
-
-      if (
-        this.clientGroup.value.name === this.tfrManagementService.getClientName
-      ) {
-        this.fillAttributesFromExisting();
-      }
+  getAllClientAttributesObserver = {
+    next: (res: ClientAttributeDTO[][]) => {
+      this.allAttributes = res;
     },
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
-        // this.tfrManagementService.serverDown = true;
         this.snackBarService.showSnackBar('Server Error. Try again', 4000);
+        // this.tfrManagementService.serverDown = true;
       }
     },
   };
@@ -83,6 +73,10 @@ export class ClientsComponent implements OnInit {
     });
 
     this.api.getClients().subscribe(this.getClientsObserver);
+
+    this.api
+      .getAllClientAttributes()
+      .subscribe(this.getAllClientAttributesObserver);
 
     this.clientGroup = new FormGroup({
       name: new FormControl(''),
@@ -134,9 +128,21 @@ export class ClientsComponent implements OnInit {
 
       this.onSelected.emit(client);
 
-      this.api
-        .getClientAttributes(client.id)
-        .subscribe(this.getClientAttributesObserver);
+      this.attributes = this.allAttributes[client.id - 1];
+
+      this.attributesSelected.emit(this.attributes);
+
+      this.getAttributes().clear();
+
+      this.attributes.forEach((res) => {
+        this.getAttributes().push(new FormControl('', [Validators.required]));
+      });
+
+      if (
+        this.clientGroup.value.name === this.tfrManagementService.getClientName
+      ) {
+        this.fillAttributesFromExisting();
+      }
     }
   }
 
