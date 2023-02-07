@@ -10,18 +10,14 @@
       <div class="project-details">
         <span
           ><strong>Start Date: </strong>
-          {{
-            dateFormatterService.getShortDisplayDate(currentProject?.start_date)
-          }}</span
+          {{ dateFormatterService.getShortDisplayDate(currentProject?.start_date) }}</span
         >
       </div>
 
       <div class="project-details">
         <span>
           <strong>End Date: </strong>
-          {{
-            dateFormatterService.getShortDisplayDate(currentProject?.end_date)
-          }}
+          {{ dateFormatterService.getShortDisplayDate(currentProject?.end_date) }}
         </span>
       </div>
 
@@ -29,16 +25,7 @@
         <span> <strong>Version: </strong> {{ currentProject?.version }} </span>
       </div>
 
-      <div
-        class="project-details"
-        [ngClass]="{
-          delivered: currentProject?.status == 'DELIVERED',
-          inprogress: currentProject?.status == 'IN PROGRESS',
-          agreed: currentProject?.status == 'AGREED',
-          archived: currentProject?.status == 'ARCHIVED',
-          draft: currentProject?.status == 'DRAFT'
-        }"
-      >
+      <div class="project-details">
         <span> <strong>Status: </strong> {{ currentProject?.status }} </span>
       </div>
     </div>
