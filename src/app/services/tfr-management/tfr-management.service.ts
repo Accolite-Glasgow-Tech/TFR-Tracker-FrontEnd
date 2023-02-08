@@ -54,8 +54,8 @@ export class TfrManagementService {
         });
       }
     },
-    error: () => {
-      this.responseHandlerService.badSave();
+    error: (err: HttpErrorResponse) => {
+      this.responseHandlerService.handleBadProjectUpdate(err);
       this.subject.next(false);
     },
   };
