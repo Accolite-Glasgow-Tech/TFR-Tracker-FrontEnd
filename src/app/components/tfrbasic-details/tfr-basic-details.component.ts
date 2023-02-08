@@ -51,15 +51,11 @@ export class TfrBasicDetailsComponent implements OnInit {
     },
     error: (err: HttpErrorResponse) => {
       if (err.status === 400) {
-        this.tfrDetails.get('name')?.setValue('');
-        this.tfrDetails.get('start_date')?.setValue(null);
-        this.tfrDetails.get('end_date')?.setValue(null);
-        this.tfrDetails.get('client_id')?.setValue('');
+        this.tfrDetails.reset();
         if (this.clientGroup) {
           this.apiService.resetClientDetails();
           this.clientGroup.markAsPristine();
         }
-        this.tfrDetails.markAsPristine();
       } else {
         this.responseHandlerService.badGet();
       }
