@@ -57,7 +57,7 @@ export class ResponseHandlerService {
   }
 
   badGet() {
-    this.snackBarService.showSnackBar('Server Error. Try again', 5000);
+    this.snackBarService.showSnackBar('Error. Try again', 5000);
   }
 
   badSave() {

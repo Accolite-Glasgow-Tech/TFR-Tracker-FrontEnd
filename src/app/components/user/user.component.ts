@@ -26,9 +26,13 @@ export class UserComponent implements OnInit {
   ) {}
   registerObserver = {
     next: (info: RegisterResponse) => {
-      this.responseHandlerService.goodRegister();
-      if (info.status === true) {
-        this.goLogin();
+      if (info == undefined) {
+        this.responseHandlerService.badGet();
+      } else {
+        this.responseHandlerService.goodRegister();
+        if (info.status === true) {
+          this.goLogin();
+        }
       }
     },
     error: (err: HttpErrorResponse) => {
@@ -38,6 +42,9 @@ export class UserComponent implements OnInit {
 
   loginObserver = {
     next: (info: LoginResponse) => {
+      if (info == undefined) {
+        this.responseHandlerService.badGet();
+      }
       if (info.status == true) {
         sessionStorage.setItem('jwt_token', info.token);
         this.userService.user_id = info.id;

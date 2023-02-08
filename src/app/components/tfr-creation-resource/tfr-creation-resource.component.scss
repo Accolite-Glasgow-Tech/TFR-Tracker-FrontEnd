@@ -73,6 +73,14 @@
   height: 7px;
 }
 
+.resource-count-div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: baseline;
+}
+
 @media screen and (max-width: 800px) {
   button {
     width: 1%;
