@@ -1,14 +1,13 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ApiService } from 'src/app/services/api/api.service';
 import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   ClientAttributeDTO,
   ClientDTO,
   Project,
-  ProjectBasicDetails,
+  ProjectBasicDetails
 } from 'src/app/shared/interfaces';
 
 @Component({
@@ -19,7 +18,6 @@ import {
 export class TfrBasicDetailsComponent implements OnInit {
   constructor(
     protected tfrManager: TfrManagementService,
-    private apiService: ApiService,
     private responseHandlerService: ResponseHandlerService
   ) {}
 

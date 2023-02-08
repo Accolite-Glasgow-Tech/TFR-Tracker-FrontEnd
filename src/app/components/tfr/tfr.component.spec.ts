@@ -233,7 +233,9 @@ describe('TfrComponent', () => {
   it('load fail, project does not exist', async () => {
     await setUpSuccess();
     fixture.detectChanges();
-    component.getProjectObserver.next({project: new HttpErrorResponse({status:500})});
+    tfrManagementServiceSpy.getProjectObserver.next({
+      project: new HttpErrorResponse({ status: 500 }),
+    });
     expect(tfrManagementServiceSpy.apiError).toBe(true);
     expect(component).toBeTruthy();
   });
@@ -241,7 +243,9 @@ describe('TfrComponent', () => {
   it('load fail, server down', async () => {
     await setUpSuccess();
     fixture.detectChanges();
-    component.getProjectObserver.next({ project: new HttpErrorResponse({status: 503})});
+    tfrManagementServiceSpy.getProjectObserver.next({
+      project: new HttpErrorResponse({ status: 503 }),
+    });
     expect(tfrManagementServiceSpy.serverDown).toBe(true);
     expect(component).toBeTruthy();
   });

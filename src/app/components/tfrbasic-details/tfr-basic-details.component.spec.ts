@@ -1,28 +1,40 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { MatDialogModule } from '@angular/material/dialog';
+import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrBasicDetailsComponent } from './tfr-basic-details.component';
-import { ApiService } from 'src/app/services/api/api.service';
 
-describe('TFRBasicDetailsComponent', () => {
+fdescribe('TFRBasicDetailsComponent', () => {
   let component: TfrBasicDetailsComponent;
   let fixture: ComponentFixture<TfrBasicDetailsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TfrBasicDetailsComponent],
-      imports: [ MatDialogModule ],
+      imports: [MatDialogModule],
       providers: [
         {
           provide: TfrManagementService,
-          useValue: jasmine.createSpyObj(['']),
+          useValue: jasmine.createSpyObj(
+            'TfrManagementService',
+            [
+              'setBasicDetails',
+              'extractProject',
+              'resetClientDetails',
+              'getFromDatabase',
+            ],
+            ['getBasicDetails', 'project', 'getProjectId']
+          ),
         },
         {
-          provide: ApiService,
-          useValue: jasmine.createSpyObj(['']),
-        }
-      ]
+          provide: ResponseHandlerService,
+          useValue: jasmine.createSpyObj('ResponseHandlerService', [
+            'unsavedChangesDialogue',
+            'badGet',
+          ]),
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TfrBasicDetailsComponent);
