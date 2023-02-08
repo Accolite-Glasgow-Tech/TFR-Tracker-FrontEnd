@@ -49,6 +49,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
 import { WidgetClientLocationComponent } from './components/widget-client-location/widget-client-location.component';
+import { ServiceUnavailableComponent } from './components/service-unavailable/service-unavailable.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { WidgetClientLocationComponent } from './components/widget-client-locati
     ManageWidgetModalComponent,
     NotesDialogComponent,
     WidgetClientLocationComponent,
+    ServiceUnavailableComponent,
   ],
 
   providers: [

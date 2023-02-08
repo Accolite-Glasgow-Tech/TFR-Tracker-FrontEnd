@@ -21,10 +21,9 @@
       </mat-form-field>
       <mat-icon
         *ngIf="
-          !(
-            resourceService.resourcesWithoutDeleted(allocatedResources)
-              .length >= resourcesCount && resourcesCount !== null
-          )
+          resourceService.resourcesWithoutDeleted(allocatedResources).length <
+            resourcesCount &&
+          (resourcesCount !== null || resourcesCount)
         "
         [ngStyle]="{ color: '#8a8a8a' }"
         #infoTooltip="matTooltip"
