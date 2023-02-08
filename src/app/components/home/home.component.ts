@@ -108,6 +108,8 @@ export class HomeComponent implements OnInit {
 
   OpenPopup() {
     const popup = this.matdialog.open(ManageWidgetModalComponent, {
+      height: '330px',
+      width: '350px',
       panelClass: 'popup-window', // class defined in global styles.scss
       enterAnimationDuration: '500ms',
       data: { widgetdata: this.widgetsfalse },

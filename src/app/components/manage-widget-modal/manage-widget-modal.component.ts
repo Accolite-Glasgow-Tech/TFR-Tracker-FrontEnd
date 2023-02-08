@@ -11,7 +11,6 @@ export class ManageWidgetModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     @Optional() public ref: MatDialogRef<ManageWidgetModalComponent>
   ) {}
-
   widgetsfalse: any;
   widgets: any = [
     {

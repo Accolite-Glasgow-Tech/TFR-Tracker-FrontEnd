@@ -1,40 +1,29 @@
 <h1 class="title" mat-dialog-title>
-  <strong> Add Widgets </strong>
+  <strong> Widgets </strong>
 </h1>
 
-<!-- <div style="margin: 0px">
+<div style="margin: 0px">
   <mat-button-toggle-group
     #toggleBtn="matButtonToggleGroup"
     multiple
     style="display: block"
   >
-    <mat-card *ngFor="let wid of widgets" style="padding: 5px 20px 5px 20px">
+    <mat-card *ngFor="let wid of widgets" style="padding: 2px 37px 2px 37px">
       <mat-button-toggle
         value="{{ wid.componentName }}"
         type="button"
         class="btn btn-success top-btn-left"
-        style="font-size: 120%; white-space: pre-wrap"
+        style="font-size: 120%; white-space: pre-wrap; text-align-last: left"
       >
-        <i
-          class="fa fa-plus-circle"
-          aria-hidden="true"
-          *ngIf="!wid.present"
-          style="color : green ;    margin-right: 10px;   "
-        ></i>
-        <i
-          class="fa fa-minus-circle"
-          aria-hidden="true"
-          *ngIf="wid.present"
-          style="color : red ;    margin-right: 10px;   "
-        ></i>
-
-        <b> {{ wid.componentName }} Widget </b></mat-button-toggle
-      >
+        <mat-slide-toggle color="primary" [(ngModel)]="wid.present">
+          <b>{{ wid.componentName }} Widget</b>
+        </mat-slide-toggle>
+      </mat-button-toggle>
     </mat-card>
   </mat-button-toggle-group>
-</div> -->
+</div>
 
-<div style="margin: 0px">
+<!-- <div style="margin: 0px">
   <mat-button-toggle-group
     #toggleBtn="matButtonToggleGroup"
     multiple
@@ -54,7 +43,7 @@
       </mat-button-toggle>
     </mat-card>
   </mat-button-toggle-group>
-</div>
+</div> -->
 
 <div class="foot" mat-dialog-actions>
   <button
