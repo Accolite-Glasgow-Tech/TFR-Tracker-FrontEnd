@@ -1,8 +1,29 @@
 <h1 class="title" mat-dialog-title>
-  <marquee behavior="alternate"><strong> Add Widgets </strong></marquee>
+  <strong> Widgets </strong>
 </h1>
 
 <div style="margin: 0px">
+  <mat-button-toggle-group
+    #toggleBtn="matButtonToggleGroup"
+    multiple
+    style="display: block"
+  >
+    <mat-card *ngFor="let wid of widgets" style="padding: 2px 37px 2px 37px">
+      <mat-button-toggle
+        value="{{ wid.componentName }}"
+        type="button"
+        class="btn btn-success top-btn-left"
+        style="font-size: 120%; white-space: pre-wrap; text-align-last: left"
+      >
+        <mat-slide-toggle color="primary" [(ngModel)]="wid.present">
+          <b>{{ wid.componentName }} Widget</b>
+        </mat-slide-toggle>
+      </mat-button-toggle>
+    </mat-card>
+  </mat-button-toggle-group>
+</div>
+
+<!-- <div style="margin: 0px">
   <mat-button-toggle-group
     #toggleBtn="matButtonToggleGroup"
     multiple
@@ -13,29 +34,23 @@
         value="{{ wid.componentName }}"
         type="button"
         class="btn btn-success top-btn-left"
-        style="font-size: 102%; white-space: pre-wrap"
+        style="font-size: 120%; white-space: pre-wrap; align-self: center"
       >
-        <i
-          class="fa fa-plus-circle"
-          aria-hidden="true"
-          *ngIf="!wid.present"
-        ></i>
-        <i
-          class="fa fa-minus-circle"
-          aria-hidden="true"
-          *ngIf="wid.present"
-        ></i>
-        <b> {{ wid.componentName }} Widget </b></mat-button-toggle
-      >
+        <input type="checkbox" *ngIf="wid.present" checked="checked" />
+        <input type="checkbox" *ngIf="!wid.present" />
+        <span class="checkmark"></span>
+        <b> {{ wid.componentName }} Widget </b>
+      </mat-button-toggle>
     </mat-card>
   </mat-button-toggle-group>
-</div>
+</div> -->
+
 <div class="foot" mat-dialog-actions>
   <button
     mat-raised-button
     type="button"
-    color="warn"
     (click)="onClick(toggleBtn.value)"
+    style="background-color: rgb(32, 32, 148); color: whitesmoke"
   >
     Okay
   </button>

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
-import { WidgetClientLocationService } from './widget-client-location.service';
+import { WidgetClientLocationService } from '../../services/service-widget-client-location/widget-client-location.service';
 
 @Component({
   selector: 'app-widget-client-location',
@@ -23,8 +22,7 @@ export class WidgetClientLocationComponent {
 
   chart: any;
   chartOptions = {
-    title: {
-    },
+    title: {},
     size: 5,
     animationEnabled: true,
     axisY: {

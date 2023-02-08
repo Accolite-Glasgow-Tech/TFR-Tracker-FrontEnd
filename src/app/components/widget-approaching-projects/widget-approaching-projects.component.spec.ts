@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { WidgetApproachingProjectsService } from '../../services/service-widget-approaching-project/widget-approaching-projects.service';
 import { WidgetApproachingProjectsComponent } from './widget-approaching-projects.component';
-import { WidgetApproachingProjectsService } from './widget-approaching-projects.service';
 
 describe('WidgetApproachingProjectsComponent', () => {
   let component: WidgetApproachingProjectsComponent;
@@ -14,10 +14,10 @@ describe('WidgetApproachingProjectsComponent', () => {
         {
           provide: WidgetApproachingProjectsService,
           useValue: jasmine.createSpyObj('WidgetApproachingProjectsService', {
-            'readApproachingProjectNamesData': of([]),
-          })
-        }
-      ]
+            readApproachingProjectNamesData: of([]),
+          }),
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(WidgetApproachingProjectsComponent);

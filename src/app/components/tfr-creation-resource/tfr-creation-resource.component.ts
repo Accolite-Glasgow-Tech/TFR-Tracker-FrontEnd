@@ -58,18 +58,16 @@ export class TfrCreationResourceComponent implements OnInit {
   ) {}
 
   resourceFormGroup!: FormGroup;
-  resourcesCountFormGroup!: FormGroup;
   resourcesCount: number = 1;
   resources!: ResourceListType[];
   currentResourceSkills: DisplaySkillDTO[] = [];
   currentResourceName!: string;
   seniorityLevels!: string[];
   filteredResourceOption!: Observable<ResourceListType[]>;
-  filteredRoleOption!: Observable<string[]>;
   allocatedResources: AllocatedResourceTypeDTO[] = [];
-  savedAllocatedResource: ProjectResourceDTO[] = [];
   resourceDetailsUpdated: boolean = false;
   previousUpdateSuccessful: boolean = true;
+  tooltipMsg: string = 'Hello swxy';
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
   @Input() editMode = false;
@@ -162,18 +160,6 @@ export class TfrCreationResourceComponent implements OnInit {
       }),
     });
 
-    if (this.tfrManagementService.getResourcesCount === 0) {
-      this.resourceFormGroup.get('resources_count')?.setValue('');
-      this.resourcesCount = 1;
-    } else {
-      this.resourceFormGroup
-        .get('resources_count')
-        ?.setValue(this.tfrManagementService.getResourcesCount);
-      this.resourcesCount = this.tfrManagementService.getResourcesCount!;
-    }
-
-    this.addEventListener();
-
     this.apiService.getAllSeniorityLevels().subscribe((data: string[]) => {
       this.seniorityLevels = data;
     });
@@ -195,16 +181,26 @@ export class TfrCreationResourceComponent implements OnInit {
       let temp: ProjectResourceDTO[] | undefined =
         this.tfrManagementService.getProjectResources;
 
-      if (temp !== undefined) {
+      if (temp) {
         this.stepCompletedEmitter.emit(true);
-        this.savedAllocatedResource = temp;
-
-        this.updateResourceList();
-
+        this.updateResourceList(temp);
         this.tfrManagementService.setProjectResourcesWithNames(
           this.allocatedResources
         );
       }
+
+      if (this.tfrManagementService.getResourcesCount === 0) {
+        this.resourceFormGroup.get('resources_count')?.setValue(1);
+        this.resourcesCount = 1;
+      } else {
+        this.resourceFormGroup
+          .get('resources_count')
+          ?.setValue(this.tfrManagementService.getResourcesCount);
+        this.resourcesCount = this.tfrManagementService.getResourcesCount!;
+      }
+
+      this.refreshTooltipMsg();
+      this.addEventListener();
     });
   }
 
@@ -282,11 +278,12 @@ export class TfrCreationResourceComponent implements OnInit {
     this.resourceFormGroup
       .get('resources_count')
       ?.setValue(this.resourcesCount, { emitEvent: false });
+    this.refreshTooltipMsg();
     this.addEventListener();
   }
 
-  updateResourceList() {
-    this.savedAllocatedResource.forEach((resource) => {
+  updateResourceList(projectResources: ProjectResourceDTO[]) {
+    projectResources.forEach((resource: ProjectResourceDTO) => {
       let indexOfResource = this.resources.findIndex(
         (val) => val.resource_id === resource.resource_id
       );
@@ -349,6 +346,7 @@ export class TfrCreationResourceComponent implements OnInit {
       .subscribe((val: number) => {
         this.resourcesCount = val;
         this.resourceDetailsUpdated = true;
+        this.refreshTooltipMsg();
       });
   }
 
@@ -357,5 +355,15 @@ export class TfrCreationResourceComponent implements OnInit {
     this.apiService
       .getSkillsByResourceId(selectedResource.resource_id)
       .subscribe(this.getResourceSkillObserver);
+  }
+
+  refreshTooltipMsg() {
+    let allocatedResourceCount = this.resourceService.resourcesWithoutDeleted(
+      this.allocatedResources
+    ).length;
+    this.tooltipMsg =
+      this.resourcesCount > allocatedResourceCount
+        ? `${this.resourcesCount - allocatedResourceCount} more to allocate`
+        : `${allocatedResourceCount - this.resourcesCount} allocated in excess`;
   }
 }
