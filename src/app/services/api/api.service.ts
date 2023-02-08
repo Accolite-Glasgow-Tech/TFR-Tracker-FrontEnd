@@ -1,32 +1,39 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { getAllocatedResourcesURL, getSkillsURL } from 'src/app/shared/utils';
+import { environment } from 'src/environments/environment';
 import {
   allProjectsURL,
+  approachingProjectsURL,
+  clientProjectCountURL,
   clientsURL,
   clientsURLdupe,
+  loginURL,
   projectSearchURL,
   projectsURL,
+  registrationURL,
   resourceProjectsURL,
   seniorityLevelsURL,
   tasksURL,
   TFRCreationResourceURL,
+  TFRLocationCountURL,
+  TFRStatusCountURL,
 } from '../../shared/constants';
 import {
   AllocatedResourceTypeDTO,
   ClientAttributeDTO,
   ClientDTO,
   DisplaySkillDTO,
+  LoginResponse,
   Project,
   ProjectDTO,
   ProjectMilestoneDTO,
+  RegisterResponse,
   ResourceDTO,
   ResourceListType,
   TaskCreationDTO,
 } from '../../shared/interfaces';
-
-import { getAllocatedResourcesURL, getSkillsURL } from 'src/app/shared/utils';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -48,9 +55,33 @@ export class ApiService {
   postProjectResources(project: Project | undefined) {
     return this.http.post(resourceProjectsURL, project);
   }
+
+  postRegister(body: any) {
+    return this.http.post<RegisterResponse>(registrationURL, body);
+  }
+
+  postLogin(body: any) {
+    return this.http.post<LoginResponse>(loginURL, body);
+  }
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// GET ///////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
+
+  getTFRLocationCount(): Observable<any> {
+    return this.http.get<any>(TFRLocationCountURL);
+  }
+
+  getClientProjectCount(): Observable<any> {
+    return this.http.get<any>(clientProjectCountURL);
+  }
+
+  getApproachingProjectNames(): Observable<any> {
+    return this.http.get<any>(approachingProjectsURL);
+  }
+
+  getTFRStatusCount(): Observable<any> {
+    return this.http.get<any>(TFRStatusCountURL);
+  }
 
   getResourcesByProjectId(projectId: number): Observable<ResourceDTO[]> {
     return this.http.get<ResourceDTO[]>(

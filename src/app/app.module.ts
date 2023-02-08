@@ -11,9 +11,6 @@ import { NgChartsModule } from 'ng2-charts';
 import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
 import { ChartsComponent } from './components/charts/charts.component';
 import { WidgetClientProjectCountComponent } from './components/widget-client-project-count/widget-client-project-count.component';
-import { ChartsService } from './services/service-charts/charts.service';
-import { WidgetClientLocationService } from './services/service-widget-client-location/widget-client-location.service';
-import { WidgetClientProjectCountService } from './services/service-widget-client-project-count/widget-client-project-count.service';
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
 import { StepperComponent } from './components/stepper/stepper.component';
@@ -86,9 +83,6 @@ import { WidgetClientLocationComponent } from './components/widget-client-locati
   ],
 
   providers: [
-    ChartsService,
-    WidgetClientLocationService,
-    WidgetClientProjectCountService,
     DatePipe,
     {
       provide: HTTP_INTERCEPTORS,
