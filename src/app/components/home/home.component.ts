@@ -7,6 +7,7 @@ import { ManageWidgetModalComponent } from '../manage-widget-modal/manage-widget
 import { WidgetApproachingProjectsComponent } from '../widget-approaching-projects/widget-approaching-projects.component';
 import { WidgetClientLocationComponent } from '../widget-client-location/widget-client-location.component';
 import { WidgetClientProjectCountComponent } from '../widget-client-project-count/widget-client-project-count.component';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -28,7 +29,6 @@ export class HomeComponent implements OnInit {
   flag = 0;
 
   constructor(private matdialog: MatDialog) {}
-
   ngOnInit() {
     this.widgets.push({
       componentName: 'Client Location',

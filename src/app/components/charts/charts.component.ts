@@ -18,24 +18,26 @@ export class ChartsComponent implements OnInit {
   pieChartData: any = [];
   pieChartLabels: any[] = [];
   ngOnInit() {
-    this.chartservice.readTfrStatusData().subscribe((responsedata) => {
-      (this.pieChartLabels = Object.keys(JSON.parse(responsedata.response))),
-        (this.pieChartData = [
-          {
-            data: Object.values(JSON.parse(responsedata.response)),
-            backgroundColor: [
-              'orange',
-              'blue',
-              'red',
-              'green',
-              'yellow',
-              'gray',
-              'pink',
-              'brown',
-            ],
-          },
-        ]);
-    });
+    this.chartservice
+      .readTfrStatusData()
+      .subscribe((responsedata: { response: string }) => {
+        (this.pieChartLabels = Object.keys(JSON.parse(responsedata.response))),
+          (this.pieChartData = [
+            {
+              data: Object.values(JSON.parse(responsedata.response)),
+              backgroundColor: [
+                'orange',
+                'blue',
+                'red',
+                'green',
+                'yellow',
+                'gray',
+                'pink',
+                'brown',
+              ],
+            },
+          ]);
+      });
   }
 
   onChartClick(event: any) {

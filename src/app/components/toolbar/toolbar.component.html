@@ -1,4 +1,4 @@
-<mat-toolbar style="background-color: #5203fb">
+<mat-toolbar style="background-color: midnightblue">
   <div fxShow="true" fxHide.gt-sm="true">
     <button mat-icon-button (click)="toggle()">
       <mat-icon>menu</mat-icon>
@@ -12,8 +12,10 @@
   <div *ngFor="let route of appRoutes" fxShow="true" fxHide.lt-md="true">
     <a
       mat-button
-      style="color: white"
-      *ngIf="route.navigationLabel && routeGuardManager.checkRouting(route.component)"
+      style="color: antiquewhite"
+      *ngIf="
+        route.navigationLabel && routeGuardManager.checkRouting(route.component)
+      "
       routerLink="{{ route.path }}"
       routerLinkActive="active-route"
       >{{ route.navigationLabel }}</a

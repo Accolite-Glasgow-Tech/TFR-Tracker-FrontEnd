@@ -8,16 +8,16 @@
   }
 
   a.headerText {
-    font-family: Roboto;
+    font-family: FontAwesome;
     font-size: 3vw;
-    color: #000000;
+    color: antiquewhite;
     font-weight: 500;
     vertical-align: -webkit-baseline-middle;
     margin: 14px;
   }
 
   .header {
-    background: #507fc6;
+    background: midnightblue;
     border: 1px solid #ffffff;
     display: flexbox;
     flex-wrap: wrap;
@@ -29,7 +29,7 @@
   }
 
   .closeiconbutton {
-    background-color: #507fc6;
+    background-color: midnightblue;
     font-size: 24px;
     cursor: pointer;
     margin: 0px;
@@ -41,7 +41,7 @@
 
   .geariconbtn {
     max-width: 2vw;
-    background-color: #507fc6;
+    background-color: midnightblue;
     font-size: 24px;
     cursor: pointer;
     margin-right: 1vw;
@@ -59,16 +59,16 @@
   }
 
   a.headerText {
-    font-family: Roboto;
+    font-family: FontAwesome;
     font-size: 5vw;
-    color: #000000;
+    color: antiquewhite;
     font-weight: 500;
     vertical-align: -webkit-baseline-middle;
     margin: 14px;
   }
 
   .header {
-    background: #507fc6;
+    background: midnightblue;
     border: 1px solid #ffffff;
     display: flexbox;
     height: 13%;
@@ -78,7 +78,7 @@
   }
 
   .closeiconbutton {
-    background-color: #507fc6;
+    background-color: midnightblue;
     font-size: 24px;
     cursor: pointer;
     margin: 0px;
@@ -90,7 +90,7 @@
 
   .geariconbtn {
     max-width: 2vw;
-    background-color: #507fc6;
+    background-color: midnightblue;
     font-size: 24px;
     cursor: pointer;
     margin-right: 3vw;
@@ -116,7 +116,7 @@ section {
 
 .widget {
   border: 8px solid #fbfbfb;
-  background-color: #1e0c0c;
+  background-color: #0f0f0ffb;
   width: inherit;
   height: inherit;
   position: relative;
@@ -124,10 +124,21 @@ section {
   inline-size: auto;
 }
 
+.widgetcontent {
+  width: inherit;
+  /* height: inherit; */
+  position: relative;
+  margin: 8%;
+  margin-bottom: 104px;
+  size-adjust: inherit;
+  inline-size: auto;
+  height: -webkit-fill-available;
+}
+
 @media all and (min-device-width: 1700px) and (-webkit-min-device-pixel-ratio: 1) {
   .widget {
     border: 8px solid #fbfbfb;
-    background-color: #1e0c0c;
+    background-color: #0f0f0ffb;
     width: inherit;
     height: 140%;
     position: relative;
