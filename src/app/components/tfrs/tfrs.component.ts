@@ -46,13 +46,21 @@ export class TfrsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  ngAfterViewInit() {
-    this.ApiService.getAllProjects().subscribe((allProjects) => {
+  getAllProjectsObserver = {
+    next: (allProjects: ProjectDTO[]) => {
       this.projectList = new MatTableDataSource(allProjects);
-
       this.projectList.paginator = this.paginator;
       this.projectList.sort = this.sort;
-    });
+    },
+    error: (err: HttpErrorResponse) => {
+      if (err.status === 0) {
+        this.serverDown = true;
+      }
+    },
+  };
+
+  ngAfterViewInit() {
+    this.ApiService.getAllProjects().subscribe(this.getAllProjectsObserver);
   }
 
   announceSortChange(sortState: Sort) {
@@ -73,19 +81,6 @@ export class TfrsComponent implements OnInit {
     private http: HttpClient,
     public dateFormatterService: DateFormatterService
   ) {}
-
-  getAllProjectsObserver = {
-    next: (allProjects: ProjectDTO[]) => {
-      this.projectList = new MatTableDataSource(allProjects);
-      this.projectList.paginator = this.paginator;
-      this.projectList.sort = this.sort;
-    },
-    error: (err: HttpErrorResponse) => {
-      if (err.status === 0) {
-        this.serverDown = true;
-      }
-    },
-  };
 
   ngOnInit(): void {
     this.ApiService.getAllProjects().subscribe(this.getAllProjectsObserver);

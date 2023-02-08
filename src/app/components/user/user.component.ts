@@ -60,8 +60,6 @@ export class UserComponent implements OnInit {
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
         this.responseHandlerService.badGet();
-      } else if (err.status === 400) {
-        this.responseHandlerService.badCredentials();
       }
     },
   };
