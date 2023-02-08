@@ -99,7 +99,9 @@
 >
   No Projects to Show
 </h1>
-<app-service-unavailable *ngIf="serverDown"></app-service-unavailable>
+<div *ngIf="serverDown" class="service-unavailable-div">
+  <app-service-unavailable></app-service-unavailable>
+</div>
 
 <div
   class="tfrs-table-container"
