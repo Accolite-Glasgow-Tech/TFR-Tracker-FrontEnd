@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GridsterComponent, IGridsterOptions } from 'angular2gridster';
 import { MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { ApiService } from 'src/app/services/api/api.service';
 import { ChartsComponent } from '../charts/charts.component';
 import { ManageWidgetModalComponent } from '../manage-widget-modal/manage-widget-modal.component';
 import { WidgetApproachingProjectsComponent } from '../widget-approaching-projects/widget-approaching-projects.component';
@@ -12,7 +13,7 @@ import { WidgetClientProjectCountComponent } from '../widget-client-project-coun
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [MdbModalService],
+  providers: [MdbModalService, ApiService],
 })
 export class HomeComponent implements OnInit {
   @ViewChild(GridsterComponent) gridster!: GridsterComponent;

@@ -26,40 +26,34 @@ export class TfrBasicDetailsComponent implements OnInit {
   getProjectObserver = {
     next: (project: HttpResponse<Project>) => {
       this.tfrManager.extractProject(project);
-      let previousStateBasicDetails: ProjectBasicDetails =
-        this.tfrManager.getBasicDetails!;
 
-      this.tfrDetails.get('name')?.setValue(previousStateBasicDetails.name);
+      this.tfrDetails.get('name')?.setValue(this.tfrManager.project!.name);
       this.tfrDetails
         .get('start_date')
-        ?.setValue(previousStateBasicDetails.start_date);
+        ?.setValue(this.tfrManager.project!.start_date);
       this.tfrDetails
         .get('end_date')
-        ?.setValue(previousStateBasicDetails.end_date);
+        ?.setValue(this.tfrManager.project!.end_date);
       this.tfrDetails
         .get('client_id')
-        ?.setValue(previousStateBasicDetails.client_id);
+        ?.setValue(this.tfrManager.project!.client_id);
 
       if (this.projectToEdit !== undefined) {
-        this.projectToEdit.client_id = previousStateBasicDetails.client_id;
+        this.projectToEdit.client_id = this.tfrManager.project!.client_id;
       }
 
-      this.apiService.resetClientDetails();
+      this.tfrManager.resetClientDetails();
       this.clientGroup.markAsPristine();
 
       this.tfrDetails.markAsPristine();
     },
     error: (err: HttpErrorResponse) => {
       if (err.status === 400) {
-        this.tfrDetails.get('name')?.setValue('');
-        this.tfrDetails.get('start_date')?.setValue(null);
-        this.tfrDetails.get('end_date')?.setValue(null);
-        this.tfrDetails.get('client_id')?.setValue('');
+        this.tfrDetails.reset();
         if (this.clientGroup) {
-          this.apiService.resetClientDetails();
+          this.tfrManager.resetClientDetails();
           this.clientGroup.markAsPristine();
         }
-        this.tfrDetails.markAsPristine();
       } else {
         this.responseHandlerService.badGet();
       }

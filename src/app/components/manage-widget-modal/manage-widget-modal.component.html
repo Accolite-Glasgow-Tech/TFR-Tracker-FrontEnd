@@ -23,34 +23,12 @@
   </mat-button-toggle-group>
 </div>
 
-<!-- <div style="margin: 0px">
-  <mat-button-toggle-group
-    #toggleBtn="matButtonToggleGroup"
-    multiple
-    style="display: block"
-  >
-    <mat-card *ngFor="let wid of widgets" style="padding: 5px 20px 5px 20px">
-      <mat-button-toggle
-        value="{{ wid.componentName }}"
-        type="button"
-        class="btn btn-success top-btn-left"
-        style="font-size: 120%; white-space: pre-wrap; align-self: center"
-      >
-        <input type="checkbox" *ngIf="wid.present" checked="checked" />
-        <input type="checkbox" *ngIf="!wid.present" />
-        <span class="checkmark"></span>
-        <b> {{ wid.componentName }} Widget </b>
-      </mat-button-toggle>
-    </mat-card>
-  </mat-button-toggle-group>
-</div> -->
-
 <div class="foot" mat-dialog-actions>
   <button
     mat-raised-button
     type="button"
     (click)="onClick(toggleBtn.value)"
-    style="background-color: #252590; color: antiquewhite"
+    color="primary"
   >
     Okay
   </button>

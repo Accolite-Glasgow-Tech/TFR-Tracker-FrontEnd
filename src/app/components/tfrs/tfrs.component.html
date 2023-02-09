@@ -93,9 +93,16 @@
     </mat-form-field>
   </div>
 </div>
-<h1 class="empty-list-message" *ngIf="projectList.data.length === 0">
+<h1
+  class="empty-list-message"
+  *ngIf="projectList.data.length === 0 && !serverDown"
+>
   No Projects to Show
 </h1>
+<div *ngIf="serverDown" class="service-unavailable-div">
+  <app-service-unavailable></app-service-unavailable>
+</div>
+
 <div
   class="tfrs-table-container"
   [ngClass]="{ hidden: projectList.data.length === 0 }"

@@ -1,11 +1,12 @@
 <mat-card
-  *ngIf="pieChartData.length === 0"
+  *ngIf="!serverup"
   style="background-color: transparent; padding: 15px"
 >
   <h1 style="align-self: center; color: antiquewhite">
-    Service unavailable. Try again
+    service unavailable. Try again
   </h1>
 </mat-card>
+
 <mat-card class="chartouter" *ngIf="pieChartData.length > 0">
   <canvas
     class="chartinner"

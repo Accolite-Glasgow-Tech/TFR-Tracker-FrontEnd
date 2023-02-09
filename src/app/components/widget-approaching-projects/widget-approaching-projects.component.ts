@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WidgetApproachingProjectsService } from '../../services/service-widget-approaching-project/widget-approaching-projects.service';
+import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'app-widget-approaching-projects',
@@ -7,14 +7,12 @@ import { WidgetApproachingProjectsService } from '../../services/service-widget-
   styleUrls: ['./widget-approaching-projects.component.scss'],
 })
 export class WidgetApproachingProjectsComponent {
-  constructor(
-    private widgetApproachingProjectsService: WidgetApproachingProjectsService
-  ) {
-    this.widgetApproachingProjectsService
-      .readApproachingProjectNamesData()
-      .subscribe((data) => {
-        this.ProjectDetails = data;
-      });
+  serverup = false;
+  constructor(private apiService: ApiService) {
+    this.apiService.getApproachingProjectNames().subscribe((data: any) => {
+      this.ProjectDetails = data;
+      this.serverup = true;
+    });
   }
 
   public ProjectDetails = [];

@@ -1,5 +1,11 @@
 <mat-card
-  *ngIf="dataPoints.length === 0"
+  *ngIf="dataPoints.length === 0 && serverup"
+  style="background-color: transparent; padding: 15px"
+>
+  <h1 style="align-self: center; color: antiquewhite">No Data to show</h1>
+</mat-card>
+<mat-card
+  *ngIf="!serverup"
   style="background-color: transparent; padding: 15px"
 >
   <h1 style="align-self: center; color: antiquewhite">

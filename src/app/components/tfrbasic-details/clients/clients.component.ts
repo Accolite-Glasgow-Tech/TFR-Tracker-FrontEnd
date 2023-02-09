@@ -40,8 +40,10 @@ export class ClientsComponent implements OnInit {
         .getAllClientAttributes()
         .subscribe(this.getAllClientAttributesObserver);
     },
-    error: () => {
-      this.tfrManagementService.serverDown = true;
+    error: (err: HttpErrorResponse) => {
+      if (err.status === 0) {
+        this.tfrManagementService.serverDown = true;
+      }
     },
   };
 
@@ -60,7 +62,7 @@ export class ClientsComponent implements OnInit {
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
         this.responseHandler.badGet();
-        // this.tfrManagementService.serverDown = true;
+        this.tfrManagementService.serverDown = true;
       }
     },
   };
@@ -70,7 +72,7 @@ export class ClientsComponent implements OnInit {
       name: new FormControl(''),
     });
 
-    this.api.clientReset.subscribe(() => {
+    this.tfrManagementService.clientReset.subscribe(() => {
       this.resetClientControls();
     });
 

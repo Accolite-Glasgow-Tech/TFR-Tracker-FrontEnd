@@ -51,17 +51,19 @@ export class ResponseHandlerService {
   handleBadProjectUpdate(err: HttpErrorResponse) {
     if (err.status === 412) {
       this.outOfDateProject();
+    } else if (err.status === 400) {
+      this.badRequest();
     } else {
       this.badSave();
     }
   }
 
   badGet() {
-    this.snackBarService.showSnackBar('Server Error. Try again', 5000);
+    this.snackBarService.showSnackBar('Error. Try again', 5000);
   }
 
   badSave() {
-    this.snackBarService.showSnackBar('Save Unsuccessful. Server Error', 5000);
+    this.snackBarService.showSnackBar('Save Unsuccessful. Try again', 5000);
   }
 
   goodSave() {
@@ -71,8 +73,7 @@ export class ResponseHandlerService {
   goodRegister() {
     this.snackBarService.showSnackBar('Successfully registered', 3000);
   }
-
-  badCredentials() {
-    this.snackBarService.showSnackBar('Incorrect username or password', 5000);
+  badRequest() {
+    this.snackBarService.showSnackBar('Bad request. Try again', 5000);
   }
 }
