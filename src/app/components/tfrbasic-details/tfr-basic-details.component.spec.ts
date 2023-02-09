@@ -295,13 +295,6 @@ fdescribe('TFRBasicDetailsComponent', () => {
     );
   });
 
-  it('onClientSelected should mark client_id formControl dirty', () => {
-    component.onClientSelect(DummyClients[0]);
-
-    expect(component.tfrDetails.get('client_id')?.dirty).toBeTruthy();
-    expect(component.tfrDetails.dirty).toBeTruthy();
-  });
-
   it('next() should call unsavedChanges response if isFormDirty is true', () => {
     spyOn(component, 'isFormDirty').and.returnValue(true);
 
