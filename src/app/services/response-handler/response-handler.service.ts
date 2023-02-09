@@ -43,9 +43,13 @@ export class ResponseHandlerService {
       this.redirectDialogue();
     dialogRef.afterClosed().subscribe((result: string) => {
       if (result === 'true') {
-        window.location.reload();
+        this.reloadPage();
       }
     });
+  }
+
+  reloadPage() {
+    window.location.reload();
   }
 
   handleBadProjectUpdate(err: HttpErrorResponse) {
