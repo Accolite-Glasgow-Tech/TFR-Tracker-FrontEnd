@@ -23,7 +23,7 @@ import { ResponseHandlerService } from '../response-handler/response-handler.ser
 
 export const WINDOW = new InjectionToken('Window');
 
-fdescribe('TfrManagementService', () => {
+describe('TfrManagementService', () => {
   let service: TfrManagementService;
   let responseHandlerServiceSpy: jasmine.SpyObj<ResponseHandlerService>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
