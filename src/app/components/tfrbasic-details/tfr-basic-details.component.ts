@@ -141,7 +141,6 @@ export class TfrBasicDetailsComponent implements OnInit {
 
   onClientSelect(client: ClientDTO) {
     this.tfrDetails.get('client_id')?.setValue(client.id);
-    this.tfrDetails.get('client_id')?.markAsDirty();
   }
 
   next() {
