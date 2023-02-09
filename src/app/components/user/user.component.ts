@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from 'src/app/services/api/api.service';
 import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { userService } from 'src/app/services/user/user.service';
@@ -19,6 +20,7 @@ export class UserComponent implements OnInit {
   logging: any = false;
   constructor(
     private userService: userService,
+    private apiService: ApiService,
     private router: Router,
     private route: ActivatedRoute,
     private responseHandlerService: ResponseHandlerService,
@@ -58,8 +60,6 @@ export class UserComponent implements OnInit {
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
         this.responseHandlerService.badGet();
-      } else if (err.status === 400) {
-        this.responseHandlerService.badCredentials();
       }
     },
   };
@@ -115,8 +115,8 @@ export class UserComponent implements OnInit {
       user_name: this.registerGroup.get('name').value,
       password: this.registerGroup.get('password').value,
     };
-    this.userService
-      .register(registerRequestBody)
+    this.apiService
+      .postRegister(registerRequestBody)
       .subscribe(this.registerObserver);
   }
   login() {
@@ -124,7 +124,7 @@ export class UserComponent implements OnInit {
       user_name: this.logginGroup.get('name').value,
       password: this.logginGroup.get('password').value,
     };
-    this.userService.login(loginBody).subscribe(this.loginObserver);
+    this.apiService.postLogin(loginBody).subscribe(this.loginObserver);
   }
   goLogin() {
     this.router.navigateByUrl('/login');

@@ -1,3 +1,5 @@
+@import "../../../variables";
+
 @media all and (min-device-width: 800px) and (-webkit-min-device-pixel-ratio: 1) {
   .example-button-row {
     display: block;
@@ -10,14 +12,14 @@
   a.headerText {
     font-family: Roboto;
     font-size: 3vw;
-    color: #000000;
+    color: white;
     font-weight: 500;
     vertical-align: -webkit-baseline-middle;
     margin: 14px;
   }
 
   .header {
-    background: #507fc6;
+    background: $primary;
     border: 1px solid #ffffff;
     display: flexbox;
     flex-wrap: wrap;
@@ -29,7 +31,7 @@
   }
 
   .closeiconbutton {
-    background-color: #507fc6;
+    background-color: $primary;
     font-size: 24px;
     cursor: pointer;
     margin: 0px;
@@ -41,7 +43,7 @@
 
   .geariconbtn {
     max-width: 2vw;
-    background-color: #507fc6;
+    background-color: $primary;
     font-size: 24px;
     cursor: pointer;
     margin-right: 1vw;
@@ -61,14 +63,14 @@
   a.headerText {
     font-family: Roboto;
     font-size: 5vw;
-    color: #000000;
+    color: white;
     font-weight: 500;
     vertical-align: -webkit-baseline-middle;
     margin: 14px;
   }
 
   .header {
-    background: #507fc6;
+    background: $primary;
     border: 1px solid #ffffff;
     display: flexbox;
     height: 13%;
@@ -78,7 +80,7 @@
   }
 
   .closeiconbutton {
-    background-color: #507fc6;
+    background-color: $primary;
     font-size: 24px;
     cursor: pointer;
     margin: 0px;
@@ -90,7 +92,7 @@
 
   .geariconbtn {
     max-width: 2vw;
-    background-color: #507fc6;
+    background-color: $primary;
     font-size: 24px;
     cursor: pointer;
     margin-right: 3vw;

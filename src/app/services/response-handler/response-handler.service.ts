@@ -73,11 +73,6 @@ export class ResponseHandlerService {
   goodRegister() {
     this.snackBarService.showSnackBar('Successfully registered', 3000);
   }
-
-  badCredentials() {
-    this.snackBarService.showSnackBar('Incorrect username or password', 5000);
-  }
-
   badRequest() {
     this.snackBarService.showSnackBar('Bad request. Try again', 5000);
   }

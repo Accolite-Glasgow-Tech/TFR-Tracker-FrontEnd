@@ -11,9 +11,6 @@ import { NgChartsModule } from 'ng2-charts';
 import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
 import { ChartsComponent } from './components/charts/charts.component';
 import { WidgetClientProjectCountComponent } from './components/widget-client-project-count/widget-client-project-count.component';
-import { ChartsService } from './services/service-charts/charts.service';
-import { WidgetClientLocationService } from './services/service-widget-client-location/widget-client-location.service';
-import { WidgetClientProjectCountService } from './services/service-widget-client-project-count/widget-client-project-count.service';
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
 import { StepperComponent } from './components/stepper/stepper.component';
@@ -49,6 +46,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
 import { WidgetClientLocationComponent } from './components/widget-client-location/widget-client-location.component';
+import { ServiceUnavailableComponent } from './components/service-unavailable/service-unavailable.component';
 
 @NgModule({
   declarations: [
@@ -83,12 +81,10 @@ import { WidgetClientLocationComponent } from './components/widget-client-locati
     ManageWidgetModalComponent,
     NotesDialogComponent,
     WidgetClientLocationComponent,
+    ServiceUnavailableComponent,
   ],
 
   providers: [
-    ChartsService,
-    WidgetClientLocationService,
-    WidgetClientProjectCountService,
     DatePipe,
     {
       provide: HTTP_INTERCEPTORS,

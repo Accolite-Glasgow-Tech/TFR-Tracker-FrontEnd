@@ -1,7 +1,7 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -19,7 +19,7 @@ import { getPDFReportURL } from 'src/app/shared/utils';
   templateUrl: './tfrs.component.html',
   styleUrls: ['./tfrs.component.scss'],
 })
-export class TfrsComponent implements OnInit, AfterViewInit {
+export class TfrsComponent implements OnInit {
   panelOpenState!: boolean;
 
   displayedColumns: string[] = [
@@ -41,17 +41,26 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   startAfterDate: any = new FormControl();
   endBeforeDate: any = new FormControl();
   pageSize = [3, 5, 10, 15];
+  serverDown: boolean = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  ngAfterViewInit() {
-    this.ApiService.getAllProjects().subscribe((allProjects) => {
+  getAllProjectsObserver = {
+    next: (allProjects: ProjectDTO[]) => {
       this.projectList = new MatTableDataSource(allProjects);
-
       this.projectList.paginator = this.paginator;
       this.projectList.sort = this.sort;
-    });
+    },
+    error: (err: HttpErrorResponse) => {
+      if (err.status === 0) {
+        this.serverDown = true;
+      }
+    },
+  };
+
+  ngAfterViewInit() {
+    this.ApiService.getAllProjects().subscribe(this.getAllProjectsObserver);
   }
 
   announceSortChange(sortState: Sort) {
@@ -74,11 +83,7 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.ApiService.getAllProjects().subscribe((allProjects) => {
-      this.projectList = new MatTableDataSource(allProjects);
-      this.projectList.paginator = this.paginator;
-      this.projectList.sort = this.sort;
-    });
+    this.ApiService.getAllProjects().subscribe(this.getAllProjectsObserver);
     this.ApiService.getAllClients().subscribe((allClients) => {
       this.clients = allClients;
     });

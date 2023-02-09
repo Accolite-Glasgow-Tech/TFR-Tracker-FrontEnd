@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WidgetClientProjectCountService } from '../../services/service-widget-client-project-count/widget-client-project-count.service';
+import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'app-widget-client-project-count',
@@ -8,23 +8,18 @@ import { WidgetClientProjectCountService } from '../../services/service-widget-c
 })
 export class WidgetClientProjectCountComponent {
   dataPoints: any[] = [];
-  constructor(
-    private widgetClientProjectCountservice: WidgetClientProjectCountService
-  ) {
-    this.widgetClientProjectCountservice
-      .readClientProjectCountUrlUrl()
-      .subscribe((response) => {
-        this.chartOptions.data[0].dataPoints = response;
-        this.dataPoints = response;
-      });
+  constructor(private apiService: ApiService) {
+    this.apiService.getClientProjectCount().subscribe((response) => {
+      this.chartOptions.data[0].dataPoints = response;
+      this.dataPoints = response;
+    });
   }
 
   chart: any;
   chartOptions = {
     title: {
-      //  text: "Project Count VS Client"
+      text: 'Number of TFRs with each client',
     },
-    size: 5,
     animationEnabled: true,
     axisY: {
       includeZero: true,

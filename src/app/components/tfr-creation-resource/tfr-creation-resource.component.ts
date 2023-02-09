@@ -67,7 +67,7 @@ export class TfrCreationResourceComponent implements OnInit {
   allocatedResources: AllocatedResourceTypeDTO[] = [];
   resourceDetailsUpdated: boolean = false;
   previousUpdateSuccessful: boolean = true;
-  tooltipMsg: string = 'Hello swxy';
+  tooltipMsg: string = '';
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
   @Input() editMode = false;
