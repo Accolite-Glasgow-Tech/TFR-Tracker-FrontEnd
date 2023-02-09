@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="widgets">
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -6,10 +6,9 @@
   <div class="example-button-row">
     <button
       mat-raised-button
-      class="btn btn-primary"
-      color="primary"
       type="button"
-      class="btn btn-success top-btn-left"
+      class="btn top-btn-left"
+      color="primary"
       (click)="OpenPopup()"
     >
       <strong>Widget Manager</strong>

@@ -10,11 +10,7 @@ import { GridsterModule } from 'angular2gridster';
 import { NgChartsModule } from 'ng2-charts';
 import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
 import { ChartsComponent } from './components/charts/charts.component';
-import { ChartsService } from './components/charts/charts.service';
-import { WidgetClientLocationComponent } from './components/widget-client-location/widget-client-location.component';
-import { WidgetClientLocationService } from './components/widget-client-location/widget-client-location.service';
 import { WidgetClientProjectCountComponent } from './components/widget-client-project-count/widget-client-project-count.component';
-import { WidgetClientProjectCountService } from './components/widget-client-project-count/widget-client-project-count.service';
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
 import { StepperComponent } from './components/stepper/stepper.component';
@@ -32,8 +28,8 @@ import { ResourceTableComponent } from './components/resource-table/resource-tab
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
 import { TfrComponent } from './components/tfr/tfr.component';
-import { TfrBasicDetailsComponent } from './components/tfrbasic-details/tfr-basic-details.component';
 import { ClientsComponent } from './components/tfrbasic-details/clients/clients.component';
+import { TfrBasicDetailsComponent } from './components/tfrbasic-details/tfr-basic-details.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { UserComponent } from './components/user/user.component';
@@ -43,19 +39,20 @@ import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IgxListModule, IgxRippleModule } from 'igniteui-angular';
 import { ChipComponent } from './components/chip/chip.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
-import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { ManageWidgetModalComponent } from './components/manage-widget-modal/manage-widget-modal.component';
 import { NotesDialogComponent } from './components/notes-dialog/notes-dialog.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
+import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
+import { WidgetClientLocationComponent } from './components/widget-client-location/widget-client-location.component';
+import { ServiceUnavailableComponent } from './components/service-unavailable/service-unavailable.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChartsComponent,
     ToolbarComponent,
-    WidgetClientLocationComponent,
     CanvasJSChart,
     WidgetClientProjectCountComponent,
     StepperComponent,
@@ -82,13 +79,12 @@ import { NotesDialogComponent } from './components/notes-dialog/notes-dialog.com
     PageNotFoundComponent,
     LogOutComponent,
     ManageWidgetModalComponent,
-    NotesDialogComponent
+    NotesDialogComponent,
+    WidgetClientLocationComponent,
+    ServiceUnavailableComponent,
   ],
 
   providers: [
-    ChartsService,
-    WidgetClientLocationService,
-    WidgetClientProjectCountService,
     DatePipe,
     {
       provide: HTTP_INTERCEPTORS,

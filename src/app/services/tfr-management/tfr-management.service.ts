@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Data } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
 import {
@@ -22,6 +22,7 @@ export class TfrManagementService {
   public project!: Project | undefined;
   projectResourcesWithNames!: AllocatedResourceTypeDTO[];
   subject = new Subject<boolean>();
+  clientReset = new EventEmitter<boolean>();
 
   clientName: string = '';
   apiError: boolean = false;
@@ -45,17 +46,40 @@ export class TfrManagementService {
     next: (response: any) => {
       if (this.project) {
         this.project.id = Number(response);
-        this.project.version++;
         this.responseHandlerService.goodSave();
-        this.subject.next(true);
         this.getFromDatabase(Number(response)).subscribe((res) => {
           this.extractProject(res);
         });
+        this.subject.next(true);
       }
     },
-    error: () => {
-      this.responseHandlerService.badSave();
+    error: (err: HttpErrorResponse) => {
+      this.responseHandlerService.handleBadProjectUpdate(err);
       this.subject.next(false);
+    },
+  };
+
+  protected getResourceNameObserver = {
+    next: (data: AllocatedResourceTypeDTO[]) => {
+      this.projectResourcesWithNames = data;
+    },
+  };
+
+  protected retrieveProjectObserver = {
+    next: (response: Data) => {
+      let status = response['project']['status'];
+      if (status === 500) {
+        this.apiError = true;
+      } else if (status === 503) {
+        this.serverDown = true;
+      } else {
+        let project = response['project'];
+        this.project = project;
+        this.apiService
+          .getResourcesNamesByProjectIdFromDatabase(project.id)
+          .subscribe(this.getResourceNameObserver);
+        this.setClientName(project.client_id);
+      }
     },
   };
 
@@ -63,6 +87,10 @@ export class TfrManagementService {
     private apiService: ApiService,
     private responseHandlerService: ResponseHandlerService
   ) {}
+
+  get getProjectObserver() {
+    return this.retrieveProjectObserver;
+  }
 
   get getProjectId(): number | undefined {
     return this.project?.id;
@@ -291,5 +319,9 @@ export class TfrManagementService {
       this.project.notes = notes;
       this.updateProjectToDatabase();
     }
+  }
+
+  resetClientDetails() {
+    this.clientReset.emit(true);
   }
 }

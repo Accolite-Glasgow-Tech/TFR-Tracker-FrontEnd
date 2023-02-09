@@ -1,7 +1,6 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ApiService } from 'src/app/services/api/api.service';
 import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
@@ -19,46 +18,40 @@ import {
 export class TfrBasicDetailsComponent implements OnInit {
   constructor(
     protected tfrManager: TfrManagementService,
-    private apiService: ApiService,
     private responseHandlerService: ResponseHandlerService
   ) {}
 
   getProjectObserver = {
     next: (project: HttpResponse<Project>) => {
       this.tfrManager.extractProject(project);
-      let previousStateBasicDetails: ProjectBasicDetails =
-        this.tfrManager.getBasicDetails!;
 
-      this.tfrDetails.get('name')?.setValue(previousStateBasicDetails.name);
+      this.tfrDetails.get('name')?.setValue(this.tfrManager.project!.name);
       this.tfrDetails
         .get('start_date')
-        ?.setValue(previousStateBasicDetails.start_date);
+        ?.setValue(this.tfrManager.project!.start_date);
       this.tfrDetails
         .get('end_date')
-        ?.setValue(previousStateBasicDetails.end_date);
+        ?.setValue(this.tfrManager.project!.end_date);
       this.tfrDetails
         .get('client_id')
-        ?.setValue(previousStateBasicDetails.client_id);
+        ?.setValue(this.tfrManager.project!.client_id);
 
-      !this.projectToEdit ??
-        (this.projectToEdit.client_id = previousStateBasicDetails.client_id);
+      if (this.projectToEdit !== undefined) {
+        this.projectToEdit.client_id = this.tfrManager.project!.client_id;
+      }
 
-      this.apiService.resetClientDetails();
+      this.tfrManager.resetClientDetails();
       this.clientGroup.markAsPristine();
 
       this.tfrDetails.markAsPristine();
     },
     error: (err: HttpErrorResponse) => {
       if (err.status === 400) {
-        this.tfrDetails.get('name')?.setValue('');
-        this.tfrDetails.get('start_date')?.setValue(null);
-        this.tfrDetails.get('end_date')?.setValue(null);
-        this.tfrDetails.get('client_id')?.setValue('');
+        this.tfrDetails.reset();
         if (this.clientGroup) {
-          this.apiService.resetClientDetails();
+          this.tfrManager.resetClientDetails();
           this.clientGroup.markAsPristine();
         }
-        this.tfrDetails.markAsPristine();
       } else {
         this.responseHandlerService.badGet();
       }
@@ -98,6 +91,7 @@ export class TfrBasicDetailsComponent implements OnInit {
       // set form group details to existing details
       this.setDetailsToExistingProject();
     }
+
     this.previousUpdateSuccessful = this.editMode;
   }
 
@@ -147,7 +141,6 @@ export class TfrBasicDetailsComponent implements OnInit {
 
   onClientSelect(client: ClientDTO) {
     this.tfrDetails.get('client_id')?.setValue(client.id);
-    this.tfrDetails.get('client_id')?.markAsDirty;
   }
 
   next() {

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { WidgetClientProjectCountComponent } from './widget-client-project-count.component';
-import { WidgetClientProjectCountService } from './widget-client-project-count.service';
 import { of } from 'rxjs';
+import { WidgetClientProjectCountService } from 'src/app/services/service-widget-client-project-count/widget-client-project-count.service';
+import { WidgetClientProjectCountComponent } from './widget-client-project-count.component';
 
 describe('WidgetClientProjectCountComponent', () => {
   let component: WidgetClientProjectCountComponent;
@@ -9,17 +9,16 @@ describe('WidgetClientProjectCountComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WidgetClientProjectCountComponent ],
+      declarations: [WidgetClientProjectCountComponent],
       providers: [
         {
           provide: WidgetClientProjectCountService,
           useValue: jasmine.createSpyObj('WidgetClientProjectCountService', {
-            'readClientProjectCountUrlUrl': of({})
-          })
-        }
-      ]
-    })
-    .compileComponents();
+            readClientProjectCountUrlUrl: of({}),
+          }),
+        },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(WidgetClientProjectCountComponent);
     component = fixture.componentInstance;

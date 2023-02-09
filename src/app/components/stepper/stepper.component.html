@@ -115,6 +115,5 @@
 </div>
 
 <div *ngIf="tfrManagementService.serverDown" class="server-down-div">
-  Service unavailable. Try again.
-  <a class="refresh-link" onclick="window.location.reload();"><u>Refresh</u></a>
+  <app-service-unavailable></app-service-unavailable>
 </div>

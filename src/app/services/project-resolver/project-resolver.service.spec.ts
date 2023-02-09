@@ -1,9 +1,15 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { Project } from 'src/app/shared/interfaces';
-import { DummyProject } from 'src/app/types/dummy-data';
+import {
+  DummyError0,
+  DummyError500,
+  DummyError503,
+  DummyProject,
+  DummyProjectResponseOk,
+} from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
 
 import { ProjectResolverService } from './project-resolver.service';
@@ -33,9 +39,7 @@ describe('ProjectResolverService', () => {
 
   it('should call resolve() - return project', () => {
     const dummyProject: Project = DummyProject;
-    let httpResponseProject: HttpResponse<Project> = new HttpResponse({
-      body: dummyProject,
-    });
+    let httpResponseProject: HttpResponse<Project> = DummyProjectResponseOk;
 
     apiServiceSpy.getProject.and.returnValue(of(httpResponseProject));
 
@@ -45,17 +49,17 @@ describe('ProjectResolverService', () => {
   });
 
   it('should call resolve() - catch error - server error', () => {
-    const err = new HttpErrorResponse({status:0});
+    const err = DummyError0;
     apiServiceSpy.getProject.and.returnValue(throwError(() => err));
 
     service.resolve(route).subscribe((response) => {
-      const expectedResponse = new HttpErrorResponse({ status: 503 });
+      const expectedResponse = DummyError503;
       expect(response).toEqual(expectedResponse);
     });
   });
 
   it('should call resolve() - catch error - project does not exist', () => {
-    const err = new HttpErrorResponse({status:500});
+    const err = DummyError500;
     apiServiceSpy.getProject.and.returnValue(throwError(() => err));
 
     service.resolve(route).subscribe((response) => {

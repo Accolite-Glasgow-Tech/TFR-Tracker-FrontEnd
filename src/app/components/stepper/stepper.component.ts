@@ -1,12 +1,10 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
@@ -28,13 +26,6 @@ export class StepperComponent implements OnInit {
   @ViewChild('stepper') myStepper!: MatStepper;
 
   /*
-    Will be removed once Laura's component is placed in the stepper
-  */
-  milestoneFormGroup = this._formBuilder.group({
-    milestoneName: ['', Validators.required],
-  });
-
-  /*
     The size of this array is proportional to the number of steps in the stepper (excluding the
     last summary step).
 
@@ -50,36 +41,7 @@ export class StepperComponent implements OnInit {
     A value of true forces the user to complete its current step before moving to the next.
   */
   isLinear = true;
-
-  /*
-    Listens to screen size changes. When the screen is small, the orientation of the stepper
-    will be vertical. A horizontal stepper will appear on a large screen.
-  */
   stepLabels: Observable<string[]>;
-
-  getResourceNameObserver = {
-    next: (data: AllocatedResourceTypeDTO[]) => {
-      this.tfrManagementService.projectResourcesWithNames = data;
-    },
-  };
-
-  getProjectObserver = {
-    next: (response: Data) => {
-      let status = response['project']['status'];
-      if (status === 500) {
-        this.tfrManagementService.apiError = true;
-      } else if (status === 503) {
-        this.tfrManagementService.serverDown = true;
-      } else {
-        let project = response['project'];
-        this.tfrManagementService.project = project;
-        this.apiService
-          .getResourcesNamesByProjectIdFromDatabase(project.id)
-          .subscribe(this.getResourceNameObserver);
-        this.tfrManagementService.setClientName(project.client_id);
-      }
-    },
-  };
 
   submitTFRObserver = {
     next: () => {
@@ -92,14 +54,12 @@ export class StepperComponent implements OnInit {
   };
 
   constructor(
-    private _formBuilder: FormBuilder,
     @Inject(TfrManagementService)
     protected tfrManagementService: TfrManagementService,
     protected breakpointObserver: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
     private resourceService: ResourceService,
-    private apiService: ApiService,
     private responseHandlerService: ResponseHandlerService
   ) {
     /*
@@ -122,16 +82,14 @@ export class StepperComponent implements OnInit {
     if (this.route.snapshot.routeConfig?.path !== 'tfr/create') {
       let tfrId = Number(this.route.snapshot.paramMap.get('id'));
 
-      /*
-        Error validation for the path variable.
-        The path variable (the project_id) is expected to be a number.
-      */
       if (!Number.isInteger(tfrId)) {
         this.router.navigate(['/home']);
       } else {
         this.route.paramMap.subscribe((result) => {
           tfrId = Number(result.get('id'));
-          this.route.data.subscribe(this.getProjectObserver);
+          this.route.data.subscribe(
+            this.tfrManagementService.getProjectObserver
+          );
         });
       }
     }
@@ -166,12 +124,6 @@ export class StepperComponent implements OnInit {
     }
   }
 
-  /*
-    After submitting the whole project, this method handles the redirection to the URL where all
-    the TFRs are displayed.
-
-    A small confirmation pop-up msg (aka a snack bar) is displayed at the bottom of the screen for 3000ms.
-  */
   redirect(update: boolean) {
     if (update || this.tfrManagementService.project?.status === 'DRAFT') {
       this.tfrManagementService
@@ -182,9 +134,6 @@ export class StepperComponent implements OnInit {
     }
   }
 
-  /*
-    In edit mode the submit button should not be present
-  */
   setEditMode(editMode: boolean) {
     this.editMode = editMode;
   }

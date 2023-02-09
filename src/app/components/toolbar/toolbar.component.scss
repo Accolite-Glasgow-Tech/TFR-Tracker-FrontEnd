@@ -1,15 +1,13 @@
-@media all 
-and (min-device-width: 800px) 
-and (-webkit-min-device-pixel-ratio: 1) { 
+@import "../../../variables";
+
+@media all and (min-device-width: 800px) and (-webkit-min-device-pixel-ratio: 1) {
   .heading {
     color: white;
     font-size: 3vw;
   }
 }
 
-@media all 
-and (max-device-width: 799px) 
-and (-webkit-min-device-pixel-ratio: 1) { 
+@media all and (max-device-width: 799px) and (-webkit-min-device-pixel-ratio: 1) {
   .heading {
     color: white;
     font-size: 6vw;
@@ -49,6 +47,10 @@ button {
 }
 
 .active-route {
-  background: #4001c8;
+  background: $secondary;
   border-radius: 15px;
+}
+
+.toolbar {
+  background-color: $primary;
 }

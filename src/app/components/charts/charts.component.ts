@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartOptions } from 'chart.js';
-import { ChartsService } from './charts.service';
+import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'app-charts',
   templateUrl: './charts.component.html',
   styleUrls: ['./charts.component.scss'],
-  providers: [ChartsService],
 })
 export class ChartsComponent implements OnInit {
-  constructor(private chartservice: ChartsService) {}
+  constructor(private apiService: ApiService) {}
   public pieChartOptions: ChartOptions<'pie'> = {
     responsive: true,
     plugins: { legend: { position: 'left' } },
@@ -18,7 +17,7 @@ export class ChartsComponent implements OnInit {
   pieChartData: any = [];
   pieChartLabels: any[] = [];
   ngOnInit() {
-    this.chartservice.readTfrStatusData().subscribe((responsedata) => {
+    this.apiService.getTFRStatusCount().subscribe((responsedata: any) => {
       (this.pieChartLabels = Object.keys(JSON.parse(responsedata.response))),
         (this.pieChartData = [
           {

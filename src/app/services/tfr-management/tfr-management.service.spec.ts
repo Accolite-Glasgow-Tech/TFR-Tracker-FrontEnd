@@ -1,6 +1,6 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import {
   AllocatedResourceTypeDTO,
@@ -12,20 +12,24 @@ import {
 } from 'src/app/shared/interfaces';
 import {
   DummyAllocatedResources,
+  DummyClients,
+  DummyError412,
+  DummyError500,
   DummyProject,
+  DummyProjectResponseOk,
 } from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
-import { SnackBarService } from '../snack-bar/snack-bar.service';
 
 import { TfrManagementService } from './tfr-management.service';
 
 import { InjectionToken } from '@angular/core';
+import { ResponseHandlerService } from '../response-handler/response-handler.service';
 
 export const WINDOW = new InjectionToken('Window');
 
 describe('TfrManagementService', () => {
   let service: TfrManagementService;
-  let snackBarServiceSpy: jasmine.SpyObj<SnackBarService>;
+  let responseHandlerServiceSpy: jasmine.SpyObj<ResponseHandlerService>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
   let milestones: Milestone[];
   let projectResources: ProjectResourceDTO[];
@@ -34,11 +38,6 @@ describe('TfrManagementService', () => {
   let clientName: string;
   let basicDetails: ProjectBasicDetails;
   let clients: ClientDTO[];
-  let dialogSpy: jasmine.Spy;
-  let dialogRefSpyObj = jasmine.createSpyObj({
-    afterClosed: of('true'),
-    close: of('true'),
-  });
   let windowMock = {
     location: {
       reload: jasmine.createSpy('reload'),
@@ -50,8 +49,11 @@ describe('TfrManagementService', () => {
       imports: [MatDialogModule],
       providers: [
         {
-          provide: SnackBarService,
-          useValue: jasmine.createSpyObj('SnackBarService', ['showSnackBar']),
+          provide: ResponseHandlerService,
+          useValue: jasmine.createSpyObj('ResponseHandlerService', [
+            'goodSave',
+            'handleBadProjectUpdate',
+          ]),
         },
         {
           provide: ApiService,
@@ -62,22 +64,22 @@ describe('TfrManagementService', () => {
             'putProject',
             'getProject',
             'postProjectResources',
+            'getResourcesNamesByProjectIdFromDatabase',
           ]),
         },
         { provide: WINDOW, useValue: windowMock },
       ],
     });
 
-    snackBarServiceSpy = TestBed.inject(
-      SnackBarService
-    ) as jasmine.SpyObj<SnackBarService>;
+    responseHandlerServiceSpy = TestBed.inject(
+      ResponseHandlerService
+    ) as jasmine.SpyObj<ResponseHandlerService>;
     apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
-    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(
-      dialogRefSpyObj
-    );
+
     service = TestBed.inject(TfrManagementService);
 
     project = { ...DummyProject };
+
     milestones = project.milestones;
     projectResources = project.project_resources;
 
@@ -92,31 +94,9 @@ describe('TfrManagementService', () => {
       project
     );
 
-    clients = [
-      {
-        id: 1,
-        name: 'JP Morgan',
-      },
-      {
-        id: 2,
-        name: 'Morgan Stanley',
-      },
-      {
-        id: 3,
-        name: 'HSBC',
-      },
-      {
-        id: 4,
-        name: 'BOA',
-      },
-      {
-        id: 5,
-        name: 'Santander',
-      },
-    ];
+    clients = DummyClients;
 
     projectResourcesWithNames = DummyAllocatedResources;
-
     service.project = project;
 
     apiServiceSpy.postProject.and.returnValue(of(1));
@@ -213,36 +193,30 @@ describe('TfrManagementService', () => {
   });
 
   it('should update project to db - failure bad versioning', () => {
-    let httpErrorResponse: HttpErrorResponse = new HttpErrorResponse({
-      status: 412,
-    });
-    dialogRefSpyObj.afterClosed.and.returnValue(of('true'));
-    spyOn(window.location, 'reload');
+    let httpErrorResponse: HttpErrorResponse = DummyError412;
 
     service.updateProjectToDatabaseObserver.error(httpErrorResponse);
-    expect(window.location.reload).toHaveBeenCalled();
-    expect(dialogSpy).toHaveBeenCalled();
+    expect(
+      responseHandlerServiceSpy.handleBadProjectUpdate
+    ).toHaveBeenCalledWith(httpErrorResponse);
   });
 
   it('should update project to db - failure server error', () => {
-    let httpErrorResponse: HttpErrorResponse = new HttpErrorResponse({
-      status: 500,
-    });
+    let httpErrorResponse: HttpErrorResponse = DummyError500;
 
     service.updateProjectToDatabaseObserver.error(httpErrorResponse);
 
-    expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
-      'Save Unsuccessful. Server Error',
-      4000
-    );
+    expect(
+      responseHandlerServiceSpy.handleBadProjectUpdate
+    ).toHaveBeenCalledWith(httpErrorResponse);
   });
 
   it('should create project - error', () => {
-    service.createProjectObserver.error();
-    expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
-      'Save Unsuccessful. Server Error',
-      4000
-    );
+    let error: HttpErrorResponse = DummyError500;
+    service.createProjectObserver.error(error);
+    expect(
+      responseHandlerServiceSpy.handleBadProjectUpdate
+    ).toHaveBeenCalledWith(error);
     service.subject.subscribe((response) => {
       expect(response).toBe(false);
     });
@@ -251,19 +225,24 @@ describe('TfrManagementService', () => {
   it('should make API call to create project in db', () => {
     service.project = project;
     apiServiceSpy.postProject.and.returnValue(of(1));
+    let httpResponse = DummyProjectResponseOk;
+    apiServiceSpy.getProject.and.returnValue(of(httpResponse));
+
     service.createProjectInDatabase();
-    expect(service.project.id).toBe(1);
-    expect(service.project.version).toBe(2);
-    expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
-      'Saved to database',
-      2000
-    );
+    expect(service.project?.id).toBe(1);
+    expect(service.project?.version).toBe(1);
+    expect(responseHandlerServiceSpy.goodSave).toHaveBeenCalled();
+    service.subject.subscribe((response) => {
+      expect(response).toBe(true);
+    });
   });
 
   it('should create a new project by setting basic details', () => {
+    let httpResponse = DummyProjectResponseOk;
     service.project = undefined;
     apiServiceSpy.getClients.and.returnValue(of(clients));
     apiServiceSpy.postProject.and.returnValue(of(2));
+    apiServiceSpy.getProject.and.returnValue(of(httpResponse));
     service.setBasicDetails(basicDetails, true);
     expect(service.getBasicDetails).toEqual(basicDetails);
   });
@@ -312,38 +291,14 @@ describe('TfrManagementService', () => {
     expect(service.project.version).toBe(1);
   });
 
-  it('should get project from database', () => {
-    let httpResponse = new HttpResponse<Project>({
-      url: 'http://localhost:8080/projects/1',
-      body: project,
-      status: 200,
-    });
-
-    apiServiceSpy.getProject.and.returnValue(of(httpResponse));
-
-    let result = service.getFromDatabase(1);
-    result.subscribe((data) => {
-      expect(data.url).toEqual(httpResponse.url);
-      expect(data.status).toEqual(httpResponse.status);
-    });
-  });
-
   it('should extract project success', () => {
-    let httpResponse = new HttpResponse<Project>({
-      url: 'http://localhost:8080/projects/1',
-      body: project,
-      status: 200,
-    });
+    let httpResponse = DummyProjectResponseOk;
     expect(service.extractProject(httpResponse)).toEqual(httpResponse);
     expect(service.project).toEqual(project);
   });
 
   it('should extract project failure', () => {
-    let httpResponse = new HttpResponse<Project>({
-      url: 'http://localhost:8080/projects/1',
-      body: undefined,
-      status: 200,
-    });
+    let httpResponse = DummyProjectResponseOk;
     expect(service.extractProject(httpResponse)).toEqual(httpResponse);
     expect(service.project).toEqual(undefined);
   });
@@ -357,5 +312,61 @@ describe('TfrManagementService', () => {
   it('should set resources count', () => {
     service.setResourcesCount(1);
     expect(service.project?.resources_count).toBe(1);
+  });
+
+  it('should retrieve project - 500 error', () => {
+    let response = {
+      project: {
+        status: 500,
+      },
+    };
+    let observer = service.getProjectObserver;
+    observer.next(response);
+    expect(service.apiError).toBe(true);
+  });
+
+  it('should retrieve project - 503 error', () => {
+    let response = {
+      project: {
+        status: 503,
+      },
+    };
+    let observer = service.getProjectObserver;
+    observer.next(response);
+    expect(service.serverDown).toBe(true);
+  });
+
+  it('should retrieve project', () => {
+    let response = {
+      project: project,
+    };
+    apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
+      of(projectResourcesWithNames)
+    );
+    apiServiceSpy.getClients.and.returnValue(of(clients));
+    let observer = service.getProjectObserver;
+    observer.next(response);
+    expect(service.projectResourcesWithNames).toEqual(
+      projectResourcesWithNames
+    );
+    expect(service.project).toEqual(project);
+    expect(
+      apiServiceSpy.getResourcesNamesByProjectIdFromDatabase
+    ).toHaveBeenCalledWith(1);
+  });
+
+  it('should emit client reset', () => {
+    spyOn(service.clientReset, 'emit');
+    service.resetClientDetails();
+    expect(service.clientReset.emit).toHaveBeenCalledWith(true);
+  });
+
+  it('should set project notes', () => {
+    apiServiceSpy.putProject.and.returnValue(of(1));
+    service.project = project;
+    expect(service.project.notes).toBe('');
+    service.setNotes('Hello World');
+    expect(service.project.notes).toBe('Hello World');
+    expect(apiServiceSpy.putProject).toHaveBeenCalled();
   });
 });

@@ -1,7 +1,7 @@
 <div id="resource_div">
   <form [formGroup]="resourceFormGroup">
-    <div>
-      <label class="label-padding">Total number of resources: </label>
+    <div class="resource-count-div">
+      <label class="label-padding">Total number of resources:</label>
       <mat-form-field appearance="fill" class="form-field small-font">
         <input
           type="number"
@@ -19,25 +19,40 @@
           Required
         </mat-error>
       </mat-form-field>
-      <mat-error
+      <mat-icon
+        *ngIf="
+          resourceService.resourcesWithoutDeleted(allocatedResources).length <
+            resourcesCount &&
+          (resourcesCount !== null || resourcesCount)
+        "
+        [ngStyle]="{ color: '#8a8a8a' }"
+        #infoTooltip="matTooltip"
+        [matTooltip]="tooltipMsg"
+        matTooltipPosition="below"
+        (click)="infoTooltip.toggle()"
+        >info</mat-icon
+      >
+
+      <mat-icon
+        *ngIf="
+          resourceService.resourcesWithoutDeleted(allocatedResources).length ===
+          resourcesCount
+        "
+        [ngStyle]="{ color: 'green' }"
+        >check_circle_outline</mat-icon
+      >
+      <mat-icon
         *ngIf="
           resourceService.resourcesWithoutDeleted(allocatedResources).length >
             resourcesCount && resourcesCount !== null
         "
+        [ngStyle]="{ color: 'red' }"
+        #warningToolTip="matTooltip"
+        [matTooltip]="tooltipMsg"
+        matTooltipPosition="below"
+        (click)="warningToolTip.toggle()"
+        >warning</mat-icon
       >
-        You have allocated more resources than required
-      </mat-error>
-      <mat-error
-        *ngIf="
-          resourceService.resourcesWithoutDeleted(allocatedResources).length ===
-            resourcesCount &&
-          (resourceFormGroup.controls['seniorityLevel'].touched ||
-            resourceFormGroup.controls['resource_name'].touched ||
-            resourceFormGroup.controls['role'].touched)
-        "
-      >
-        Maximum number of resources reached
-      </mat-error>
     </div>
     <br />
 
