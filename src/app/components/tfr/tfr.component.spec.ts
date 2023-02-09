@@ -1,11 +1,10 @@
-import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { Project } from 'src/app/shared/interfaces';
-import { DummyProject } from 'src/app/types/dummy-data';
+import { DummyProject, DummyProjectResponseOk } from 'src/app/types/dummy-data';
 import { NotesDialogComponent } from '../notes-dialog/notes-dialog.component';
 
 import { TfrComponent } from './tfr.component';
@@ -34,10 +33,7 @@ describe('TfrComponent', () => {
 
   beforeEach(() => {
     responseObj = {
-      project: new HttpResponse<Project>({
-        body: dummyProject,
-        status: 200,
-      }),
+      project: DummyProjectResponseOk,
     };
 
     TestBed.overrideComponent(TfrComponent, {

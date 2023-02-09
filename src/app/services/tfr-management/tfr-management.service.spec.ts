@@ -1,4 +1,4 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
@@ -12,7 +12,11 @@ import {
 } from 'src/app/shared/interfaces';
 import {
   DummyAllocatedResources,
+  DummyClients,
+  DummyError412,
+  DummyError500,
   DummyProject,
+  DummyProjectResponseOk,
 } from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
 
@@ -90,28 +94,7 @@ describe('TfrManagementService', () => {
       project
     );
 
-    clients = [
-      {
-        id: 1,
-        name: 'JP Morgan',
-      },
-      {
-        id: 2,
-        name: 'Morgan Stanley',
-      },
-      {
-        id: 3,
-        name: 'HSBC',
-      },
-      {
-        id: 4,
-        name: 'BOA',
-      },
-      {
-        id: 5,
-        name: 'Santander',
-      },
-    ];
+    clients = DummyClients;
 
     projectResourcesWithNames = DummyAllocatedResources;
     service.project = project;
@@ -210,9 +193,7 @@ describe('TfrManagementService', () => {
   });
 
   it('should update project to db - failure bad versioning', () => {
-    let httpErrorResponse: HttpErrorResponse = new HttpErrorResponse({
-      status: 412,
-    });
+    let httpErrorResponse: HttpErrorResponse = DummyError412;
 
     service.updateProjectToDatabaseObserver.error(httpErrorResponse);
     expect(
@@ -221,9 +202,7 @@ describe('TfrManagementService', () => {
   });
 
   it('should update project to db - failure server error', () => {
-    let httpErrorResponse: HttpErrorResponse = new HttpErrorResponse({
-      status: 500,
-    });
+    let httpErrorResponse: HttpErrorResponse = DummyError500;
 
     service.updateProjectToDatabaseObserver.error(httpErrorResponse);
 
@@ -233,7 +212,7 @@ describe('TfrManagementService', () => {
   });
 
   it('should create project - error', () => {
-    let error: HttpErrorResponse = new HttpErrorResponse({ status: 500 });
+    let error: HttpErrorResponse = DummyError500;
     service.createProjectObserver.error(error);
     expect(
       responseHandlerServiceSpy.handleBadProjectUpdate
@@ -246,11 +225,7 @@ describe('TfrManagementService', () => {
   it('should make API call to create project in db', () => {
     service.project = project;
     apiServiceSpy.postProject.and.returnValue(of(1));
-    let httpResponse = new HttpResponse<Project>({
-      url: 'http://localhost:8080/projects/1',
-      body: project,
-      status: 200,
-    });
+    let httpResponse = DummyProjectResponseOk;
     apiServiceSpy.getProject.and.returnValue(of(httpResponse));
 
     service.createProjectInDatabase();
@@ -263,11 +238,7 @@ describe('TfrManagementService', () => {
   });
 
   it('should create a new project by setting basic details', () => {
-    let httpResponse = new HttpResponse<Project>({
-      url: 'http://localhost:8080/projects/1',
-      body: project,
-      status: 200,
-    });
+    let httpResponse = DummyProjectResponseOk;
     service.project = undefined;
     apiServiceSpy.getClients.and.returnValue(of(clients));
     apiServiceSpy.postProject.and.returnValue(of(2));
@@ -321,21 +292,13 @@ describe('TfrManagementService', () => {
   });
 
   it('should extract project success', () => {
-    let httpResponse = new HttpResponse<Project>({
-      url: 'http://localhost:8080/projects/1',
-      body: project,
-      status: 200,
-    });
+    let httpResponse = DummyProjectResponseOk;
     expect(service.extractProject(httpResponse)).toEqual(httpResponse);
     expect(service.project).toEqual(project);
   });
 
   it('should extract project failure', () => {
-    let httpResponse = new HttpResponse<Project>({
-      url: 'http://localhost:8080/projects/1',
-      body: undefined,
-      status: 200,
-    });
+    let httpResponse = DummyProjectResponseOk;
     expect(service.extractProject(httpResponse)).toEqual(httpResponse);
     expect(service.project).toEqual(undefined);
   });

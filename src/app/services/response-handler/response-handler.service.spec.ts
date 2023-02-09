@@ -3,6 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
+import {
+  DummyError400,
+  DummyError412,
+  DummyError500,
+} from 'src/app/types/dummy-data';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
 import { ResponseHandlerService } from './response-handler.service';
 
@@ -73,27 +78,21 @@ describe('ResponseHandlerService', () => {
   });
 
   it('should handle bad project update - 400 error', () => {
-    let err: HttpErrorResponse = new HttpErrorResponse({
-      status: 400,
-    });
+    let err: HttpErrorResponse = DummyError400;
     spyOn(service, 'badRequest');
     service.handleBadProjectUpdate(err);
     expect(service.badRequest).toHaveBeenCalled();
   });
 
   it('should handle bad project update - 500 error', () => {
-    let err: HttpErrorResponse = new HttpErrorResponse({
-      status: 500,
-    });
+    let err: HttpErrorResponse = DummyError500;
     spyOn(service, 'badSave');
     service.handleBadProjectUpdate(err);
     expect(service.badSave).toHaveBeenCalled();
   });
 
   it('should handle bad project update - 412 error', () => {
-    let err: HttpErrorResponse = new HttpErrorResponse({
-      status: 412,
-    });
+    let err: HttpErrorResponse = DummyError412;
     spyOn(service, 'outOfDateProject');
     service.handleBadProjectUpdate(err);
     expect(service.outOfDateProject).toHaveBeenCalled();
