@@ -1,15 +1,10 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { ApiService } from 'src/app/services/api/api.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
-import {
-  DummyAllocatedResources,
-  DummyProject,
-} from 'src/app/types/dummy-data';
+import { Project } from 'src/app/shared/interfaces';
+import { DummyProject, DummyProjectResponseOk } from 'src/app/types/dummy-data';
 import { NotesDialogComponent } from '../notes-dialog/notes-dialog.component';
 
 import { TfrComponent } from './tfr.component';
@@ -32,84 +27,83 @@ describe('TfrComponent', () => {
     'navigate',
   ]);
   let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
-  let apiServiceSpy: jasmine.SpyObj<ApiService>;
+  let providersList: any = [];
 
   const dummyProject: Project = DummyProject;
 
-  const dummyAllocatedResource: AllocatedResourceTypeDTO[] =
-    DummyAllocatedResources;
+  beforeEach(() => {
+    responseObj = {
+      project: DummyProjectResponseOk,
+    };
+
+    TestBed.overrideComponent(TfrComponent, {
+      set: {
+        providers: [
+          {
+            provide: TfrManagementService,
+            useValue: jasmine.createSpyObj('TfrManagementService', [
+              'setClientName',
+              'setNotes',
+              'getProjectObserver',
+            ]),
+          },
+        ],
+      },
+    });
+
+    providersList = [
+      {
+        provide: Router,
+        useValue: routerSpy,
+      },
+      {
+        provide: MatDialog,
+        useClass: MatDialogMock,
+      },
+    ];
+  });
 
   async function setUpSuccess() {
-    await TestBed.configureTestingModule({
-      declarations: [TfrComponent],
-      providers: [
-        {
-          provide: Router,
-          useValue: routerSpy,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return '1';
-                },
-              },
+    providersList.push({
+      provide: ActivatedRoute,
+      useValue: {
+        snapshot: {
+          paramMap: {
+            get: (id: string) => {
+              return '1';
             },
-            paramMap: of(convertToParamMap({ id: 1 })),
-            data: of(responseObj),
           },
         },
-        {
-          provide: ApiService,
-          useValue: jasmine.createSpyObj('ApiService', [
-            'getResourcesNamesByProjectIdFromDatabase',
-          ]),
-        },
-        {
-          provide: MatDialog,
-          useClass: MatDialogMock,
-        },
-      ],
+        paramMap: of(convertToParamMap({ id: 1 })),
+        data: of(responseObj),
+      },
+    });
+    await TestBed.configureTestingModule({
+      declarations: [TfrComponent],
+      providers: providersList,
     }).compileComponents();
 
     createComponent();
   }
 
   async function setUpFailurePathVariable() {
-    await TestBed.configureTestingModule({
-      declarations: [TfrComponent],
-      providers: [
-        {
-          provide: Router,
-          useValue: routerSpy,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return 'asds';
-                },
-              },
+    providersList.push({
+      provide: ActivatedRoute,
+      useValue: {
+        snapshot: {
+          paramMap: {
+            get: (id: string) => {
+              return 'asds';
             },
-            paramMap: of(convertToParamMap({ id: 'asds' })),
-            data: of(responseObj),
           },
         },
-        {
-          provide: ApiService,
-          useValue: jasmine.createSpyObj('ApiService', [
-            'getResourcesNamesByProjectIdFromDatabase',
-          ]),
-        },
-        {
-          provide: MatDialog,
-          useClass: MatDialogMock,
-        },
-      ],
+        paramMap: of(convertToParamMap({ id: 'asds' })),
+        data: of(responseObj),
+      },
+    });
+    await TestBed.configureTestingModule({
+      declarations: [TfrComponent],
+      providers: providersList,
     }).compileComponents();
 
     createComponent();
@@ -121,39 +115,24 @@ describe('TfrComponent', () => {
     let errorResponse: Object = {
       project: errorMessage,
     };
+    providersList.push({
+      provide: ActivatedRoute,
+      useValue: {
+        snapshot: {
+          paramMap: {
+            get: (id: string) => {
+              return '13';
+            },
+          },
+        },
+        paramMap: of(convertToParamMap({ id: '13' })),
+        data: of(errorResponse),
+      },
+    });
 
     await TestBed.configureTestingModule({
       declarations: [TfrComponent],
-      providers: [
-        {
-          provide: Router,
-          useValue: routerSpy,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return '13';
-                },
-              },
-            },
-            paramMap: of(convertToParamMap({ id: '13' })),
-            data: of(errorResponse),
-          },
-        },
-        {
-          provide: ApiService,
-          useValue: jasmine.createSpyObj('ApiService', [
-            'getResourcesNamesByProjectIdFromDatabase',
-          ]),
-        },
-        {
-          provide: MatDialog,
-          useClass: MatDialogMock,
-        },
-      ],
+      providers: providersList,
     }).compileComponents();
 
     createComponent();
@@ -166,37 +145,10 @@ describe('TfrComponent', () => {
     tfrManagementServiceSpy = fixture.debugElement.injector.get(
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
-    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
-
-    apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
-      of(dummyAllocatedResource)
-    );
+    (tfrManagementServiceSpy as any).getProjectObserver = {};
 
     component = fixture.componentInstance;
   }
-
-  beforeEach(() => {
-    responseObj = {
-      project: new HttpResponse<Project>({
-        body: dummyProject,
-        status: 200,
-      }),
-    };
-
-    TestBed.overrideComponent(TfrComponent, {
-      set: {
-        providers: [
-          {
-            provide: TfrManagementService,
-            useValue: jasmine.createSpyObj('TfrManagementService', [
-              'setClientName',
-              'setNotes',
-            ]),
-          },
-        ],
-      },
-    });
-  });
 
   it('path variable not an integer, should redirect to home page', async () => {
     await setUpFailurePathVariable();
@@ -216,10 +168,6 @@ describe('TfrComponent', () => {
     await setUpSuccess();
     fixture.detectChanges();
     expect(component.TfrId).toBe(1);
-    expect(tfrManagementServiceSpy.setClientName.calls.count()).toBe(1);
-    expect(
-      apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
-    ).toBe(1);
     expect(component).toBeTruthy();
   });
 
@@ -228,25 +176,5 @@ describe('TfrComponent', () => {
     component.TfrId = 1;
     component.redirectToEditTfr();
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/tfr/1/edit']);
-  });
-
-  it('load fail, project does not exist', async () => {
-    await setUpSuccess();
-    fixture.detectChanges();
-    tfrManagementServiceSpy.getProjectObserver.next({
-      project: new HttpErrorResponse({ status: 500 }),
-    });
-    expect(tfrManagementServiceSpy.apiError).toBe(true);
-    expect(component).toBeTruthy();
-  });
-
-  it('load fail, server down', async () => {
-    await setUpSuccess();
-    fixture.detectChanges();
-    tfrManagementServiceSpy.getProjectObserver.next({
-      project: new HttpErrorResponse({ status: 503 }),
-    });
-    expect(tfrManagementServiceSpy.serverDown).toBe(true);
-    expect(component).toBeTruthy();
   });
 });

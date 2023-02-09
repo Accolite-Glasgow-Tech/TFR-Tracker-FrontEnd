@@ -5,6 +5,7 @@ import {
   ClientDTO,
   Project,
   ProjectBasicDetails,
+  ProjectResourceDTO,
 } from 'src/app/shared/interfaces';
 
 export const DummyProject: Project = {
@@ -273,10 +274,37 @@ export const DummyProjectBasicDetailsDraft: ProjectBasicDetails = {
   status: 'DRAFT',
 };
 
-export const DummyClient: ClientDTO = {
-  id: 1,
-  name: 'Morgan Stanley',
-};
+export const DummyProjectResources: ProjectResourceDTO[] = [
+  {
+    project_id: 1,
+    resource_id: 1,
+    role: 'SCRUM MASTER',
+    seniority: 'SENIOR',
+    is_deleted: false,
+  },
+  {
+    project_id: 1,
+    resource_id: 3,
+    role: 'SOFTWARE DEVELOPER',
+    seniority: 'JUNIOR',
+    is_deleted: false,
+  },
+];
+
+export const DummyClients: ClientDTO[] = [
+  {
+    id: 1,
+    name: 'JP Morgan',
+  },
+  {
+    id: 2,
+    name: 'Morgan Stanley',
+  },
+  {
+    id: 3,
+    name: 'HSBC',
+  },
+];
 
 // Http Responses
 
@@ -297,6 +325,10 @@ export const DummyError412: HttpErrorResponse = new HttpErrorResponse({
 
 export const DummyError500: HttpErrorResponse = new HttpErrorResponse({
   status: 500,
+});
+
+export const DummyError503: HttpErrorResponse = new HttpErrorResponse({
+  status: 503,
 });
 
 export const DummyError0: HttpErrorResponse = new HttpErrorResponse({

@@ -5,7 +5,7 @@ import { of, throwError } from 'rxjs';
 import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
-  DummyClient,
+  DummyClients,
   DummyError0,
   DummyError400,
   DummyProject,
@@ -289,14 +289,14 @@ fdescribe('TFRBasicDetailsComponent', () => {
   });
 
   it('onClientSelected should set client_id correctly', () => {
-    component.onClientSelect(DummyClient);
+    component.onClientSelect(DummyClients[0]);
     expect(component.tfrDetails.get('client_id')?.value).toEqual(
-      DummyClient.id
+      DummyClients[0].id
     );
   });
 
   it('onClientSelected should mark client_id formControl dirty', () => {
-    component.onClientSelect(DummyClient);
+    component.onClientSelect(DummyClients[0]);
 
     expect(component.tfrDetails.get('client_id')?.dirty).toBeTruthy();
     expect(component.tfrDetails.dirty).toBeTruthy();
