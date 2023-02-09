@@ -7,7 +7,7 @@ import {
   ClientAttributeDTO,
   ClientDTO,
   Project,
-  ProjectBasicDetails
+  ProjectBasicDetails,
 } from 'src/app/shared/interfaces';
 
 @Component({
@@ -141,7 +141,7 @@ export class TfrBasicDetailsComponent implements OnInit {
 
   onClientSelect(client: ClientDTO) {
     this.tfrDetails.get('client_id')?.setValue(client.id);
-    this.tfrDetails.get('client_id')?.markAsDirty;
+    this.tfrDetails.get('client_id')?.markAsDirty();
   }
 
   next() {
