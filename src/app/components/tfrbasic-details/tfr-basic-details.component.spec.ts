@@ -16,7 +16,7 @@ import {
 } from 'src/app/types/dummy-data';
 import { TfrBasicDetailsComponent } from './tfr-basic-details.component';
 
-fdescribe('TFRBasicDetailsComponent', () => {
+describe('TFRBasicDetailsComponent', () => {
   let component: TfrBasicDetailsComponent;
   let fixture: ComponentFixture<TfrBasicDetailsComponent>;
   let tfrManagerSpy: jasmine.SpyObj<TfrManagementService>;

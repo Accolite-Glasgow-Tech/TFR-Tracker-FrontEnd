@@ -68,10 +68,6 @@ export class ClientsComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.clientGroup = new FormGroup({
-      name: new FormControl(''),
-    });
-
     this.tfrManagementService.clientReset.subscribe(() => {
       this.resetClientControls();
     });
