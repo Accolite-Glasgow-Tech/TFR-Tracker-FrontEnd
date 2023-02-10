@@ -1,6 +1,6 @@
 @import "../../../variables";
 
-@media all and (min-device-width: 800px) and (-webkit-min-device-pixel-ratio: 1) {
+@media all and (min-device-width: 6001px) {
   .example-button-row {
     display: block;
     text-align: right;
@@ -32,7 +32,91 @@
 
   .closeiconbutton {
     background-color: $primary;
-    font-size: 24px;
+    font-size: 60px;
+    cursor: pointer;
+    margin: 0px;
+    max-width: 2vw;
+    float: right;
+    border: none;
+    margin-right: 1vw;
+  }
+}
+
+@media all and (min-device-width: 3501px) and (max-width: 6000px) and (-webkit-min-device-pixel-ratio: 0.5) {
+  .example-button-row {
+    display: block;
+    text-align: right;
+    padding-right: 9%;
+    margin-bottom: -6px;
+    margin-top: 6px;
+  }
+
+  a.headerText {
+    font-family: FontAwesome;
+    font-size: 3vw;
+    color: white;
+    font-weight: 500;
+    vertical-align: -webkit-baseline-middle;
+    margin: 14px;
+  }
+
+  .header {
+    background: $primary;
+    border: 1px solid #ffffff;
+    display: flexbox;
+    flex-wrap: wrap;
+    height: 13%;
+    padding-right: 2vw;
+    padding-top: 1vw;
+    padding-bottom: 1.5vw;
+    padding-left: 1vw;
+  }
+
+  .closeiconbutton {
+    background-color: $primary;
+    font-size: 50px;
+    cursor: pointer;
+    margin: 0px;
+    max-width: 2vw;
+    float: right;
+    border: none;
+    margin-right: 1vw;
+  }
+}
+
+@media all and (min-device-width: 800px) and (max-width: 3500px) and (-webkit-min-device-pixel-ratio: 1) {
+  .example-button-row {
+    display: block;
+    text-align: right;
+    padding-right: 9%;
+    margin-bottom: -6px;
+    margin-top: 6px;
+  }
+
+  a.headerText {
+    font-family: FontAwesome;
+    font-size: 3vw;
+    color: white;
+    font-weight: 500;
+    vertical-align: -webkit-baseline-middle;
+    margin: 14px;
+  }
+
+  .header {
+    background: $primary;
+    border: 1px solid #ffffff;
+    display: flexbox;
+    flex-wrap: wrap;
+    height: 13%;
+    padding-right: 2vw;
+    padding-top: 1vw;
+    padding-bottom: 1.5vw;
+    padding-left: 1vw;
+  }
+
+  .closeiconbutton {
+    background-color: $primary;
+    font-size: 35px;
     cursor: pointer;
     margin: 0px;
     max-width: 2vw;

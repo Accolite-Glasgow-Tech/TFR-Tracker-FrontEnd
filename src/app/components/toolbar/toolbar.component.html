@@ -10,8 +10,15 @@
   </a>
   <span class="example-spacer"></span>
   <div *ngFor="let route of appRoutes" fxShow="true" fxHide.lt-md="true">
-    <a mat-button style="color: white" routerLinkActive="active-route">{{
-      route.navigationLabel
-    }}</a>
+    <a
+      mat-button
+      style="color: white"
+      *ngIf="
+        route.navigationLabel && routeGuardManager.checkRouting(route.component)
+      "
+      routerLink="{{ route.path }}"
+      routerLinkActive="active-route"
+      >{{ route.navigationLabel }}</a
+    >
   </div>
 </mat-toolbar>

@@ -1,1 +1,24 @@
-  
+.nodata {
+  background-color: transparent;
+  padding: 15px;
+}
+
+@media all and (min-device-width: 3501px) and (max-width: 4500px) and (-webkit-min-device-pixel-ratio: 0.5) {
+  .chartstyle {
+    margin: -30px;
+  }
+}
+
+@media all and (min-device-width: 4501px) and (max-width: 5500px) and (-webkit-min-device-pixel-ratio: 0.5) {
+  .chartstyle {
+    margin: -60px;
+    margin-top: -105px;
+  }
+}
+
+@media all and (min-device-width: 5501px) {
+  .chartstyle {
+    margin: -3px;
+    margin-top: -169px;
+  }
+}
