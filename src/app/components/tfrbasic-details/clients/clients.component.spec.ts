@@ -24,7 +24,7 @@ import {
 } from 'src/app/types/dummy-data';
 import { ClientsComponent } from './clients.component';
 
-fdescribe('ClientsComponent', () => {
+describe('ClientsComponent', () => {
   let component: ClientsComponent;
   let fixture: ComponentFixture<ClientsComponent>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
