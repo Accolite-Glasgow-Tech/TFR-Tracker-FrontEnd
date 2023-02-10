@@ -324,4 +324,8 @@ export class TfrManagementService {
   resetClientDetails() {
     this.clientReset.emit(true);
   }
+
+  setServerDown(isServerDown: boolean) {
+    this.serverDown = isServerDown;
+  }
 }
