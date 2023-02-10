@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { tfrService } from 'src/app/services/tfrs/tfr.service';
+import { ApiService } from 'src/app/services/api/api.service';
 
 import { TfrsComponent } from './tfrs.component';
 
@@ -17,8 +17,8 @@ describe('TfrsComponent', () => {
       providers: [
         DatePipe,
         {
-          provide: tfrService,
-          useValue: jasmine.createSpyObj('tfrService', {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', {
             getAllProjects: of([]),
             getAllClients: of([]),
           }),
