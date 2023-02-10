@@ -116,8 +116,8 @@ export class ClientsComponent implements OnInit {
 
   @Output() onSelected = new EventEmitter<ClientDTO>();
   @Output() attributesSelected = new EventEmitter<ClientAttributeDTO[]>();
-  onSelectedClient(client: ClientDTO) {
-    this.getAttributes().reset();
+  onSelectedClient(client: ClientDTO | undefined) {
+    this.getAttributes().clear();
 
     if (client) {
       this.clientGroup.get('name')?.setValue(client.name);
