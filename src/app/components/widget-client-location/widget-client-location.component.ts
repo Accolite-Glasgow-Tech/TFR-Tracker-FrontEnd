@@ -8,10 +8,12 @@ import { ApiService } from 'src/app/services/api/api.service';
 })
 export class WidgetClientLocationComponent {
   dataPoints: any[] = [];
+  serverup = false;
   constructor(private apiService: ApiService) {
     this.apiService.getTFRLocationCount().subscribe((response: any) => {
       this.chartOptions.data[0].dataPoints = response;
       this.dataPoints = response;
+      this.serverup = true;
     });
   }
 

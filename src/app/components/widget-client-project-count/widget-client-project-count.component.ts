@@ -8,10 +8,12 @@ import { ApiService } from 'src/app/services/api/api.service';
 })
 export class WidgetClientProjectCountComponent {
   dataPoints: any[] = [];
+  serverup = false;
   constructor(private apiService: ApiService) {
     this.apiService.getClientProjectCount().subscribe((response) => {
       this.chartOptions.data[0].dataPoints = response;
       this.dataPoints = response;
+      this.serverup = true;
     });
   }
 

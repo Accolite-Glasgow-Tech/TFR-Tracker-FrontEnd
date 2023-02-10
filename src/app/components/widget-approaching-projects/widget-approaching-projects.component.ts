@@ -7,9 +7,11 @@ import { ApiService } from 'src/app/services/api/api.service';
   styleUrls: ['./widget-approaching-projects.component.scss'],
 })
 export class WidgetApproachingProjectsComponent {
+  serverup = false;
   constructor(private apiService: ApiService) {
     this.apiService.getApproachingProjectNames().subscribe((data: any) => {
       this.ProjectDetails = data;
+      this.serverup = true;
     });
   }
 
