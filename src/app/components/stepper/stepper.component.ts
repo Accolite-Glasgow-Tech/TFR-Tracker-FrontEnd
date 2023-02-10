@@ -1,12 +1,10 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
@@ -56,14 +54,12 @@ export class StepperComponent implements OnInit {
   };
 
   constructor(
-    private _formBuilder: FormBuilder,
     @Inject(TfrManagementService)
     protected tfrManagementService: TfrManagementService,
     protected breakpointObserver: BreakpointObserver,
     private router: Router,
     private route: ActivatedRoute,
     private resourceService: ResourceService,
-    private apiService: ApiService,
     private responseHandlerService: ResponseHandlerService
   ) {
     /*

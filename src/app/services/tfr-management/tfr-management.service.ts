@@ -46,12 +46,11 @@ export class TfrManagementService {
     next: (response: any) => {
       if (this.project) {
         this.project.id = Number(response);
-        this.project.version++;
         this.responseHandlerService.goodSave();
-        this.subject.next(true);
         this.getFromDatabase(Number(response)).subscribe((res) => {
           this.extractProject(res);
         });
+        this.subject.next(true);
       }
     },
     error: (err: HttpErrorResponse) => {
@@ -60,13 +59,13 @@ export class TfrManagementService {
     },
   };
 
-  getResourceNameObserver = {
+  protected getResourceNameObserver = {
     next: (data: AllocatedResourceTypeDTO[]) => {
       this.projectResourcesWithNames = data;
     },
   };
 
-  getProjectObserver = {
+  protected retrieveProjectObserver = {
     next: (response: Data) => {
       let status = response['project']['status'];
       if (status === 500) {
@@ -88,6 +87,10 @@ export class TfrManagementService {
     private apiService: ApiService,
     private responseHandlerService: ResponseHandlerService
   ) {}
+
+  get getProjectObserver() {
+    return this.retrieveProjectObserver;
+  }
 
   get getProjectId(): number | undefined {
     return this.project?.id;
