@@ -14,6 +14,5 @@ export class WidgetApproachingProjectsComponent {
       this.serverup = true;
     });
   }
-
   public ProjectDetails = [];
 }
