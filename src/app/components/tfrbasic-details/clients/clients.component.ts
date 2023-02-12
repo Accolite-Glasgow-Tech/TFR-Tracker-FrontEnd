@@ -42,7 +42,7 @@ export class ClientsComponent implements OnInit {
     },
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
-        this.tfrManagementService.serverDown = true;
+        this.tfrManagementService.setServerDown(true);
       }
     },
   };
@@ -62,16 +62,12 @@ export class ClientsComponent implements OnInit {
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
         this.responseHandler.badGet();
-        this.tfrManagementService.serverDown = true;
+        this.tfrManagementService.setServerDown(true);
       }
     },
   };
 
   ngOnInit() {
-    this.clientGroup = new FormGroup({
-      name: new FormControl(''),
-    });
-
     this.tfrManagementService.clientReset.subscribe(() => {
       this.resetClientControls();
     });
@@ -120,8 +116,8 @@ export class ClientsComponent implements OnInit {
 
   @Output() onSelected = new EventEmitter<ClientDTO>();
   @Output() attributesSelected = new EventEmitter<ClientAttributeDTO[]>();
-  onSelectedClient(client: ClientDTO) {
-    this.getAttributes().reset();
+  onSelectedClient(client: ClientDTO | undefined) {
+    this.getAttributes().clear();
 
     if (client) {
       this.clientGroup.get('name')?.setValue(client.name);

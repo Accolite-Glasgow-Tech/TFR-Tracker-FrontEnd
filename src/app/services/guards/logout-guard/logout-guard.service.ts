@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
-import { Router } from '@angular/router';
 import { userService } from '../../user/user.service';
 
 @Injectable({
@@ -31,12 +30,5 @@ export class LogoutGuardService implements CanActivate {
 
   checkIfComponentCanBeActivated(): boolean {
     return !this.userService.isLoggedIn() || environment.routeGuardingDisabled;
-  }
-
-  get isLoggedIn(): boolean {
-    if (typeof sessionStorage.getItem('jwt_token') == 'string') {
-      return true;
-    }
-    return false;
   }
 }
