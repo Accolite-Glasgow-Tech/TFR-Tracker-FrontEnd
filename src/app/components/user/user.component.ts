@@ -50,7 +50,6 @@ export class UserComponent implements OnInit {
         sessionStorage.setItem('jwt_token', info.token);
         userService.user_id = info.id
         userService.user_role = info.authorities[0]
-        console.log(userService.user_role)
         this.jumpToHome();
       } else {
         userService.user_id = undefined
