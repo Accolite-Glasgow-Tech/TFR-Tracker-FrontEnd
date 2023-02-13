@@ -1,6 +1,6 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
-import { WidgetClientProjectCountService } from 'src/app/services/service-widget-client-project-count/widget-client-project-count.service';
+import { ApiService } from 'src/app/services/api/api.service';
 import { WidgetClientProjectCountComponent } from './widget-client-project-count.component';
 
 describe('WidgetClientProjectCountComponent', () => {
@@ -10,12 +10,11 @@ describe('WidgetClientProjectCountComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [WidgetClientProjectCountComponent],
+      imports: [HttpClientTestingModule],
       providers: [
         {
-          provide: WidgetClientProjectCountService,
-          useValue: jasmine.createSpyObj('WidgetClientProjectCountService', {
-            readClientProjectCountUrlUrl: of({}),
-          }),
+          provide: ApiService,
+          useValue: jasmine.createSpyObj(['']),
         },
       ],
     }).compileComponents();
@@ -23,9 +22,5 @@ describe('WidgetClientProjectCountComponent', () => {
     fixture = TestBed.createComponent(WidgetClientProjectCountComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
   });
 });

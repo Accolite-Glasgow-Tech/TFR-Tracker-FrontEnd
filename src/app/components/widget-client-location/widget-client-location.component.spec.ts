@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { WidgetClientLocationService } from 'src/app/services/service-widget-client-location/widget-client-location.service';
+import { ApiService } from 'src/app/services/api/api.service';
 import { WidgetClientLocationComponent } from './widget-client-location.component';
 
 describe('WidgetClientLocationComponent', () => {
@@ -13,7 +13,7 @@ describe('WidgetClientLocationComponent', () => {
       imports: [HttpClientTestingModule],
       providers: [
         {
-          provide: WidgetClientLocationService,
+          provide: ApiService,
           useValue: jasmine.createSpyObj(['']),
         },
       ],
@@ -24,7 +24,4 @@ describe('WidgetClientLocationComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
 });

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { WidgetApproachingProjectsService } from '../../services/service-widget-approaching-project/widget-approaching-projects.service';
+import { ApiService } from 'src/app/services/api/api.service';
 import { WidgetApproachingProjectsComponent } from './widget-approaching-projects.component';
 
 describe('WidgetApproachingProjectsComponent', () => {
@@ -12,9 +12,9 @@ describe('WidgetApproachingProjectsComponent', () => {
       declarations: [WidgetApproachingProjectsComponent],
       providers: [
         {
-          provide: WidgetApproachingProjectsService,
-          useValue: jasmine.createSpyObj('WidgetApproachingProjectsService', {
-            readApproachingProjectNamesData: of([]),
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', {
+            getApproachingProjectNames: of([]),
           }),
         },
       ],
@@ -27,5 +27,17 @@ describe('WidgetApproachingProjectsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('test if getApproachingProjectNames returns list of data', () => {
+    const apiService = fixture.debugElement.injector.get(ApiService);
+    fixture.detectChanges();
+    expect(apiService.getApproachingProjectNames()).not.toBeNull();
+  });
+
+  it('test if ProjectDetails is not empty', () => {
+    const test = component.ProjectDetails;
+    fixture.detectChanges();
+    expect(test).not.toBeNull();
   });
 });

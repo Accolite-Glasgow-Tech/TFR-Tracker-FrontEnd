@@ -2,16 +2,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GridsterComponent, IGridsterOptions } from 'angular2gridster';
 import { MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { ApiService } from 'src/app/services/api/api.service';
 import { ChartsComponent } from '../charts/charts.component';
 import { ManageWidgetModalComponent } from '../manage-widget-modal/manage-widget-modal.component';
 import { WidgetApproachingProjectsComponent } from '../widget-approaching-projects/widget-approaching-projects.component';
 import { WidgetClientLocationComponent } from '../widget-client-location/widget-client-location.component';
 import { WidgetClientProjectCountComponent } from '../widget-client-project-count/widget-client-project-count.component';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [MdbModalService],
+  providers: [MdbModalService, ApiService],
 })
 export class HomeComponent implements OnInit {
   @ViewChild(GridsterComponent) gridster!: GridsterComponent;
@@ -28,7 +30,6 @@ export class HomeComponent implements OnInit {
   flag = 0;
 
   constructor(private matdialog: MatDialog) {}
-
   ngOnInit() {
     this.widgets.push({
       componentName: 'Client Location',
