@@ -57,6 +57,18 @@ fdescribe('MilestoneManagerService', () => {
       expect(service.getMilestones).toEqual(
         jasmine.arrayContaining(expectedMilestones)
       );
+      expect(expectedMilestones).toEqual(
+        jasmine.arrayContaining(service.getMilestones)
+      );
+    });
+
+    describe('should throw an error for and leave data unchanged if', () => {
+      it('is passed a null milestone', () => {
+        fail('not implemented');
+      });
+      it('is passed a milestone referencing a non existing milestone', () => {
+        fail('not implemented');
+      });
     });
   });
 
