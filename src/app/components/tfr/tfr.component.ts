@@ -15,6 +15,7 @@ export class TfrComponent implements OnInit {
   TfrId!: Number;
   errorMessage: string = '';
   notes: string = '';
+  sessionStorage = sessionStorage;
 
   constructor(
     private route: ActivatedRoute,

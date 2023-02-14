@@ -322,7 +322,7 @@ describe('TfrManagementService', () => {
     };
     let observer = service.getProjectObserver;
     observer.next(response);
-    expect(service.apiError).toBe(true);
+    expect(service.errorCode).toBe(404);
   });
 
   it('should retrieve project - 503 error', () => {
@@ -333,7 +333,7 @@ describe('TfrManagementService', () => {
     };
     let observer = service.getProjectObserver;
     observer.next(response);
-    expect(service.serverDown).toBe(true);
+    expect(service.errorCode).toBe(503);
   });
 
   it('should retrieve project', () => {
