@@ -30,6 +30,7 @@ export interface MilestoneDTO {
   delivery_date: Date;
   acceptance_date: Date;
   is_deleted: Boolean;
+  possible_status?: string[];
 }
 
 export interface TFRRoute extends Route {
@@ -132,71 +133,73 @@ export interface DisplaySkillDTO {
   percentage: number;
 }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /////////////////////////////////// REFACTOR //////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////
-  // Please delete all the duplicate DTOs, add proper type checking where appropriate
-  // and update your components / services to use the interfaces that are not in this section
-  
-  export interface Project {
-    id: number;
-    notes: string;
-    name: string;
-    client_id: number;
-    start_date: Date;
-    end_date: Date;
-    status: string;
-    version: number;
-    client_specific: { [key: string]: string };
-    resources_count: number;
-    is_deleted: Boolean;
-    created_by: number;
-    modified_by: number;
-    created_at: Date;
-    modified_at: Date;
-    milestones: Milestone[];
-    project_resources: ProjectResourceDTO[];
-  }
-  
-  export interface ProjectMilestoneDTO {
-    id: number;
-    notes: string;
-    name: string;
-    client_id: number;
-    start_date: Date;
-    end_date: Date;
-    status: string;
-    version: number;
-    client_specific: { [key: string]: string };
-    is_deleted: Boolean;
-    created_by: number;
-    modified_by: number;
-    created_at: Date;
-    modified_at: Date;
-    milestones: MilestoneDTO[];
-    project_resources: ProjectResourceDTO[];
-  }
+///////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// REFACTOR //////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+// Please delete all the duplicate DTOs, add proper type checking where appropriate
+// and update your components / services to use the interfaces that are not in this section
 
-  export interface FormMilestone {
-    id: number;
-    project_id: number;
-    status: string;
-    name: string;
-    description: string;
-    start_date?: Date;
-    delivery_date?: Date;
-    acceptance_date?: Date;
-    is_deleted: Boolean;
-  }
-  
-  export interface Milestone {
-    id: number;
-    project_id: number;
-    status: string;
-    name: string;
-    description: string;
-    start_date: Date;
-    delivery_date: Date;
-    acceptance_date: Date;
-    is_deleted: Boolean;
-  }
+export interface Project {
+  id: number;
+  notes: string;
+  name: string;
+  client_id: number;
+  start_date: Date;
+  end_date: Date;
+  status: string;
+  version: number;
+  client_specific: { [key: string]: string };
+  resources_count: number;
+  is_deleted: Boolean;
+  created_by: number;
+  modified_by: number;
+  created_at: Date;
+  modified_at: Date;
+  milestones: Milestone[];
+  project_resources: ProjectResourceDTO[];
+}
+
+export interface ProjectMilestoneDTO {
+  id: number;
+  notes: string;
+  name: string;
+  client_id: number;
+  start_date: Date;
+  end_date: Date;
+  status: string;
+  version: number;
+  client_specific: { [key: string]: string };
+  is_deleted: Boolean;
+  created_by: number;
+  modified_by: number;
+  created_at: Date;
+  modified_at: Date;
+  milestones: MilestoneDTO[];
+  project_resources: ProjectResourceDTO[];
+}
+
+export interface FormMilestone {
+  id: number;
+  project_id: number;
+  status: string;
+  name: string;
+  description: string;
+  start_date?: Date;
+  delivery_date?: Date;
+  acceptance_date?: Date;
+  is_deleted: Boolean;
+  possible_status: string[];
+}
+
+export interface Milestone {
+  id: number;
+  project_id: number;
+  status: string;
+  name: string;
+  description: string;
+  start_date: Date;
+  delivery_date: Date;
+  acceptance_date: Date;
+  is_deleted: Boolean;
+  possible_status?: string[];
+}

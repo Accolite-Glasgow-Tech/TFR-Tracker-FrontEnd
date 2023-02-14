@@ -26,11 +26,15 @@ export class MilestoneManagerService {
     this.broadcastUpdate();
   }
 
-  updateToRemove(milestone: Milestone) {
-    this.remove(milestone);
+  updateToRemove(formMilestone: FormMilestone) {
+    let milestone = this.findById(formMilestone.id);
+    this.removeById(milestone.id);
     milestone.is_deleted = true;
     this.milestones.push(milestone);
     this.broadcastUpdate();
+  }
+  findById(id: number): Milestone {
+    throw new Error('Method not implemented.');
   }
   saveMilestone(milestoneToAdd: Milestone | null) {
     if (milestoneToAdd != null) {
@@ -58,6 +62,7 @@ export class MilestoneManagerService {
         id: idOfNew,
         is_deleted: false,
         status: 'INTENT',
+        possible_status: ['INTENT'],
       });
     } else {
       throw new Error('bad project Id passed');
@@ -88,8 +93,11 @@ export class MilestoneManagerService {
     this.milestones.push(milestoneToAdd);
   }
   private remove(milestoneToRemove: Milestone) {
+    this.removeById(milestoneToRemove.id);
+  }
+  private removeById(id: Number) {
     this.milestones = this.milestones.filter(
-      (value: Milestone) => milestoneToRemove.id != value.id
+      (milestone: Milestone) => milestone.id != id
     );
   }
   private broadcastUpdate() {

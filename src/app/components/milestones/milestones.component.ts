@@ -5,7 +5,6 @@ import { MilestoneManagerService } from 'src/app/services/milestone-manager/mile
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { FormMilestone, Milestone, Project } from 'src/app/shared/interfaces';
-import { MilestoneStatusService } from 'src/app/services/milestone-status/milestone-status.service';
 @Component({
   selector: 'app-milestones',
   templateUrl: './milestones.component.html',
@@ -16,8 +15,7 @@ export class MilestonesComponent implements OnInit {
   constructor(
     private milestoneManagerService: MilestoneManagerService,
     private projectManagerService: TfrManagementService,
-    private snackBarService: SnackBarService,
-    private milestoneStatusService: MilestoneStatusService
+    private snackBarService: SnackBarService
   ) {}
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
@@ -59,10 +57,10 @@ export class MilestonesComponent implements OnInit {
   updateObserver = {
     next: () => this.update(),
   };
-  get selectedMilestone(): Milestone | null {
-    return this.formMilestone as Milestone | null;
+  get selectedMilestone(): FormMilestone | null {
+    return this.formMilestone;
   }
-  set selectedMilestone(milestone: Milestone | null) {
+  set selectedMilestone(milestone: FormMilestone | null) {
     this.formMilestone = milestone;
   }
   get submittable(): boolean {
@@ -106,10 +104,10 @@ export class MilestonesComponent implements OnInit {
     this.milestones = this.milestoneManagerService.getMilestones;
     this.formMilestone = this.milestoneManagerService.getSelected;
     if (this.formMilestone) {
-      this.statusOptions = this.milestoneStatusService.getNextStatus(
-        this.formMilestone.status
-      );
       this.milestoneForm.setValue(this.ConvertMilestoneToFormData());
+      this.formMilestone.possible_status.length > 1
+        ? this.milestoneForm.get('status')?.enable()
+        : this.milestoneForm.get('status')?.disable();
     }
   }
 
@@ -180,11 +178,11 @@ export class MilestonesComponent implements OnInit {
       (milestone) => !milestone.is_deleted
     );
   }
-  removeMilestone(milestone: Milestone) {
+  removeMilestone(milestone: FormMilestone) {
     this.milestoneManagerService.updateToRemove(milestone);
     this.isPristine = false;
   }
-  selectMilestone(milestone: Milestone) {
+  selectMilestone(milestone: FormMilestone) {
     this.milestoneManagerService.setSelected(milestone);
   }
   submitMilestones() {
