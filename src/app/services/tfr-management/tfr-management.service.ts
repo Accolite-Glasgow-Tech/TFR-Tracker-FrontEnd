@@ -27,6 +27,7 @@ export class TfrManagementService {
   clientName: string = '';
   apiError: boolean = false;
   serverDown: boolean = false;
+  accessDenied: boolean = false;
 
   updateProjectToDatabaseObserver = {
     next: (response: Data) => {
@@ -72,6 +73,8 @@ export class TfrManagementService {
         this.apiError = true;
       } else if (status === 503) {
         this.serverDown = true;
+      } else if (status === 403) {
+        this.responseHandlerService.accessDenied();
       } else {
         let project = response['project'];
         this.project = project;

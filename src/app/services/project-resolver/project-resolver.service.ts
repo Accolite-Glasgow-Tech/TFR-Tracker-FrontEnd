@@ -29,7 +29,7 @@ export class ProjectResolverService
         if (err.status === 0) {
           return of(new HttpErrorResponse({ status: 503 }));
         } else {
-          return of(new HttpErrorResponse({ status: 500 }));
+          return of(new HttpErrorResponse({ status: err.status }));
         }
       })
     );

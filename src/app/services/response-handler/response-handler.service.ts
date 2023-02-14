@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
 
@@ -10,7 +11,8 @@ import { SnackBarService } from '../snack-bar/snack-bar.service';
 export class ResponseHandlerService {
   constructor(
     private dialog: MatDialog,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
+    private router: Router
   ) {}
 
   unsavedChangesDialogue() {
@@ -57,6 +59,8 @@ export class ResponseHandlerService {
       this.outOfDateProject();
     } else if (err.status === 400) {
       this.badRequest();
+    } else if (err.status === 403) {
+      this.accessDenied();
     } else {
       this.badSave();
     }
@@ -79,5 +83,9 @@ export class ResponseHandlerService {
   }
   badRequest() {
     this.snackBarService.showSnackBar('Bad request. Try again', 5000);
+  }
+
+  accessDenied() {
+    this.router.navigateByUrl('403');
   }
 }

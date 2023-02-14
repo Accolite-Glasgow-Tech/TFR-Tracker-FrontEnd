@@ -47,6 +47,7 @@ import { UserSchedulesComponent } from './components/user-schedules/user-schedul
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
 import { WidgetClientLocationComponent } from './components/widget-client-location/widget-client-location.component';
 import { ServiceUnavailableComponent } from './components/service-unavailable/service-unavailable.component';
+import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { ServiceUnavailableComponent } from './components/service-unavailable/se
     NotesDialogComponent,
     WidgetClientLocationComponent,
     ServiceUnavailableComponent,
+    AccessDeniedComponent,
   ],
 
   providers: [
