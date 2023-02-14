@@ -61,7 +61,10 @@ export class TfrComponent implements OnInit {
     this.notes = this.tfrManagementService.project?.notes ?? '';
     const dialogRef = this.dialog.open(NotesDialogComponent, {
       panelClass: 'notes-popup-window', // class defined in global styles.scss
-      data: this.notes,
+      data: {
+        notes: this.notes,
+        editable: sessionStorage.getItem('user_role') !== 'ROLE_RESOURCE',
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

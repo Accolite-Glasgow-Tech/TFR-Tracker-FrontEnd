@@ -5,7 +5,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { dialogContent } from 'src/app/shared/interfaces';
+import { tfrCreationDialogContent } from 'src/app/shared/interfaces';
 
 import { TfrCreationDialogComponent } from './tfr-creation-dialog.component';
 
@@ -13,7 +13,7 @@ describe('TfrCreationDialogComponent', () => {
   let component: TfrCreationDialogComponent;
   let fixture: ComponentFixture<TfrCreationDialogComponent>;
 
-  let dialogContent: dialogContent = {
+  let tfrCreationDialogContent: tfrCreationDialogContent = {
     title: 'Discard',
     content: 'Changes were made',
     confirmText: 'Discard',
@@ -29,7 +29,7 @@ describe('TfrCreationDialogComponent', () => {
       providers: [
         {
           provide: MAT_DIALOG_DATA,
-          useValue: dialogContent,
+          useValue: tfrCreationDialogContent,
         },
         {
           provide: MatDialogRef,

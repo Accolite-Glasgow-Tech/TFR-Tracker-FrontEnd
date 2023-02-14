@@ -17,7 +17,14 @@
       (click)="openNotes()"
     >
       <mat-icon>book</mat-icon>
-      Add Notes
+      <ng-container
+        *ngIf="sessionStorage.getItem('user_role') !== 'ROLE_RESOURCE'"
+        >Add Notes</ng-container
+      >
+      <ng-container
+        *ngIf="sessionStorage.getItem('user_role') === 'ROLE_RESOURCE'"
+        >View Notes</ng-container
+      >
     </button>
   </div>
   <div class="title">
