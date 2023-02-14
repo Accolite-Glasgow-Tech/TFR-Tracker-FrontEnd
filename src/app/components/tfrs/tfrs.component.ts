@@ -83,7 +83,7 @@ export class TfrsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.ApiService.getAllProjects().subscribe(this.getAllProjectsObserver);
+    
     this.ApiService.getAllClients().subscribe((allClients) => {
       this.clients = allClients;
     });

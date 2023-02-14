@@ -116,7 +116,7 @@ export interface LoginResponse {
   user_name: string;
   msg: string;
   status: boolean;
-  authorities: Array<String>;
+  role: string;
   token: string;
 }
 
