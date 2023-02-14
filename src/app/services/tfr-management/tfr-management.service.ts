@@ -27,7 +27,7 @@ export class TfrManagementService {
   clientName: string = '';
   apiError: boolean = false;
   serverDown: boolean = false;
-  accessDenied: boolean = false;
+  errorCode: number = 200;
 
   updateProjectToDatabaseObserver = {
     next: (response: Data) => {
@@ -40,6 +40,7 @@ export class TfrManagementService {
     error: (err: HttpErrorResponse) => {
       this.responseHandlerService.handleBadProjectUpdate(err);
       this.subject.next(false);
+      this.errorCode = err.status;
     },
   };
 
@@ -57,6 +58,7 @@ export class TfrManagementService {
     error: (err: HttpErrorResponse) => {
       this.responseHandlerService.handleBadProjectUpdate(err);
       this.subject.next(false);
+      this.errorCode = err.status;
     },
   };
 
@@ -69,12 +71,14 @@ export class TfrManagementService {
   protected retrieveProjectObserver = {
     next: (response: Data) => {
       let status = response['project']['status'];
+
+      if (typeof status === 'number') {
+        this.errorCode = status;
+      }
       if (status === 500) {
         this.apiError = true;
       } else if (status === 503) {
         this.serverDown = true;
-      } else if (status === 403) {
-        this.responseHandlerService.accessDenied();
       } else {
         let project = response['project'];
         this.project = project;

@@ -1,6 +1,5 @@
 import { LoginGuardService } from 'src/app/services/guards/login-guard/login-guard.service';
 import { LogoutGuardService } from 'src/app/services/guards/logout-guard/logout-guard.service';
-import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
 import { HomeComponent } from './components/home/home.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { ReportsComponent } from './components/reports/reports.component';
@@ -74,10 +73,6 @@ export const appRoutes: TFRRoute[] = [
     canActivate: [LoginGuardService],
     path: 'tfr/:id/reports',
     component: ReportsComponent,
-  },
-  {
-    path: '403',
-    component: AccessDeniedComponent,
   },
   {
     path: '**',
