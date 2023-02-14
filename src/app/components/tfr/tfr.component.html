@@ -1,4 +1,8 @@
-<div *ngIf="!tfrManagementService.apiError && !tfrManagementService.serverDown">
+<div
+  *ngIf="
+    tfrManagementService.errorCode === 200 && !tfrManagementService.serverDown
+  "
+>
   <div class="top-btn-div">
     <button
       mat-raised-button
@@ -32,6 +36,6 @@
 <div *ngIf="tfrManagementService.apiError">
   <app-page-not-found></app-page-not-found>
 </div>
-<div *ngIf="tfrManagementService.serverDown" class="server-down-div">
-  <app-service-unavailable></app-service-unavailable>
+<div *ngIf="!(tfrManagementService.errorCode === 200)" class="server-down-div">
+  <app-error [code]="tfrManagementService.errorCode"></app-error>
 </div>

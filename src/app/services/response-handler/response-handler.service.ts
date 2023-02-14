@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TfrCreationDialogComponent } from 'src/app/components/tfr-creation-dialog/tfr-creation-dialog.component';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
-
 @Injectable({
   providedIn: 'root',
 })
