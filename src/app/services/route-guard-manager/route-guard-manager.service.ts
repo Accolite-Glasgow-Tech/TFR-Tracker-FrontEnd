@@ -2,24 +2,26 @@ import { Injectable, OnInit, Type } from '@angular/core';
 import { appRoutes } from '../../app-routes';
 import { LoginGuardService } from '../guards/login-guard/login-guard.service';
 import { LogoutGuardService } from '../guards/logout-guard/logout-guard.service';
+import { WriteGuard } from '../guards/write-guard/write.guard';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class RouteGuardManagerService implements OnInit{
+export class RouteGuardManagerService implements OnInit {
+  constructor(
+    private loginGuardService: LoginGuardService,
+    private logoutGuardService: LogoutGuardService,
+    private writeGuard: WriteGuard
+  ) {
+    this.services = new Array();
+    this.services.push(this.loginGuardService);
+    this.services.push(this.logoutGuardService);
+    this.services.push(this.writeGuard);
+  }
 
-  constructor(private loginGuardService: LoginGuardService,
-    private logoutGuardService: LogoutGuardService) { 
-      this.services = new Array();
-      this.services.push(this.loginGuardService);
-      this.services.push(this.logoutGuardService);
-    }
+  services!: any[];
 
-    services!: any[];
-
-    ngOnInit(): void {
-      
-    }
+  ngOnInit(): void {}
 
   /**
    * returns the associated Route of the provided component type
@@ -37,11 +39,11 @@ export class RouteGuardManagerService implements OnInit{
     let route = this.getRouteDataFor(component);
     let guards: any[] | undefined = route?.canActivate;
 
-    if (guards !== undefined){
-      for(let fn of guards){
-        for (let service of this.services){
-          if(fn.name === service.constructor.name){
-            if(!service.checkIfComponentCanBeActivated()){
+    if (guards !== undefined) {
+      for (let fn of guards) {
+        for (let service of this.services) {
+          if (fn.name === service.constructor.name) {
+            if (!service.checkIfComponentCanBeActivated()) {
               return false;
             }
           }

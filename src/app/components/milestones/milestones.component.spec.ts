@@ -6,7 +6,7 @@ import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { MilestonesComponent } from './milestones.component';
 
-fdescribe('MilestonesComponent', () => {
+describe('MilestonesComponent', () => {
   let component: MilestonesComponent;
   let fixture: ComponentFixture<MilestonesComponent>;
   let milestoneManagerSpy: jasmine.SpyObj<MilestoneManagerService>;

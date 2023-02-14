@@ -48,12 +48,13 @@ export class UserComponent implements OnInit {
       }
       if (info.status == true) {
         sessionStorage.setItem('jwt_token', info.token);
-        userService.user_id = info.id
-        userService.user_role = info.authorities[0]
+        userService.user_id = info.id;
+        userService.user_role = info.authorities;
+        console.log(userService.user_role + '#####');
         this.jumpToHome();
       } else {
-        userService.user_id = undefined
-        userService.user_role = undefined
+        userService.user_id = undefined;
+        userService.user_role = undefined;
         sessionStorage.removeItem('jwt_token');
         this.snackBarService.showSnackBar(info.msg, 3000);
       }
