@@ -10,4 +10,8 @@ export class userService {
   isLoggedIn(): boolean {
     return sessionStorage.getItem('jwt_token') !== null;
   }
+
+  get getUserRole(): any {
+    return userService.user_role;
+  }
 }

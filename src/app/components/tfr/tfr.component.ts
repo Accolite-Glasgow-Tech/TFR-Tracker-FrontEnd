@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+import { userService } from 'src/app/services/user/user.service';
 import { NotesDialogComponent } from '../notes-dialog/notes-dialog.component';
 
 @Component({
@@ -20,7 +21,8 @@ export class TfrComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     @Inject(TfrManagementService)
-    protected tfrManagementService: TfrManagementService
+    protected tfrManagementService: TfrManagementService,
+    @Inject(userService) protected userService: userService
   ) {}
 
   ngOnInit() {

@@ -5,6 +5,7 @@
 >
   <div class="top-btn-div">
     <button
+      *ngIf="userService.getUserRole === 'ROLE_RESOURCE'"
       mat-raised-button
       class="edit-btn"
       color="primary"
