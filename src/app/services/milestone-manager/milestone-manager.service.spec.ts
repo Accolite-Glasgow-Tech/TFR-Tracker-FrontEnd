@@ -47,7 +47,7 @@ fdescribe('MilestoneManagerService', () => {
 
   describe('when deleting', () => {
     it('should only delete the requested milestone', () => {
-      service.updateToRemove(DummyProject.milestones[0]);
+      service.setDeleted(DummyProject.milestones[0]);
       let expectedMilestones = DummyProject.milestones;
       expectedMilestones.shift();
       let removedMilestone = DummyProject.milestones[0];

@@ -26,16 +26,14 @@ export class MilestoneManagerService {
     this.broadcastUpdate();
   }
 
-  updateToRemove(formMilestone: MilestoneDTO) {
-    console.log(this.milestones);
+  setDeleted(formMilestone: MilestoneDTO) {
     let milestone = this.findExisting(formMilestone);
     if (milestone == null) {
       throw new Error('no milestone to update');
     }
-    this.removeById(milestone.id!);
+    this.remove(milestone);
     milestone.is_deleted = true;
     this.milestones.push(milestone);
-    console.log(this.milestones);
     this.broadcastUpdate();
   }
   private findExisting(milestone: MilestoneDTO): MilestoneDTO | null {
