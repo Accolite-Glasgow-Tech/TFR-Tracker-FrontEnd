@@ -1,48 +1,51 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { FormMilestone, Milestone } from 'src/app/shared/interfaces';
+import { MilestoneDTO } from 'src/app/shared/interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MilestoneManagerService {
-  milestones: Milestone[] = [];
-  selected: FormMilestone | null = null;
+  milestones: MilestoneDTO[] = [];
+  selected: MilestoneDTO | null = null;
   @Output() Update: EventEmitter<void> = new EventEmitter();
   constructor() {}
 
-  get getMilestones(): Milestone[] {
+  get getMilestones(): MilestoneDTO[] {
     return this.milestones;
   }
-  setMilestones(milestones: Milestone[] | undefined) {
+  setMilestones(milestones: MilestoneDTO[] | undefined) {
     this.milestones = milestones ? milestones : [];
     this.broadcastUpdate();
   }
 
-  get getSelected(): FormMilestone | null {
+  get getSelected(): MilestoneDTO | null {
     return this.selected;
   }
-  setSelected(milestone: FormMilestone | null) {
+  setSelected(milestone: MilestoneDTO | null) {
     this.selected = milestone;
     this.broadcastUpdate();
   }
 
-  updateToRemove(formMilestone: FormMilestone) {
-    let milestone = this.findById(formMilestone.id);
-    this.removeById(milestone.id);
+  updateToRemove(formMilestone: MilestoneDTO) {
+    console.log(this.milestones);
+    let milestone = this.findExisting(formMilestone);
+    if (milestone == null) {
+      throw new Error('no milestone to update');
+    }
+    this.removeById(milestone.id!);
     milestone.is_deleted = true;
     this.milestones.push(milestone);
+    console.log(this.milestones);
     this.broadcastUpdate();
   }
-  findById(id: number): Milestone {
-    throw new Error('Method not implemented.');
-  }
-  saveMilestone(milestoneToAdd: Milestone | null) {
-    if (milestoneToAdd != null) {
-      this.remove(milestoneToAdd);
-      this.add(milestoneToAdd);
-      this.setSelected(null);
+  private findExisting(milestone: MilestoneDTO): MilestoneDTO | null {
+    if (!milestone.id) {
+      this.noIdError();
     }
-    this.broadcastUpdate();
+    return this.findById(milestone.id!);
+  }
+  findById(id: number): MilestoneDTO | null {
+    return this.milestones.find((milestone) => (milestone.id = id)) ?? null;
   }
 
   get MilestonesNotDeletedLength(): number {
@@ -70,40 +73,50 @@ export class MilestoneManagerService {
     this.broadcastUpdate();
   }
 
-  saveFormMilestone(milestone: FormMilestone | null) {
+  saveMilestone(milestone: MilestoneDTO | null) {
     if (this.isSaveable(milestone)) {
-      this.remove(milestone as Milestone);
-      this.add(milestone as Milestone);
+      this.remove(milestone as MilestoneDTO);
+      this.add(milestone as MilestoneDTO);
       this.setSelected(null);
+      this.broadcastUpdate();
     } else {
       throw new Error('bad milestone save');
     }
   }
 
-  isSaveable(milestone: FormMilestone | null): boolean {
+  isSaveable(milestone: MilestoneDTO | null): boolean {
     return (
       !!milestone?.acceptance_date &&
       !!milestone?.delivery_date &&
       !!milestone?.start_date &&
-      !!milestone?.name
+      !!milestone?.name &&
+      !!milestone?.status
     );
   }
 
-  private add(milestoneToAdd: Milestone) {
+  private add(milestoneToAdd: MilestoneDTO) {
     this.milestones.push(milestoneToAdd);
   }
-  private remove(milestoneToRemove: Milestone) {
-    this.removeById(milestoneToRemove.id);
+  private noIdError(): void {
+    throw new Error("can't remove milestones without id's");
   }
-  private removeById(id: Number) {
+
+  private remove(milestoneToRemove: MilestoneDTO) {
+    milestoneToRemove.id
+      ? this.removeById(milestoneToRemove.id)
+      : this.noIdError();
+  }
+  private removeById(id: number) {
     this.milestones = this.milestones.filter(
-      (milestone: Milestone) => milestone.id != id
+      (milestone: MilestoneDTO) => milestone.id != id
     );
   }
   private broadcastUpdate() {
     this.Update.emit();
   }
   generateIdOfNew() {
-    return Math.min(0, ...this.milestones.map((milestone) => milestone.id)) - 1;
+    return (
+      Math.min(0, ...this.milestones.map((milestone) => milestone.id ?? 0)) - 1
+    );
   }
 }

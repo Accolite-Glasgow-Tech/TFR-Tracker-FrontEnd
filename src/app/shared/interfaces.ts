@@ -26,9 +26,9 @@ export interface MilestoneDTO {
   status: string;
   name: string;
   description: string;
-  start_date: Date;
-  delivery_date: Date;
-  acceptance_date: Date;
+  start_date?: Date;
+  delivery_date?: Date;
+  acceptance_date?: Date;
   is_deleted: Boolean;
   possible_status?: string[];
 }
@@ -156,7 +156,7 @@ export interface Project {
   modified_by: number;
   created_at: Date;
   modified_at: Date;
-  milestones: Milestone[];
+  milestones: MilestoneDTO[];
   project_resources: ProjectResourceDTO[];
 }
 
@@ -177,30 +177,4 @@ export interface ProjectMilestoneDTO {
   modified_at: Date;
   milestones: MilestoneDTO[];
   project_resources: ProjectResourceDTO[];
-}
-
-export interface FormMilestone {
-  id: number;
-  project_id: number;
-  status: string;
-  name: string;
-  description: string;
-  start_date?: Date;
-  delivery_date?: Date;
-  acceptance_date?: Date;
-  is_deleted: Boolean;
-  possible_status: string[];
-}
-
-export interface Milestone {
-  id: number;
-  project_id: number;
-  status: string;
-  name: string;
-  description: string;
-  start_date: Date;
-  delivery_date: Date;
-  acceptance_date: Date;
-  is_deleted: Boolean;
-  possible_status?: string[];
 }

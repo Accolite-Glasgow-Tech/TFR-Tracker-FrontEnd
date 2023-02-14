@@ -321,7 +321,7 @@ export class TfrCreationResourceComponent implements OnInit {
 
   resetResources() {
     this.tfrManagementService
-      .getFromDatabase(this.tfrManagementService.getProjectId as Number)
+      .getFromDatabase(this.tfrManagementService.getProjectId as number)
       .subscribe(this.getProjectObserver);
   }
 

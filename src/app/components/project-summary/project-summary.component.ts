@@ -3,7 +3,7 @@ import { DateFormatterService } from 'src/app/services/date-formatter/date-forma
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import {
   AllocatedResourceTypeDTO,
-  Milestone,
+  MilestoneDTO,
   Project,
 } from 'src/app/shared/interfaces';
 
@@ -22,13 +22,15 @@ export class ProjectSummaryComponent {
   @Input() resourcesWithNames!: AllocatedResourceTypeDTO[];
   @Input() clientName!: string;
 
-  get currentProjectMilestones(): Milestone[] {
+  get currentProjectMilestones(): MilestoneDTO[] {
     return this.milestonesWithoutDeleted(this.currentProject?.milestones);
   }
-  milestonesWithoutDeleted(milestones: Milestone[] | undefined): Milestone[] {
+  milestonesWithoutDeleted(
+    milestones: MilestoneDTO[] | undefined
+  ): MilestoneDTO[] {
     return !milestones
       ? []
-      : milestones.filter((milestone: Milestone) => !milestone.is_deleted);
+      : milestones.filter((milestone: MilestoneDTO) => !milestone.is_deleted);
   }
 
   get currentResourcesWithNames(): AllocatedResourceTypeDTO[] {

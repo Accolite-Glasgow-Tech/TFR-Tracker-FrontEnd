@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MilestoneManagerService } from 'src/app/services/milestone-manager/milestone-manager.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { FormMilestone, Milestone, Project } from 'src/app/shared/interfaces';
+import { MilestoneDTO, Project } from 'src/app/shared/interfaces';
 @Component({
   selector: 'app-milestones',
   templateUrl: './milestones.component.html',
@@ -20,8 +20,8 @@ export class MilestonesComponent implements OnInit {
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
   isPristine: boolean = true;
-  milestones: Milestone[] = [];
-  formMilestone: FormMilestone | null = null;
+  milestones: MilestoneDTO[] = [];
+  formMilestone: MilestoneDTO | null = null;
   statusOptions: string[] = [];
   milestoneForm = new FormGroup({
     name: new FormControl<string>('', {
@@ -57,10 +57,10 @@ export class MilestonesComponent implements OnInit {
   updateObserver = {
     next: () => this.update(),
   };
-  get selectedMilestone(): FormMilestone | null {
+  get selectedMilestone(): MilestoneDTO | null {
     return this.formMilestone;
   }
-  set selectedMilestone(milestone: FormMilestone | null) {
+  set selectedMilestone(milestone: MilestoneDTO | null) {
     this.formMilestone = milestone;
   }
   get submittable(): boolean {
@@ -102,10 +102,19 @@ export class MilestonesComponent implements OnInit {
 
   update() {
     this.milestones = this.milestoneManagerService.getMilestones;
-    this.formMilestone = this.milestoneManagerService.getSelected;
+    let selectedMilestone = this.milestoneManagerService.getSelected;
+    if (
+      (selectedMilestone?.id && selectedMilestone?.possible_status) ||
+      selectedMilestone == null
+    ) {
+      this.formMilestone = selectedMilestone;
+    } else {
+      console.log(selectedMilestone);
+      throw new Error('selected milestone missing attributes');
+    }
     if (this.formMilestone) {
       this.milestoneForm.setValue(this.ConvertMilestoneToFormData());
-      this.formMilestone.possible_status.length > 1
+      this.formMilestone.possible_status!.length > 1
         ? this.milestoneForm.get('status')?.enable()
         : this.milestoneForm.get('status')?.disable();
     }
@@ -117,11 +126,10 @@ export class MilestonesComponent implements OnInit {
       this.projectManagerService.getMilestones
     );
   }
-  get getFormMilestone(): FormMilestone | null {
-    if (this.formMilestone != null) {
+  get getFormMilestone(): MilestoneDTO | null {
+    if (this.formMilestone && this.formMilestone.possible_status) {
       return Object.assign(this.formMilestone, this.milestoneForm.value);
-    }
-    throw new Error('milestone not assigned');
+    } else throw new Error('milestone not assigned');
   }
 
   ConvertMilestoneToFormData(): {
@@ -169,7 +177,7 @@ export class MilestonesComponent implements OnInit {
     this.milestoneManagerService.setSelected(null);
   }
   saveSelected() {
-    this.milestoneManagerService.saveFormMilestone(this.getFormMilestone);
+    this.milestoneManagerService.saveMilestone(this.getFormMilestone);
     this.isPristine = false;
   }
 
@@ -178,11 +186,11 @@ export class MilestonesComponent implements OnInit {
       (milestone) => !milestone.is_deleted
     );
   }
-  removeMilestone(milestone: FormMilestone) {
+  removeMilestone(milestone: MilestoneDTO) {
     this.milestoneManagerService.updateToRemove(milestone);
     this.isPristine = false;
   }
-  selectMilestone(milestone: FormMilestone) {
+  selectMilestone(milestone: MilestoneDTO) {
     this.milestoneManagerService.setSelected(milestone);
   }
   submitMilestones() {

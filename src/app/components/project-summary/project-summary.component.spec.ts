@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
-import { AllocatedResourceTypeDTO, Milestone } from 'src/app/shared/interfaces';
+import {
+  AllocatedResourceTypeDTO,
+  MilestoneDTO,
+} from 'src/app/shared/interfaces';
 import {
   DummyAllocatedResources,
   DummyProject,
@@ -53,7 +56,7 @@ describe('ProjectSummaryComponent', () => {
   });
 
   it('should return not deleted milestones success', () => {
-    const expectedResults: Milestone[] = [
+    const expectedResults: MilestoneDTO[] = [
       DummyProject.milestones[1],
       DummyProject.milestones[2],
     ];
@@ -63,7 +66,7 @@ describe('ProjectSummaryComponent', () => {
   });
 
   it('should return not deleted milestones empty list', () => {
-    let dummyMilestones!: Milestone[];
+    let dummyMilestones!: MilestoneDTO[];
 
     let results = component.milestonesWithoutDeleted(dummyMilestones);
     expect(results).toEqual([]);
