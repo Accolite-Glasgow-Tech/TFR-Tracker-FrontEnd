@@ -187,7 +187,7 @@ export class MilestonesComponent implements OnInit {
     );
   }
   removeMilestone(milestone: MilestoneDTO) {
-    this.milestoneManagerService.updateToRemove(milestone);
+    this.milestoneManagerService.setDeleted(milestone);
     this.isPristine = false;
   }
   selectMilestone(milestone: MilestoneDTO) {
