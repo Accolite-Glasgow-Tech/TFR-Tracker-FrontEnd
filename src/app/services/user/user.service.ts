@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class userService {
-  public user_id: any = undefined;
+  public static user_id: any = undefined;
+  public static user_role: any = undefined;
   constructor() {}
 
   isLoggedIn(): boolean {

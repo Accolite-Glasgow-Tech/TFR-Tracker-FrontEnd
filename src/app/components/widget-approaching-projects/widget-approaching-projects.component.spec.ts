@@ -28,4 +28,16 @@ describe('WidgetApproachingProjectsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('test if getApproachingProjectNames returns list of data', () => {
+    const apiService = fixture.debugElement.injector.get(ApiService);
+    fixture.detectChanges();
+    expect(apiService.getApproachingProjectNames()).not.toBeNull();
+  });
+
+  it('test if ProjectDetails is not empty', () => {
+    const test = component.ProjectDetails;
+    fixture.detectChanges();
+    expect(test).not.toBeNull();
+  });
 });

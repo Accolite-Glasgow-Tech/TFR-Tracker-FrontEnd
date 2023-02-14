@@ -24,6 +24,23 @@ describe('ChartsComponent', () => {
   });
 
   it('is created', () => {
-    expect(ChartsComponent).toBeDefined();
+    expect(component).toBeTruthy();
+  });
+
+  it('is server up', () => {
+    expect(component.serverup).toBe(false);
+  });
+
+  it('testing html element', () => {
+    const data = fixture.nativeElement;
+    expect(data.querySelector('.head').textContent).toContain(
+      'service unavailable. Try again'
+    );
+  });
+
+  it('testing server is up', () => {
+    const element: HTMLDivElement =
+      fixture.debugElement.nativeElement.querySelector('#mat1');
+    expect(element).not.toBeNull();
   });
 });
