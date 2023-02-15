@@ -118,6 +118,7 @@ export class MilestonesComponent implements OnInit {
         ? this.milestoneForm.get('status')?.enable()
         : this.milestoneForm.get('status')?.disable();
     }
+    console.log(this.milestones);
   }
 
   ngOnInit(): void {
@@ -181,24 +182,23 @@ export class MilestonesComponent implements OnInit {
     this.isPristine = false;
   }
 
-  get milestonesNotDeleted() {
-    return this.milestoneManagerService.getMilestones.filter(
-      (milestone) => !milestone.is_deleted
-    );
+  get milestonesNotDeleted(): MilestoneDTO[] {
+    return this.milestones.filter((milestone) => !milestone.is_deleted);
   }
-  removeMilestone(milestone: MilestoneDTO) {
+  removeMilestone(milestone: MilestoneDTO): void {
+    console.log(milestone);
     this.milestoneManagerService.setDeleted(milestone);
     this.isPristine = false;
   }
-  selectMilestone(milestone: MilestoneDTO) {
+  selectMilestone(milestone: MilestoneDTO): void {
     this.milestoneManagerService.setSelected(milestone);
   }
-  submitMilestones() {
+  submitMilestones(): void {
     this.projectManagerService
       .putMilestones(this.milestoneManagerService.getMilestones)
       .subscribe(this.putObserver);
   }
-  resetMilestones() {
+  resetMilestones(): void {
     let projectId = this.projectManagerService.getProjectId;
     if (projectId) {
       this.projectManagerService

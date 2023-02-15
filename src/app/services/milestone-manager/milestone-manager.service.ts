@@ -5,8 +5,8 @@ import { MilestoneDTO } from 'src/app/shared/interfaces';
   providedIn: 'root',
 })
 export class MilestoneManagerService {
-  milestones: MilestoneDTO[] = [];
-  selected: MilestoneDTO | null = null;
+  private milestones: MilestoneDTO[] = [];
+  private selected: MilestoneDTO | null = null;
   @Output() Update: EventEmitter<void> = new EventEmitter();
   constructor() {}
 
@@ -43,14 +43,15 @@ export class MilestoneManagerService {
     return this.findById(milestone.id!);
   }
   findById(id: number): MilestoneDTO | null {
-    return this.milestones.find((milestone) => (milestone.id = id)) ?? null;
+    return this.milestones.find((milestone) => milestone.id == id) ?? null;
   }
 
-  get MilestonesNotDeletedLength(): number {
-    return this.milestones.filter((milestone) => !milestone.is_deleted).length;
+  get MilestonesNotDeleted(): MilestoneDTO[] {
+    return this.milestones.filter((milestone) => !milestone.is_deleted);
   }
+
   get submittable(): boolean {
-    return this.MilestonesNotDeletedLength >= 1;
+    return this.MilestonesNotDeleted.length >= 1;
   }
 
   selectNewMilestone(projectId: number | undefined) {

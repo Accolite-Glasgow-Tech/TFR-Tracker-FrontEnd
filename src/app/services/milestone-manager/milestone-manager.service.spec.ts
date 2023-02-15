@@ -3,16 +3,16 @@ import { MilestoneDTO } from 'src/app/shared/interfaces';
 import { DummyProject } from 'src/app/types/dummy-data';
 import { MilestoneManagerService } from './milestone-manager.service';
 
-fdescribe('MilestoneManagerService', () => {
+describe('MilestoneManagerService', () => {
   let service: MilestoneManagerService;
   let unsaveableMilestone: MilestoneDTO;
-  let deletedMilestone: MilestoneDTO;
+  let deletedTempMilestone: MilestoneDTO;
+  let noIdMilestone: MilestoneDTO;
 
-  beforeEach(() => {
+  beforeAll(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(MilestoneManagerService);
     const dummyProject = DummyProject;
-    service.setMilestones(DummyProject.milestones);
     unsaveableMilestone = {
       id: 1,
       project_id: 1,
@@ -22,7 +22,7 @@ fdescribe('MilestoneManagerService', () => {
       status: 'INTENT',
       possible_status: ['INTENT'],
     };
-    deletedMilestone = {
+    deletedTempMilestone = {
       id: -2,
       project_id: 1,
       name: 'deleted',
@@ -34,6 +34,21 @@ fdescribe('MilestoneManagerService', () => {
       status: 'INTENT',
       possible_status: ['INTENT'],
     };
+    noIdMilestone = {
+      project_id: 1,
+      name: 'noId',
+      description: 'this milestone is deleted',
+      is_deleted: true,
+      start_date: new Date(),
+      delivery_date: new Date(),
+      acceptance_date: new Date(),
+      status: 'INTENT',
+      possible_status: ['INTENT'],
+    };
+  });
+
+  beforeEach(() => {
+    service.setMilestones(DummyProject.milestones);
   });
 
   it('should be created', () => {
@@ -49,8 +64,8 @@ fdescribe('MilestoneManagerService', () => {
     it('should only delete the requested milestone', () => {
       service.setDeleted(DummyProject.milestones[0]);
       let expectedMilestones = DummyProject.milestones;
-      expectedMilestones.shift();
       let removedMilestone = DummyProject.milestones[0];
+      expectedMilestones.shift();
       removedMilestone.is_deleted = true;
       expectedMilestones.push(removedMilestone);
       expect(service.getMilestones.length).toEqual(expectedMilestones.length);
@@ -62,17 +77,21 @@ fdescribe('MilestoneManagerService', () => {
       );
     });
 
-    describe('should throw an error for and leave data unchanged if', () => {
-      it('is passed a null milestone', () => {
-        fail('not implemented');
+    describe('throws an error for and leave data unchanged if', () => {
+      it('is passed a milestone with null id', () => {
+        expect(() => service.setDeleted(noIdMilestone)).toThrow(
+          new Error("can't remove milestones without id's")
+        );
       });
       it('is passed a milestone referencing a non existing milestone', () => {
-        fail('not implemented');
+        expect(() => service.setDeleted(deletedTempMilestone)).toThrow(
+          new Error('no milestone to update')
+        );
       });
     });
   });
 
-  describe('when saving,', () => {
+  describe('saving', () => {
     it("shouldn't save unsaveable milestones", () => {
       try {
         service.saveMilestone(unsaveableMilestone);
@@ -85,6 +104,7 @@ fdescribe('MilestoneManagerService', () => {
     it('should save over a preexisting milestone', () => {
       service.setSelected(DummyProject.milestones[0]);
       service.saveMilestone(DummyProject.milestones[0]);
+
       expect(service.getSelected).toEqual(null);
       expect(service.getMilestones).toEqual(
         jasmine.arrayContaining(DummyProject.milestones)
@@ -95,11 +115,27 @@ fdescribe('MilestoneManagerService', () => {
     });
   });
 
-  it('should generate temporary ids correctly', () => {
-    expect(service.generateIdOfNew()).toEqual(-1);
-    service.setMilestones([deletedMilestone, ...DummyProject.milestones]);
-    expect(service.generateIdOfNew()).toEqual(-3);
-    service.setMilestones([]);
-    expect(service.generateIdOfNew()).toEqual(-1);
+  describe('generating new milestones', () => {
+    it('should generate temporary ids correctly', () => {
+      expect(service.generateIdOfNew()).toEqual(-1);
+      service.setMilestones([deletedTempMilestone, ...DummyProject.milestones]);
+      expect(service.generateIdOfNew()).toEqual(-3);
+      service.setMilestones([]);
+      expect(service.generateIdOfNew()).toEqual(-1);
+    });
+
+    it('should create expected new milestones', () => {
+      let newMilestone = {
+        project_id: DummyProject.id,
+        name: '',
+        description: '',
+        id: -1,
+        is_deleted: false,
+        status: 'INTENT',
+        possible_status: ['INTENT'],
+      };
+      service.selectNewMilestone(DummyProject.id);
+      expect(service.getSelected).toEqual(newMilestone);
+    });
   });
 });
