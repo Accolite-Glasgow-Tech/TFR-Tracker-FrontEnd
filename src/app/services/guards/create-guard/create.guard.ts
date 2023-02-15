@@ -8,7 +8,7 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 
-const AuthorisedRoles: string[] = ['ROLE_PMO', 'ROLE_MANAGER'];
+const AuthorisedRoles: string[] = ['ROLE_PMO', 'ROLE_MANAGER']; // roles that are permitted access
 
 @Injectable({
   providedIn: 'root',
@@ -32,8 +32,8 @@ export class CreateGuard implements CanActivate {
   }
 
   checkIfComponentCanBeActivated() {
-    // ADMIN or MANAGER
     if (
+      sessionStorage.getItem('jwt_token') !== null &&
       sessionStorage['user_role'] !== undefined &&
       AuthorisedRoles.includes(sessionStorage['user_role'])
     ) {

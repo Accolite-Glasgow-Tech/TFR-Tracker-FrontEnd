@@ -1,7 +1,11 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { getAllocatedResourcesURL, getSkillsURL } from 'src/app/shared/utils';
+import {
+  getAllocatedResourcesURL,
+  getSkillsURL,
+  getWritePermissionCheckUrl,
+} from 'src/app/shared/utils';
 import { environment } from 'src/environments/environment';
 import {
   allProjectsURL,
@@ -133,6 +137,10 @@ export class ApiService {
     return this.http.get<AllocatedResourceTypeDTO[]>(
       getAllocatedResourcesURL(projectId)
     );
+  }
+
+  getHasWritePermission(projectId: number): Observable<boolean> {
+    return this.http.get<boolean>(getWritePermissionCheckUrl(projectId));
   }
 
   ///////////////////////////////////////////////////////////////////////////
