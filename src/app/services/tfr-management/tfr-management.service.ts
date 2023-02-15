@@ -22,6 +22,7 @@ export class TfrManagementService {
   projectResourcesWithNames!: AllocatedResourceTypeDTO[];
   subject = new Subject<boolean>();
   clientReset = new EventEmitter<boolean>();
+  canEdit: boolean = true;
 
   clientName: string = '';
   errorCode: number = 200;
@@ -65,6 +66,12 @@ export class TfrManagementService {
     },
   };
 
+  protected getCanWritePermissionObserver = {
+    next: (data: boolean) => {
+      this.canEdit = data;
+    },
+  };
+
   protected retrieveProjectObserver = {
     next: (response: Data) => {
       let status = response['project']['status'];
@@ -79,9 +86,12 @@ export class TfrManagementService {
         let project = response['project'];
         this.project = project;
         this.apiService
-          .getResourcesNamesByProjectIdFromDatabase(project.id)
+          .getResourcesNamesByProjectIdFromDatabase(this.project?.id!)
           .subscribe(this.getResourceNameObserver);
-        this.setClientName(project.client_id);
+        this.setClientName(this.project?.client_id!);
+        this.apiService
+          .getHasWritePermission(this.project?.id!)
+          .subscribe(this.getCanWritePermissionObserver);
       }
     },
   };
