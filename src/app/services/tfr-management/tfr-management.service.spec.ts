@@ -1,4 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { InjectionToken } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
@@ -17,13 +18,11 @@ import {
   DummyError500,
   DummyProject,
   DummyProjectResponseOk,
+  DummyProjectUndefinedResponse,
 } from 'src/app/types/dummy-data';
 import { ApiService } from '../api/api.service';
-
-import { TfrManagementService } from './tfr-management.service';
-
-import { InjectionToken } from '@angular/core';
 import { ResponseHandlerService } from '../response-handler/response-handler.service';
+import { TfrManagementService } from './tfr-management.service';
 
 export const WINDOW = new InjectionToken('Window');
 
@@ -298,7 +297,7 @@ describe('TfrManagementService', () => {
   });
 
   it('should extract project failure', () => {
-    let httpResponse = DummyProjectResponseOk;
+    let httpResponse = DummyProjectUndefinedResponse;
     expect(service.extractProject(httpResponse)).toEqual(httpResponse);
     expect(service.project).toEqual(undefined);
   });
@@ -368,5 +367,10 @@ describe('TfrManagementService', () => {
     service.setNotes('Hello World');
     expect(service.project.notes).toBe('Hello World');
     expect(apiServiceSpy.putProject).toHaveBeenCalled();
+  });
+
+  it('should set server down', () => {
+    service.setServerDown();
+    expect(service.errorCode).toBe(503);
   });
 });
