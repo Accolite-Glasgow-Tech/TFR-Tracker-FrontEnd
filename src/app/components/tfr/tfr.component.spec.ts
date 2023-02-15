@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
@@ -12,7 +12,7 @@ import { TfrComponent } from './tfr.component';
 export class MatDialogMock {
   open(component: NotesDialogComponent) {
     return {
-      afterClosed: () => of('true'),
+      afterClosed: () => of(false),
     };
   }
 }
@@ -28,6 +28,7 @@ describe('TfrComponent', () => {
   ]);
   let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
   let providersList: any = [];
+  let dialogSpy: jasmine.Spy;
 
   const dummyProject: Project = DummyProject;
 
@@ -176,5 +177,54 @@ describe('TfrComponent', () => {
     component.TfrId = 1;
     component.redirectToEditTfr();
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/tfr/1/edit']);
+  });
+
+  it('open notes - editable', async () => {
+    const store: any = {
+      user_role: 'ROLE_PMO',
+    };
+    await setUpSuccess();
+    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
+      afterClosed: () => of(true),
+    } as MatDialogRef<NotesDialogComponent>);
+    spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
+      return store[key];
+    });
+    expect(component.notes).toBe('');
+
+    component.openNotes();
+
+    expect(dialogSpy).toHaveBeenCalledWith(NotesDialogComponent, {
+      panelClass: 'notes-popup-window',
+      data: {
+        notes: '',
+        editable: true,
+      },
+    });
+  });
+
+  it('open notes - uneditable', async () => {
+    const store: any = {
+      user_role: 'ROLE_RESOURCE',
+    };
+    await setUpSuccess();
+    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
+      afterClosed: () => of(true),
+    } as MatDialogRef<NotesDialogComponent>);
+    spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
+      return store[key];
+    });
+
+    expect(component.notes).toBe('');
+
+    component.openNotes();
+
+    expect(dialogSpy).toHaveBeenCalledWith(NotesDialogComponent, {
+      panelClass: 'notes-popup-window',
+      data: {
+        notes: '',
+        editable: false,
+      },
+    });
   });
 });

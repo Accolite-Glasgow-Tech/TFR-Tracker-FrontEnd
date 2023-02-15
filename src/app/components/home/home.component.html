@@ -23,13 +23,12 @@
   </div>
 
   <ngx-gridster
-    style="height: 400px; width: 85%; padding-left: 8%"
+    class="gridstergroup"
     [options]="gridsterOptions"
     [draggableOptions]="{ handlerClass: 'panel-heading' }"
     (optionsChange)="optionsChange($event)"
   >
     <ngx-gridster-item
-      style="height: fit-content; left: 0px; top: 0px; bottom: 0px"
       class="ngxgriditem"
       *ngFor="let widget of widgets; index as i"
     >

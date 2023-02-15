@@ -22,10 +22,6 @@ export class MatDialogMock {
 describe('ResponseHandlerService', () => {
   let service: ResponseHandlerService;
   let dialogSpy: jasmine.Spy;
-  let dialogRefSpyObj = jasmine.createSpyObj({
-    afterClosed: of({}),
-    close: null,
-  });
   let snackBarServiceSpy: jasmine.SpyObj<SnackBarService>;
 
   beforeEach(() => {
