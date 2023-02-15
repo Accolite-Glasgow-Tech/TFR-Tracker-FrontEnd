@@ -45,7 +45,7 @@ export class ApiService {
   /////////////////////////////////// POST //////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
   postTask(taskObject: TaskCreationDTO) {
-    return this.http.post(tasksURL, taskObject);
+    return this.http.post(tasksURL, taskObject, { observe: 'response' });
   }
 
   postProject(project: Project | undefined | ProjectMilestoneDTO) {
