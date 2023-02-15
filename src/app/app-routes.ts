@@ -43,7 +43,6 @@ export const appRoutes: TFRRoute[] = [
     canActivate: [CreateGuard],
   },
   {
-    navigationLabel: 'Log out',
     path: 'logout',
     component: LogOutComponent,
     canActivate: [LoginGuardService],

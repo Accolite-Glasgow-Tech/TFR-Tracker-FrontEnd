@@ -2,5 +2,6 @@
   <mat-icon class="white-icon">face</mat-icon>
 </button>
 <mat-menu #menu="matMenu">
-  <button mat-menu-item>hello, {{ userName }}</button>
+  <button mat-menu-item disabled>{{ userName }}</button>
+  <button mat-menu-item routerLink="logout">log out</button>
 </mat-menu>
