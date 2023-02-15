@@ -1,1 +1,6 @@
-<div *ngIf="userName">hello, {{ userName }}</div>
+<button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="userName">
+  <mat-icon class="white-icon">face</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>hello, {{ userName }}</button>
+</mat-menu>
