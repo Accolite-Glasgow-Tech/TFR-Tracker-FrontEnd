@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import {
   AllocatedResourceTypeDTO,
   ClientDTO,
-  Milestone,
+  MilestoneDTO,
   Project,
   ProjectBasicDetails,
   ProjectResourceDTO,
@@ -30,7 +30,7 @@ describe('TfrManagementService', () => {
   let service: TfrManagementService;
   let responseHandlerServiceSpy: jasmine.SpyObj<ResponseHandlerService>;
   let apiServiceSpy: jasmine.SpyObj<ApiService>;
-  let milestones: Milestone[];
+  let milestones: MilestoneDTO[];
   let projectResources: ProjectResourceDTO[];
   let projectResourcesWithNames: AllocatedResourceTypeDTO[];
   let project: Project;

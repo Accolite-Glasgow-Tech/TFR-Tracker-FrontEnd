@@ -19,9 +19,6 @@
     appearance="fill"
     class="container"
   >
-    <div *ngIf="statusOptions.length == 0" class="acceptedNote">
-      <label>Accepted</label>
-    </div>
     <div class="inputdiv">
       <mat-form-field class="form-field">
         <input
@@ -41,17 +38,13 @@
         ></textarea>
         <mat-error>Description Required</mat-error>
       </mat-form-field>
-      <mat-form-field
-        *ngIf="
-          projectStatus != 'DRAFT' &&
-          (formMilestone?.id ?? -1) > 0 &&
-          statusOptions.length > 0
-        "
-        class="form-field"
-      >
+      <mat-form-field class="form-field">
         <mat-label>Status</mat-label>
-        <mat-select formControlName="status">
-          <mat-option *ngFor="let option of statusOptions" [value]="option">
+        <mat-select #select formControlName="status">
+          <mat-option
+            *ngFor="let option of formMilestone.possible_status"
+            [value]="option"
+          >
             {{ option }}
           </mat-option>
         </mat-select>
@@ -136,7 +129,7 @@
   >
     Back
   </button>
-  
+
   <button
     *ngIf="!selectedMilestone"
     type="button"
@@ -160,7 +153,7 @@
   >
     Reset
   </button>
-  
+
   <button
     class="navigation-btn"
     color="primary"

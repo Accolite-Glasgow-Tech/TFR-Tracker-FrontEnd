@@ -5,7 +5,6 @@ import { Observable, of, Subject } from 'rxjs';
 import {
   AllocatedResourceTypeDTO,
   ClientDTO,
-  Milestone,
   MilestoneDTO,
   Project,
   ProjectBasicDetails,
@@ -104,7 +103,7 @@ export class TfrManagementService {
     return this.project?.name;
   }
 
-  get getMilestones(): Milestone[] | undefined {
+  get getMilestones(): MilestoneDTO[] | undefined {
     return this.project?.milestones;
   }
 
@@ -233,15 +232,15 @@ export class TfrManagementService {
     return true;
   }
 
-  set milestones(milestones: Milestone[]) {
+  set milestones(milestones: MilestoneDTO[]) {
     if (this.project !== undefined) {
       this.project.milestones = milestones;
     }
   }
 
-  stripTempIds(milestones: Milestone[]): MilestoneDTO[] {
+  stripTempIds(milestones: MilestoneDTO[]): MilestoneDTO[] {
     let strippedMilestones: MilestoneDTO[] = milestones.map((milestone) => {
-      if (milestone.id > 0) {
+      if (milestone.id! > 0) {
         return milestone;
       }
       let { id, ...cleanedMilestone } = milestone;
@@ -250,7 +249,7 @@ export class TfrManagementService {
     return strippedMilestones;
   }
 
-  projectStripTempIds(milestonesToStrip: Milestone[]): ProjectMilestoneDTO {
+  projectStripTempIds(milestonesToStrip: MilestoneDTO[]): ProjectMilestoneDTO {
     if (this.project) {
       let projectDTO: ProjectMilestoneDTO = this.project;
       projectDTO.milestones = this.stripTempIds(milestonesToStrip);
@@ -259,7 +258,7 @@ export class TfrManagementService {
     throw new Error('No project defined');
   }
 
-  putMilestones(milestones: Milestone[]): Observable<{}> {
+  putMilestones(milestones: MilestoneDTO[]): Observable<{}> {
     return this.project == undefined
       ? new Observable<{}>((subscriber) => {
           subscriber.error('project undefined');
@@ -305,7 +304,7 @@ export class TfrManagementService {
     return this.subject.asObservable();
   }
 
-  getFromDatabase(project_id: Number): Observable<HttpResponse<Project>> {
+  getFromDatabase(project_id: number): Observable<HttpResponse<Project>> {
     return this.apiService.getProject(project_id);
   }
 

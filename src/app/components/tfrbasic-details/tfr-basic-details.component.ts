@@ -154,7 +154,7 @@ export class TfrBasicDetailsComponent implements OnInit {
 
   resetInputFields() {
     this.tfrManager
-      .getFromDatabase(this.tfrManager.getProjectId as Number)
+      .getFromDatabase(this.tfrManager.getProjectId as number)
       .subscribe(this.getProjectObserver);
   }
 
