@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { CreateGuard } from '../guards/create-guard/create.guard';
 import { LoginGuardService } from '../guards/login-guard/login-guard.service';
 import { LogoutGuardService } from '../guards/logout-guard/logout-guard.service';
 
@@ -12,11 +13,21 @@ describe('RouteGuardManagerService', () => {
       providers: [
         {
           provide: LoginGuardService,
-          useValue: jasmine.createSpyObj(['']),
+          useValue: jasmine.createSpyObj('LoginGuardService', [
+            'checkIfComponentCanBeActivated',
+          ]),
         },
         {
           provide: LogoutGuardService,
-          useValue: jasmine.createSpyObj(['']),
+          useValue: jasmine.createSpyObj('LogoutGuardService', [
+            'checkIfComponentCanBeActivated',
+          ]),
+        },
+        {
+          provide: CreateGuard,
+          useValue: jasmine.createSpyObj('CreateGuard', [
+            'checkIfComponentCanBeActivated',
+          ]),
         },
       ],
     });

@@ -8,6 +8,7 @@ import { StepperComponent } from './components/stepper/stepper.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { UserComponent } from './components/user/user.component';
+import { WriteGuard } from './services/guards/write-guard/write.guard';
 import { ProjectResolverService } from './services/project-resolver/project-resolver.service';
 import { TFRRoute } from './shared/interfaces';
 
@@ -50,7 +51,7 @@ export const appRoutes: TFRRoute[] = [
   {
     path: 'tfr/:id/edit',
     component: StepperComponent,
-    canActivate: [LoginGuardService],
+    canActivate: [WriteGuard],
 
     resolve: {
       project: ProjectResolverService,

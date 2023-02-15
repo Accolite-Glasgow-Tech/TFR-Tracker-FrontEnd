@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   getAllocatedResourcesURL,
-  getCanWritePermissionURL,
   getSkillsURL,
+  getWritePermissionCheckUrl,
 } from 'src/app/shared/utils';
 import { environment } from 'src/environments/environment';
 import {
@@ -49,7 +49,7 @@ export class ApiService {
   /////////////////////////////////// POST //////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
   postTask(taskObject: TaskCreationDTO) {
-    return this.http.post(tasksURL, taskObject);
+    return this.http.post(tasksURL, taskObject, { observe: 'response' });
   }
 
   postProject(project: Project | undefined | ProjectMilestoneDTO) {
@@ -139,8 +139,8 @@ export class ApiService {
     );
   }
 
-  getCanWritePermission(projectId: number): Observable<boolean> {
-    return this.http.get<boolean>(getCanWritePermissionURL(projectId));
+  getHasWritePermission(projectId: number): Observable<boolean> {
+    return this.http.get<boolean>(getWritePermissionCheckUrl(projectId));
   }
 
   ///////////////////////////////////////////////////////////////////////////
