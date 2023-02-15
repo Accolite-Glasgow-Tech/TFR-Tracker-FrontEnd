@@ -1,8 +1,8 @@
 import { Injectable, OnInit, Type } from '@angular/core';
 import { appRoutes } from '../../app-routes';
+import { CreateGuard } from '../guards/create-guard/create.guard';
 import { LoginGuardService } from '../guards/login-guard/login-guard.service';
 import { LogoutGuardService } from '../guards/logout-guard/logout-guard.service';
-import { WriteGuard } from '../guards/write-guard/write.guard';
 
 @Injectable({
   providedIn: 'root',
@@ -11,12 +11,12 @@ export class RouteGuardManagerService implements OnInit {
   constructor(
     private loginGuardService: LoginGuardService,
     private logoutGuardService: LogoutGuardService,
-    private writeGuard: WriteGuard
+    private createGuard: CreateGuard
   ) {
     this.services = new Array();
     this.services.push(this.loginGuardService);
     this.services.push(this.logoutGuardService);
-    this.services.push(this.writeGuard);
+    this.services.push(this.createGuard);
   }
 
   services!: any[];

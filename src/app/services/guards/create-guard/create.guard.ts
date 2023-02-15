@@ -7,12 +7,13 @@ import {
   UrlTree,
 } from '@angular/router';
 import { Observable } from 'rxjs';
-import { userService } from 'src/app/services/user/user.service';
+
+const AuthorisedRoles: string[] = ['ROLE_PMO', 'ROLE_MANAGER'];
 
 @Injectable({
   providedIn: 'root',
 })
-export class WriteGuard implements CanActivate {
+export class CreateGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(
@@ -32,16 +33,13 @@ export class WriteGuard implements CanActivate {
 
   checkIfComponentCanBeActivated() {
     // ADMIN or MANAGER
-    if (userService.user_role === undefined) {
+    if (
+      sessionStorage['user_role'] !== undefined &&
+      AuthorisedRoles.includes(sessionStorage['user_role'])
+    ) {
+      return true;
+    } else {
       return false;
     }
-
-    for (let i = 0; i < userService.user_role.length; i++) {
-      if (userService.user_role[i] === 'ROLE_ADMIN') {
-        return true;
-      }
-    }
-
-    return false;
   }
 }

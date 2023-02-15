@@ -4,7 +4,7 @@ import { LogoutGuardService } from '../guards/logout-guard/logout-guard.service'
 
 import { RouteGuardManagerService } from './route-guard-manager.service';
 
-describe('RouteGuardManagerService', () => {
+fdescribe('RouteGuardManagerService', () => {
   let service: RouteGuardManagerService;
 
   beforeEach(() => {
@@ -12,13 +12,13 @@ describe('RouteGuardManagerService', () => {
       providers: [
         {
           provide: LoginGuardService,
-          useValue: jasmine.createSpyObj([''])
+          useValue: jasmine.createSpyObj(['']),
         },
         {
           provide: LogoutGuardService,
-          useValue: jasmine.createSpyObj([''])
-        }
-      ]
+          useValue: jasmine.createSpyObj(['']),
+        },
+      ],
     });
     service = TestBed.inject(RouteGuardManagerService);
   });

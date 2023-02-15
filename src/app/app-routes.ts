@@ -1,6 +1,6 @@
+import { CreateGuard } from 'src/app/services/guards/create-guard/create.guard';
 import { LoginGuardService } from 'src/app/services/guards/login-guard/login-guard.service';
 import { LogoutGuardService } from 'src/app/services/guards/logout-guard/logout-guard.service';
-import { WriteGuard } from 'src/app/services/guards/write-guard/write.guard';
 import { HomeComponent } from './components/home/home.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { ReportsComponent } from './components/reports/reports.component';
@@ -40,7 +40,7 @@ export const appRoutes: TFRRoute[] = [
     path: 'tfr/create',
     component: StepperComponent,
     navigationLabel: 'Create TFR',
-    canActivate: [WriteGuard],
+    canActivate: [CreateGuard],
   },
   {
     navigationLabel: 'Log out',
