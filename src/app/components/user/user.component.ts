@@ -50,11 +50,14 @@ export class UserComponent implements OnInit {
         sessionStorage.setItem('jwt_token', info.token);
         sessionStorage.setItem('user_role',info.role)
         sessionStorage.setItem('user_id',info.id.toString())
+        sessionStorage.setItem('user_name',info.username)
+        console.log(sessionStorage.getItem('user_name'))
         this.jumpToHome();
       } else {
         sessionStorage.removeItem('user_id');
         sessionStorage.removeItem('jwt_token');
         sessionStorage.removeItem('user_role');
+        sessionStorage.removeItem('user_name')
         this.snackBarService.showSnackBar(info.msg, 3000);
       }
     },
