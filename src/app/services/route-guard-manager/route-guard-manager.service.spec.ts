@@ -4,7 +4,7 @@ import { LogoutGuardService } from '../guards/logout-guard/logout-guard.service'
 
 import { RouteGuardManagerService } from './route-guard-manager.service';
 
-fdescribe('RouteGuardManagerService', () => {
+describe('RouteGuardManagerService', () => {
   let service: RouteGuardManagerService;
 
   beforeEach(() => {
