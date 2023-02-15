@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
-import { userService } from 'src/app/services/user/user.service';
 import { LoginResponse, RegisterResponse } from 'src/app/shared/interfaces';
 
 @Component({
@@ -48,14 +47,13 @@ export class UserComponent implements OnInit {
       }
       if (info.status == true) {
         sessionStorage.setItem('jwt_token', info.token);
-        userService.user_id = info.id;
-        userService.user_role = info.authorities;
-        console.log(userService.user_role + '#####');
+        sessionStorage.setItem('user_role', info.role);
+        sessionStorage.setItem('user_id', info.id.toString());
         this.jumpToHome();
       } else {
-        userService.user_id = undefined;
-        userService.user_role = undefined;
+        sessionStorage.removeItem('user_id');
         sessionStorage.removeItem('jwt_token');
+        sessionStorage.removeItem('user_role');
         this.snackBarService.showSnackBar(info.msg, 3000);
       }
     },
