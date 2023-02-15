@@ -185,6 +185,7 @@ describe('TfrCreationResourceComponent', () => {
 
   it('should add a new resource', () => {
     expect(component.resourceDetailsUpdated).toBe(false);
+    expect(projectResourcesWithNames[0].is_deleted).toBe(false);
 
     component.allocatedResources = [];
     (tfrManagementServiceSpy as any).getProjectId = 1;

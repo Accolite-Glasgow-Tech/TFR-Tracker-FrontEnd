@@ -42,7 +42,7 @@ export class ClientsComponent implements OnInit {
     },
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
-        this.tfrManagementService.setServerDown(true);
+        this.tfrManagementService.setServerDown();
       }
     },
   };
@@ -62,7 +62,7 @@ export class ClientsComponent implements OnInit {
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
         this.responseHandler.badGet();
-        this.tfrManagementService.setServerDown(true);
+        this.tfrManagementService.setServerDown();
       }
     },
   };

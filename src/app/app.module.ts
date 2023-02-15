@@ -43,8 +43,6 @@ import { ErrorComponent } from './components/error/error.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { ManageWidgetModalComponent } from './components/manage-widget-modal/manage-widget-modal.component';
 import { NotesDialogComponent } from './components/notes-dialog/notes-dialog.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { ServiceUnavailableComponent } from './components/service-unavailable/service-unavailable.component';
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
 import { WidgetClientLocationComponent } from './components/widget-client-location/widget-client-location.component';
@@ -77,12 +75,10 @@ import { WidgetClientLocationComponent } from './components/widget-client-locati
     UserSchedulesComponent,
     WidgetApproachingProjectsComponent,
     ChipComponent,
-    PageNotFoundComponent,
     LogOutComponent,
     ManageWidgetModalComponent,
     NotesDialogComponent,
     WidgetClientLocationComponent,
-    ServiceUnavailableComponent,
     ErrorComponent,
   ],
 

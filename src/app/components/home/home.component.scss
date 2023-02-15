@@ -9,6 +9,13 @@
     margin-top: 6px;
   }
 
+  .gridstergroup {
+    height: 400px;
+    width: 85%;
+    margin-left: 8%;
+    margin-right: 8%;
+  }
+
   a.headerText {
     font-family: FontAwesome;
     font-size: 3vw;
@@ -51,6 +58,13 @@
     margin-top: 6px;
   }
 
+  .gridstergroup {
+    height: 400px;
+    width: 85%;
+    margin-left: 8%;
+    margin-right: 8%;
+  }
+
   a.headerText {
     font-family: FontAwesome;
     font-size: 3vw;
@@ -91,6 +105,13 @@
     padding-right: 9%;
     margin-bottom: -6px;
     margin-top: 6px;
+  }
+
+  .gridstergroup {
+    height: 400px;
+    width: 85%;
+    margin-left: 8%;
+    margin-right: 8%;
   }
 
   a.headerText {
@@ -142,6 +163,13 @@
     text-align: center;
     margin-bottom: -6px;
     margin-top: 6px;
+  }
+
+  .gridstergroup {
+    height: 400px;
+    width: 85%;
+    margin-left: 8%;
+    margin-right: 8%;
   }
 
   a.headerText {
@@ -198,6 +226,10 @@ section {
 .ngxgriditem {
   display: inline-table;
   position: initial;
+  height: fit-content;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
 }
 
 .widget {

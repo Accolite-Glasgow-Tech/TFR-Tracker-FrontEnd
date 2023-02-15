@@ -41,7 +41,7 @@ export class TfrsComponent implements OnInit {
   startAfterDate: any = new FormControl();
   endBeforeDate: any = new FormControl();
   pageSize = [3, 5, 10, 15];
-  serverDown: boolean = false;
+  errorCode: number = 200;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -54,7 +54,8 @@ export class TfrsComponent implements OnInit {
     },
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
-        this.serverDown = true;
+        /* server not responding */
+        this.errorCode = 503;
       }
     },
   };
@@ -83,7 +84,6 @@ export class TfrsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    
     this.ApiService.getAllClients().subscribe((allClients) => {
       this.clients = allClients;
     });

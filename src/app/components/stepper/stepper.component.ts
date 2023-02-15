@@ -42,6 +42,7 @@ export class StepperComponent implements OnInit {
   */
   isLinear = true;
   stepLabels: Observable<string[]>;
+  sessionStorage = sessionStorage;
 
   submitTFRObserver = {
     next: () => {

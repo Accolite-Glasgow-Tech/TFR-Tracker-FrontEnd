@@ -124,9 +124,7 @@ describe('ClientsComponent', () => {
   it('is getClientsObserver.error is called with error status 0, serverDown should be set', () => {
     component.getClientsObserver.error(DummyError0);
 
-    expect(tfrManagementServiceSpy.setServerDown).toHaveBeenCalledOnceWith(
-      true
-    );
+    expect(tfrManagementServiceSpy.setServerDown).toHaveBeenCalled();
   });
 
   it('is getClientsObserver.error is called with error status of not 0, serverDown should not be set', () => {
@@ -201,9 +199,7 @@ describe('ClientsComponent', () => {
     component.getAllClientAttributesObserver.error(DummyError0);
 
     expect(responseHandlerSpy.badGet).toHaveBeenCalledTimes(1);
-    expect(tfrManagementServiceSpy.setServerDown).toHaveBeenCalledOnceWith(
-      true
-    );
+    expect(tfrManagementServiceSpy.setServerDown).toHaveBeenCalled();
   });
 
   it('getAllClientAttributesObserver.error should not call badGet and setServerDown if error status is not 0', () => {
