@@ -1,7 +1,7 @@
 <div *ngIf="tfrManagementService.errorCode === 200">
   <div class="top-btn-div">
     <button
-      *ngIf="sessionStorage.getItem('user_role') !== 'ROLE_RESOURCE'"
+      *ngIf="tfrManagementService.canEdit"
       mat-raised-button
       class="edit-btn"
       color="primary"
@@ -17,12 +17,10 @@
       (click)="openNotes()"
     >
       <mat-icon>book</mat-icon>
-      <ng-container
-        *ngIf="sessionStorage.getItem('user_role') !== 'ROLE_RESOURCE'"
+      <ng-container *ngIf="tfrManagementService.canEdit"
         >Add Notes</ng-container
       >
-      <ng-container
-        *ngIf="sessionStorage.getItem('user_role') === 'ROLE_RESOURCE'"
+      <ng-container *ngIf="!tfrManagementService.canEdit"
         >View Notes</ng-container
       >
     </button>
