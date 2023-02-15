@@ -114,18 +114,23 @@ export interface RegisterResponse {
 
 export interface LoginResponse {
   id: BigInteger;
-  user_name: string;
+  username: string;
   msg: string;
   status: boolean;
-  authorities: Array<String>;
+  role: string;
   token: string;
 }
 
-export interface dialogContent {
+export interface tfrCreationDialogContent {
   title: string;
   content: string;
   confirmText: string;
   cancelText: string;
+}
+
+export interface notesDialogContent {
+  notes: string;
+  editable: boolean;
 }
 
 export interface DisplaySkillDTO {

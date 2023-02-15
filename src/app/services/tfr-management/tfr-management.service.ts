@@ -24,8 +24,6 @@ export class TfrManagementService {
   clientReset = new EventEmitter<boolean>();
 
   clientName: string = '';
-  apiError: boolean = false;
-  serverDown: boolean = false;
   errorCode: number = 200;
 
   updateProjectToDatabaseObserver = {
@@ -74,9 +72,8 @@ export class TfrManagementService {
       if (typeof status === 'number') {
         this.errorCode = status;
         if (status === 500) {
-          this.apiError = true;
-        } else if (status === 503) {
-          this.serverDown = true;
+          /* TFR id does not exist - url -> /tfr/undefined - server returns 500 */
+          this.errorCode = 404;
         }
       } else {
         let project = response['project'];
@@ -331,7 +328,7 @@ export class TfrManagementService {
     this.clientReset.emit(true);
   }
 
-  setServerDown(isServerDown: boolean) {
-    this.serverDown = isServerDown;
+  setServerDown() {
+    this.errorCode = 503;
   }
 }

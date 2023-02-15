@@ -319,6 +319,13 @@ export const DummyProjectResponseOk: HttpResponse<Project> =
     status: 200,
   });
 
+export const DummyProjectUndefinedResponse: HttpResponse<Project> =
+  new HttpResponse<Project>({
+    url: 'http://localhost:8080/projects/1',
+    body: undefined,
+    status: 200,
+  });
+
 export const DummyError400: HttpErrorResponse = new HttpErrorResponse({
   status: 400,
 });

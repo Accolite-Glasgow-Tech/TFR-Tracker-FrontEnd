@@ -95,12 +95,12 @@
 </div>
 <h1
   class="empty-list-message"
-  *ngIf="projectList.data.length === 0 && !serverDown"
+  *ngIf="projectList.data.length === 0 && errorCode !== 503"
 >
   No Projects to Show
 </h1>
-<div *ngIf="serverDown" class="service-unavailable-div">
-  <app-service-unavailable></app-service-unavailable>
+<div *ngIf="errorCode === 503" class="service-unavailable-div">
+  <app-error [code]="errorCode"></app-error>
 </div>
 
 <div
