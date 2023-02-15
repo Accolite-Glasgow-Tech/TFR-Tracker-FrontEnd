@@ -68,16 +68,6 @@ export class TfrManagementService {
 
   protected getCanWritePermissionObserver = {
     next: (data: boolean) => {
-      if (data) {
-        this.apiService
-          .getResourcesNamesByProjectIdFromDatabase(this.project?.id!)
-          .subscribe(this.getResourceNameObserver);
-        this.setClientName(this.project?.client_id!);
-      }
-      console.log('Here');
-
-      console.log(data);
-
       this.canEdit = data;
     },
   };
@@ -96,7 +86,11 @@ export class TfrManagementService {
         let project = response['project'];
         this.project = project;
         this.apiService
-          .getCanWritePermission(this.project?.id!)
+          .getResourcesNamesByProjectIdFromDatabase(this.project?.id!)
+          .subscribe(this.getResourceNameObserver);
+        this.setClientName(this.project?.client_id!);
+        this.apiService
+          .getHasWritePermission(this.project?.id!)
           .subscribe(this.getCanWritePermissionObserver);
       }
     },

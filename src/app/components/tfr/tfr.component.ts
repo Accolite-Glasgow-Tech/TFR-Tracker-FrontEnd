@@ -63,7 +63,7 @@ export class TfrComponent implements OnInit {
       panelClass: 'notes-popup-window', // class defined in global styles.scss
       data: {
         notes: this.notes,
-        editable: sessionStorage.getItem('user_role') !== 'ROLE_RESOURCE',
+        editable: this.tfrManagementService.canEdit,
       },
     });
 
