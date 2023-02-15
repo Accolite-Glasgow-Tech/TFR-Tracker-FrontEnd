@@ -34,7 +34,7 @@ describe('ChartsComponent', () => {
   it('testing html element', () => {
     const data = fixture.nativeElement;
     expect(data.querySelector('.head').textContent).toContain(
-      'service unavailable. Try again'
+      'Service unavailable. Try again'
     );
   });
 

@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
+import { userService } from 'src/app/services/user/user.service';
 import { NotesDialogComponent } from '../notes-dialog/notes-dialog.component';
 
 @Component({
@@ -14,13 +15,15 @@ export class TfrComponent implements OnInit {
   TfrId!: Number;
   errorMessage: string = '';
   notes: string = '';
+  sessionStorage = sessionStorage;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
     @Inject(TfrManagementService)
-    protected tfrManagementService: TfrManagementService
+    protected tfrManagementService: TfrManagementService,
+    @Inject(userService) protected userService: userService
   ) {}
 
   ngOnInit() {
@@ -58,7 +61,10 @@ export class TfrComponent implements OnInit {
     this.notes = this.tfrManagementService.project?.notes ?? '';
     const dialogRef = this.dialog.open(NotesDialogComponent, {
       panelClass: 'notes-popup-window', // class defined in global styles.scss
-      data: this.notes,
+      data: {
+        notes: this.notes,
+        editable: sessionStorage.getItem('user_role') !== 'ROLE_RESOURCE',
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

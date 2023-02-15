@@ -19,7 +19,6 @@ export class UserComponent implements OnInit {
   registering: any = true;
   logging: any = false;
   constructor(
-    private userService: userService,
     private apiService: ApiService,
     private router: Router,
     private route: ActivatedRoute,
@@ -49,11 +48,13 @@ export class UserComponent implements OnInit {
       }
       if (info.status == true) {
         sessionStorage.setItem('jwt_token', info.token);
-        this.userService.user_id = info.id;
+        sessionStorage.setItem('user_role',info.role)
+        sessionStorage.setItem('user_id',info.id.toString())
         this.jumpToHome();
       } else {
-        this.userService.user_id = undefined;
+        sessionStorage.removeItem('user_id');
         sessionStorage.removeItem('jwt_token');
+        sessionStorage.removeItem('user_role');
         this.snackBarService.showSnackBar(info.msg, 3000);
       }
     },
