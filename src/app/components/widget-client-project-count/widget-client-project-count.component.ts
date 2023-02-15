@@ -21,6 +21,7 @@ export class WidgetClientProjectCountComponent {
   chartOptions = {
     title: {
       text: 'Number of TFRs with each client',
+      fontFamily: 'Roboto',
     },
     animationEnabled: true,
     axisY: {

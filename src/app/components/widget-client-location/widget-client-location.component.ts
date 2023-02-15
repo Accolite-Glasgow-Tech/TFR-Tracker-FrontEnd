@@ -19,7 +19,10 @@ export class WidgetClientLocationComponent {
 
   chart: any;
   chartOptions = {
-    title: { text: 'Number of TFRs in each location' },
+    title: {
+      text: 'Number of TFRs in each location',
+      fontFamily: 'Roboto',
+    },
     animationEnabled: true,
     axisY: {
       includeZero: true,

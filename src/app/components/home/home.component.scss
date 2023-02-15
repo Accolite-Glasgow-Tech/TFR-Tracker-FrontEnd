@@ -17,12 +17,18 @@
   }
 
   a.headerText {
-    font-family: FontAwesome;
     font-size: 3vw;
     color: white;
     font-weight: 500;
     vertical-align: -webkit-baseline-middle;
     margin: 14px;
+  }
+
+  .widget-manager {
+    color: white;
+    background-color: $primary;
+    border: 1px solid midnightblue;
+    font-family: sans-serif;
   }
 
   .header {
@@ -66,7 +72,6 @@
   }
 
   a.headerText {
-    font-family: FontAwesome;
     font-size: 3vw;
     color: white;
     font-weight: 500;
@@ -115,7 +120,6 @@
   }
 
   a.headerText {
-    font-family: FontAwesome;
     font-size: 3vw;
     color: white;
     font-weight: 500;
@@ -173,7 +177,6 @@
   }
 
   a.headerText {
-    font-family: FontAwesome;
     font-size: 5vw;
     color: white;
     font-weight: 500;
