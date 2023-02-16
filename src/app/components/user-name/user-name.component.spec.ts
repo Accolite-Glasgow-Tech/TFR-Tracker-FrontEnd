@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { UserNameComponent } from './user-name.component';
 
@@ -8,9 +9,9 @@ describe('UserNameComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserNameComponent ]
-    })
-    .compileComponents();
+      declarations: [UserNameComponent],
+      imports: [MatMenuModule],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UserNameComponent);
     component = fixture.componentInstance;

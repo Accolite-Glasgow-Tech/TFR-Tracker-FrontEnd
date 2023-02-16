@@ -33,7 +33,7 @@ export class WriteGuard implements CanActivate {
         if (res === true) {
           return true;
         } else {
-          this.router.navigateByUrl('/home');
+          this.router.navigateByUrl('/tfr/' + projectId);
           return false;
         }
       })

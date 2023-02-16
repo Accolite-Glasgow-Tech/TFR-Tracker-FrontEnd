@@ -191,6 +191,7 @@ describe('TfrComponent', () => {
       return store[key];
     });
     expect(component.notes).toBe('');
+    (tfrManagementServiceSpy as any).canEdit = true;
 
     component.openNotes();
 
@@ -214,6 +215,7 @@ describe('TfrComponent', () => {
     spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
       return store[key];
     });
+    (tfrManagementServiceSpy as any).canEdit = false;
 
     expect(component.notes).toBe('');
 
