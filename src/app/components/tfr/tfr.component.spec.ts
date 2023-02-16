@@ -179,7 +179,7 @@ describe('TfrComponent', () => {
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/tfr/1/edit']);
   });
 
-  fit('open notes - editable', async () => {
+  it('open notes - editable', async () => {
     const store: any = {
       user_role: 'ROLE_PMO',
     };
@@ -204,7 +204,7 @@ describe('TfrComponent', () => {
     });
   });
 
-  fit('open notes - uneditable', async () => {
+  it('open notes - uneditable', async () => {
     const store: any = {
       user_role: 'ROLE_RESOURCE',
     };
