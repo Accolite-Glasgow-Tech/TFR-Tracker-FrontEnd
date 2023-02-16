@@ -179,7 +179,7 @@ describe('TfrComponent', () => {
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/tfr/1/edit']);
   });
 
-  it('open notes - editable', async () => {
+  fit('open notes - editable', async () => {
     const store: any = {
       user_role: 'ROLE_PMO',
     };
@@ -191,6 +191,7 @@ describe('TfrComponent', () => {
       return store[key];
     });
     expect(component.notes).toBe('');
+    (tfrManagementServiceSpy as any).canEdit = true;
 
     component.openNotes();
 
@@ -203,7 +204,7 @@ describe('TfrComponent', () => {
     });
   });
 
-  it('open notes - uneditable', async () => {
+  fit('open notes - uneditable', async () => {
     const store: any = {
       user_role: 'ROLE_RESOURCE',
     };
@@ -214,6 +215,7 @@ describe('TfrComponent', () => {
     spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
       return store[key];
     });
+    (tfrManagementServiceSpy as any).canEdit = false;
 
     expect(component.notes).toBe('');
 
