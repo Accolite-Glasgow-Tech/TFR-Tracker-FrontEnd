@@ -11,7 +11,7 @@ import { ApiService } from '../../api/api.service';
 
 import { WriteGuard } from './write.guard';
 
-fdescribe('WriteGuard', () => {
+describe('WriteGuard', () => {
   let guard: WriteGuard;
   let params: Params = {
     id: '1',

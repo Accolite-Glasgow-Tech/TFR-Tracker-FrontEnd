@@ -26,6 +26,7 @@ describe('CreateGuard', () => {
     });
     guard = TestBed.inject(CreateGuard);
     routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    sessionStorage.setItem('jwt_token', 'test_token');
   });
 
   it('should be created', () => {
@@ -52,6 +53,16 @@ describe('CreateGuard', () => {
     expect(guard.checkIfComponentCanBeActivated()).toBeFalsy();
 
     sessionStorage.removeItem('user_role');
+
+    expect(guard.checkIfComponentCanBeActivated()).toBeFalsy();
+  });
+
+  it('checkIfComponentCanBeActivated should return false if user logged is not logged in', () => {
+    sessionStorage.setItem('user_role', 'ROLE_PMO');
+
+    expect(guard.checkIfComponentCanBeActivated()).toBeTruthy();
+
+    sessionStorage.removeItem('jwt_token');
 
     expect(guard.checkIfComponentCanBeActivated()).toBeFalsy();
   });
