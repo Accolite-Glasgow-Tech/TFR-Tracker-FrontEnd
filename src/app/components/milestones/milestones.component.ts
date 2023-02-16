@@ -109,7 +109,6 @@ export class MilestonesComponent implements OnInit {
     ) {
       this.formMilestone = selectedMilestone;
     } else {
-      console.log(selectedMilestone);
       throw new Error('selected milestone missing attributes');
     }
     if (this.formMilestone) {
@@ -118,7 +117,6 @@ export class MilestonesComponent implements OnInit {
         ? this.milestoneForm.get('status')?.enable()
         : this.milestoneForm.get('status')?.disable();
     }
-    console.log(this.milestones);
   }
 
   ngOnInit(): void {
@@ -186,7 +184,6 @@ export class MilestonesComponent implements OnInit {
     return this.milestones.filter((milestone) => !milestone.is_deleted);
   }
   removeMilestone(milestone: MilestoneDTO): void {
-    console.log(milestone);
     this.milestoneManagerService.setDeleted(milestone);
     this.isPristine = false;
   }
