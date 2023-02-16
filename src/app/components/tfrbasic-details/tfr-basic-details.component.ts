@@ -84,7 +84,9 @@ export class TfrBasicDetailsComponent implements OnInit {
     // check whether project exists yet, and if so, pre-fill details and set to edit mode
     if (this.tfrManager.getBasicDetails != undefined) {
       this.editMode = true;
-      this.stepCompletedEmitter.emit(true);
+      setTimeout(() => {
+        this.stepCompletedEmitter.emit(true);
+      }, 0);
       this.editModeEmitter.emit(true);
       // edit mode
       this.projectToEdit = this.tfrManager.getBasicDetails;
