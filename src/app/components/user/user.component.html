@@ -66,20 +66,27 @@
     <div class="heading">Login</div>
     <div class="register-container">
       <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
-        <input matInput placeholder="" formControlName="name" required />
+        <mat-label for="email">Email</mat-label>
+        <input
+          matInput
+          placeholder=""
+          formControlName="name"
+          required
+          id="email"
+        />
       </mat-form-field>
     </div>
 
     <div class="register-container">
       <mat-form-field appearance="fill">
-        <mat-label>Password</mat-label>
+        <mat-label for="password">Password</mat-label>
         <input
           matInput
           placeholder=""
           formControlName="password"
           required
           type="password"
+          id="password"
         />
       </mat-form-field>
     </div>
@@ -92,6 +99,7 @@
           mat-raised-button
           color="primary"
           (click)="login()"
+          type="submit"
         >
           Login
         </button>
