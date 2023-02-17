@@ -187,7 +187,7 @@ describe('TFRBasicDetailsComponent', () => {
     expect(component.isFormDirty()).toBeFalsy();
   });
 
-  it('saveTFR should call setBasicDetails with correct details and status as draft if not in edit mode', () => {
+  it('saveTFR should call setBasicDetails with correct details and status as draft if not in edit mode', fakeAsync(() => {
     const editModeVal = false;
     const previousSuccessVal = false;
 
@@ -207,17 +207,19 @@ describe('TFRBasicDetailsComponent', () => {
       .get('client_id')
       ?.setValue(DummyProjectBasicDetailsInProgress.client_id);
     component.client_specificData =
-      DummyProjectBasicDetailsInProgress.client_specific;
+      DummyProjectBasicDetailsDraft.client_specific;
 
     component.editMode = editModeVal;
 
     component.saveTFR();
 
+    tick(100);
+
     expect(tfrManagerSpy.setBasicDetails).toHaveBeenCalledOnceWith(
       DummyProjectBasicDetailsDraft,
       previousSuccessVal
     );
-  });
+  }));
 
   it('saveTFR should call setBasicDetails with correct details and status if in edit mode', () => {
     const editModeVal = true;
