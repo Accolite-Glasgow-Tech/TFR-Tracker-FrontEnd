@@ -95,11 +95,12 @@ export class HomeComponent implements OnInit {
   }
 
   public onClick_removeItem(_widget: any): void {
+    console.log('### ' + Object.values(_widget));
     this.widgets.splice(this.widgets.indexOf(_widget), 1);
     this.widgetsfalse.push({
       componentName: _widget.componentName,
       present: false,
-      componentType: _widget.ChartsComponent,
+      componentType: _widget.componentType,
     });
   }
 
