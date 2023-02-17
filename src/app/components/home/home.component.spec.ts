@@ -7,7 +7,7 @@ import { WidgetClientProjectCountComponent } from '../widget-client-project-coun
 
 import { HomeComponent } from './home.component';
 
-fdescribe('HomeComponent', () => {
+describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
   let widgets = [
