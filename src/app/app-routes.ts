@@ -3,10 +3,12 @@ import { LoginGuardService } from 'src/app/services/guards/login-guard/login-gua
 import { LogoutGuardService } from 'src/app/services/guards/logout-guard/logout-guard.service';
 import { HomeComponent } from './components/home/home.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
+import { ProjectSchedulesComponent } from './components/project-schedules/project-schedules.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { StepperComponent } from './components/stepper/stepper.component';
 import { TfrComponent } from './components/tfr/tfr.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
+import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { UserComponent } from './components/user/user.component';
 import { WriteGuard } from './services/guards/write-guard/write.guard';
 import { ProjectResolverService } from './services/project-resolver/project-resolver.service';
@@ -74,6 +76,16 @@ export const appRoutes: TFRRoute[] = [
     canActivate: [LoginGuardService],
     path: 'tfr/:id/reports',
     component: ReportsComponent,
+  },
+  {
+    canActivate: [LoginGuardService],
+    path: 'mySchedules',
+    component: UserSchedulesComponent,
+  },
+  {
+    canActivate: [LoginGuardService],
+    path: 'tfr/:id/schedules',
+    component: ProjectSchedulesComponent,
   },
   {
     path: '**',

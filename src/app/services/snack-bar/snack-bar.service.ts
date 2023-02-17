@@ -18,7 +18,7 @@ export class SnackBarService {
     - content: Information to be displayed in snackbar.
     - duration: How long should the snackbar be displayed for.
   */
-  showSnackBar(content: string, duration: number) {
+  showSnackBar(content: string, duration: number = 2000) {
     this.snackBar.open(content, 'OK', {
       duration: duration,
       verticalPosition: 'bottom',

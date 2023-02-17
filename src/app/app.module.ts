@@ -47,6 +47,7 @@ import { UserSchedulesComponent } from './components/user-schedules/user-schedul
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
 import { WidgetClientLocationComponent } from './components/widget-client-location/widget-client-location.component';
 import { UserNameComponent } from './components/user-name/user-name.component';
+import { ProjectSchedulesComponent } from './components/project-schedules/project-schedules.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { UserNameComponent } from './components/user-name/user-name.component';
     WidgetClientLocationComponent,
     ErrorComponent,
     UserNameComponent,
+    ProjectSchedulesComponent,
   ],
 
   providers: [

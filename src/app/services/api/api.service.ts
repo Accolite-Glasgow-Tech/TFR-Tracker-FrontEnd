@@ -25,6 +25,7 @@ import {
   registrationURL,
   resourceProjectsURL,
   seniorityLevelsURL,
+  taskResourcesURL,
   tasksURL,
   TFRCreationResourceURL,
   TFRLocationCountURL,
@@ -43,8 +44,11 @@ import {
   ResourceDTO,
   ResourceListType,
   TaskCreationDTO,
+  TaskResourceDTO,
 } from '../../shared/interfaces';
 import { SnackBarService } from '../snack-bar/snack-bar.service';
+
+const backendURL = environment.backendURL;
 
 @Injectable({
   providedIn: 'root',
@@ -56,9 +60,8 @@ export class ApiService {
     private snackBarService: SnackBarService
   ) {}
 
-  ///////////////////////////////////////////////////////////////////////////
-  /////////////////////////////////// POST //////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////
+  // These are not APIs, move them to a suitable file, also use interceptors instead of manually changing every single api
+
   redirectTap = {
     error: (error: HttpErrorResponse) => {
       error.status == 401 ? this.cleanAndRedirect() : true;
@@ -74,11 +77,16 @@ export class ApiService {
     );
   }
 
+  ///////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////// POST //////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
+
   postTask(taskObject: TaskCreationDTO) {
-    const result = this.http.post(tasksURL, taskObject, {
-      observe: 'response',
-    });
-    return result;
+    return this.http
+      .post(tasksURL, taskObject, {
+        observe: 'response',
+      })
+      .pipe(tap(this.redirectTap));
   }
 
   postProject(project: Project | undefined | ProjectMilestoneDTO) {
@@ -128,23 +136,19 @@ export class ApiService {
 
   getResourcesByProjectId(projectId: number): Observable<ResourceDTO[]> {
     return this.http
-      .get<ResourceDTO[]>(
-        `${environment.backendURL}/search/resource/project/${projectId}`
-      )
+      .get<ResourceDTO[]>(`${backendURL}/search/resource/project/${projectId}`)
       .pipe(tap(this.redirectTap));
   }
 
   getClientAttributes(clientId: number): Observable<ClientAttributeDTO[]> {
     return this.http
-      .get<ClientAttributeDTO[]>(
-        `${environment.backendURL}/vendorAttributes/${clientId}`
-      )
+      .get<ClientAttributeDTO[]>(`${backendURL}/vendorAttributes/${clientId}`)
       .pipe(tap(this.redirectTap));
   }
 
   getAllClientAttributes(): Observable<ClientAttributeDTO[][]> {
     return this.http
-      .get<ClientAttributeDTO[][]>(`${environment.backendURL}/vendorAttributes`)
+      .get<ClientAttributeDTO[][]>(`${backendURL}/vendorAttributes`)
       .pipe(tap(this.redirectTap));
   }
 
@@ -156,9 +160,9 @@ export class ApiService {
       .pipe(tap(this.redirectTap));
   }
 
-  getUserTasksById(userId: number): Observable<{}> {
+  getUserTasks(userId: number) {
     return this.http
-      .get(`${environment.backendURL}/tasks/${userId}`)
+      .get(`${backendURL}/tasks/user/${userId}`)
       .pipe(tap(this.redirectTap));
   }
 
@@ -200,15 +204,35 @@ export class ApiService {
       .pipe(tap(this.redirectTap));
   }
 
+  getProjectTasks(projectId: number) {
+    return this.http
+      .get(`${backendURL}/tasks/project/${projectId}`)
+      .pipe(tap(this.redirectTap));
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// PUT ///////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
   putProject(project: Project | undefined | ProjectMilestoneDTO) {
     return this.http.put(projectsURL, project).pipe(tap(this.redirectTap));
   }
+
+  putTaskAvailability(taskResource: TaskResourceDTO) {
+    return this.http
+      .put(taskResourcesURL, taskResource, {
+        observe: 'response',
+      })
+      .pipe(tap(this.redirectTap));
+  }
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// DELETE ////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
+
+  deleteTaskById(taskId: number) {
+    return this.http
+      .delete(`${backendURL}/tasks/${taskId}`)
+      .pipe(tap(this.redirectTap));
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// REFACTOR //////////////////////////////

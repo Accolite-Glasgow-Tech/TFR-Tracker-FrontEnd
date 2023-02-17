@@ -3,6 +3,7 @@ import { environment } from 'src/environments/environment';
 const backendURL = environment.backendURL;
 
 export const tasksURL = `${backendURL}/tasks`;
+export const taskResourcesURL = `${backendURL}/tasks/resources`;
 export const allProjectsURL = `${backendURL}/search/project/all`;
 export const TFRLocationCountURL = `${backendURL}/tfrLocationCount`;
 export const TFRStatusCountURL = `${backendURL}/projects/statusCount`;
