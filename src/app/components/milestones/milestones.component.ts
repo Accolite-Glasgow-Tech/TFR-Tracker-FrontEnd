@@ -189,14 +189,16 @@ export class MilestonesComponent implements OnInit {
   }
   resetMilestones(): void {
     let projectId = this.projectManagerService.getProjectId;
-    if (projectId) {
-      this.projectManagerService
-        .getFromDatabase(projectId)
-        .subscribe(this.getObserver);
-    } else {
-      throw new Error('no project id found on project manager');
-    }
+    projectId
+      ? this.projectManagerService
+          .getFromDatabase(projectId)
+          .subscribe(this.getObserver)
+      : this.noIdError();
   }
+  private noIdError() {
+    throw new Error('no project id found on project manager');
+  }
+
   nextStep() {
     this.stepCompletedEmitter.emit(true);
     this.nextStepEmitter.emit(true);
