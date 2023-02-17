@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { of, throwError } from 'rxjs';
@@ -86,7 +91,7 @@ describe('TFRBasicDetailsComponent', () => {
     );
   });
 
-  it('should emit stepCompleted and editMode when opened in edit mode', () => {
+  it('should emit stepCompleted and editMode when opened in edit mode', fakeAsync(() => {
     (tfrManagerSpy as any).getBasicDetails = DummyProjectBasicDetailsInProgress;
 
     spyOn(component.editModeEmitter, 'emit');
@@ -94,10 +99,12 @@ describe('TFRBasicDetailsComponent', () => {
 
     component.ngOnInit();
 
+    tick(100);
+
     expect(component.editMode).toBeTruthy();
     expect(component.editModeEmitter.emit).toHaveBeenCalledOnceWith(true);
     expect(component.stepCompletedEmitter.emit).toHaveBeenCalledOnceWith(true);
-  });
+  }));
 
   it('isFormValid should return true when tfrDetails and clientGroup are valid', () => {
     component.tfrDetails = new FormGroup({ a: new FormControl() });
