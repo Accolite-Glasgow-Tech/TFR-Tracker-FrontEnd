@@ -1,5 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { debounce, interval, map, Observable, startWith } from 'rxjs';
 import { ApiService } from 'src/app/services/api/api.service';
 import {
@@ -7,7 +13,17 @@ import {
   AllocatedResourceTypeDTO,
   ResourceListType,
 } from 'src/app/shared/interfaces';
-import { autoCompleteResourceNameValidator } from '../tfr-creation-resource/tfr-creation-resource.component';
+
+export function autoCompleteResourceNameValidator(
+  validOptions: ResourceListType[]
+): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    if (validOptions.find((e) => e.resource_name === control.value)) {
+      return null; /* valid option selected */
+    }
+    return { invalidAutoCompleteResourceName: { value: control.value } };
+  };
+}
 
 @Component({
   selector: 'app-resource-selection',
@@ -21,7 +37,6 @@ export class ResourceSelectionComponent implements OnInit {
   @Input() updateResourceMode: boolean = false;
   @Input() seniorityLevels: string[] = [];
   @Input() resources: ResourceListType[] = [];
-  @Input() resourceCountValid: boolean = true;
   @Input() resourceToEdit!: AllocatedResourceTypeDTO;
   @Output() displaySkillEmitter = new EventEmitter<ResourceListType>();
   @Output() addResourceEmitter = new EventEmitter<AddResource>();
@@ -67,11 +82,12 @@ export class ResourceSelectionComponent implements OnInit {
         this.resourceToEdit.seniority
       );
     }
+
     this.allocationFormGroup.controls['resource_name'].addValidators([
       autoCompleteResourceNameValidator(this.resources),
     ]);
-    this.allocationFormGroup.markAsPristine;
-    this.formGroupEmitter.emit(this.allocationFormGroup);
+
+    setTimeout(() => this.formGroupEmitter.emit(this.allocationFormGroup), 0);
 
     this.filteredResourceOption = this.allocationFormGroup.controls[
       'resource_name'

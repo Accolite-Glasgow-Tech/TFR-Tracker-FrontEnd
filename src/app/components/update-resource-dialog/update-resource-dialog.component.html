@@ -11,6 +11,7 @@
 <div mat-dialog-actions class="dialog-btn-div">
   <button mat-button mat-dialog-close>Cancel</button>
   <button
+    *ngIf="allocationFormGroup"
     mat-button
     color="primary"
     [disabled]="!allocationFormGroup.valid || allocationFormGroup.pristine"
