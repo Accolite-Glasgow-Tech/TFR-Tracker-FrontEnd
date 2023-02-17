@@ -141,6 +141,10 @@ export class TfrsComponent implements OnInit {
     this.router.navigateByUrl(`/tfr/${tfrId}/reports`);
   }
 
+  viewSchedules(tfrId: number): void {
+    this.router.navigateByUrl(`/tfr/${tfrId}/schedules`);
+  }
+
   displayDate(date: Date) {
     return this.dateFormatterService.getShortDisplayDate(date);
   }
