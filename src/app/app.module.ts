@@ -38,15 +38,15 @@ import { TokenInterceptorService } from './interceptors/token-interceptor.servic
 import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IgxListModule, IgxRippleModule } from 'igniteui-angular';
-import { ChipComponent } from './components/chip/chip.component';
 import { ErrorComponent } from './components/error/error.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { ManageWidgetModalComponent } from './components/manage-widget-modal/manage-widget-modal.component';
+import { ChipComponent } from './components/milestones/chip/chip.component';
 import { NotesDialogComponent } from './components/notes-dialog/notes-dialog.component';
+import { UserNameComponent } from './components/user-name/user-name.component';
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
 import { WidgetClientLocationComponent } from './components/widget-client-location/widget-client-location.component';
-import { UserNameComponent } from './components/user-name/user-name.component';
 
 @NgModule({
   declarations: [
