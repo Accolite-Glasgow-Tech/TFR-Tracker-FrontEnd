@@ -1,6 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ApiService } from 'src/app/services/api/api.service';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 
 import { ChartsComponent } from './charts.component';
 
@@ -15,7 +16,13 @@ describe('ChartsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       declarations: [ChartsComponent],
-      providers: [{ provide: ApiService, uservalue: chartServiceSpy }],
+      providers: [
+        { provide: ApiService, uservalue: chartServiceSpy },
+        {
+          provide: SnackBarService,
+          useValue: jasmine.createSpyObj(['']),
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ChartsComponent);

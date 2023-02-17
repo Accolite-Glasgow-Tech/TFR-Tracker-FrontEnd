@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material/dialog';
 
 import { NotesDialogComponent } from './notes-dialog.component';
 
@@ -8,9 +9,14 @@ describe('NotesDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NotesDialogComponent ]
-    })
-    .compileComponents();
+      declarations: [NotesDialogComponent],
+      providers: [
+        {
+          provide: MatDialog,
+          useValue: jasmine.createSpyObj(['']),
+        },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NotesDialogComponent);
     component = fixture.componentInstance;
