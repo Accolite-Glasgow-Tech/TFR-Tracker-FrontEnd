@@ -7,6 +7,7 @@ import {
   AllocatedResourceTypeDTO,
   ResourceListType,
 } from 'src/app/shared/interfaces';
+import { autoCompleteResourceNameValidator } from '../tfr-creation-resource/tfr-creation-resource.component';
 
 @Component({
   selector: 'app-resource-selection',
@@ -66,6 +67,10 @@ export class ResourceSelectionComponent implements OnInit {
         this.resourceToEdit.seniority
       );
     }
+    this.allocationFormGroup.controls['resource_name'].addValidators([
+      autoCompleteResourceNameValidator(this.resources),
+    ]);
+    this.allocationFormGroup.markAsPristine;
     this.formGroupEmitter.emit(this.allocationFormGroup);
 
     this.filteredResourceOption = this.allocationFormGroup.controls[

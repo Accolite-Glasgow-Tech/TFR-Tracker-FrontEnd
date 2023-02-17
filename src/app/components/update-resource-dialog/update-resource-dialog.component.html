@@ -13,7 +13,7 @@
   <button
     mat-button
     color="primary"
-    [disabled]="!allocationFormGroup.valid"
+    [disabled]="!allocationFormGroup.valid || allocationFormGroup.pristine"
     [mat-dialog-close]="updateResource()"
   >
     Update

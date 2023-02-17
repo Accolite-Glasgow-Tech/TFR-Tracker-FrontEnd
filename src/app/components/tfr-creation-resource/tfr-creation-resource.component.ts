@@ -27,6 +27,7 @@ import { ResourceService } from 'src/app/services/resource/resource.service';
 import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
+  AddResource,
   AllocatedResourceTypeDTO,
   DisplaySkillDTO,
   Project,
@@ -371,14 +372,54 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   editResource(resourceToEdit: AllocatedResourceTypeDTO) {
+    let indexOfResource = this.resources.findIndex(
+      (r) => r.resource_id === resourceToEdit.resource_id
+    );
+
+    this.resources[indexOfResource].selected = false;
     let dialogRef!: MatDialogRef<UpdateResourceDialogComponent, any>;
     dialogRef = this.dialog.open(UpdateResourceDialogComponent, {
       data: {
-        seniorityLevels: this.seniorityLevels,
         resources: this.resources,
+        seniorityLevels: this.seniorityLevels,
         resourceToEdit: resourceToEdit,
       },
       autoFocus: false,
+    });
+
+    dialogRef.afterClosed().subscribe((result: AddResource) => {
+      if (result) {
+        if (
+          result.resource_name !== this.resources[indexOfResource].resource_name
+        ) {
+          this.allocatedResources.splice(
+            this.allocatedResources.findIndex(
+              (r) =>
+                r.resource_name ===
+                  this.resources[indexOfResource].resource_name &&
+                r.is_deleted === false
+            ),
+            1
+          );
+          indexOfResource = this.resources.findIndex(
+            (r) => r.resource_name === result.resource_name
+          );
+          this.resources[indexOfResource].selected = true;
+          this.addResource(result.resource_name, result.role, result.seniority);
+        } else {
+          this.resources[indexOfResource].selected = true;
+          indexOfResource = this.allocatedResources.findIndex(
+            (r) =>
+              r.resource_name ===
+                this.resources[indexOfResource].resource_name &&
+              r.is_deleted === false
+          );
+          this.allocatedResources[indexOfResource].role = result.role;
+          this.allocatedResources[indexOfResource].seniority = result.seniority;
+        }
+      } else {
+        this.resources[indexOfResource].selected = true;
+      }
     });
   }
 }
