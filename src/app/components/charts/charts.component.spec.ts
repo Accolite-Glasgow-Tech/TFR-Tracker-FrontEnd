@@ -1,26 +1,30 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiService } from 'src/app/services/api/api.service';
-
 import { ChartsComponent } from './charts.component';
 
 describe('ChartsComponent', () => {
   let component: ChartsComponent;
   let fixture: ComponentFixture<ChartsComponent>;
-  let chartService: ApiService;
-  let chartServiceSpy: { ChartsComponent: jasmine.Spy };
+  let apiServiceSpy: jasmine.SpyObj<ApiService>;
 
   beforeEach(async () => {
-    chartServiceSpy = jasmine.createSpyObj([ApiService, ['ChartsComponent']]);
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MatSnackBarModule],
       declarations: [ChartsComponent],
-      providers: [{ provide: ApiService, uservalue: chartServiceSpy }],
+      providers: [
+        {
+          provide: ApiService,
+          usevalue: jasmine.createSpyObj('ApiService', ['getTFRStatusCount']),
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ChartsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
   });
 
   it('is created', () => {
