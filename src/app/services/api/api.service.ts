@@ -25,7 +25,7 @@ import {
   registrationURL,
   resourceProjectsURL,
   seniorityLevelsURL,
-  taskAvailabilityURL,
+  taskResourcesURL,
   tasksURL,
   TFRCreationResourceURL,
   TFRLocationCountURL,
@@ -82,10 +82,11 @@ export class ApiService {
   ///////////////////////////////////////////////////////////////////////////
 
   postTask(taskObject: TaskCreationDTO) {
-    const result = this.http.post(tasksURL, taskObject, {
-      observe: 'response',
-    });
-    return result;
+    return this.http
+      .post(tasksURL, taskObject, {
+        observe: 'response',
+      })
+      .pipe(tap(this.redirectTap));
   }
 
   postProject(project: Project | undefined | ProjectMilestoneDTO) {
@@ -161,7 +162,7 @@ export class ApiService {
 
   getUserTasks(userId: number) {
     return this.http
-      .get(`${backendURL}/tasks/${userId}`)
+      .get(`${backendURL}/tasks/user/${userId}`)
       .pipe(tap(this.redirectTap));
   }
 
@@ -204,7 +205,9 @@ export class ApiService {
   }
 
   getProjectTasks(projectId: number) {
-    return this.http.get(`${backendURL}/tasks/project/${projectId}`);
+    return this.http
+      .get(`${backendURL}/tasks/project/${projectId}`)
+      .pipe(tap(this.redirectTap));
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -215,13 +218,21 @@ export class ApiService {
   }
 
   putTaskAvailability(taskResource: TaskResourceDTO) {
-    return this.http.put(taskAvailabilityURL, taskResource, {
-      observe: 'response',
-    });
+    return this.http
+      .put(taskResourcesURL, taskResource, {
+        observe: 'response',
+      })
+      .pipe(tap(this.redirectTap));
   }
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// DELETE ////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
+
+  deleteTaskById(taskId: number) {
+    return this.http
+      .delete(`${backendURL}/tasks/${taskId}`)
+      .pipe(tap(this.redirectTap));
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// REFACTOR //////////////////////////////

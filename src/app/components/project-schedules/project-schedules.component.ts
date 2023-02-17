@@ -55,6 +55,14 @@ export class ProjectSchedulesComponent {
   }
 
   deleteTask(taskId: number) {
+    this.apiService.deleteTaskById(taskId).subscribe({
+      next: () => {
+        this.snackBarService.showSnackBar('Task deleted successfully');
+        this.tasks = this.tasks.filter((task) => task.id !== taskId);
+      },
+      error: (error: HttpErrorResponse) =>
+        this.snackBarService.showSnackBar(error.error),
+    });
     log(taskId);
   }
 }
