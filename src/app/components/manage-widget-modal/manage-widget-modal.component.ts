@@ -46,9 +46,6 @@ export class ManageWidgetModalComponent implements OnInit {
       }
     }
   }
-  // closeWidget(componentName: string) {
-  //   this.ref.close(componentName);
-  // }
 
   onClick(dat: any) {
     this.ref.close(dat);
