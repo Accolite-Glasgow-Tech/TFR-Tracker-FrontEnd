@@ -226,7 +226,7 @@
       [resourcesWithNames]="
         resourceService.resourcesWithoutDeleted(allocatedResources)
       "
-      [withDelete]="true"
+      [withEdit]="true"
       (removeResourceEmitter)="removeResource($event)"
     >
     </app-resource-table>
