@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ReportsComponent } from './reports.component';
-import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApiService } from 'src/app/services/api/api.service';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
+import { ReportsComponent } from './reports.component';
 
 describe('ReportsComponent', () => {
   let component: ReportsComponent;
@@ -15,8 +15,15 @@ describe('ReportsComponent', () => {
       providers: [
         {
           provide: ApiService,
-          useValue: jasmine.createSpyObj([''])
-        }
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesByProjectId',
+            'postTask',
+          ]),
+        },
+        {
+          provide: SnackBarService,
+          useValue: jasmine.createSpyObj('SnackBarService', ['showSnackBar']),
+        },
       ],
       declarations: [ReportsComponent, FrequencyPickerComponent],
     }).compileComponents();

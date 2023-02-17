@@ -8,4 +8,8 @@ export class userService {
   isLoggedIn(): boolean {
     return sessionStorage.getItem('jwt_token') !== null;
   }
+
+  getUserID(): Number {
+    return Number(sessionStorage.getItem('user_id'));
+  }
 }

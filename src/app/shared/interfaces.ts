@@ -43,9 +43,9 @@ export interface TaskDTO {
   task_type: any;
   execute_at: Date;
   recurring: boolean;
-  cron: string | null;
+  cron?: string;
   by_email: boolean;
-  expiration_date: Date | null;
+  expiration_date?: Date;
 }
 
 export interface ResourceDTO {
@@ -137,6 +137,22 @@ export interface DisplaySkillDTO {
   skill: string;
   experience: number;
   percentage: number;
+}
+
+export interface UserTaskDTO {
+  project_name: string;
+  frequency: string;
+  next_occurrence: Date;
+  task_id: number;
+  task_type: string;
+  resource_id: number;
+  enabled: boolean;
+}
+
+export interface TaskResourceDTO {
+  task_id: number;
+  resource_id: number;
+  enabled: boolean;
 }
 
 ///////////////////////////////////////////////////////////////////////////

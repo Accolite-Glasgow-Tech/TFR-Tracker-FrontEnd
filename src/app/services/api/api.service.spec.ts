@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { SnackBarService } from '../snack-bar/snack-bar.service';
 import { ApiService } from './api.service';
 
 describe('ApiService', () => {
@@ -7,7 +8,13 @@ describe('ApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
+      imports: [HttpClientTestingModule],
+      providers: [
+        {
+          provide: SnackBarService,
+          useValue: jasmine.createSpyObj('SnackBarService', ['showSnackBar']),
+        },
+      ],
     });
     service = TestBed.inject(ApiService);
   });

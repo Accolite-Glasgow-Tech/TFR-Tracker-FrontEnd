@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { of, throwError } from 'rxjs';
@@ -86,7 +91,7 @@ describe('TFRBasicDetailsComponent', () => {
     );
   });
 
-  it('should emit stepCompleted and editMode when opened in edit mode', () => {
+  it('should emit stepCompleted and editMode when opened in edit mode', fakeAsync(() => {
     (tfrManagerSpy as any).getBasicDetails = DummyProjectBasicDetailsInProgress;
 
     spyOn(component.editModeEmitter, 'emit');
@@ -94,10 +99,12 @@ describe('TFRBasicDetailsComponent', () => {
 
     component.ngOnInit();
 
+    tick(100);
+
     expect(component.editMode).toBeTruthy();
     expect(component.editModeEmitter.emit).toHaveBeenCalledOnceWith(true);
     expect(component.stepCompletedEmitter.emit).toHaveBeenCalledOnceWith(true);
-  });
+  }));
 
   it('isFormValid should return true when tfrDetails and clientGroup are valid', () => {
     component.tfrDetails = new FormGroup({ a: new FormControl() });
@@ -180,7 +187,7 @@ describe('TFRBasicDetailsComponent', () => {
     expect(component.isFormDirty()).toBeFalsy();
   });
 
-  it('saveTFR should call setBasicDetails with correct details and status as draft if not in edit mode', () => {
+  it('saveTFR should call setBasicDetails with correct details and status as draft if not in edit mode', fakeAsync(() => {
     const editModeVal = false;
     const previousSuccessVal = false;
 
@@ -200,17 +207,19 @@ describe('TFRBasicDetailsComponent', () => {
       .get('client_id')
       ?.setValue(DummyProjectBasicDetailsInProgress.client_id);
     component.client_specificData =
-      DummyProjectBasicDetailsInProgress.client_specific;
+      DummyProjectBasicDetailsDraft.client_specific;
 
     component.editMode = editModeVal;
 
     component.saveTFR();
 
+    tick(100);
+
     expect(tfrManagerSpy.setBasicDetails).toHaveBeenCalledOnceWith(
       DummyProjectBasicDetailsDraft,
       previousSuccessVal
     );
-  });
+  }));
 
   it('saveTFR should call setBasicDetails with correct details and status if in edit mode', () => {
     const editModeVal = true;

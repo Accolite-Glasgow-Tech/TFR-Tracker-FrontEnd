@@ -1,6 +1,7 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ApiService } from 'src/app/services/api/api.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { userService } from 'src/app/services/user/user.service';
 
@@ -12,20 +13,23 @@ describe('UserComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserComponent ],
-      imports: [ RouterTestingModule ],
+      declarations: [UserComponent],
+      imports: [RouterTestingModule, MatDialogModule],
       providers: [
         {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', ['']),
+        },
+        {
           provide: SnackBarService,
-          useValue: jasmine.createSpyObj([''])
+          useValue: jasmine.createSpyObj(['']),
         },
         {
           provide: userService,
-          useValue: jasmine.createSpyObj([''])
-        }
-      ]
-    })
-    .compileComponents();
+          useValue: jasmine.createSpyObj(['']),
+        },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UserComponent);
     component = fixture.componentInstance;

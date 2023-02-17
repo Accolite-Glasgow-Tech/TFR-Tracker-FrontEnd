@@ -18,7 +18,6 @@ import {
 import {
   DummyAllocatedResources,
   DummyProject,
-  DummyProjectResources,
 } from 'src/app/types/dummy-data';
 import {
   autoCompleteResourceNameValidator,
@@ -111,9 +110,9 @@ describe('TfrCreationResourceComponent', () => {
         selected: false,
       },
     ];
-    projectResources = DummyProjectResources;
+    projectResources = DummyAllocatedResources;
 
-    projectResourcesWithNames = [{ ...DummyAllocatedResources[0] }];
+    projectResourcesWithNames = DummyAllocatedResources;
     seniorityLevels = ['ADVANCED', 'SENIOR', 'INTERMEDIATE', 'JUNIOR'];
     dummyAllocatedResource = [...DummyAllocatedResources];
 

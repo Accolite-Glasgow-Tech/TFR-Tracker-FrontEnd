@@ -1,0 +1,70 @@
+<h1 *ngIf="tasks.length === 0">There are no scheduled tasks!</h1>
+<div *ngIf="tasks.length > 0">
+  <table mat-table [dataSource]="tasks">
+    <ng-container matColumnDef="frequency">
+      <th mat-header-cell *matHeaderCellDef>Frequency</th>
+      <td mat-cell *matCellDef="let task">{{ cronToFrequency(task.cron) }}</td>
+    </ng-container>
+
+    <mat-text-column
+      name="task_type"
+      [headerText]="taskTypeLable"
+    ></mat-text-column>
+
+    <ng-container matColumnDef="next_occurrence">
+      <th mat-header-cell *matHeaderCellDef>Next occourance</th>
+      <td mat-cell *matCellDef="let task">
+        {{ task.execute_at | date : "EEEE dd/MM/yy" }} at
+        {{ task.execute_at | date : "HH:mm" }} GMT
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expiration_date">
+      <th mat-header-cell *matHeaderCellDef>Expires at</th>
+      <td mat-cell *matCellDef="let task">
+        <span *ngIf="task.expiration_date !== null">
+          {{ task.expiration_date | date : "EEEE dd/MM/yy" }} at
+          {{ task.expiration_date | date : "HH:mm" }} GMT
+        </span>
+        <span *ngIf="task.expiration_date === null"> Never </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="recurring">
+      <th mat-header-cell *matHeaderCellDef>Recurring</th>
+      <td mat-cell *matCellDef="let task">
+        <mat-icon *ngIf="task.recurring" class="green">check</mat-icon>
+        <mat-icon *ngIf="!task.recurring" class="red">close</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="by_email">
+      <th mat-header-cell *matHeaderCellDef>Sent by email</th>
+      <td mat-cell *matCellDef="let task">
+        <mat-icon *ngIf="task.by_email" class="green">check</mat-icon>
+        <mat-icon *ngIf="!task.by_email" class="red">close</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>Edit</th>
+      <td mat-cell *matCellDef="let task">
+        <button mat-icon-button [disabled]="true">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Delete</th>
+      <td mat-cell *matCellDef="let task">
+        <button mat-icon-button color="warn" (click)="deleteTask(task.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
