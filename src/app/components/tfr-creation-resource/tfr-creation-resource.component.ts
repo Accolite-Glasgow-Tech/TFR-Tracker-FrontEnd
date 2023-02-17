@@ -47,6 +47,9 @@ export function autoCompleteResourceNameValidator(
   };
 }
 
+export const RESOURCE_NAME = 'resource_name';
+export const RESOURCE_ID = 'resource_id';
+
 @Component({
   selector: 'app-tfr-creation-resource',
   templateUrl: './tfr-creation-resource.component.html',
@@ -221,9 +224,8 @@ export class TfrCreationResourceComponent implements OnInit {
   addResource(resource_name: string, role: string, seniority: string) {
     this.resourceDetailsUpdated = true;
 
-    const index = this.resources.findIndex(
-      (resource) => resource.resource_name === resource_name
-    );
+    const index = this.findResourceIndex(resource_name, RESOURCE_NAME);
+
     this.resources[index].selected = true;
 
     const allocatedResource: AllocatedResourceTypeDTO = {
@@ -243,6 +245,8 @@ export class TfrCreationResourceComponent implements OnInit {
     );
 
     if (existingAllocatedResourceIndex !== -1) {
+      this.allocatedResources[existingAllocatedResourceIndex].seniority =
+        seniority;
       this.allocatedResources[existingAllocatedResourceIndex].is_deleted =
         false;
     } else {
@@ -255,8 +259,9 @@ export class TfrCreationResourceComponent implements OnInit {
   removeResource(removedResource: AllocatedResourceTypeDTO) {
     this.resourceDetailsUpdated = true;
 
-    const indexForResourcesArr = this.resources.findIndex(
-      (resource) => resource.resource_id === removedResource.resource_id
+    const indexForResourcesArr = this.findResourceIndex(
+      removedResource.resource_id,
+      RESOURCE_ID
     );
     this.resources[indexForResourcesArr].selected = false;
     const indexForAllocatedResourceArr = this.allocatedResources.findIndex(
@@ -288,8 +293,9 @@ export class TfrCreationResourceComponent implements OnInit {
 
   updateResourceList(projectResources: ProjectResourceDTO[]) {
     projectResources.forEach((resource: ProjectResourceDTO) => {
-      let indexOfResource = this.resources.findIndex(
-        (val) => val.resource_id === resource.resource_id
+      let indexOfResource = this.findResourceIndex(
+        resource.resource_id,
+        RESOURCE_ID
       );
 
       if (!resource.is_deleted) {
@@ -372,8 +378,9 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   editResource(resourceToEdit: AllocatedResourceTypeDTO) {
-    let indexOfResource = this.resources.findIndex(
-      (r) => r.resource_id === resourceToEdit.resource_id
+    let indexOfResource: number = this.findResourceIndex(
+      resourceToEdit.resource_id,
+      RESOURCE_ID
     );
 
     this.resources[indexOfResource].selected = false;
@@ -401,8 +408,9 @@ export class TfrCreationResourceComponent implements OnInit {
             ),
             1
           );
-          indexOfResource = this.resources.findIndex(
-            (r) => r.resource_name === result.resource_name
+          indexOfResource = this.findResourceIndex(
+            result.resource_name,
+            RESOURCE_NAME
           );
           this.resources[indexOfResource].selected = true;
           this.addResource(result.resource_name, result.role, result.seniority);
@@ -417,9 +425,15 @@ export class TfrCreationResourceComponent implements OnInit {
           this.allocatedResources[indexOfResource].role = result.role;
           this.allocatedResources[indexOfResource].seniority = result.seniority;
         }
+        this.resourceDetailsUpdated = true;
       } else {
         this.resources[indexOfResource].selected = true;
       }
     });
+  }
+
+  findResourceIndex(searchValue: any, keyString: string): number {
+    let key = keyString as keyof typeof this.resources[0];
+    return this.resources.findIndex((r) => r[key] === searchValue);
   }
 }

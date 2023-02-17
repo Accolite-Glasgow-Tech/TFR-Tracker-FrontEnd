@@ -40,7 +40,7 @@ export class StepperComponent implements OnInit {
 
     A value of true forces the user to complete its current step before moving to the next.
   */
-  isLinear = false;
+  isLinear = true;
   stepLabels: Observable<string[]>;
   sessionStorage = sessionStorage;
 
