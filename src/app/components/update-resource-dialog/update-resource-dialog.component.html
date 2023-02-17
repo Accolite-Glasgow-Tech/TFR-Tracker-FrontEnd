@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Update Resource</h2>
+<app-resource-selection
+  [updateResourceMode]="true"
+  [resourceCountValid]="true"
+  [seniorityLevels]="data.seniorityLevels"
+  [resources]="data.resources"
+  [resourceToEdit]="data.resourceToEdit"
+  (formGroupEmitter)="valueChanges($event)"
+>
+</app-resource-selection>
+<div mat-dialog-actions class="dialog-btn-div">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button
+    mat-button
+    color="primary"
+    [disabled]="!allocationFormGroup.valid"
+    [mat-dialog-close]="updateResource()"
+  >
+    Update
+  </button>
+</div>

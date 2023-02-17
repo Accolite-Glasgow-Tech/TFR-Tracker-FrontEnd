@@ -24,12 +24,14 @@ export class ResourceTableComponent {
   */
   @Output() removeResourceEmitter: EventEmitter<AllocatedResourceTypeDTO> =
     new EventEmitter();
+  @Output() editResourceEmitter: EventEmitter<AllocatedResourceTypeDTO> =
+    new EventEmitter();
 
   removeResource(resource: AllocatedResourceTypeDTO) {
     this.removeResourceEmitter.emit(resource);
   }
 
   editResource(resource: AllocatedResourceTypeDTO) {
-    console.log(resource);
+    this.editResourceEmitter.emit(resource);
   }
 }

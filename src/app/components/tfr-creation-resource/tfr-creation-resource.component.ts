@@ -14,6 +14,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import {
   debounceTime,
@@ -32,6 +33,7 @@ import {
   ProjectResourceDTO,
   ResourceListType,
 } from 'src/app/shared/interfaces';
+import { UpdateResourceDialogComponent } from '../update-resource-dialog/update-resource-dialog.component';
 
 export function autoCompleteResourceNameValidator(
   validOptions: ResourceListType[]
@@ -54,6 +56,7 @@ export class TfrCreationResourceComponent implements OnInit {
     protected resourceService: ResourceService,
     protected tfrManagementService: TfrManagementService,
     private responseHandlerService: ResponseHandlerService,
+    private dialog: MatDialog,
     @Inject(ApiService) private apiService: ApiService
   ) {}
 
@@ -365,5 +368,17 @@ export class TfrCreationResourceComponent implements OnInit {
       this.resourcesCount > allocatedResourceCount
         ? `${this.resourcesCount - allocatedResourceCount} more to allocate`
         : `${allocatedResourceCount - this.resourcesCount} allocated in excess`;
+  }
+
+  editResource(resourceToEdit: AllocatedResourceTypeDTO) {
+    let dialogRef!: MatDialogRef<UpdateResourceDialogComponent, any>;
+    dialogRef = this.dialog.open(UpdateResourceDialogComponent, {
+      data: {
+        seniorityLevels: this.seniorityLevels,
+        resources: this.resources,
+        resourceToEdit: resourceToEdit,
+      },
+      autoFocus: false,
+    });
   }
 }

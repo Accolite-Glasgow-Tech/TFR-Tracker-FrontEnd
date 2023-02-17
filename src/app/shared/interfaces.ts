@@ -155,6 +155,18 @@ export interface TaskResourceDTO {
   enabled: boolean;
 }
 
+export interface AddResource {
+  resource_name: string;
+  role: string;
+  seniority: string;
+}
+
+export interface UpdateResourceDialogContent {
+  seniorityLevels: string[];
+  resources: ResourceListType[];
+  resourceToEdit: AllocatedResourceTypeDTO;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// REFACTOR //////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
