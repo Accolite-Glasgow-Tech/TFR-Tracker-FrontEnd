@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Data } from '@angular/router';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, tap } from 'rxjs';
 import {
   AllocatedResourceTypeDTO,
   ClientDTO,
@@ -29,9 +29,7 @@ export class TfrManagementService {
 
   updateProjectToDatabaseObserver = {
     next: (response: Data) => {
-      if (this.project) {
-        this.project.version = Number(response);
-      }
+      this.updateVersion(response);
       this.responseHandlerService.goodSave();
       this.subject.next(true);
     },
@@ -259,6 +257,12 @@ export class TfrManagementService {
     return strippedMilestones;
   }
 
+  updateVersion(response: {}) {
+    if (this.project) {
+      this.project.version = Number(response);
+    }
+  }
+
   projectStripTempIds(milestonesToStrip: MilestoneDTO[]): ProjectMilestoneDTO {
     if (this.project) {
       let projectDTO: ProjectMilestoneDTO = this.project;
@@ -274,7 +278,9 @@ export class TfrManagementService {
           subscriber.error('project undefined');
           subscriber.complete;
         })
-      : this.apiService.putProject(this.projectStripTempIds(milestones));
+      : this.apiService
+          .putProject(this.projectStripTempIds(milestones))
+          .pipe(tap({ next: this.updateVersion }));
   }
 
   setProjectResources(project_resources: ProjectResourceDTO[]) {

@@ -2,7 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MilestoneManagerService } from 'src/app/services/milestone-manager/milestone-manager.service';
-import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { MilestoneDTO, Project } from 'src/app/shared/interfaces';
 @Component({
@@ -15,7 +15,7 @@ export class MilestonesComponent implements OnInit {
   constructor(
     private milestoneManagerService: MilestoneManagerService,
     private projectManagerService: TfrManagementService,
-    private snackBarService: SnackBarService
+    private responseHandlerService: ResponseHandlerService
   ) {}
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
@@ -71,33 +71,25 @@ export class MilestonesComponent implements OnInit {
   }
 
   putObserver = {
-    next: (response: {}) => {
-      if (this.projectManagerService.project) {
-        this.projectManagerService.project.version = Number(response);
-      }
-      this.snackBarService.showSnackBar('Updates saved to database', 2000);
+    next: () => {
+      this.responseHandlerService.goodSave();
       this.isPristine = true;
       this.resetMilestones();
       this.update();
     },
-    error: (err: Error) =>
-      this.snackBarService.showSnackBar(
-        'Update failed, please try again',
-        2000
-      ),
+    error: this.responseHandlerService.badGet,
   };
 
   getObserver = {
     next: (projectResponse: HttpResponse<Project>) => {
       this.projectManagerService.extractProject(projectResponse);
-      this.snackBarService.showSnackBar('Get successful', 2000);
+      this.responseHandlerService.goodGet();
       this.milestoneManagerService.setMilestones(
         this.projectManagerService.getMilestones
       );
       this.update();
     },
-    error: (err: Error) =>
-      this.snackBarService.showSnackBar('Get failed, please retry', 2000),
+    error: this.responseHandlerService.badGet,
   };
 
   update() {
