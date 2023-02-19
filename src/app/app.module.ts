@@ -10,11 +10,7 @@ import { GridsterModule } from 'angular2gridster';
 import { NgChartsModule } from 'ng2-charts';
 import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
 import { ChartsComponent } from './components/charts/charts.component';
-import { ChartsService } from './components/charts/charts.service';
-import { WidgetVendorLocationComponent } from './components/widget-vendor-location/widget-vendor-location.component';
-import { WidgetVendorLocationService } from './components/widget-vendor-location/widget-vendor-location.service';
-import { WidgetVendorProjectCountComponent } from './components/widget-vendor-project-count/widget-vendor-project-count.component';
-import { WidgetVendorProjectCountService } from './components/widget-vendor-project-count/widget-vendor-project-count.service';
+import { WidgetClientProjectCountComponent } from './components/widget-client-project-count/widget-client-project-count.component';
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
 import { StepperComponent } from './components/stepper/stepper.component';
@@ -32,8 +28,8 @@ import { ResourceTableComponent } from './components/resource-table/resource-tab
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { TfrCreationDialogComponent } from './components/tfr-creation-dialog/tfr-creation-dialog.component';
 import { TfrComponent } from './components/tfr/tfr.component';
+import { ClientsComponent } from './components/tfrbasic-details/clients/clients.component';
 import { TfrBasicDetailsComponent } from './components/tfrbasic-details/tfr-basic-details.component';
-import { VendorsComponent } from './components/tfrbasic-details/vendors/vendors.component';
 import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { UserComponent } from './components/user/user.component';
@@ -42,20 +38,24 @@ import { TokenInterceptorService } from './interceptors/token-interceptor.servic
 import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IgxListModule, IgxRippleModule } from 'igniteui-angular';
-import { ChipComponent } from './components/chip/chip.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { ErrorComponent } from './components/error/error.component';
+import { LogOutComponent } from './components/log-out/log-out.component';
+import { ManageWidgetModalComponent } from './components/manage-widget-modal/manage-widget-modal.component';
+import { ChipComponent } from './components/milestones/chip/chip.component';
+import { NotesDialogComponent } from './components/notes-dialog/notes-dialog.component';
+import { ProjectSchedulesComponent } from './components/project-schedules/project-schedules.component';
+import { UserNameComponent } from './components/user-name/user-name.component';
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
-import { LogOutComponent } from './components/log-out/log-out.component';
+import { WidgetClientLocationComponent } from './components/widget-client-location/widget-client-location.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChartsComponent,
     ToolbarComponent,
-    WidgetVendorLocationComponent,
     CanvasJSChart,
-    WidgetVendorProjectCountComponent,
+    WidgetClientProjectCountComponent,
     StepperComponent,
     TfrCreationResourceComponent,
     HomeComponent,
@@ -69,7 +69,7 @@ import { LogOutComponent } from './components/log-out/log-out.component';
     UserComponent,
     FrequencyPickerComponent,
     TfrBasicDetailsComponent,
-    VendorsComponent,
+    ClientsComponent,
     ProjectSummaryComponent,
     ResourceTableComponent,
     MilestoneTableComponent,
@@ -77,14 +77,16 @@ import { LogOutComponent } from './components/log-out/log-out.component';
     UserSchedulesComponent,
     WidgetApproachingProjectsComponent,
     ChipComponent,
-    PageNotFoundComponent,
     LogOutComponent,
+    ManageWidgetModalComponent,
+    NotesDialogComponent,
+    WidgetClientLocationComponent,
+    ErrorComponent,
+    UserNameComponent,
+    ProjectSchedulesComponent,
   ],
 
   providers: [
-    ChartsService,
-    WidgetVendorLocationService,
-    WidgetVendorProjectCountService,
     DatePipe,
     {
       provide: HTTP_INTERCEPTORS,

@@ -1,25 +1,27 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import * as FileSaver from 'file-saver';
-import { tfrService } from 'src/app/services/tfrs/tfr.service';
+import { ApiService } from 'src/app/services/api/api.service';
+import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service';
 import { statusList } from 'src/app/shared/constants';
 import { ProjectDTO } from 'src/app/shared/interfaces';
 import { getPDFReportURL } from 'src/app/shared/utils';
-import { DateFormatterService } from 'src/app/services/date-formatter/date-formatter.service'
 
 @Component({
   selector: 'app-tfrs',
   templateUrl: './tfrs.component.html',
   styleUrls: ['./tfrs.component.scss'],
 })
-export class TfrsComponent implements OnInit, AfterViewInit {
+export class TfrsComponent implements OnInit {
+  panelOpenState!: boolean;
+
   displayedColumns: string[] = [
     'name',
     'start_date',
@@ -27,26 +29,39 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     'status',
     'link',
   ];
+
   ELEMENT_DATA: any = [];
   projectList: MatTableDataSource<ProjectDTO> = new MatTableDataSource(
     this.ELEMENT_DATA
   );
-  selectedVendorName: any;
-  vendors: any;
+  selectedClientName: any;
+  clients: any;
   statusList = statusList;
   selectedStatus: any;
   startAfterDate: any = new FormControl();
   endBeforeDate: any = new FormControl();
   pageSize = [3, 5, 10, 15];
+  errorCode: number = 200;
 
-  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  ngAfterViewInit() {
-    setTimeout(() => {
+  getAllProjectsObserver = {
+    next: (allProjects: ProjectDTO[]) => {
+      this.projectList = new MatTableDataSource(allProjects);
       this.projectList.paginator = this.paginator;
       this.projectList.sort = this.sort;
-    });
+    },
+    error: (err: HttpErrorResponse) => {
+      if (err.status === 0) {
+        /* server not responding */
+        this.errorCode = 503;
+      }
+    },
+  };
+
+  ngAfterViewInit() {
+    this.ApiService.getAllProjects().subscribe(this.getAllProjectsObserver);
   }
 
   announceSortChange(sortState: Sort) {
@@ -60,20 +75,17 @@ export class TfrsComponent implements OnInit, AfterViewInit {
   projectPostBody: any = {};
 
   constructor(
-    private tfrService: tfrService,
+    private ApiService: ApiService,
     private liveAnnouncer: LiveAnnouncer,
     private datePipe: DatePipe,
     private router: Router,
     private http: HttpClient,
-    public dateFormatterService: DateFormatterService,
+    public dateFormatterService: DateFormatterService
   ) {}
 
   ngOnInit(): void {
-    this.tfrService.getAllProjects().subscribe((allProjects) => {
-      this.projectList.data = allProjects;
-    });
-    this.tfrService.getAllVendors().subscribe((allVendors) => {
-      this.vendors = allVendors;
+    this.ApiService.getAllClients().subscribe((allClients) => {
+      this.clients = allClients;
     });
   }
 
@@ -91,15 +103,20 @@ export class TfrsComponent implements OnInit, AfterViewInit {
         'yyyy-MM-dd 23:59:59'
       );
     }
-    if (this.selectedVendorName != undefined) {
-      this.projectPostBody['vendor_name'] = this.selectedVendorName;
+    if (this.selectedClientName != undefined) {
+      this.projectPostBody['client_name'] = this.selectedClientName;
     }
     if (this.selectedStatus != undefined) {
-      this.projectPostBody['status'] = this.selectedStatus;
+      this.projectPostBody['status'] =
+        this.selectedStatus === 'IN PROGRESS'
+          ? 'IN_PROGRESS'
+          : this.selectedStatus;
     }
-    this.tfrService.getProjects(this.projectPostBody).subscribe((projects) => {
-      this.projectList.data = projects;
-    });
+    this.ApiService.searchProjects(this.projectPostBody).subscribe(
+      (projects) => {
+        this.projectList.data = projects;
+      }
+    );
   }
 
   viewTFRDetails(tfrId: number): void {
@@ -124,4 +141,34 @@ export class TfrsComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl(`/tfr/${tfrId}/reports`);
   }
 
+  viewSchedules(tfrId: number): void {
+    this.router.navigateByUrl(`/tfr/${tfrId}/schedules`);
+  }
+
+  displayDate(date: Date) {
+    return this.dateFormatterService.getShortDisplayDate(date);
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.projectList.filter = filterValue.trim().toLowerCase();
+  }
+
+  clearFilters() {
+    this.selectedStatus = undefined;
+    this.startAfterDate.reset();
+    this.endBeforeDate.reset();
+    this.selectedClientName = undefined;
+
+    this.getProjects();
+  }
+
+  isFilterPresent(): boolean {
+    return (
+      this.selectedStatus != undefined ||
+      this.startAfterDate.dirty ||
+      this.endBeforeDate.dirty ||
+      this.selectedClientName != undefined
+    );
+  }
 }

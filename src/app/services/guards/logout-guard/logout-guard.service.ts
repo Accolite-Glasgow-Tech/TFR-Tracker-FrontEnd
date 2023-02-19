@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
-import { Router } from '@angular/router';
-import { UserService } from '../../user/user.service';
+import { userService } from '../../user/user.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LogoutGuardService implements CanActivate {
-
-  constructor(private router: Router,
-    private userService: UserService) {}
+  constructor(private router: Router, private userService: userService) {}
 
   /**
    * Allows activation if User is logged out OR if guarding is disabled
@@ -18,7 +15,6 @@ export class LogoutGuardService implements CanActivate {
   canActivate(): boolean {
     let activated = this.checkIfComponentCanBeActivated();
     if (!activated) {
-      console.log('called');
       this.navigateToValid();
     }
     return activated;
@@ -33,16 +29,6 @@ export class LogoutGuardService implements CanActivate {
   }
 
   checkIfComponentCanBeActivated(): boolean {
-    return (
-      !this.userService.isLoggedIn() ||
-      environment.routeGuardingDisabled
-    );
-  }
-
-  get isLoggedIn(): boolean {
-    if (typeof sessionStorage.getItem('jwt_token') == 'string') {
-      return true;
-    }
-    return false;
+    return !this.userService.isLoggedIn() || environment.routeGuardingDisabled;
   }
 }

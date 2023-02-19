@@ -1,13 +1,16 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { filter, from, map, Observable, of } from 'rxjs';
-import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { ResourceService } from 'src/app/services/resource/resource.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project } from 'src/app/shared/interfaces';
-
+import { AllocatedResourceTypeDTO, Project } from 'src/app/shared/interfaces';
+import {
+  DummyAllocatedResources,
+  DummyProject,
+} from 'src/app/types/dummy-data';
 import { StepperComponent } from './stepper.component';
 
 describe('StepperComponent', () => {
@@ -16,10 +19,11 @@ describe('StepperComponent', () => {
 
   let activatedRoute: ActivatedRoute;
   let responseObj: Object;
+  let providers: any = [];
+
+  let resourceServiceSpy: jasmine.SpyObj<ResourceService>;
   const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-  const snackBarServiceSpy = jasmine.createSpyObj('SnackBarService', [
-    'showSnackBar',
-  ]);
+  let responseHandlerServiceSpy: jasmine.SpyObj<ResponseHandlerService>;
   let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
 
   const matchObj = [{ matchStr: '(min-width: 800px)', result: false }];
@@ -30,75 +34,54 @@ describe('StepperComponent', () => {
     );
   const breakPointSpy = jasmine.createSpyObj('BreakPointObserver', ['observe']);
   breakPointSpy.observe.and.callFake(fakeObserve);
-
   function resize(width: number): void {
     matchObj[0].result = width >= 800;
   }
 
-  const dummyProject: Project = {
-    id: 1,
-    name: 'Bench Project',
-    vendor_id: 2,
-    start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-    end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-    status: 'INPROGRESS',
-    version: 1,
-    vendor_specific: {
-      Department: 'Finance',
-      'ED/MD': 'Julia Lee',
-    },
-    milestones: [
+  const dummyProject: Project = DummyProject;
+
+  const dummyAllocatedResource: AllocatedResourceTypeDTO[] =
+    DummyAllocatedResources;
+
+  beforeEach(() => {
+    TestBed.overrideComponent(StepperComponent, {
+      set: {
+        providers: [
+          {
+            provide: TfrManagementService,
+            useValue: jasmine.createSpyObj('TfrManagementService', [
+              'setClientName',
+              'updateStatusToDatabase',
+              'getProjectResourcesWithNames',
+              'getProjectObserver',
+            ]),
+          },
+        ],
+      },
+    });
+
+    providers = [
       {
-        id: 3,
-        project_id: 1,
-        description: 'deployment',
-        start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: true,
+        provide: Router,
+        useValue: routerSpy,
       },
       {
-        id: 2,
-        project_id: 1,
-        description: 'frontend',
-        start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
+        provide: ResponseHandlerService,
+        useValue: jasmine.createSpyObj('ResponseHandlerService', [
+          'goodSave',
+          'badSave',
+        ]),
       },
       {
-        id: 1,
-        project_id: 1,
-        description: 'backend',
-        start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-    ],
-    is_deleted: false,
-    created_by: 1,
-    modified_by: 2,
-    created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-    modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-    project_resources: [
-      {
-        project_id: 1,
-        resource_id: 3,
-        role: 'SOFTWARE_DEVELOPER',
+        provide: BreakpointObserver,
+        useValue: breakPointSpy,
       },
       {
-        project_id: 1,
-        resource_id: 1,
-        role: 'SCRUM_MASTER',
+        provide: ResourceService,
+        useValue: jasmine.createSpyObj(['resourcesWithoutDeleted']),
       },
-      {
-        project_id: 1,
-        resource_id: 2,
-        role: 'PROJECT_MANAGER',
-      },
-    ],
-  };
+    ];
+  });
 
   async function setUpSuccess() {
     responseObj = {
@@ -108,118 +91,47 @@ describe('StepperComponent', () => {
       }),
     };
 
-    await TestBed.configureTestingModule({
-      declarations: [StepperComponent],
-      providers: [
-        FormBuilder,
-        {
-          provide: Router,
-          useValue: routerSpy,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return '1';
-                },
-              },
+    providers.push({
+      provide: ActivatedRoute,
+      useValue: {
+        snapshot: {
+          paramMap: {
+            get: (id: string) => {
+              return '1';
             },
-            paramMap: of(convertToParamMap({ id: 1 })),
-            data: of(responseObj),
           },
         },
-        {
-          provide: SnackBarService,
-          useValue: snackBarServiceSpy,
-        },
-        {
-          provide: BreakpointObserver,
-          useValue: breakPointSpy,
-        },
-      ],
+        paramMap: of(convertToParamMap({ id: 1 })),
+        data: of(responseObj),
+      },
+    });
+
+    await TestBed.configureTestingModule({
+      declarations: [StepperComponent],
+      providers: providers,
     }).compileComponents();
 
     createComponent();
   }
 
   async function setUpFailurePathVariable() {
-    await TestBed.configureTestingModule({
-      declarations: [StepperComponent],
-      providers: [
-        FormBuilder,
-        {
-          provide: Router,
-          useValue: routerSpy,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return 'asds';
-                },
-              },
+    providers.push({
+      provide: ActivatedRoute,
+      useValue: {
+        snapshot: {
+          paramMap: {
+            get: (id: string) => {
+              return 'asds';
             },
-            paramMap: of(convertToParamMap({ id: 'asds' })),
-            data: of(responseObj),
           },
         },
-        {
-          provide: SnackBarService,
-          useValue: snackBarServiceSpy,
-        },
-        {
-          provide: BreakpointObserver,
-          useValue: breakPointSpy,
-        },
-      ],
-    }).compileComponents();
-
-    createComponent();
-  }
-
-  async function setUpFailureProjectNotFound() {
-    responseObj = {
-      project: new HttpResponse<Project>({
-        body: dummyProject,
-        status: 404,
-      }),
-    };
-
+        paramMap: of(convertToParamMap({ id: 'asds' })),
+        data: of(responseObj),
+      },
+    });
     await TestBed.configureTestingModule({
       declarations: [StepperComponent],
-      providers: [
-        FormBuilder,
-        {
-          provide: Router,
-          useValue: routerSpy,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return '13';
-                },
-              },
-            },
-            paramMap: of(convertToParamMap({ id: '13' })),
-            data: of(responseObj),
-          },
-        },
-        {
-          provide: SnackBarService,
-          useValue: snackBarServiceSpy,
-        },
-        {
-          provide: BreakpointObserver,
-          useValue: breakPointSpy,
-        },
-      ],
+      providers: providers,
     }).compileComponents();
 
     createComponent();
@@ -231,43 +143,22 @@ describe('StepperComponent', () => {
     tfrManagementServiceSpy = fixture.debugElement.injector.get(
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
+    resourceServiceSpy = TestBed.inject(
+      ResourceService
+    ) as jasmine.SpyObj<ResourceService>;
+    responseHandlerServiceSpy = TestBed.inject(
+      ResponseHandlerService
+    ) as jasmine.SpyObj<ResponseHandlerService>;
+
     TestBed.inject(BreakpointObserver);
 
     component = fixture.componentInstance;
     fixture.detectChanges();
   }
 
-  beforeEach(() => {
-    TestBed.overrideComponent(StepperComponent, {
-      set: {
-        providers: [
-          {
-            provide: TfrManagementService,
-            useValue: jasmine.createSpyObj('TfrManagementService', [
-              'getResourcesNamesByProjectIdFromDatabase',
-              'setVendorName',
-              'updateStatusToDatabase',
-            ]),
-          },
-        ],
-      },
-    });
-  });
-
   it('load project given projectId path variable', async () => {
     await setUpSuccess();
     fixture.detectChanges();
-    expect(tfrManagementServiceSpy.setVendorName.calls.count()).toBe(1);
-    expect(
-      tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
-    ).toBe(1);
-    expect(component).toBeTruthy();
-  });
-
-  it('load fail, project does not exist', async () => {
-    await setUpFailureProjectNotFound();
-    fixture.detectChanges();
-    expect(tfrManagementServiceSpy.apiError).toBe(true);
     expect(component).toBeTruthy();
   });
 
@@ -305,20 +196,12 @@ describe('StepperComponent', () => {
     tfrManagementServiceSpy.updateStatusToDatabase.and.returnValue(of(true));
     component.redirect(true);
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/tfrs']);
-    expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
-      'TFR submitted.',
-      3000
-    );
   });
 
   it('update project status and redirect to /tfrs failure', async () => {
     await setUpSuccess();
     tfrManagementServiceSpy.updateStatusToDatabase.and.returnValue(of(false));
     component.redirect(true);
-    expect(snackBarServiceSpy.showSnackBar).toHaveBeenCalledWith(
-      'TFR not submitted. Error occured',
-      5000
-    );
   });
 
   it('redirect without updating to database', async () => {
@@ -331,5 +214,18 @@ describe('StepperComponent', () => {
     await setUpSuccess();
     component.setEditMode(true);
     expect(component.editMode).toBe(true);
+  });
+
+  it('should return allocated resources without delete', () => {
+    resourceServiceSpy.resourcesWithoutDeleted.and.returnValue(
+      dummyAllocatedResource
+    );
+    expect(component.currentResourcesWithNames).toEqual(dummyAllocatedResource);
+  });
+
+  it('should display bad save msg when submit tfr fails', async () => {
+    await setUpSuccess();
+    component.submitTFRObserver.error();
+    expect(responseHandlerServiceSpy.badSave).toHaveBeenCalled();
   });
 });

@@ -1,46 +1,57 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { FormMilestone, Milestone } from 'src/app/shared/interfaces';
+import { MilestoneDTO } from 'src/app/shared/interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MilestoneManagerService {
-  milestones: Milestone[] = [];
-  selected: FormMilestone | null = null;
-  @Output() Update: EventEmitter<any> = new EventEmitter();
+  private milestones: MilestoneDTO[] = [];
+  private selected: MilestoneDTO | null = null;
+  @Output() Update: EventEmitter<void> = new EventEmitter();
   constructor() {}
-  get getMilestones() {
+
+  get getMilestones(): MilestoneDTO[] {
     return this.milestones;
   }
-  setMilestones(milestones: Milestone[] | undefined) {
+  setMilestones(milestones: MilestoneDTO[] | undefined) {
     this.milestones = milestones ? milestones : [];
     this.broadcastUpdate();
   }
-  setSelected(milestone: FormMilestone | null) {
+
+  get getSelected(): MilestoneDTO | null {
+    return this.selected;
+  }
+  setSelected(milestone: MilestoneDTO | null) {
     this.selected = milestone;
     this.broadcastUpdate();
   }
-  get getSelected(): FormMilestone | null {
-    return this.selected;
-  }
 
-  updateToRemove(milestone: Milestone) {
+  setDeleted(formMilestone: MilestoneDTO) {
+    let milestone = this.findExisting(formMilestone);
+    if (milestone == null) {
+      throw new Error('no milestone to update');
+    }
     this.remove(milestone);
     milestone.is_deleted = true;
     this.milestones.push(milestone);
     this.broadcastUpdate();
   }
-  saveMilestone(milestoneToAdd: Milestone | null) {
-    if (milestoneToAdd != null) {
-      this.remove(milestoneToAdd);
-      this.add(milestoneToAdd);
-      this.setSelected(null);
+  private findExisting(milestone: MilestoneDTO): MilestoneDTO | null {
+    if (!milestone.id) {
+      this.noIdError();
     }
-    this.broadcastUpdate();
+    return this.findById(milestone.id!);
+  }
+  findById(id: number): MilestoneDTO | null {
+    return this.milestones.find((milestone) => milestone.id == id) ?? null;
+  }
+
+  get MilestonesNotDeleted(): MilestoneDTO[] {
+    return this.milestones.filter((milestone) => !milestone.is_deleted);
   }
 
   get submittable(): boolean {
-    return this.getMilestones.length >= 1;
+    return this.MilestonesNotDeleted.length >= 1;
   }
 
   selectNewMilestone(projectId: number | undefined) {
@@ -48,9 +59,12 @@ export class MilestoneManagerService {
     if (projectId != undefined) {
       this.setSelected({
         project_id: projectId,
+        name: '',
         description: '',
         id: idOfNew,
         is_deleted: false,
+        status: 'INTENT',
+        possible_status: ['INTENT'],
       });
     } else {
       throw new Error('bad project Id passed');
@@ -58,40 +72,50 @@ export class MilestoneManagerService {
     this.broadcastUpdate();
   }
 
-  saveFormMilestone(milestone: FormMilestone | null) {
+  saveMilestone(milestone: MilestoneDTO | null) {
     if (this.isSaveable(milestone)) {
-      this.remove(milestone as Milestone);
-      this.add(milestone as Milestone);
+      this.remove(milestone as MilestoneDTO);
+      this.add(milestone as MilestoneDTO);
       this.setSelected(null);
-      console.log('Saved');
-      console.log(milestone);
+      this.broadcastUpdate();
     } else {
-      console.log(milestone);
       throw new Error('bad milestone save');
     }
   }
 
-  isSaveable(milestone: FormMilestone | null): boolean {
+  isSaveable(milestone: MilestoneDTO | null): boolean {
     return (
       !!milestone?.acceptance_date &&
       !!milestone?.delivery_date &&
       !!milestone?.start_date &&
-      !!milestone?.description
+      !!milestone?.name &&
+      !!milestone?.status
     );
   }
 
-  private add(milestoneToAdd: Milestone) {
+  private add(milestoneToAdd: MilestoneDTO) {
     this.milestones.push(milestoneToAdd);
   }
-  private remove(milestoneToRemove: Milestone) {
+  private noIdError(): void {
+    throw new Error("can't remove milestones without id's");
+  }
+
+  private remove(milestoneToRemove: MilestoneDTO) {
+    milestoneToRemove.id
+      ? this.removeById(milestoneToRemove.id)
+      : this.noIdError();
+  }
+  private removeById(id: number) {
     this.milestones = this.milestones.filter(
-      (value: Milestone) => milestoneToRemove.id != value.id
+      (milestone: MilestoneDTO) => milestone.id != id
     );
   }
   private broadcastUpdate() {
     this.Update.emit();
   }
-  private generateIdOfNew() {
-    return Math.min(0, ...this.milestones.map((milestone) => milestone.id)) - 1;
+  generateIdOfNew() {
+    return (
+      Math.min(0, ...this.milestones.map((milestone) => milestone.id ?? 0)) - 1
+    );
   }
 }

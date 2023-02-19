@@ -1,0 +1,25 @@
+<form [formGroup]="clientGroup">
+  <div class="container">
+    <mat-form-field class="form-field" appearance="fill">
+      <mat-label>Client*</mat-label>
+      <mat-select formControlName="name">
+        <mat-option
+          *ngFor="let client of clients"
+          [value]="client.name"
+          (click)="onSelectedClient(client)"
+        >
+          {{ client.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <ng-container
+      formArrayName="attributeValues"
+      *ngFor="let attribute of attributes; index as i"
+    >
+      <mat-form-field class="form-field" appearance="fill">
+        <mat-label>{{ attribute.attribute_name }}</mat-label>
+        <input matInput formControlName="{{ i }}" />
+      </mat-form-field>
+    </ng-container>
+  </div>
+</form>

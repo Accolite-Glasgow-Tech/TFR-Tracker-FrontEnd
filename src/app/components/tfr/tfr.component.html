@@ -1,6 +1,7 @@
-<div *ngIf="!tfrManagementService.apiError">
+<div *ngIf="tfrManagementService.errorCode === 200">
   <div class="top-btn-div">
     <button
+      *ngIf="tfrManagementService.canEdit"
       mat-raised-button
       class="edit-btn"
       color="primary"
@@ -8,6 +9,20 @@
     >
       <mat-icon>edit</mat-icon>
       Edit
+    </button>
+    <button
+      mat-raised-button
+      class="edit-btn"
+      color="primary"
+      (click)="openNotes()"
+    >
+      <mat-icon>book</mat-icon>
+      <ng-container *ngIf="tfrManagementService.canEdit"
+        >Add Notes</ng-container
+      >
+      <ng-container *ngIf="!tfrManagementService.canEdit"
+        >View Notes</ng-container
+      >
     </button>
   </div>
   <div class="title">
@@ -17,9 +32,9 @@
   <app-project-summary
     [currentProject]="tfrManagementService.getProject"
     [resourcesWithNames]="tfrManagementService.getProjectResourcesWithNames"
-    [vendorName]="tfrManagementService.getVendorName"
+    [clientName]="tfrManagementService.getClientName"
   ></app-project-summary>
 </div>
-<div *ngIf="tfrManagementService.apiError">
-  <app-page-not-found></app-page-not-found>
+<div *ngIf="!(tfrManagementService.errorCode === 200)" class="server-down-div">
+  <app-error [code]="tfrManagementService.errorCode"></app-error>
 </div>

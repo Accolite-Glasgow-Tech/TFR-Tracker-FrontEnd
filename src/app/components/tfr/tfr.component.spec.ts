@@ -1,11 +1,21 @@
-import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import { Project } from 'src/app/shared/interfaces';
+import { DummyProject, DummyProjectResponseOk } from 'src/app/types/dummy-data';
+import { NotesDialogComponent } from '../notes-dialog/notes-dialog.component';
 
 import { TfrComponent } from './tfr.component';
+
+export class MatDialogMock {
+  open(component: NotesDialogComponent) {
+    return {
+      afterClosed: () => of(false),
+    };
+  }
+}
 
 describe('TfrComponent', () => {
   let component: TfrComponent;
@@ -17,123 +27,84 @@ describe('TfrComponent', () => {
     'navigate',
   ]);
   let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
+  let providersList: any = [];
+  let dialogSpy: jasmine.Spy;
 
-  const dummyProject: Project = {
-    id: 1,
-    name: 'Bench Project',
-    vendor_id: 2,
-    start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-    end_date: new Date('2022-12-31T23:59:59.000+00:00'),
-    status: 'INPROGRESS',
-    version: 1,
-    vendor_specific: {
-      Department: 'Finance',
-      'ED/MD': 'Julia Lee',
-    },
-    milestones: [
+  const dummyProject: Project = DummyProject;
+
+  beforeEach(() => {
+    responseObj = {
+      project: DummyProjectResponseOk,
+    };
+
+    TestBed.overrideComponent(TfrComponent, {
+      set: {
+        providers: [
+          {
+            provide: TfrManagementService,
+            useValue: jasmine.createSpyObj('TfrManagementService', [
+              'setClientName',
+              'setNotes',
+              'getProjectObserver',
+            ]),
+          },
+        ],
+      },
+    });
+
+    providersList = [
       {
-        id: 3,
-        project_id: 1,
-        description: 'deployment',
-        start_date: new Date('2022-12-26T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: true,
+        provide: Router,
+        useValue: routerSpy,
       },
       {
-        id: 2,
-        project_id: 1,
-        description: 'frontend',
-        start_date: new Date('2022-12-19T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-23T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
+        provide: MatDialog,
+        useClass: MatDialogMock,
       },
-      {
-        id: 1,
-        project_id: 1,
-        description: 'backend',
-        start_date: new Date('2022-12-12T09:00:00.000+00:00'),
-        delivery_date: new Date('2022-12-16T23:59:59.000+00:00'),
-        acceptance_date: new Date('2022-12-31T23:59:59.000+00:00'),
-        is_deleted: false,
-      },
-    ],
-    is_deleted: false,
-    created_by: 1,
-    modified_by: 2,
-    created_at: new Date('2022-12-01T08:00:00.000+00:00'),
-    modified_at: new Date('2022-12-05T10:00:00.000+00:00'),
-    project_resources: [
-      {
-        project_id: 1,
-        resource_id: 3,
-        role: 'SOFTWARE_DEVELOPER',
-      },
-      {
-        project_id: 1,
-        resource_id: 1,
-        role: 'SCRUM_MASTER',
-      },
-      {
-        project_id: 1,
-        resource_id: 2,
-        role: 'PROJECT_MANAGER',
-      },
-    ],
-  };
+    ];
+  });
 
   async function setUpSuccess() {
-    await TestBed.configureTestingModule({
-      declarations: [TfrComponent],
-      providers: [
-        {
-          provide: Router,
-          useValue: routerSpy,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return '1';
-                },
-              },
+    providersList.push({
+      provide: ActivatedRoute,
+      useValue: {
+        snapshot: {
+          paramMap: {
+            get: (id: string) => {
+              return '1';
             },
-            paramMap: of(convertToParamMap({ id: 1 })),
-            data: of(responseObj),
           },
         },
-      ],
+        paramMap: of(convertToParamMap({ id: 1 })),
+        data: of(responseObj),
+      },
+    });
+    await TestBed.configureTestingModule({
+      declarations: [TfrComponent],
+      providers: providersList,
     }).compileComponents();
 
     createComponent();
   }
 
   async function setUpFailurePathVariable() {
-    await TestBed.configureTestingModule({
-      declarations: [TfrComponent],
-      providers: [
-        {
-          provide: Router,
-          useValue: routerSpy,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return 'asds';
-                },
-              },
+    providersList.push({
+      provide: ActivatedRoute,
+      useValue: {
+        snapshot: {
+          paramMap: {
+            get: (id: string) => {
+              return 'asds';
             },
-            paramMap: of(convertToParamMap({ id: 'asds' })),
-            data: of(responseObj),
           },
         },
-      ],
+        paramMap: of(convertToParamMap({ id: 'asds' })),
+        data: of(responseObj),
+      },
+    });
+    await TestBed.configureTestingModule({
+      declarations: [TfrComponent],
+      providers: providersList,
     }).compileComponents();
 
     createComponent();
@@ -145,29 +116,24 @@ describe('TfrComponent', () => {
     let errorResponse: Object = {
       project: errorMessage,
     };
+    providersList.push({
+      provide: ActivatedRoute,
+      useValue: {
+        snapshot: {
+          paramMap: {
+            get: (id: string) => {
+              return '13';
+            },
+          },
+        },
+        paramMap: of(convertToParamMap({ id: '13' })),
+        data: of(errorResponse),
+      },
+    });
 
     await TestBed.configureTestingModule({
       declarations: [TfrComponent],
-      providers: [
-        {
-          provide: Router,
-          useValue: routerSpy,
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (id: string) => {
-                  return '13';
-                },
-              },
-            },
-            paramMap: of(convertToParamMap({ id: '13' })),
-            data: of(errorResponse),
-          },
-        },
-      ],
+      providers: providersList,
     }).compileComponents();
 
     createComponent();
@@ -180,32 +146,10 @@ describe('TfrComponent', () => {
     tfrManagementServiceSpy = fixture.debugElement.injector.get(
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
+    (tfrManagementServiceSpy as any).getProjectObserver = {};
 
     component = fixture.componentInstance;
   }
-
-  beforeEach(() => {
-    responseObj = {
-      project: new HttpResponse<Project>({
-        body: dummyProject,
-        status: 200,
-      }),
-    };
-
-    TestBed.overrideComponent(TfrComponent, {
-      set: {
-        providers: [
-          {
-            provide: TfrManagementService,
-            useValue: jasmine.createSpyObj('TfrManagementService', [
-              'getResourcesNamesByProjectIdFromDatabase',
-              'setVendorName',
-            ]),
-          },
-        ],
-      },
-    });
-  });
 
   it('path variable not an integer, should redirect to home page', async () => {
     await setUpFailurePathVariable();
@@ -225,10 +169,6 @@ describe('TfrComponent', () => {
     await setUpSuccess();
     fixture.detectChanges();
     expect(component.TfrId).toBe(1);
-    expect(tfrManagementServiceSpy.setVendorName.calls.count()).toBe(1);
-    expect(
-      tfrManagementServiceSpy.getResourcesNamesByProjectIdFromDatabase.calls.count()
-    ).toBe(1);
     expect(component).toBeTruthy();
   });
 
@@ -237,5 +177,56 @@ describe('TfrComponent', () => {
     component.TfrId = 1;
     component.redirectToEditTfr();
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/tfr/1/edit']);
+  });
+
+  it('open notes - editable', async () => {
+    const store: any = {
+      user_role: 'ROLE_PMO',
+    };
+    await setUpSuccess();
+    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
+      afterClosed: () => of(true),
+    } as MatDialogRef<NotesDialogComponent>);
+    spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
+      return store[key];
+    });
+    expect(component.notes).toBe('');
+    (tfrManagementServiceSpy as any).canEdit = true;
+
+    component.openNotes();
+
+    expect(dialogSpy).toHaveBeenCalledWith(NotesDialogComponent, {
+      panelClass: 'notes-popup-window',
+      data: {
+        notes: '',
+        editable: true,
+      },
+    });
+  });
+
+  it('open notes - uneditable', async () => {
+    const store: any = {
+      user_role: 'ROLE_RESOURCE',
+    };
+    await setUpSuccess();
+    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
+      afterClosed: () => of(true),
+    } as MatDialogRef<NotesDialogComponent>);
+    spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
+      return store[key];
+    });
+    (tfrManagementServiceSpy as any).canEdit = false;
+
+    expect(component.notes).toBe('');
+
+    component.openNotes();
+
+    expect(dialogSpy).toHaveBeenCalledWith(NotesDialogComponent, {
+      panelClass: 'notes-popup-window',
+      data: {
+        notes: '',
+        editable: false,
+      },
+    });
   });
 });

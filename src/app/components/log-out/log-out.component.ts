@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 export class LogOutComponent implements OnInit {
   constructor(private router: Router) {}
   ngOnInit(): void {
-    sessionStorage.removeItem('jwt_token');
+    sessionStorage.clear();
     this.router.navigateByUrl('login');
   }
 }

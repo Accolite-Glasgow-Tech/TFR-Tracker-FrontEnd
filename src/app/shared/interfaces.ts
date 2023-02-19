@@ -2,13 +2,15 @@ import { Route } from '@angular/router';
 
 export interface ProjectDTO {
   id?: number;
+  notes: string;
   name: string;
-  vendor_id: number;
+  client_id: number;
   start_date: Date;
   end_date: Date;
-  status: any;
+  status: string;
   version: number;
-  vendor_specific: string;
+  client_specific: { [key: string]: string };
+  resources_count: number;
   is_deleted: boolean;
   created_by: number;
   created_at: Date;
@@ -18,73 +20,17 @@ export interface ProjectDTO {
   project_resources?: ProjectResourceDTO[];
 }
 
-export interface Project {
-  id: number;
-  name: string;
-  vendor_id: number;
-  start_date: Date;
-  end_date: Date;
-  status: string;
-  version: number;
-  vendor_specific: { [key: string]: string };
-  is_deleted: Boolean;
-  created_by: number;
-  modified_by: number;
-  created_at: Date;
-  modified_at: Date;
-  milestones: Milestone[];
-  project_resources: ProjectResourceDTO[];
-}
-
-export interface ProjectMilestoneDTO {
-  id: number;
-  name: string;
-  vendor_id: number;
-  start_date: Date;
-  end_date: Date;
-  status: string;
-  version: number;
-  vendor_specific: { [key: string]: string };
-  is_deleted: Boolean;
-  created_by: number;
-  modified_by: number;
-  created_at: Date;
-  modified_at: Date;
-  milestones: MilestoneDTO[];
-  project_resources: ProjectResourceDTO[];
-}
-
-export interface FormMilestone {
-  id: number;
+export interface MilestoneDTO {
+  id?: number;
   project_id: number;
+  status: string;
+  name: string;
   description: string;
   start_date?: Date;
   delivery_date?: Date;
   acceptance_date?: Date;
   is_deleted: Boolean;
-  tracker?: TrackerDTO;
-}
-
-export interface Milestone {
-  id: number;
-  project_id: number;
-  description: string;
-  start_date: Date;
-  delivery_date: Date;
-  acceptance_date: Date;
-  is_deleted: Boolean;
-  tracker?: TrackerDTO;
-}
-
-export interface MilestoneDTO {
-  id?: number;
-  project_id: number;
-  description: string;
-  start_date: Date;
-  delivery_date: Date;
-  acceptance_date: Date;
-  is_deleted: Boolean;
-  tracker?: TrackerDTO;
+  possible_status?: string[];
 }
 
 export interface TFRRoute extends Route {
@@ -97,9 +43,9 @@ export interface TaskDTO {
   task_type: any;
   execute_at: Date;
   recurring: boolean;
-  cron: string | null;
+  cron?: string;
   by_email: boolean;
-  expiration_date: Date | null;
+  expiration_date?: Date;
 }
 
 export interface ResourceDTO {
@@ -116,25 +62,13 @@ export interface TaskCreationDTO {
   resources: ResourceDTO[];
 }
 
-export interface TrackerDTO {
-  milestone_id: number;
-  project_id: number;
-  start_date: Date;
-  end_date: Date;
-  status: string;
-  created_by: number;
-  modified_by: number;
-  created_at: Date;
-  modified_at: Date;
-}
-
-export interface VendorDTO {
+export interface ClientDTO {
   id: number;
   name: string;
 }
 
-export interface VendorAttributeDTO {
-  vendor_id: number;
+export interface ClientAttributeDTO {
+  client_id: number;
   attribute_name: string;
   is_deleted: boolean;
 }
@@ -144,6 +78,8 @@ export interface AllocatedResourceTypeDTO {
   resource_id: number;
   resource_name: string;
   resource_email: string;
+  seniority: string;
+  is_deleted: boolean;
   role: string;
 }
 
@@ -151,14 +87,16 @@ export interface ProjectResourceDTO {
   project_id: number;
   resource_id: number;
   role: string;
+  seniority: string;
+  is_deleted: boolean;
 }
 
 export interface ProjectBasicDetails {
   name: string;
   start_date: Date;
   end_date: Date;
-  vendor_id: number;
-  vendor_specific: { [key: string]: string };
+  client_id: number;
+  client_specific: { [key: string]: string };
   status: string;
 }
 
@@ -175,14 +113,89 @@ export interface RegisterResponse {
 }
 
 export interface LoginResponse {
+  id: BigInteger;
+  username: string;
   msg: string;
   status: boolean;
+  role: string;
   token: string;
 }
 
-export interface dialogContent {
+export interface tfrCreationDialogContent {
   title: string;
   content: string;
   confirmText: string;
   cancelText: string;
+}
+
+export interface notesDialogContent {
+  notes: string;
+  editable: boolean;
+}
+
+export interface DisplaySkillDTO {
+  skill: string;
+  experience: number;
+  percentage: number;
+}
+
+export interface UserTaskDTO {
+  project_name: string;
+  frequency: string;
+  next_occurrence: Date;
+  task_id: number;
+  task_type: string;
+  resource_id: number;
+  enabled: boolean;
+}
+
+export interface TaskResourceDTO {
+  task_id: number;
+  resource_id: number;
+  enabled: boolean;
+}
+
+///////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// REFACTOR //////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+// Please delete all the duplicate DTOs, add proper type checking where appropriate
+// and update your components / services to use the interfaces that are not in this section
+
+export interface Project {
+  id: number;
+  notes: string;
+  name: string;
+  client_id: number;
+  start_date: Date;
+  end_date: Date;
+  status: string;
+  version: number;
+  client_specific: { [key: string]: string };
+  resources_count: number;
+  is_deleted: Boolean;
+  created_by: number;
+  modified_by: number;
+  created_at: Date;
+  modified_at: Date;
+  milestones: MilestoneDTO[];
+  project_resources: ProjectResourceDTO[];
+}
+
+export interface ProjectMilestoneDTO {
+  id: number;
+  notes: string;
+  name: string;
+  client_id: number;
+  start_date: Date;
+  end_date: Date;
+  status: string;
+  version: number;
+  client_specific: { [key: string]: string };
+  is_deleted: Boolean;
+  created_by: number;
+  modified_by: number;
+  created_at: Date;
+  modified_at: Date;
+  milestones: MilestoneDTO[];
+  project_resources: ProjectResourceDTO[];
 }

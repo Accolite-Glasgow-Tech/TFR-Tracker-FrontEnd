@@ -1,47 +1,243 @@
+@import "../../../variables";
+
+@media all and (min-device-width: 6001px) {
+  .example-button-row {
+    display: block;
+    text-align: right;
+    padding-right: 9%;
+    margin-bottom: -6px;
+    margin-top: 6px;
+  }
+
+  .gridstergroup {
+    height: 400px;
+    width: 85%;
+    margin-left: 8%;
+    margin-right: 8%;
+  }
+
+  a.headerText {
+    font-size: 3vw;
+    color: white;
+    font-weight: 500;
+    vertical-align: -webkit-baseline-middle;
+    margin: 14px;
+  }
+
+  .widget-manager {
+    color: white;
+    background-color: $primary;
+    border: 1px solid midnightblue;
+    font-family: sans-serif;
+  }
+
+  .header {
+    background: $primary;
+    border: 1px solid #ffffff;
+    display: flexbox;
+    flex-wrap: wrap;
+    height: 13%;
+    padding-right: 2vw;
+    padding-top: 1vw;
+    padding-bottom: 1.5vw;
+    padding-left: 1vw;
+  }
+
+  .closeiconbutton {
+    background-color: $primary;
+    font-size: 60px;
+    cursor: pointer;
+    margin: 0px;
+    max-width: 2vw;
+    float: right;
+    border: none;
+    margin-right: 1vw;
+  }
+}
+
+@media all and (min-device-width: 3501px) and (max-width: 6000px) {
+  .example-button-row {
+    display: block;
+    text-align: right;
+    padding-right: 9%;
+    margin-bottom: -6px;
+    margin-top: 6px;
+  }
+
+  .gridstergroup {
+    height: 400px;
+    width: 85%;
+    margin-left: 8%;
+    margin-right: 8%;
+  }
+
+  a.headerText {
+    font-size: 3vw;
+    color: white;
+    font-weight: 500;
+    vertical-align: -webkit-baseline-middle;
+    margin: 14px;
+  }
+
+  .header {
+    background: $primary;
+    border: 1px solid #ffffff;
+    display: flexbox;
+    flex-wrap: wrap;
+    height: 13%;
+    padding-right: 2vw;
+    padding-top: 1vw;
+    padding-bottom: 1.5vw;
+    padding-left: 1vw;
+  }
+
+  .closeiconbutton {
+    background-color: $primary;
+    font-size: 50px;
+    cursor: pointer;
+    margin: 0px;
+    max-width: 2vw;
+    float: right;
+    border: none;
+    margin-right: 1vw;
+  }
+}
+
+@media all and (min-device-width: 800px) and (max-width: 3500px) and (-webkit-min-device-pixel-ratio: 1) {
+  .example-button-row {
+    display: block;
+    text-align: right;
+    padding-right: 9%;
+    margin-bottom: -6px;
+    margin-top: 6px;
+  }
+
+  .gridstergroup {
+    height: 400px;
+    width: 85%;
+    margin-left: 8%;
+    margin-right: 8%;
+  }
+
+  a.headerText {
+    font-size: 3vw;
+    color: white;
+    font-weight: 500;
+    vertical-align: -webkit-baseline-middle;
+    margin: 14px;
+  }
+
+  .header {
+    background: $primary;
+    border: 1px solid #ffffff;
+    display: flexbox;
+    flex-wrap: wrap;
+    height: 13%;
+    padding-right: 2vw;
+    padding-top: 1vw;
+    padding-bottom: 1.5vw;
+    padding-left: 1vw;
+  }
+
+  .closeiconbutton {
+    background-color: $primary;
+    font-size: 35px;
+    cursor: pointer;
+    margin: 0px;
+    max-width: 2vw;
+    float: right;
+    border: none;
+    margin-right: 1vw;
+  }
+
+  .geariconbtn {
+    max-width: 2vw;
+    background-color: $primary;
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 1vw;
+    float: right;
+    border: none;
+  }
+}
+
+@media all and (min-device-width: 0px) and (max-width: 799px) and (-webkit-min-device-pixel-ratio: 1) {
+  .example-button-row {
+    display: block;
+    text-align: center;
+    margin-bottom: -6px;
+    margin-top: 6px;
+  }
+
+  .gridstergroup {
+    height: 400px;
+    width: 85%;
+    margin-left: 8%;
+    margin-right: 8%;
+  }
+
+  a.headerText {
+    font-size: 5vw;
+    color: white;
+    font-weight: 500;
+    vertical-align: -webkit-baseline-middle;
+    margin: 14px;
+  }
+
+  .header {
+    background: $primary;
+    border: 1px solid #ffffff;
+    display: flexbox;
+    height: 13%;
+    padding-right: 6vw;
+    padding-top: 1vw;
+    padding-bottom: 3vw;
+  }
+
+  .closeiconbutton {
+    background-color: $primary;
+    font-size: 24px;
+    cursor: pointer;
+    margin: 0px;
+    max-width: 2vw;
+    float: right;
+    border: none;
+    margin-right: 3vw;
+  }
+
+  .geariconbtn {
+    max-width: 2vw;
+    background-color: $primary;
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 3vw;
+    float: right;
+    border: none;
+  }
+}
+
 .top-btn-left {
   width: 250px;
   margin: 5px;
   height: 40px;
 }
 
-.example-button-row {
-  display: block;
-  text-align: -webkit-center;
-  padding-left: 1%;
-}
-
 section {
   display: table;
-}
-
-.closeiconbutton {
-  background-color: #507fc6;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  float: right;
-  vertical-align: middle;
-  margin: 6px;
-}
-
-.geariconbtn {
-  background-color: #507fc6;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  float: right;
-  vertical-align: middle;
-  margin: 6px;
 }
 
 .ngxgriditem {
   display: inline-table;
   position: initial;
+  height: fit-content;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
 }
 
 .widget {
   border: 8px solid #fbfbfb;
-  background-color: #1e0c0c;
+  background-color: #0f0f0ffb;
   width: inherit;
   height: inherit;
   position: relative;
@@ -49,17 +245,25 @@ section {
   inline-size: auto;
 }
 
-.header {
-  background: #507fc6;
-  border: 1px solid #ffffff;
-  height: 13%;
+.widgetcontent {
+  width: inherit;
+  /* height: inherit; */
+  position: relative;
+  margin: 8%;
+  margin-bottom: 104px;
+  size-adjust: inherit;
+  inline-size: auto;
+  height: -webkit-fill-available;
 }
 
-a.headerText {
-  font-family: Roboto;
-  font-size: 24px;
-  color: #000000;
-  font-weight: bold;
-  vertical-align: -webkit-baseline-middle;
-  margin: 14px;
+@media all and (min-device-width: 1700px) and (-webkit-min-device-pixel-ratio: 1) {
+  .widget {
+    border: 8px solid #fbfbfb;
+    background-color: #0f0f0ffb;
+    width: inherit;
+    height: 140%;
+    position: relative;
+    margin: 8px;
+    inline-size: auto;
+  }
 }

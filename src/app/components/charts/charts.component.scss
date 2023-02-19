@@ -1,0 +1,27 @@
+.chartouter {
+  background-color: transparent;
+  height: 100%;
+  width: 99%;
+  margin: -33px;
+  padding-left: 11px;
+}
+
+.chartinner {
+  background-color: transparent;
+  position: relative;
+  margin: 1%;
+  height: 100%;
+  width: 100%;
+  content-visibility: hidden;
+}
+
+@media all and (min-device-width: 3501px) and (-webkit-min-device-pixel-ratio: 0.5) {
+  .chartouter {
+    background-color: transparent;
+    height: 85%;
+    width: 70%;
+    margin: -75px;
+    padding-left: 29px;
+    margin-left: 84px;
+  }
+}

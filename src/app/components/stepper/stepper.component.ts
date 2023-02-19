@@ -1,14 +1,14 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { ResourceService } from 'src/app/services/resource/resource.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project } from 'src/app/shared/interfaces';
+import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-stepper',
@@ -26,13 +26,6 @@ export class StepperComponent implements OnInit {
   @ViewChild('stepper') myStepper!: MatStepper;
 
   /*
-    Will be removed once Laura's component is placed in the stepper
-  */
-  milestoneFormGroup = this._formBuilder.group({
-    milestoneName: ['', Validators.required],
-  });
-
-  /*
     The size of this array is proportional to the number of steps in the stepper (excluding the
     last summary step).
 
@@ -48,39 +41,27 @@ export class StepperComponent implements OnInit {
     A value of true forces the user to complete its current step before moving to the next.
   */
   isLinear = true;
-
-  /*
-    Listens to screen size changes. When the screen is small, the orientation of the stepper
-    will be vertical. A horizontal stepper will appear on a large screen.
-  */
   stepLabels: Observable<string[]>;
+  sessionStorage = sessionStorage;
 
-  getProjectObserver = {
-    next: (response: Data) => {
-      if (Object.keys(response).length !== 0) {
-        let status: number = response['project']['status'];
-        let project: Project = response['project']['body'];
-        if (status === 200) {
-          this.tfrManagementService.project = project;
-          this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
-            project.id
-          );
-          this.tfrManagementService.setVendorName(project.vendor_id);
-        } else {
-          this.tfrManagementService.apiError = true;
-        }
-      }
+  submitTFRObserver = {
+    next: () => {
+      this.router.navigate(['/tfrs']);
+      this.responseHandlerService.goodSave();
+    },
+    error: () => {
+      this.responseHandlerService.badSave();
     },
   };
 
   constructor(
-    private _formBuilder: FormBuilder,
     @Inject(TfrManagementService)
     protected tfrManagementService: TfrManagementService,
     protected breakpointObserver: BreakpointObserver,
-    private snackBarService: SnackBarService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private resourceService: ResourceService,
+    private responseHandlerService: ResponseHandlerService
   ) {
     /*
       Listener for the screen size.
@@ -92,32 +73,26 @@ export class StepperComponent implements OnInit {
       .pipe(
         map(({ matches }) =>
           matches
-            ? ['TFR Basic Details', 'Milestones', 'Resources', 'Summary']
+            ? ['TFR Basic Details', 'Milestones', 'Resources', 'TFR Submission']
             : ['', '', '', '']
         )
       );
   }
 
   ngOnInit(): void {
-    let tfrId = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.route.snapshot.routeConfig?.path !== 'tfr/create') {
+      let tfrId = Number(this.route.snapshot.paramMap.get('id'));
 
-    /*
-      Error validation for the path variable.
-      The path variable (the project_id) is expected to be a number.
-    */
-    if (!Number.isInteger(tfrId)) {
-      this.router.navigate(['/home']);
-    } else {
-      this.route.paramMap.subscribe((result) => {
-        tfrId = Number(result.get('id'));
-        this.route.data.subscribe(this.getProjectObserver);
-      });
-
-      /*
-        The data that will be rendered in the screen is pre-fetched before the component
-        is loaded. This component has a resolver (refer to /services/project-resolver) that
-        fetches the project to be displayed.
-      */
+      if (!Number.isInteger(tfrId)) {
+        this.router.navigate(['/home']);
+      } else {
+        this.route.paramMap.subscribe((result) => {
+          tfrId = Number(result.get('id'));
+          this.route.data.subscribe(
+            this.tfrManagementService.getProjectObserver
+          );
+        });
+      }
     }
   }
 
@@ -150,36 +125,23 @@ export class StepperComponent implements OnInit {
     }
   }
 
-  /*
-    After submitting the whole project, this method handles the redirection to the URL where all
-    the TFRs are displayed.
-
-    A small confirmation pop-up msg (aka a snack bar) is displayed at the bottom of the screen for 3000ms.
-  */
   redirect(update: boolean) {
     if (update || this.tfrManagementService.project?.status === 'DRAFT') {
       this.tfrManagementService
         .updateStatusToDatabase()
-        .subscribe((response) => {
-          if (response) {
-            this.router.navigate(['/tfrs']);
-            this.snackBarService.showSnackBar('TFR submitted.', 3000);
-          } else {
-            this.snackBarService.showSnackBar(
-              'TFR not submitted. Error occured',
-              5000
-            );
-          }
-        });
+        .subscribe(this.submitTFRObserver);
     } else {
       this.router.navigate(['/tfrs']);
     }
   }
 
-  /*
-    In edit mode the submit button should not be present
-  */
   setEditMode(editMode: boolean) {
     this.editMode = editMode;
+  }
+
+  get currentResourcesWithNames(): AllocatedResourceTypeDTO[] {
+    return this.resourceService.resourcesWithoutDeleted(
+      this.tfrManagementService.getProjectResourcesWithNames
+    );
   }
 }

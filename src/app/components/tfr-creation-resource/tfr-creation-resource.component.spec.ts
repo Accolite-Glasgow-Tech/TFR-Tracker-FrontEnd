@@ -1,61 +1,62 @@
+import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractControl, FormBuilder } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { first, of } from 'rxjs';
+import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
   AllocatedResourceTypeDTO,
-  dialogContent,
+  DisplaySkillDTO,
+  Project,
   ProjectResourceDTO,
   ResourceListType,
 } from 'src/app/shared/interfaces';
-import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
+import {
+  DummyAllocatedResources,
+  DummyProject,
+} from 'src/app/types/dummy-data';
 import {
   autoCompleteResourceNameValidator,
-  autoCompleteRoleValidator,
   TfrCreationResourceComponent,
 } from './tfr-creation-resource.component';
-
-export class MatDialogMock {
-  open(component: TfrCreationDialogComponent) {
-    return {
-      afterClosed: () => of('true'),
-    };
-  }
-}
 
 describe('TfrCreationResourceComponent', () => {
   let component: TfrCreationResourceComponent;
   let fixture: ComponentFixture<TfrCreationResourceComponent>;
-  let roles: string[];
-  let databaseRoles: string[];
-  let resourceServiceSpy: jasmine.SpyObj<ResourceService>;
-  let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
+  let seniorityLevels: string[];
+  let dummyAllocatedResource: AllocatedResourceTypeDTO[];
   let projectResources: ProjectResourceDTO[];
   let resources: ResourceListType[];
   let projectResourcesWithNames: AllocatedResourceTypeDTO[];
-  let dialogSpy: jasmine.Spy;
-  let dialogRefSpyObj = jasmine.createSpyObj({
-    afterClosed: of({}),
-    close: null,
-  });
-  dialogRefSpyObj.componentInstance = { body: '' }; // attach componentInstance to the spy object...
+
+  let resourceServiceSpy: jasmine.SpyObj<ResourceService>;
+  let apiServiceSpy: jasmine.SpyObj<ApiService>;
+  let tfrManagementServiceSpy: jasmine.SpyObj<TfrManagementService>;
+  let responseHandlerServiceSpy: jasmine.SpyObj<ResponseHandlerService>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TfrCreationResourceComponent],
-      imports: [MatAutocompleteModule],
+      imports: [MatAutocompleteModule, MatTooltipModule],
       providers: [
         FormBuilder,
         {
           provide: ResourceService,
           useValue: jasmine.createSpyObj('ResourceService', [
-            'getAllRoles',
-            'convertRoleEnum',
+            'resourcesWithoutDeleted',
+          ]),
+        },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', [
             'getAllResources',
-            'getAssociatedCleanRole',
+            'getAllSeniorityLevels',
+            'getResourcesNamesByProjectIdFromDatabase',
+            'getSkillsByResourceId',
           ]),
         },
         {
@@ -64,13 +65,20 @@ describe('TfrCreationResourceComponent', () => {
             'getProjectResources',
             'setProjectResourcesWithNames',
             'getProjectId',
+            'getResourcesCount',
             'getProjectResourcesWithNames',
             'updateProjectToResourceMapping',
+            'setResourcesCount',
+            'extractProject',
+            'getFromDatabase',
           ]),
         },
         {
-          provide: MatDialog,
-          useClass: MatDialogMock,
+          provide: ResponseHandlerService,
+          useValue: jasmine.createSpyObj('ResponseHandlerService', [
+            'badGet',
+            'unsavedChangesDialogue',
+          ]),
         },
       ],
     }).compileComponents();
@@ -81,54 +89,45 @@ describe('TfrCreationResourceComponent', () => {
     tfrManagementServiceSpy = TestBed.inject(
       TfrManagementService
     ) as jasmine.SpyObj<TfrManagementService>;
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
+    responseHandlerServiceSpy = TestBed.inject(
+      ResponseHandlerService
+    ) as jasmine.SpyObj<ResponseHandlerService>;
 
-    roles = ['TEAM LEAD', 'SCRUM MASTER', 'SOFTWARE DEVELOPER'];
-    databaseRoles = ['TEAM_LEAD', 'SCRUM_MASTER', 'SOFTWARE_DEVELOPER'];
+    (tfrManagementServiceSpy as any).getResourcesCount = 3;
+
     resources = [
       {
-        resource_name: 'John Makan',
-        resource_email: 'johnmakan@accolitedigital.com',
+        resource_name: 'John Bowers',
+        resource_email: 'johnbowers@accolitedigital.com',
         resource_id: 1,
         selected: false,
       },
       {
-        resource_name: 'Yves Reed',
-        resource_email: 'yvesreed@accolitedigital.com',
-        resource_id: 2,
+        resource_name: 'Kimberly Gould',
+        resource_email: 'kimberlygould@accolitedigital.com',
+        resource_id: 3,
         selected: false,
       },
     ];
-    projectResources = [
-      {
-        project_id: 1,
-        resource_id: 1,
-        role: 'TEAM_LEAD',
-      },
-      {
-        project_id: 1,
-        resource_id: 2,
-        role: 'SCRUM_MASTER',
-      },
-    ];
-    projectResourcesWithNames = [
-      {
-        project_id: 1,
-        resource_email: 'johnmakan@accolitedigital.com',
-        resource_id: 1,
-        resource_name: 'John Makan',
-        role: 'SCRUM MASTER',
-      },
-    ];
+    projectResources = DummyAllocatedResources;
 
-    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue({
-      afterClosed: () => of('true'),
-    } as MatDialogRef<typeof component>);
+    projectResourcesWithNames = DummyAllocatedResources;
+    seniorityLevels = ['ADVANCED', 'SENIOR', 'INTERMEDIATE', 'JUNIOR'];
+    dummyAllocatedResource = [...DummyAllocatedResources];
 
-    resourceServiceSpy.getAllRoles.and.returnValue(of(databaseRoles));
-    resourceServiceSpy.convertRoleEnum.and.returnValue(roles);
-    resourceServiceSpy.getAllResources.and.returnValue(of(resources));
+    apiServiceSpy.getAllResources.and.returnValue(of(resources));
+    apiServiceSpy.getAllSeniorityLevels.and.returnValue(of(seniorityLevels));
+    resourceServiceSpy.resourcesWithoutDeleted.and.returnValue(
+      dummyAllocatedResource
+    );
     tfrManagementServiceSpy.setProjectResourcesWithNames.and.returnValue();
-    tfrManagementServiceSpy.updateProjectToResourceMapping.and.returnValue();
+    tfrManagementServiceSpy.updateProjectToResourceMapping.and.returnValue(
+      of(true)
+    );
+    apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
+      of(dummyAllocatedResource)
+    );
     (tfrManagementServiceSpy as any).getProjectResources = projectResources;
     (tfrManagementServiceSpy as any).getProjectResourcesWithNames =
       projectResourcesWithNames;
@@ -139,7 +138,6 @@ describe('TfrCreationResourceComponent', () => {
   });
 
   it('should create and initialise values', () => {
-    expect(component.roles).toBe(roles);
     expect(component.resources).toBe(resources);
     expect(
       tfrManagementServiceSpy.setProjectResourcesWithNames.calls.count()
@@ -147,22 +145,8 @@ describe('TfrCreationResourceComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('role auto complete validator success', () => {
-    let control = { value: 'SOFTWARE DEVELOPER' };
-    let result = autoCompleteRoleValidator(roles)(control as AbstractControl);
-    expect(result).toBeNull();
-  });
-
-  it('role auto complete validator error', () => {
-    let control = { value: 'JUNIOR DEVELOPER' };
-    let result = autoCompleteRoleValidator(roles)(control as AbstractControl);
-    expect(result).toEqual({
-      invalidAutoCompleteRole: { value: control.value },
-    });
-  });
-
   it('resource auto complete validator success', () => {
-    let control = { value: 'John Makan' };
+    let control = { value: 'John Bowers' };
     let result = autoCompleteResourceNameValidator(resources)(
       control as AbstractControl
     );
@@ -179,16 +163,34 @@ describe('TfrCreationResourceComponent', () => {
     });
   });
 
-  it('should add resource', () => {
-    expect(component.resourceListUpdated).toBe(false);
+  it('should filter resource based on seniority - JUNIOR', () => {
+    resources[0].selected = false;
+    component.resources = resources;
+    let expectedResult: ResourceListType[] = [
+      {
+        resource_name: 'John Bowers',
+        resource_email: 'johnbowers@accolitedigital.com',
+        resource_id: 1,
+        selected: false,
+      },
+    ];
+
+    component.resourceFormGroup.controls['seniorityLevel'].setValue('JUNIOR');
+
+    let result: ResourceListType[] = component.filterResource('John');
+
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('should add a new resource', () => {
+    expect(component.resourceDetailsUpdated).toBe(false);
+    expect(projectResourcesWithNames[0].is_deleted).toBe(false);
 
     component.allocatedResources = [];
     (tfrManagementServiceSpy as any).getProjectId = 1;
-    component.addResource('John Makan', 'SCRUM MASTER');
+    component.addResource('John Bowers', 'SCRUM MASTER', 'SENIOR');
 
-    fixture.detectChanges();
-
-    expect(component.resourceListUpdated).toBe(true);
+    expect(component.resourceDetailsUpdated).toBe(true);
     expect(component.resources[0].selected).toBe(true);
     expect(component.allocatedResources.length).toBe(1);
     expect(
@@ -201,34 +203,45 @@ describe('TfrCreationResourceComponent', () => {
     ).toEqual(projectResourcesWithNames[0]);
   });
 
+  it('should update a resource that was previously deleted', () => {
+    let expectAllocatedResources = [...dummyAllocatedResource];
+    dummyAllocatedResource[0].is_deleted = true;
+    component.allocatedResources = dummyAllocatedResource;
+
+    component.resources = resources;
+
+    component.addResource('John Bowers', 'SCRUM MASTER', 'INTERMEDIATE');
+
+    expect(component.allocatedResources).toEqual(expectAllocatedResources);
+  });
+
   it('should remove resource', () => {
-    expect(component.resourceListUpdated).toBe(false);
+    expect(component.resourceDetailsUpdated).toBe(false);
 
-    component.removeResource(1);
-    fixture.detectChanges();
+    component.allocatedResources = dummyAllocatedResource;
+    expect(component.allocatedResources).toEqual(dummyAllocatedResource);
+    component.removeResource(projectResourcesWithNames[0]);
+    projectResourcesWithNames[0].is_deleted = true;
 
-    expect(component.resourceListUpdated).toBe(true);
+    expect(component.resourceDetailsUpdated).toBe(true);
     expect(component.resources[0].selected).toBe(false);
     expect(
       component.allocatedResources.find((resource) => {
-        return resource.resource_email === 'johnmakan@accolitedigital.com';
+        return resource.resource_email === 'johnbowers@accolitedigital.com';
       })
-    ).toEqual(undefined);
+    ).toEqual(projectResourcesWithNames[0]);
   });
 
   it('trigger next step', () => {
-    spyOn(component, 'showDialog');
-    component.resourceListUpdated = true;
+    component.resourceDetailsUpdated = true;
     component.triggerStep(true);
-    fixture.detectChanges();
-    expect(component.showDialog).toHaveBeenCalled();
+    expect(responseHandlerServiceSpy.unsavedChangesDialogue).toHaveBeenCalled();
   });
 
   it('trigger previous step', () => {
     spyOn(component, 'nextStep');
-    component.resourceListUpdated = false;
+    component.resourceDetailsUpdated = false;
     component.triggerStep(true);
-    fixture.detectChanges();
     expect(component.nextStep).toHaveBeenCalled();
   });
 
@@ -244,39 +257,106 @@ describe('TfrCreationResourceComponent', () => {
     });
 
     component.nextStep(true);
-    fixture.detectChanges();
   });
 
   it('call service to save to database', () => {
     component.saveToDatabase();
-    fixture.detectChanges();
-    expect(component.resourceListUpdated).toBe(false);
+    expect(component.resourceDetailsUpdated).toBe(false);
   });
 
   it('reset all resources', () => {
+    let responseBody = new HttpResponse<Project>({
+      body: DummyProject,
+      status: 200,
+    });
+    tfrManagementServiceSpy.getFromDatabase.and.returnValue(of(responseBody));
+    tfrManagementServiceSpy.extractProject.and.returnValue(responseBody);
+    (tfrManagementServiceSpy as any).getResourcesCount = 2;
     component.resetResources();
-    fixture.detectChanges();
     expect(component.allocatedResources).toEqual(projectResourcesWithNames);
     expect(component.resources.length).toBe(2);
-    expect(component.resources[0].selected).toBe(true);
-    expect(component.resourceListUpdated).toBe(false);
+    expect(component.tooltipMsg).toBe('0 allocated in excess');
+    expect(component.resourceDetailsUpdated).toBe(false);
   });
 
-  it('show Dialog box', () => {
-    component.showDialog(true);
-    fixture.detectChanges();
-    let dialogContent: { data: dialogContent } = {
-      data: {
-        title: 'Discard Changes',
-        content: 'Would you like to discard your changes and continue?',
-        confirmText: 'Yes',
-        cancelText: 'No',
-      },
-    };
+  it('reset all resources - resource count = 0', () => {
+    let responseBody = new HttpResponse<Project>({
+      body: DummyProject,
+      status: 200,
+    });
+    tfrManagementServiceSpy.getFromDatabase.and.returnValue(of(responseBody));
+    tfrManagementServiceSpy.extractProject.and.returnValue(responseBody);
+    (tfrManagementServiceSpy as any).getResourcesCount = 0;
+    component.resetResources();
 
-    expect(dialogSpy).toHaveBeenCalledWith(
-      TfrCreationDialogComponent,
-      dialogContent
+    expect(component.resourcesCount).toBe(1);
+    expect(component.tooltipMsg).toBe('1 allocated in excess');
+    expect(component.resourceDetailsUpdated).toBe(false);
+    expect(component.currentResourceSkills).toEqual([]);
+  });
+
+  it('should retrieve resource skills by resource id - success', () => {
+    let resourceSkills: DisplaySkillDTO[] = [
+      {
+        skill: 'Python',
+        experience: 4,
+        percentage: 100.0,
+      },
+      {
+        skill: 'Java',
+        experience: 1,
+        percentage: 25.0,
+      },
+    ];
+    apiServiceSpy.getSkillsByResourceId.and.returnValue(of(resourceSkills));
+    component.getSkills(resources[0]);
+    expect(component.currentResourceSkills).toEqual(resourceSkills);
+  });
+
+  it('should retrieve resource skills by resource id - server error', () => {
+    component.getResourceSkillObserver.error();
+    expect(component.currentResourceSkills).toEqual([]);
+  });
+
+  it('should emit step not completed on failure to retrieve project', () => {
+    component.stepCompletedEmitter
+      .pipe(first())
+      .subscribe((forward: boolean) => {
+        expect(forward).toBe(false);
+      });
+    component.getProjectObserver.error();
+    expect(responseHandlerServiceSpy.badGet).toHaveBeenCalled();
+  });
+
+  it('should emit step not completed on failure to retrieve project resources with names', () => {
+    component.stepCompletedEmitter
+      .pipe(first())
+      .subscribe((forward: boolean) => {
+        expect(forward).toBe(false);
+      });
+    component.getResourceNameObserver.error();
+    expect(responseHandlerServiceSpy.badGet).toHaveBeenCalled();
+  });
+
+  it('should emit step not completed on failure to save to database', () => {
+    tfrManagementServiceSpy.updateProjectToResourceMapping.and.returnValue(
+      of(false)
     );
+
+    component.stepCompletedEmitter
+      .pipe(first())
+      .subscribe((forward: boolean) => {
+        expect(forward).toBe(false);
+      });
+
+    component.saveToDatabase();
+    expect(component.resourceDetailsUpdated).toBe(true);
+    expect(component.previousUpdateSuccessful).toBe(false);
+  });
+
+  it('should set resources count to 1 when the project is newly created', () => {
+    (tfrManagementServiceSpy as any).getResourcesCount = 0;
+    component.ngOnInit();
+    expect(component.resourcesCount).toBe(1);
   });
 });

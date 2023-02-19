@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="true">
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -6,58 +6,24 @@
   <div class="example-button-row">
     <button
       mat-raised-button
-      color="primary"
+      name="top"
       type="button"
-      class="btn btn-success top-btn-left"
-      (click)="onClick_AddClientLocationWidget()" *ngIf="!checkForWidget('Client Location')"
-    >
-      <i class="fa fa-plus-circle" aria-hidden="true"></i> Client Location
-      Widget
-    </button>
-
-    <button
-      mat-raised-button
+      class="btn top-btn-left"
       color="primary"
-      type="button"
-      class="btn btn-success top-btn-left"
-      (click)="onClick_AddOurClientsWidget()"
-      *ngIf="!checkForWidget('Our Clients')"
+      (click)="OpenPopup()"
+      class="widget-manager"
     >
-      <i class="fa fa-plus-circle" aria-hidden="true"></i> Our Clients Widget
-    </button>
-
-    <button
-      mat-raised-button
-      color="primary"
-      type="button"
-      class="btn btn-success top-btn-left"
-      (click)="onClick_AddTFRStatusWidget()"
-      *ngIf="!checkForWidget('TFR Status')"
-    >
-      <i class="fa fa-plus-circle" aria-hidden="true"></i> TFR Status Widget
-    </button>
-
-    <button
-      mat-raised-button
-      color="primary"
-      type="button"
-      class="btn btn-success top-btn-left"
-      (click)="onClick_AddUpcomingProjectsWidget()"
-      *ngIf="!checkForWidget('Upcoming Projects')"
-    >
-      <i class="fa fa-plus-circle" aria-hidden="true"></i> Upcoming Projects
-      Widget
+      <strong>Widget Manager</strong>
     </button>
   </div>
 
   <ngx-gridster
-    style="height: 400px; width: 85%; padding-left: 8%"
+    class="gridstergroup"
     [options]="gridsterOptions"
     [draggableOptions]="{ handlerClass: 'panel-heading' }"
     (optionsChange)="optionsChange($event)"
   >
     <ngx-gridster-item
-      style="height: fit-content; left: 0px; top: 0px; bottom: 0px"
       class="ngxgriditem"
       *ngFor="let widget of widgets; index as i"
     >
@@ -79,27 +45,11 @@
             >
               <i
                 class="fa fa-close"
-                style="font-size: 24px; position: relative; margin: 7px"
-              ></i>
-            </button>
-            <button class="geariconbtn">
-              <i
-                class="fa fa-gear"
-                style="font-size: 24px; position: relative; margin: 7px"
+                style="position: relative; margin: 4px"
               ></i>
             </button>
           </h1>
-          <div
-            style="
-              width: inherit;
-              /* height: inherit; */
-              position: relative;
-              margin: 11%;
-              size-adjust: inherit;
-              inline-size: auto;
-              height: -webkit-fill-available;
-            "
-          >
+          <div class="widgetcontent">
             <ndc-dynamic
               [ndcDynamicComponent]="widget.componentType"
             ></ndc-dynamic>

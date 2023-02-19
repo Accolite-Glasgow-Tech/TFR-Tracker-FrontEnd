@@ -2,23 +2,46 @@
   display: flex;
   flex-direction: column;
   max-height: 500px;
-  min-width: 600px;
+  margin-bottom: 4rem;
 }
 .mat-table {
   overflow: auto;
   max-height: 500px;
-  min-width: 600px;
+  min-width: 100%;
+  padding: 10px;
 }
+
+.mat-column-start_date {
+  @media all and (max-width: 800px) and (-webkit-min-device-pixel-ratio: 1) {
+    display: none;
+  }
+}
+.mat-column-end_date {
+  @media all and (max-width: 800px) and (-webkit-min-device-pixel-ratio: 1) {
+    display: none;
+  }
+}
+
 .search-filters-container {
   display: flex;
-  margin: 15px;
+  margin: 0px;
   padding: 5px;
+  padding-left: 0px;
+  padding-right: 0px;
   flex-wrap: wrap;
-  justify-content: space-around;
+  gap: 3px;
+  justify-content: center;
 }
 .single-search-filter {
   margin: 3px;
+  width: 250px;
 }
+
+.name-search-field {
+  width: 99vw;
+  margin: 10px;
+}
+
 .delivered {
   color: rgb(25, 215, 25);
 }
@@ -34,13 +57,74 @@
 .draft {
   color: red;
 }
-.search-fields-row {
-  margin: 15px;
-  padding: 5px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
+
 .search-button {
   margin: 14px;
+}
+
+.empty-list-message {
+  color: rgb(218, 212, 212);
+  font-family: Roboto;
+  font-weight: lighter;
+  text-align: center;
+  margin-top: 5vh;
+  font-size: 8vw;
+
+  @media all and (min-width: 800px) and (-webkit-min-device-pixel-ratio: 1) {
+    font-size: 3vw;
+  }
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+.element-row td {
+  border-bottom-width: 0;
+}
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.element-description {
+  padding: 8px;
+}
+
+.element-description-attribution {
+  opacity: 0.5;
+}
+
+.element-diagram {
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  float: left;
+}
+
+.milestone-title {
+  font-size: large;
+  font-weight: 500;
+}
+
+.optional-text {
+  @media all and (max-width: 800px) and (-webkit-min-device-pixel-ratio: 1) {
+    display: none;
+  }
+}
+
+.undo-btn {
+  margin: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.service-unavailable-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-import { Project } from 'src/app/shared/interfaces';
+import { userService } from 'src/app/services/user/user.service';
+import { NotesDialogComponent } from '../notes-dialog/notes-dialog.component';
 
 @Component({
   selector: 'app-tfr',
@@ -12,28 +14,16 @@ import { Project } from 'src/app/shared/interfaces';
 export class TfrComponent implements OnInit {
   TfrId!: Number;
   errorMessage: string = '';
-
-  getProjectObserver = {
-    next: (response: Data) => {
-      let status: number = response['project']['status'];
-      let project: Project = response['project']['body'];
-      if (status === 200) {
-        this.tfrManagementService.project = project;
-        this.tfrManagementService.getResourcesNamesByProjectIdFromDatabase(
-          project.id
-        );
-        this.tfrManagementService.setVendorName(project.vendor_id);
-      } else {
-        this.tfrManagementService.apiError = true;
-      }
-    },
-  };
+  notes: string = '';
+  sessionStorage = sessionStorage;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private dialog: MatDialog,
     @Inject(TfrManagementService)
-    protected tfrManagementService: TfrManagementService
+    protected tfrManagementService: TfrManagementService,
+    @Inject(userService) protected userService: userService
   ) {}
 
   ngOnInit() {
@@ -55,7 +45,7 @@ export class TfrComponent implements OnInit {
         is loaded. This component has a resolver (refer to /services/project-resolver) that
         fetches the project to be displayed.
       */
-      this.route.data.subscribe(this.getProjectObserver);
+      this.route.data.subscribe(this.tfrManagementService.getProjectObserver);
     }
   }
 
@@ -65,5 +55,23 @@ export class TfrComponent implements OnInit {
   */
   redirectToEditTfr() {
     this.router.navigate(['/tfr/' + this.TfrId + '/edit']);
+  }
+
+  openNotes() {
+    this.notes = this.tfrManagementService.project?.notes ?? '';
+    const dialogRef = this.dialog.open(NotesDialogComponent, {
+      panelClass: 'notes-popup-window', // class defined in global styles.scss
+      data: {
+        notes: this.notes,
+        editable: this.tfrManagementService.canEdit,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.notes = result ?? this.notes;
+        this.tfrManagementService.setNotes(this.notes);
+      }
+    });
   }
 }

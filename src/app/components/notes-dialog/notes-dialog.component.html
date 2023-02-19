@@ -1,0 +1,17 @@
+<h1 mat-dialog-title class="window-heading">Add notes</h1>
+<div mat-dialog-content class="dialog-content-area">
+  <mat-form-field class="notes-input-area">
+    <textarea
+      matInput
+      [(ngModel)]="data.notes"
+      class="text-area"
+      [readonly]="!data.editable"
+    ></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions class="button-row" *ngIf="data.editable">
+  <button mat-button (click)="onNoClick()">Discard</button>
+  <button mat-button [mat-dialog-close]="data.notes" cdkFocusInitial>
+    Save
+  </button>
+</div>

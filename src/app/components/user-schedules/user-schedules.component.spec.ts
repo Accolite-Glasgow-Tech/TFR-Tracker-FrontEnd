@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { of } from 'rxjs';
+import { ApiService } from 'src/app/services/api/api.service';
 
 import { UserSchedulesComponent } from './user-schedules.component';
 
@@ -8,9 +11,17 @@ describe('UserSchedulesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserSchedulesComponent ]
-    })
-    .compileComponents();
+      imports: [MatSnackBarModule],
+      declarations: [UserSchedulesComponent],
+      providers: [
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', {
+            getUserTasks: of({}),
+          }),
+        },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UserSchedulesComponent);
     component = fixture.componentInstance;

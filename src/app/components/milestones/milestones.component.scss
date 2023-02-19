@@ -1,33 +1,47 @@
 #datediv {
   margin: 20px;
 }
+.name {
+  width: 200px;
+}
 .description {
-  width: 100%;
+  width: 400px;
   justify-content: center;
 }
 .inputdiv {
-  margin: 20px;
   display: flex;
-  flex-wrap: wrap;
-}
-#buttons {
-  margin: 20px;
+  width: 100%;
+  justify-content: space-between;
 }
 #chips {
   margin: 20px;
+}
+
+.chiplist {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .floating-btn-div {
   position: fixed;
   bottom: 5%;
   right: 5%;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+
+  @media screen and (min-width: 800px) {
+    width: 50%;
+  }
 }
 
 .small-text {
   font-size: smaller;
 }
 
-.form-field {
+.form-field,
+.form-field-date {
   width: 45%;
   margin: 10px;
 }
@@ -39,11 +53,17 @@
   justify-content: space-between;
 }
 
-.basic-details-div {
+.acceptedNote {
+  font-style: italic;
+  font-weight: bold;
+  color: rgb(63, 81, 181);
+}
+
+.milestones {
   margin: 1rem;
 }
 
-.intro-div {
+.intro {
   margin-left: 10px;
 }
 
@@ -51,15 +71,29 @@
   margin: 5px;
 }
 
+.discard-changes-btn {
+  @media screen and (max-width: 800px) {
+    width: 60%;
+  }
+}
+
 @media screen and (max-width: 800px) {
   button {
-    width: 2%;
-    height: 2%;
-    font-size: smaller;
+    width: 1%;
+    height: 0.5%;
+    font-size: small;
   }
 
   .form-field {
     width: 100%;
     margin: 0px;
+  }
+  .form-field-date {
+    width: 100%;
+    margin: 0px;
+  }
+
+  .inputdiv {
+    flex-wrap: wrap;
   }
 }

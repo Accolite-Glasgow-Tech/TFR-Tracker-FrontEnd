@@ -1,12 +1,12 @@
-import { ApiService } from 'src/app/services/api/api.service';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { lastValueFrom } from 'rxjs';
-import { ResourceDTO, TaskCreationDTO } from 'src/app/shared/interfaces';
-
-import { log } from 'src/app/shared/utils';
-
 import { ActivatedRoute } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
+import { ApiService } from 'src/app/services/api/api.service';
+import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
+import { ResourceDTO, TaskCreationDTO } from 'src/app/shared/interfaces';
+import { log } from 'src/app/shared/utils';
 import { FrequencyPickerComponent } from '../frequency-picker/frequency-picker.component';
 
 enum RecieverOptions {
@@ -36,7 +36,11 @@ export class ReportsComponent implements OnInit {
   recieverOptionsEnum = RecieverOptions;
   schedulerForm!: FormGroup;
 
-  constructor(private route: ActivatedRoute, private apiService: ApiService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private apiService: ApiService,
+    private snackBarService: SnackBarService
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((result) => {
@@ -69,7 +73,9 @@ export class ReportsComponent implements OnInit {
       .get('frequency')!
       .get('recurringControl')!.value;
 
-    const cron = recurring ? this.frequencyPickerComponent.getCron() : null;
+    const cron = recurring
+      ? this.frequencyPickerComponent.getCron()
+      : undefined;
     const by_email = true;
     let resources: ResourceDTO[] = [];
 
@@ -115,6 +121,11 @@ export class ReportsComponent implements OnInit {
 
   createTask(taskObject: TaskCreationDTO) {
     log(taskObject);
-    this.apiService.postTask(taskObject).subscribe((response) => log(response));
+    this.apiService.postTask(taskObject).subscribe({
+      next: () =>
+        this.snackBarService.showSnackBar('Report was scheduled successfully'),
+      error: (error: HttpErrorResponse) =>
+        this.snackBarService.showSnackBar(error.error),
+    });
   }
 }

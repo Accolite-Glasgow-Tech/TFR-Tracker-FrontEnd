@@ -1,15 +1,14 @@
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { ApiService } from 'src/app/services/api/api.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
-
 import {
+  ClientAttributeDTO,
+  ClientDTO,
+  Project,
   ProjectBasicDetails,
-  VendorAttributeDTO,
-  VendorDTO,
 } from 'src/app/shared/interfaces';
-import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-dialog.component';
 
 @Component({
   selector: 'app-tfr-basic-details',
@@ -19,9 +18,46 @@ import { TfrCreationDialogComponent } from '../tfr-creation-dialog/tfr-creation-
 export class TfrBasicDetailsComponent implements OnInit {
   constructor(
     protected tfrManager: TfrManagementService,
-    private matDialog: MatDialog,
-    private apiService: ApiService
+    private responseHandlerService: ResponseHandlerService
   ) {}
+
+  getProjectObserver = {
+    next: (project: HttpResponse<Project>) => {
+      this.tfrManager.extractProject(project);
+
+      this.tfrDetails.get('name')?.setValue(this.tfrManager.project!.name);
+      this.tfrDetails
+        .get('start_date')
+        ?.setValue(this.tfrManager.project!.start_date);
+      this.tfrDetails
+        .get('end_date')
+        ?.setValue(this.tfrManager.project!.end_date);
+      this.tfrDetails
+        .get('client_id')
+        ?.setValue(this.tfrManager.project!.client_id);
+
+      if (this.projectToEdit !== undefined) {
+        this.projectToEdit.client_id = this.tfrManager.project!.client_id;
+      }
+
+      this.tfrManager.resetClientDetails();
+      this.clientGroup.markAsPristine();
+
+      this.tfrDetails.markAsPristine();
+    },
+    error: (err: HttpErrorResponse) => {
+      if (err.status === 400) {
+        this.tfrDetails.reset();
+        if (this.clientGroup) {
+          this.tfrManager.resetClientDetails();
+          this.clientGroup.markAsPristine();
+        }
+      } else {
+        this.responseHandlerService.badGet();
+      }
+      this.stepCompletedEmitter.emit(false);
+    },
+  };
 
   @Output() nextStepEmitter = new EventEmitter<boolean>();
   @Output() stepCompletedEmitter = new EventEmitter<boolean>();
@@ -29,11 +65,12 @@ export class TfrBasicDetailsComponent implements OnInit {
   tfrDetails!: FormGroup;
   projectDetails!: ProjectBasicDetails;
   selectedProject!: ProjectBasicDetails;
-  vendorGroup!: FormGroup;
+  clientGroup!: FormGroup;
   attributeNames: string[] = [];
-  vendor_specificData: { [key: string]: string } = {};
-  editMode: Boolean = false;
+  client_specificData: { [key: string]: string } = {};
+  editMode: boolean = false;
   projectToEdit!: ProjectBasicDetails;
+  previousUpdateSuccessful!: boolean;
   @Output() editModeEmitter = new EventEmitter<boolean>();
 
   ngOnInit(): void {
@@ -41,32 +78,36 @@ export class TfrBasicDetailsComponent implements OnInit {
       name: new FormControl('', [Validators.required]),
       start_date: new FormControl<Date | null>(null),
       end_date: new FormControl<Date | null>(null),
-      vendor_id: new FormControl('', [Validators.required]),
+      client_id: new FormControl('', [Validators.required]),
     });
 
     // check whether project exists yet, and if so, pre-fill details and set to edit mode
     if (this.tfrManager.getBasicDetails != undefined) {
       this.editMode = true;
-      this.stepCompletedEmitter.emit(true);
+      setTimeout(() => {
+        this.stepCompletedEmitter.emit(true);
+      }, 0);
       this.editModeEmitter.emit(true);
       // edit mode
       this.projectToEdit = this.tfrManager.getBasicDetails;
       // set form group details to existing details
       this.setDetailsToExistingProject();
     }
+
+    this.previousUpdateSuccessful = this.editMode;
   }
 
   isFormValid() {
-    if (this.vendorGroup == undefined) {
+    if (this.clientGroup == undefined) {
       return false;
     } else {
-      return this.vendorGroup.valid && this.tfrDetails.valid;
+      return this.clientGroup.valid && this.tfrDetails.valid;
     }
   }
 
   isFormDirty() {
     if (this.isFormValid()) {
-      return this.vendorGroup.dirty || this.tfrDetails.dirty;
+      return this.clientGroup.dirty || this.tfrDetails.dirty;
     }
     return false;
   }
@@ -83,79 +124,43 @@ export class TfrBasicDetailsComponent implements OnInit {
       name: this.tfrDetails.get('name')?.value,
       start_date: this.tfrDetails.get('start_date')?.value,
       end_date: this.tfrDetails.get('end_date')?.value,
-      vendor_id: this.tfrDetails.get('vendor_id')?.value,
-      vendor_specific: this.vendor_specificData,
+      client_id: this.tfrDetails.get('client_id')?.value,
+      client_specific: this.client_specificData,
       status: this.editMode ? this.projectToEdit.status : 'DRAFT',
     };
-    this.tfrManager.setBasicDetails(updatedProjectDetails);
-    this.tfrDetails.markAsPristine();
-    this.vendorGroup.markAsPristine();
-  }
-
-  onVendorSelect(vendor: VendorDTO) {
-    this.tfrDetails.get('vendor_id')?.setValue(vendor.id);
-    this.tfrDetails.get('vendor_id')?.markAsDirty;
-  }
-
-  /*
-    Move onto the next step of the stepper
-  */
-  next() {
-    if (this.isFormDirty()) {
-      let dialogRef = this.matDialog.open(TfrCreationDialogComponent, {
-        data: {
-          title: 'Discard Changes',
-          content: 'Would you like to discard your changes and continue?',
-          confirmText: 'Yes',
-          cancelText: 'No',
-        },
-      });
-      dialogRef.afterClosed().subscribe((result: string) => {
-        if (result === 'true') {
-          /* User wants to discard changes */
-          this.stepCompletedEmitter.emit(true);
-          this.nextStepEmitter.emit(true);
-          /* Resets the value of the input fields to the most recent state of the database */
-          this.resetInputFields();
+    this.tfrManager
+      .setBasicDetails(updatedProjectDetails, this.previousUpdateSuccessful)
+      .subscribe((response) => {
+        this.previousUpdateSuccessful = response;
+        if (response) {
+          this.tfrDetails.markAsPristine();
+          this.clientGroup.markAsPristine();
+        } else {
+          this.stepCompletedEmitter.emit(false);
         }
       });
+  }
+
+  onClientSelect(client: ClientDTO) {
+    this.tfrDetails.get('client_id')?.setValue(client.id);
+  }
+
+  next() {
+    if (this.isFormDirty()) {
+      this.responseHandlerService.unsavedChangesDialogue();
     } else {
       this.stepCompletedEmitter.emit(true);
       this.nextStepEmitter.emit(true);
     }
   }
 
-  /*
-    Resets the input fields to the most recent state of the database
-  */
   resetInputFields() {
-    let previousStateBasicDetails: ProjectBasicDetails =
-      this.tfrManager.getBasicDetails!;
-
-    this.tfrDetails.get('name')?.setValue(previousStateBasicDetails.name);
-    this.tfrDetails
-      .get('start_date')
-      ?.setValue(previousStateBasicDetails.start_date);
-    this.tfrDetails
-      .get('end_date')
-      ?.setValue(previousStateBasicDetails.end_date);
-    this.tfrDetails
-      .get('vendor_id')
-      ?.setValue(previousStateBasicDetails.vendor_id);
-
-    !this.projectToEdit ??
-      (this.projectToEdit.vendor_id = previousStateBasicDetails.vendor_id);
-
-    /*
-      Trigger event to vendor component through the api.service
-    */
-    this.apiService.resetVendorDetails();
-
-    this.tfrDetails.markAsPristine();
-    this.vendorGroup.markAsPristine();
+    this.tfrManager
+      .getFromDatabase(this.tfrManager.getProjectId as number)
+      .subscribe(this.getProjectObserver);
   }
 
-  onAttributesSelected(attributes: VendorAttributeDTO[]) {
+  onAttributesSelected(attributes: ClientAttributeDTO[]) {
     this.attributeNames = [];
     attributes.forEach((att) => {
       this.attributeNames.push(att.attribute_name);
@@ -163,17 +168,17 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   onAttributesUpdated(group: FormGroup) {
-    this.vendorGroup = group;
-    this.updatevendor_specific();
+    this.clientGroup = group;
+    this.updateClient_specific();
   }
 
-  updatevendor_specific() {
-    this.vendor_specificData = {};
-    // convert the form group info to string data and assign to vendor_specificData string
-    if (this.vendorGroup.valid) {
+  updateClient_specific() {
+    this.client_specificData = {};
+    // convert the form group info to string data and assign to client_specificData string
+    if (this.clientGroup.valid) {
       let i = 0;
       while (i < this.attributeNames.length) {
-        this.vendor_specificData[this.attributeNames[i]] =
+        this.client_specificData[this.attributeNames[i]] =
           this.getAttributesArray().controls[i].value;
         i++;
       }
@@ -181,6 +186,6 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   getAttributesArray() {
-    return this.vendorGroup.controls['attributeValues'] as FormArray;
+    return this.clientGroup.controls['attributeValues'] as FormArray;
   }
 }

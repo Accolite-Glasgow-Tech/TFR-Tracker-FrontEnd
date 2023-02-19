@@ -1,85 +1,110 @@
-Add Milestones to the TFR.
-<div id="chips">
-  <mat-chip-list #chipList class="chiplist" *ngIf="!formMilestone">
-    <app-chip
-      *ngFor="let milestone of milestonesNotDeleted"
-      [value]="milestone"
-      (removeEmitter)="removeMilestone($event)"
-      (selectEmitter)="selectMilestone($event)"
-    ></app-chip>
-    <mat-chip (click)="selectNew()">+</mat-chip>
-  </mat-chip-list>
-</div>
-<mat-form
-  [formGroup]="milestoneForm"
-  *ngIf="formMilestone"
-  appearance="fill"
-  class="full-width"
->
-  <div class="inputdiv">
-    <mat-form-field class="description">
-      <textarea
-        matInput
-        placeholder="Milestone Description: "
-        type="text"
-        formControlName="description"
-      ></textarea>
-      <mat-error>Description Required</mat-error>
-    </mat-form-field>
+<div class="milestones">
+  <div class="intro"></div>
+  <label>Add Milestones to the TFR.</label>
+  <div id="chips">
+    <mat-chip-list #chipList class="chiplist" *ngIf="!formMilestone">
+      <app-chip
+        *ngFor="let milestone of milestonesNotDeleted"
+        [value]="milestone"
+        (removeEmitter)="removeMilestone($event)"
+        (selectEmitter)="selectMilestone($event)"
+      ></app-chip>
+      <mat-chip (click)="selectNew()">+</mat-chip>
+    </mat-chip-list>
   </div>
-  <div class="inputdiv">
-    <mat-form-field class="datepicker">
-      <mat-label>Acceptance Date</mat-label>
 
-      <input
-        formControlName="acceptance_date"
-        matInput
-        [matDatepicker]="picker"
-        placeholder="Acceptance Date"
-        class="datepicker"
-      />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field class="rangepicker">
-      <mat-label>Start date - Delivery Date</mat-label>
-      <mat-date-range-input
-        [rangePicker]="myRangePicker"
-        [min]="getMinDate"
-        [max]="getMaxDate"
-        required
-        class="rangepicker"
-      >
+  <mat-form
+    [formGroup]="milestoneForm"
+    *ngIf="formMilestone"
+    appearance="fill"
+    class="container"
+  >
+    <div class="inputdiv">
+      <mat-form-field class="form-field">
         <input
-          matStartDate
-          formControlName="start_date"
-          placeholder="Start date"
+          matInput
+          placeholder="Milestone Name: "
+          type="text"
+          formControlName="name"
         />
+        <mat-error>Name Required</mat-error>
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <textarea
+          matInput
+          placeholder="Milestone Description: "
+          type="text"
+          formControlName="description"
+        ></textarea>
+        <mat-error>Description Required</mat-error>
+      </mat-form-field>
+      <mat-form-field class="form-field">
+        <mat-label>Status</mat-label>
+        <mat-select #select formControlName="status">
+          <mat-option
+            *ngFor="let option of formMilestone.possible_status"
+            [value]="option"
+          >
+            {{ option }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="inputdiv">
+      <mat-form-field class="form-field-date">
+        <mat-label>Acceptance Date</mat-label>
+
         <input
-          matEndDate
-          formControlName="delivery_date"
-          placeholder="Delivery Date"
+          formControlName="acceptance_date"
+          matInput
+          [matDatepicker]="picker"
+          placeholder="Acceptance Date"
+          class="datepicker"
         />
-      </mat-date-range-input>
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="myRangePicker"
-      ></mat-datepicker-toggle>
-      <mat-date-range-picker #myRangePicker></mat-date-range-picker>
-      <mat-error>Both dates must be within project timeframe</mat-error>
-    </mat-form-field>
-  </div>
-</mat-form>
-<div id="buttons" class="floating-btn-div">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="form-field-date">
+        <mat-label>Start date - Delivery Date</mat-label>
+        <mat-date-range-input
+          [rangePicker]="myRangePicker"
+          [min]="getMinDate"
+          [max]="getMaxDate"
+          required
+          class="rangepicker"
+        >
+          <input
+            matStartDate
+            formControlName="start_date"
+            placeholder="Start date"
+          />
+          <input
+            matEndDate
+            formControlName="delivery_date"
+            placeholder="Delivery Date"
+          />
+        </mat-date-range-input>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="myRangePicker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #myRangePicker></mat-date-range-picker>
+        <mat-error>Both dates must be within project timeframe</mat-error>
+      </mat-form-field>
+    </div>
+  </mat-form>
+</div>
+
+<div class="floating-btn-div">
   <button
     mat-raised-button
     type="button"
-    class="navigation-btn"
+    class="navigation-btn discard-changes-btn"
     color="secondary"
     (click)="discardSelected()"
     *ngIf="selectedMilestone"
   >
-    discard changes
+    Discard Changes
   </button>
   <button
     *ngIf="selectedMilestone"
@@ -90,30 +115,9 @@ Add Milestones to the TFR.
     color="primary"
     [disabled]="milestoneForm.invalid"
   >
-    accept
+    Accept
   </button>
-  <button
-    *ngIf="!selectedMilestone"
-    type="button"
-    mat-raised-button
-    class="navigation-btn"
-    color="primary"
-    [disabled]="!!selectedMilestone"
-    (click)="submitMilestones()"
-  >
-    save milestones
-  </button>
-  <button
-    class="navigation-btn"
-    color="secondary"
-    *ngIf="!selectedMilestone"
-    type="button"
-    mat-raised-button
-    [disabled]="!!selectedMilestone"
-    (click)="resetMilestones()"
-  >
-    reset milestones
-  </button>
+
   <button
     class="navigation-btn"
     color="primary"
@@ -123,8 +127,33 @@ Add Milestones to the TFR.
     [disabled]="!(submittable && !selectedMilestone)"
     (click)="previousStep()"
   >
-    back
+    Back
   </button>
+
+  <button
+    *ngIf="!selectedMilestone"
+    type="button"
+    mat-raised-button
+    class="navigation-btn"
+    color="primary"
+    [disabled]="!!selectedMilestone"
+    (click)="submitMilestones()"
+  >
+    Save
+  </button>
+
+  <button
+    class="navigation-btn"
+    color="secondary"
+    *ngIf="!selectedMilestone"
+    type="button"
+    mat-raised-button
+    [disabled]="!!selectedMilestone"
+    (click)="resetMilestones()"
+  >
+    Reset
+  </button>
+
   <button
     class="navigation-btn"
     color="primary"
@@ -134,6 +163,6 @@ Add Milestones to the TFR.
     [disabled]="!(submittable && !selectedMilestone)"
     (click)="nextStep()"
   >
-    next
+    Next
   </button>
 </div>
