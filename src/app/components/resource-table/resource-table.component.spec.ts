@@ -33,4 +33,16 @@ describe('ResourceTableComponent', () => {
       dummyAllocatedResource
     );
   });
+
+  it('should notify resource edited', () => {
+    spyOn(component.editResourceEmitter, 'emit');
+    let dummyAllocatedResource: AllocatedResourceTypeDTO =
+      DummyAllocatedResources[0];
+
+    component.editResource(dummyAllocatedResource);
+
+    expect(component.editResourceEmitter.emit).toHaveBeenCalledWith(
+      dummyAllocatedResource
+    );
+  });
 });

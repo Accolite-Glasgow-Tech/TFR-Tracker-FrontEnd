@@ -121,14 +121,14 @@ export interface LoginResponse {
   token: string;
 }
 
-export interface tfrCreationDialogContent {
+export interface TfrCreationDialogContent {
   title: string;
   content: string;
   confirmText: string;
   cancelText: string;
 }
 
-export interface notesDialogContent {
+export interface NotesDialogContent {
   notes: string;
   editable: boolean;
 }

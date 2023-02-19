@@ -383,7 +383,7 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   findResourceIndex(searchValue: any, keyString: string): number {
-    let key = keyString as keyof typeof this.resources[0];
+    let key = keyString as keyof ResourceListType;
     return this.resources.findIndex((r) => r[key] === searchValue);
   }
 }

@@ -7,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { debounce, interval, map, Observable, startWith } from 'rxjs';
-import { ApiService } from 'src/app/services/api/api.service';
 import {
   AddResource,
   AllocatedResourceTypeDTO,
@@ -57,7 +56,7 @@ export class ResourceSelectionComponent implements OnInit {
     ],
   };
 
-  constructor(protected apiService: ApiService) {}
+  constructor() {}
 
   ngOnInit() {
     this.allocationFormGroup = new FormGroup({

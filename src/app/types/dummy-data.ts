@@ -6,6 +6,8 @@ import {
   Project,
   ProjectBasicDetails,
   ProjectResourceDTO,
+  ResourceListType,
+  UpdateResourceDialogContent,
 } from 'src/app/shared/interfaces';
 
 export const DummyProject: Project = {
@@ -308,6 +310,34 @@ export const DummyClients: ClientDTO[] = [
     id: 3,
     name: 'HSBC',
   },
+];
+
+export const DummyResources: ResourceListType[] = [
+  {
+    resource_name: 'John Bowers',
+    resource_email: 'johnbowers@accolitedigital.com',
+    resource_id: 1,
+    selected: false,
+  },
+  {
+    resource_name: 'Kimberly Gould',
+    resource_email: 'kimberlygould@accolitedigital.com',
+    resource_id: 3,
+    selected: false,
+  },
+];
+
+export const DummyUpdateResourceDialogContent: UpdateResourceDialogContent = {
+  seniorityLevels: ['ADVANCED', 'SENIOR', 'JUNIOR'],
+  resources: [...DummyResources],
+  resourceToEdit: DummyAllocatedResources[0],
+};
+
+export const DummySeniorityLevels: string[] = [
+  'ADVANCED',
+  'SENIOR',
+  'INTERMEDIATE',
+  'JUNIOR',
 ];
 
 // Http Responses
