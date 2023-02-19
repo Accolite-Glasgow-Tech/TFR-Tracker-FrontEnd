@@ -4,7 +4,7 @@ import { ResourceService } from 'src/app/services/resource/resource.service';
 
 import { MilestoneTableComponent } from './milestone-table.component';
 
-fdescribe('MilestoneTableComponent', () => {
+describe('MilestoneTableComponent', () => {
   let component: MilestoneTableComponent;
   let fixture: ComponentFixture<MilestoneTableComponent>;
 

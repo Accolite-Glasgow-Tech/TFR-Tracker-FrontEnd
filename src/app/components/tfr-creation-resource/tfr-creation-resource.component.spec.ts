@@ -35,7 +35,7 @@ import {
   TfrCreationResourceComponent,
 } from './tfr-creation-resource.component';
 
-fdescribe('TfrCreationResourceComponent', () => {
+describe('TfrCreationResourceComponent', () => {
   let component: TfrCreationResourceComponent;
   let fixture: ComponentFixture<TfrCreationResourceComponent>;
   let seniorityLevels: string[];
