@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialog } from '@angular/material/dialog';
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 
 import { NotesDialogComponent } from './notes-dialog.component';
 
@@ -10,10 +14,15 @@ describe('NotesDialogComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NotesDialogComponent],
+      imports: [MatDialogModule],
       providers: [
         {
-          provide: MatDialog,
-          useValue: jasmine.createSpyObj(['']),
+          provide: MatDialogRef,
+          useValue: {},
+        },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {},
         },
       ],
     }).compileComponents();

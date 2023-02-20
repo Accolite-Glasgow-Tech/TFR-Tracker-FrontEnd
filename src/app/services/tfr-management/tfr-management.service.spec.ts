@@ -64,6 +64,8 @@ describe('TfrManagementService', () => {
             'getProject',
             'postProjectResources',
             'getResourcesNamesByProjectIdFromDatabase',
+            ,
+            'getHasWritePermission',
           ]),
         },
         { provide: WINDOW, useValue: windowMock },
@@ -339,6 +341,8 @@ describe('TfrManagementService', () => {
     let response = {
       project: project,
     };
+
+    apiServiceSpy.getHasWritePermission.and.returnValue(of(true));
     apiServiceSpy.getResourcesNamesByProjectIdFromDatabase.and.returnValue(
       of(projectResourcesWithNames)
     );

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
@@ -14,8 +15,12 @@ describe('UserComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [UserComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, MatDialogModule],
       providers: [
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj('ApiService', ['']),
+        },
         {
           provide: SnackBarService,
           useValue: jasmine.createSpyObj(['']),

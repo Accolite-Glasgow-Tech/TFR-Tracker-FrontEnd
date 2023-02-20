@@ -43,6 +43,7 @@ import { LogOutComponent } from './components/log-out/log-out.component';
 import { ManageWidgetModalComponent } from './components/manage-widget-modal/manage-widget-modal.component';
 import { ChipComponent } from './components/milestones/chip/chip.component';
 import { NotesDialogComponent } from './components/notes-dialog/notes-dialog.component';
+import { ProjectSchedulesComponent } from './components/project-schedules/project-schedules.component';
 import { UserNameComponent } from './components/user-name/user-name.component';
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
@@ -82,6 +83,7 @@ import { WidgetClientLocationComponent } from './components/widget-client-locati
     WidgetClientLocationComponent,
     ErrorComponent,
     UserNameComponent,
+    ProjectSchedulesComponent,
   ],
 
   providers: [

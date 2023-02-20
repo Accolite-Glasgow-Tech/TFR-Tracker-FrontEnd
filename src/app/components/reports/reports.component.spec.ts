@@ -15,11 +15,14 @@ describe('ReportsComponent', () => {
       providers: [
         {
           provide: ApiService,
-          useValue: jasmine.createSpyObj(['']),
+          useValue: jasmine.createSpyObj('ApiService', [
+            'getResourcesByProjectId',
+            'postTask',
+          ]),
         },
         {
           provide: SnackBarService,
-          useValue: jasmine.createSpyObj(['']),
+          useValue: jasmine.createSpyObj('SnackBarService', ['showSnackBar']),
         },
       ],
       declarations: [ReportsComponent, FrequencyPickerComponent],
