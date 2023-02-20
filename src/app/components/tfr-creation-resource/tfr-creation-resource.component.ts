@@ -239,6 +239,8 @@ export class TfrCreationResourceComponent implements OnInit {
     );
 
     if (existingAllocatedResourceIndex !== -1) {
+      this.allocatedResources[existingAllocatedResourceIndex].seniority =
+        seniority;
       this.allocatedResources[existingAllocatedResourceIndex].is_deleted =
         false;
     } else {
