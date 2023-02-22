@@ -5,6 +5,7 @@ import { ApiService } from './api.service';
 
 describe('ApiService', () => {
   let service: ApiService;
+  let snackBarServiceSpy: jasmine.SpyObj<SnackBarService>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -17,6 +18,9 @@ describe('ApiService', () => {
       ],
     });
     service = TestBed.inject(ApiService);
+    snackBarServiceSpy = TestBed.inject(
+      SnackBarService
+    ) as jasmine.SpyObj<SnackBarService>;
   });
 
   it('should be created', () => {
