@@ -22,7 +22,7 @@ export class TfrManagementService {
   projectResourcesWithNames!: AllocatedResourceTypeDTO[];
   subject = new Subject<boolean>();
   clientReset = new EventEmitter<boolean>();
-  canEdit: boolean = true;
+  canEdit: boolean = false;
 
   clientName: string = '';
   errorCode: number = 200;

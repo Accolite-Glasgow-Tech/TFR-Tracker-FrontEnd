@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 import { debounce, interval, map, Observable, startWith } from 'rxjs';
 import {
-  AddResource,
   AllocatedResourceTypeDTO,
   ResourceListType,
 } from 'src/app/shared/interfaces';
@@ -31,14 +30,12 @@ export function autoCompleteResourceNameValidator(
 })
 export class ResourceSelectionComponent implements OnInit {
   allocationFormGroup!: FormGroup;
-  currentResourceName!: string;
   filteredResourceOption!: Observable<ResourceListType[]>;
   @Input() updateResourceMode: boolean = false;
   @Input() seniorityLevels: string[] = [];
   @Input() resources: ResourceListType[] = [];
   @Input() resourceToEdit!: AllocatedResourceTypeDTO;
   @Output() displaySkillEmitter = new EventEmitter<ResourceListType>();
-  @Output() addResourceEmitter = new EventEmitter<AddResource>();
   @Output() formGroupEmitter = new EventEmitter<FormGroup>();
 
   validation_msgs = {
