@@ -57,6 +57,7 @@ export class ProjectSchedulesComponent {
   }
 
   deleteTask(taskId: number) {
+    this.loading = true;
     this.apiService.deleteTaskById(taskId).subscribe({
       next: () => {
         this.snackBarService.showSnackBar('Task deleted successfully');
@@ -64,6 +65,7 @@ export class ProjectSchedulesComponent {
       },
       error: (error: HttpErrorResponse) =>
         this.snackBarService.showSnackBar(error.error),
+      complete: () => (this.loading = false),
     });
     log(taskId);
   }
