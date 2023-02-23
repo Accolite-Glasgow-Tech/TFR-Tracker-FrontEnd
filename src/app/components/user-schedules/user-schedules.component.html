@@ -1,4 +1,5 @@
-<div *ngIf="userTasks.length === 0">
+<app-loading-screen *ngIf="loading"></app-loading-screen>
+<div *ngIf="userTasks.length === 0 && !loading">
   <h1>You have no scheduled tasks!</h1>
 </div>
 <div *ngIf="userTasks.length > 0">

@@ -12,6 +12,7 @@ import { log } from 'src/app/shared/utils';
   styleUrls: ['./project-schedules.component.scss'],
 })
 export class ProjectSchedulesComponent {
+  loading: boolean = true;
   projectId!: number;
   tasks: TaskDTO[] = [];
   displayedColumns = [
@@ -40,6 +41,7 @@ export class ProjectSchedulesComponent {
           next: (response: any) => (this.tasks = <TaskDTO[]>response),
           error: (error: HttpErrorResponse) =>
             this.snackBarService.showSnackBar(error.error),
+          complete: () => (this.loading = false),
         });
       }
     });
@@ -55,6 +57,7 @@ export class ProjectSchedulesComponent {
   }
 
   deleteTask(taskId: number) {
+    this.loading = true;
     this.apiService.deleteTaskById(taskId).subscribe({
       next: () => {
         this.snackBarService.showSnackBar('Task deleted successfully');
@@ -62,6 +65,7 @@ export class ProjectSchedulesComponent {
       },
       error: (error: HttpErrorResponse) =>
         this.snackBarService.showSnackBar(error.error),
+      complete: () => (this.loading = false),
     });
     log(taskId);
   }

@@ -11,6 +11,7 @@ import { TaskResourceDTO, UserTaskDTO } from 'src/app/shared/interfaces';
   styleUrls: ['./user-schedules.component.scss'],
 })
 export class UserSchedulesComponent {
+  loading: boolean = true;
   userTasks: UserTaskDTO[] = [];
   displayedColumns = [
     'project_name',
@@ -35,6 +36,7 @@ export class UserSchedulesComponent {
         next: (response: any) => (this.userTasks = <UserTaskDTO[]>response),
         error: (error: HttpErrorResponse) =>
           this.snackBarService.showSnackBar(error.error),
+        complete: () => (this.loading = false),
       });
     }
   }
@@ -45,11 +47,13 @@ export class UserSchedulesComponent {
       resource_id: userTask.resource_id,
       enabled: event.checked,
     };
+    this.loading = true;
     this.apiService.putTaskAvailability(taskResourceDTO).subscribe({
       next: () =>
         this.snackBarService.showSnackBar('Schedule updated successfully'),
       error: (error: HttpErrorResponse) =>
         this.snackBarService.showSnackBar(error.error),
+      complete: () => (this.loading = false),
     });
   }
 }
