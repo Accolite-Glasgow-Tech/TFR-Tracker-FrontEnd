@@ -1,19 +1,23 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenInterceptorService implements HttpInterceptor {
-
-  constructor() { }
+  constructor() {}
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const  token  = sessionStorage.getItem('jwt_token');
+    const token = sessionStorage.getItem('jwt_token');
     if (token) {
       request = request.clone({
         setHeaders: {
@@ -21,9 +25,6 @@ export class TokenInterceptorService implements HttpInterceptor {
         },
       });
     }
-
-    return next.handle(request)
-
+    return next.handle(request);
   }
-
 }

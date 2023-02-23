@@ -34,8 +34,10 @@ export class UserSchedulesComponent {
     if (!Number.isNaN(userId)) {
       this.apiService.getUserTasks(<number>userId).subscribe({
         next: (response: any) => (this.userTasks = <UserTaskDTO[]>response),
-        error: (error: HttpErrorResponse) =>
-          this.snackBarService.showSnackBar(error.error),
+        error: (error: HttpErrorResponse) => {
+          this.snackBarService.showSnackBar(error.error);
+          this.loading = false;
+        },
         complete: () => (this.loading = false),
       });
     }
@@ -51,8 +53,10 @@ export class UserSchedulesComponent {
     this.apiService.putTaskAvailability(taskResourceDTO).subscribe({
       next: () =>
         this.snackBarService.showSnackBar('Schedule updated successfully'),
-      error: (error: HttpErrorResponse) =>
-        this.snackBarService.showSnackBar(error.error),
+      error: (error: HttpErrorResponse) => {
+        this.snackBarService.showSnackBar(error.error);
+        this.loading = false;
+      },
       complete: () => (this.loading = false),
     });
   }

@@ -39,8 +39,10 @@ export class ProjectSchedulesComponent {
       if (!Number.isNaN(this.projectId)) {
         this.apiService.getProjectTasks(this.projectId).subscribe({
           next: (response: any) => (this.tasks = <TaskDTO[]>response),
-          error: (error: HttpErrorResponse) =>
-            this.snackBarService.showSnackBar(error.error),
+          error: (error: HttpErrorResponse) => {
+            this.snackBarService.showSnackBar(error.error);
+            this.loading = false;
+          },
           complete: () => (this.loading = false),
         });
       }
@@ -63,8 +65,10 @@ export class ProjectSchedulesComponent {
         this.snackBarService.showSnackBar('Task deleted successfully');
         this.tasks = this.tasks.filter((task) => task.id !== taskId);
       },
-      error: (error: HttpErrorResponse) =>
-        this.snackBarService.showSnackBar(error.error),
+      error: (error: HttpErrorResponse) => {
+        this.snackBarService.showSnackBar(error.error);
+        this.loading = false;
+      },
       complete: () => (this.loading = false),
     });
     log(taskId);
