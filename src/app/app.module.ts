@@ -39,6 +39,7 @@ import { TokenInterceptorService } from './interceptors/token-interceptor/token-
 import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IgxListModule, IgxRippleModule } from 'igniteui-angular';
+import { ErrorGeneratorComponent } from './components/error-generator/error-generator.component';
 import { ErrorComponent } from './components/error/error.component';
 import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
@@ -87,6 +88,7 @@ import { WidgetClientLocationComponent } from './components/widget-client-locati
     UserNameComponent,
     ProjectSchedulesComponent,
     LoadingScreenComponent,
+    ErrorGeneratorComponent,
   ],
 
   providers: [
