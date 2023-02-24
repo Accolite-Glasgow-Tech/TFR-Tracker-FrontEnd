@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Data } from '@angular/router';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, tap } from 'rxjs';
 import {
   AllocatedResourceTypeDTO,
   ClientDTO,
@@ -25,20 +25,16 @@ export class TfrManagementService {
   canEdit: boolean = true;
 
   clientName: string = '';
-  errorCode: number = 200;
 
   updateProjectToDatabaseObserver = {
     next: (response: Data) => {
-      if (this.project) {
-        this.project.version = Number(response);
-      }
+      this.updateVersion(response);
       this.responseHandlerService.goodSave();
       this.subject.next(true);
     },
     error: (err: HttpErrorResponse) => {
       this.responseHandlerService.handleBadProjectUpdate(err);
       this.subject.next(false);
-      this.errorCode = err.status;
     },
   };
 
@@ -56,7 +52,6 @@ export class TfrManagementService {
     error: (err: HttpErrorResponse) => {
       this.responseHandlerService.handleBadProjectUpdate(err);
       this.subject.next(false);
-      this.errorCode = err.status;
     },
   };
 
@@ -76,23 +71,15 @@ export class TfrManagementService {
     next: (response: Data) => {
       let status = response['project']['status'];
 
-      if (typeof status === 'number') {
-        this.errorCode = status;
-        if (status === 500) {
-          /* TFR id does not exist - url -> /tfr/undefined - server returns 500 */
-          this.errorCode = 404;
-        }
-      } else {
-        let project = response['project'];
-        this.project = project;
-        this.apiService
-          .getResourcesNamesByProjectIdFromDatabase(this.project?.id!)
-          .subscribe(this.getResourceNameObserver);
-        this.setClientName(this.project?.client_id!);
-        this.apiService
-          .getHasWritePermission(this.project?.id!)
-          .subscribe(this.getCanWritePermissionObserver);
-      }
+      let project = response['project'];
+      this.project = project;
+      this.apiService
+        .getResourcesNamesByProjectIdFromDatabase(this.project?.id!)
+        .subscribe(this.getResourceNameObserver);
+      this.setClientName(this.project?.client_id!);
+      this.apiService
+        .getHasWritePermission(this.project?.id!)
+        .subscribe(this.getCanWritePermissionObserver);
     },
   };
 
@@ -259,6 +246,12 @@ export class TfrManagementService {
     return strippedMilestones;
   }
 
+  updateVersion(response: {}) {
+    if (this.project) {
+      this.project.version = Number(response);
+    }
+  }
+
   projectStripTempIds(milestonesToStrip: MilestoneDTO[]): ProjectMilestoneDTO {
     if (this.project) {
       let projectDTO: ProjectMilestoneDTO = this.project;
@@ -274,7 +267,9 @@ export class TfrManagementService {
           subscriber.error('project undefined');
           subscriber.complete;
         })
-      : this.apiService.putProject(this.projectStripTempIds(milestones));
+      : this.apiService
+          .putProject(this.projectStripTempIds(milestones))
+          .pipe(tap({ next: this.updateVersion }));
   }
 
   setProjectResources(project_resources: ProjectResourceDTO[]) {
@@ -336,9 +331,5 @@ export class TfrManagementService {
 
   resetClientDetails() {
     this.clientReset.emit(true);
-  }
-
-  setServerDown() {
-    this.errorCode = 503;
   }
 }

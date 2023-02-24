@@ -1,4 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { HttpErrorCodes } from 'src/app/shared/constants';
+import { log } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-error',
@@ -6,39 +10,37 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./error.component.scss'],
 })
 export class ErrorComponent {
-  @Input() code!: number;
+  @Input() error!: HttpErrorResponse;
+  description!: string;
+  message!: string;
+  statusCode!: number;
 
-  message: string = '';
-  error: string = '';
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    if (this.code !== undefined) {
-      switch (this.code) {
-        case 404: {
-          this.error = 'Not Found';
-          this.message = "The Page you are looking for doesn't exist.";
-          break;
-        }
-        case 503: {
-          this.error = 'Service unavailable';
-          this.message = 'Sorry. This page is currently unavailable.';
-          break;
-        }
-        case 500: {
-          this.error = 'Internal Service Error';
-          this.message = 'Sorry. Something went wrong.';
-          break;
-        }
-        case 403: {
-          this.error = 'Access Denied';
-          this.message = 'You do not have access to view this page.';
-          break;
-        }
-        default: {
-          this.error = 'Unknown Error';
-          this.message = 'Sorry. Something went wrong.';
-        }
-      }
+    const parameter = this.route.snapshot.queryParamMap.get('error');
+    if (parameter !== null) {
+      this.error = <HttpErrorResponse>JSON.parse(parameter);
+    }
+
+    log(this.error);
+    this.updateInfo();
+  }
+
+  updateInfo(): void {
+    if (this.error.status === 0) {
+      this.statusCode = 503;
+      this.description = 'Service Unavailable';
+      this.message =
+        'The service is temporarily unavailable. Please try again later.';
+    } else {
+      this.statusCode = this.error.status;
+      const desc = HttpErrorCodes.get(this.error.status);
+      this.description = desc === undefined ? 'Unknown error!' : desc;
+      this.message =
+        desc === undefined
+          ? 'Sorry, something went wrong.'
+          : JSON.stringify(this.error.error).slice(1, -1);
     }
   }
 }

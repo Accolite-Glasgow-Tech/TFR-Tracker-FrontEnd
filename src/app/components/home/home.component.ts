@@ -99,13 +99,11 @@ export class HomeComponent implements OnInit {
     this.widgetsfalse.push({
       componentName: _widget.componentName,
       present: false,
-      componentType: _widget.ChartsComponent,
+      componentType: _widget.componentType,
     });
   }
 
-  optionsChange(options: IGridsterOptions) {
-    // console.log('options change:', options.lanes);
-  }
+  optionsChange(options: IGridsterOptions) {}
 
   OpenPopup() {
     const popup = this.matdialog.open(ManageWidgetModalComponent, {

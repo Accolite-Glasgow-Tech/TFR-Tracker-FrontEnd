@@ -1,4 +1,5 @@
-<h1 *ngIf="tasks.length === 0">There are no scheduled tasks!</h1>
+<app-loading-screen *ngIf="loading"></app-loading-screen>
+<h1 *ngIf="tasks.length === 0 && !loading">There are no scheduled tasks!</h1>
 <div *ngIf="tasks.length > 0">
   <table mat-table [dataSource]="tasks">
     <ng-container matColumnDef="frequency">

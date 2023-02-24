@@ -1,4 +1,7 @@
-<h1 *ngIf="userTasks.length === 0">You have no scheduled tasks!</h1>
+<app-loading-screen *ngIf="loading"></app-loading-screen>
+<div *ngIf="userTasks.length === 0 && !loading">
+  <h1>You have no scheduled tasks!</h1>
+</div>
 <div *ngIf="userTasks.length > 0">
   <table mat-table [dataSource]="userTasks">
     <mat-text-column
