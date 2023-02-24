@@ -29,6 +29,9 @@ export class ErrorComponent {
   updateInfo(): void {
     const desc = HttpErrorCodes.get(this.error.status);
     this.description = desc === undefined ? 'Unknown error!' : desc;
-    this.message = JSON.stringify(this.error.error).slice(1, -1);
+    this.message =
+      desc === undefined
+        ? 'Sorry, something went wrong.'
+        : JSON.stringify(this.error.error).slice(1, -1);
   }
 }
