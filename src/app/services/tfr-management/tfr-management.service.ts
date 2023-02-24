@@ -25,7 +25,6 @@ export class TfrManagementService {
   canEdit: boolean = true;
 
   clientName: string = '';
-  errorCode: number = 200;
 
   updateProjectToDatabaseObserver = {
     next: (response: Data) => {
@@ -36,7 +35,6 @@ export class TfrManagementService {
     error: (err: HttpErrorResponse) => {
       this.responseHandlerService.handleBadProjectUpdate(err);
       this.subject.next(false);
-      this.errorCode = err.status;
     },
   };
 
@@ -54,7 +52,6 @@ export class TfrManagementService {
     error: (err: HttpErrorResponse) => {
       this.responseHandlerService.handleBadProjectUpdate(err);
       this.subject.next(false);
-      this.errorCode = err.status;
     },
   };
 
@@ -74,23 +71,15 @@ export class TfrManagementService {
     next: (response: Data) => {
       let status = response['project']['status'];
 
-      if (typeof status === 'number') {
-        this.errorCode = status;
-        if (status === 500) {
-          /* TFR id does not exist - url -> /tfr/undefined - server returns 500 */
-          this.errorCode = 404;
-        }
-      } else {
-        let project = response['project'];
-        this.project = project;
-        this.apiService
-          .getResourcesNamesByProjectIdFromDatabase(this.project?.id!)
-          .subscribe(this.getResourceNameObserver);
-        this.setClientName(this.project?.client_id!);
-        this.apiService
-          .getHasWritePermission(this.project?.id!)
-          .subscribe(this.getCanWritePermissionObserver);
-      }
+      let project = response['project'];
+      this.project = project;
+      this.apiService
+        .getResourcesNamesByProjectIdFromDatabase(this.project?.id!)
+        .subscribe(this.getResourceNameObserver);
+      this.setClientName(this.project?.client_id!);
+      this.apiService
+        .getHasWritePermission(this.project?.id!)
+        .subscribe(this.getCanWritePermissionObserver);
     },
   };
 
@@ -342,9 +331,5 @@ export class TfrManagementService {
 
   resetClientDetails() {
     this.clientReset.emit(true);
-  }
-
-  setServerDown() {
-    this.errorCode = 503;
   }
 }

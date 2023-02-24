@@ -40,11 +40,6 @@ export class ClientsComponent implements OnInit {
         .getAllClientAttributes()
         .subscribe(this.getAllClientAttributesObserver);
     },
-    error: (err: HttpErrorResponse) => {
-      if (err.status === 0) {
-        this.tfrManagementService.setServerDown();
-      }
-    },
   };
 
   getAllClientAttributesObserver = {
@@ -62,7 +57,6 @@ export class ClientsComponent implements OnInit {
     error: (err: HttpErrorResponse) => {
       if (err.status === 0) {
         this.responseHandler.badGet();
-        this.tfrManagementService.setServerDown();
       }
     },
   };
