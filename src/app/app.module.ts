@@ -33,12 +33,15 @@ import { TfrBasicDetailsComponent } from './components/tfrbasic-details/tfr-basi
 import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { UserComponent } from './components/user/user.component';
-import { TokenInterceptorService } from './interceptors/token-interceptor.service';
+import { ErrorInterceptorService } from './interceptors/error-interceptor/error-interceptor.service';
+import { TokenInterceptorService } from './interceptors/token-interceptor/token-interceptor.service';
 
 import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IgxListModule, IgxRippleModule } from 'igniteui-angular';
+import { ErrorGeneratorComponent } from './components/error-generator/error-generator.component';
 import { ErrorComponent } from './components/error/error.component';
+import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { ManageWidgetModalComponent } from './components/manage-widget-modal/manage-widget-modal.component';
 import { ChipComponent } from './components/milestones/chip/chip.component';
@@ -84,6 +87,8 @@ import { WidgetClientLocationComponent } from './components/widget-client-locati
     ErrorComponent,
     UserNameComponent,
     ProjectSchedulesComponent,
+    LoadingScreenComponent,
+    ErrorGeneratorComponent,
   ],
 
   providers: [
@@ -91,6 +96,11 @@ import { WidgetClientLocationComponent } from './components/widget-client-locati
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptorService,
       multi: true,
     },
   ],

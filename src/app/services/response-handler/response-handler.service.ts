@@ -65,6 +65,10 @@ export class ResponseHandlerService {
     this.snackBarService.showSnackBar('Error. Try again', 5000);
   }
 
+  goodGet() {
+    this.snackBarService.showSnackBar('Get successful', 2000);
+  }
+
   badSave() {
     this.snackBarService.showSnackBar('Save Unsuccessful. Try again', 5000);
   }

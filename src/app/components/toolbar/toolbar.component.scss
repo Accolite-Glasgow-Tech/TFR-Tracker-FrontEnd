@@ -1,4 +1,4 @@
-@import "../../../variables";
+@import "/src/variables";
 
 @media all and (min-device-width: 800px) and (-webkit-min-device-pixel-ratio: 1) {
   .heading {
@@ -52,5 +52,6 @@ button {
 }
 
 .toolbar {
+  height: $toolbar-height;
   background-color: $primary;
 }

@@ -155,9 +155,15 @@ export class TfrBasicDetailsComponent implements OnInit {
   }
 
   resetInputFields() {
-    this.tfrManager
-      .getFromDatabase(this.tfrManager.getProjectId as number)
-      .subscribe(this.getProjectObserver);
+    if (!this.editMode) {
+      this.tfrManager.resetClientDetails();
+      this.tfrDetails.reset();
+      this.clientGroup.reset();
+    } else {
+      this.tfrManager
+        .getFromDatabase(this.tfrManager.getProjectId as number)
+        .subscribe(this.getProjectObserver);
+    }
   }
 
   onAttributesSelected(attributes: ClientAttributeDTO[]) {

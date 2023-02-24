@@ -95,7 +95,6 @@ export class HomeComponent implements OnInit {
   }
 
   public onClick_removeItem(_widget: any): void {
-    console.log('### ' + Object.values(_widget));
     this.widgets.splice(this.widgets.indexOf(_widget), 1);
     this.widgetsfalse.push({
       componentName: _widget.componentName,
@@ -104,9 +103,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  optionsChange(options: IGridsterOptions) {
-    // console.log('options change:', options.lanes);
-  }
+  optionsChange(options: IGridsterOptions) {}
 
   OpenPopup() {
     const popup = this.matdialog.open(ManageWidgetModalComponent, {

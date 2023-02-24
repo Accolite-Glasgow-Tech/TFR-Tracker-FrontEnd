@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApiService } from 'src/app/services/api/api.service';
+import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { userService } from 'src/app/services/user/user.service';
 
@@ -26,6 +27,14 @@ describe('UserComponent', () => {
         },
         {
           provide: userService,
+          useValue: jasmine.createSpyObj(['']),
+        },
+        {
+          provide: ApiService,
+          useValue: jasmine.createSpyObj(['']),
+        },
+        {
+          provide: ResponseHandlerService,
           useValue: jasmine.createSpyObj(['']),
         },
       ],
