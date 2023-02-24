@@ -51,7 +51,6 @@ export class UserComponent implements OnInit {
         sessionStorage.setItem('user_role', info.role);
         sessionStorage.setItem('user_id', info.id.toString());
         sessionStorage.setItem('user_name', info.username);
-        console.log("jwt_token "+sessionStorage.getItem('jwt_token'));
         this.jumpToHome();
       } else {
         sessionStorage.removeItem('user_id');
