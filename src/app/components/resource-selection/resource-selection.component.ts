@@ -109,7 +109,7 @@ export class ResourceSelectionComponent implements OnInit {
   }
 
   getSkills(selectedResource: ResourceListType) {
-    if (this.updateResourceMode)
+    if (!this.updateResourceMode)
       this.displaySkillEmitter.emit(selectedResource);
   }
 }

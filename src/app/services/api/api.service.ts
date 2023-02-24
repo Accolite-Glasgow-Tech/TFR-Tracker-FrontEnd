@@ -10,6 +10,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 import {
   getAllocatedResourcesURL,
   getSkillsURL,
+  getUpdateProjectResourcesURL,
   getWritePermissionCheckUrl,
 } from 'src/app/shared/utils';
 import { environment } from 'src/environments/environment';
@@ -23,7 +24,6 @@ import {
   projectSearchURL,
   projectsURL,
   registrationURL,
-  resourceProjectsURL,
   seniorityLevelsURL,
   taskResourcesURL,
   tasksURL,
@@ -40,6 +40,7 @@ import {
   Project,
   ProjectDTO,
   ProjectMilestoneDTO,
+  ProjectResourceDTO,
   RegisterResponse,
   ResourceDTO,
   ResourceListType,
@@ -91,12 +92,6 @@ export class ApiService {
 
   postProject(project: Project | undefined | ProjectMilestoneDTO) {
     return this.http.post(projectsURL, project).pipe(tap(this.redirectTap));
-  }
-
-  postProjectResources(project: Project | undefined) {
-    return this.http
-      .post(resourceProjectsURL, project)
-      .pipe(tap(this.redirectTap));
   }
 
   postRegister(body: any) {
@@ -221,6 +216,19 @@ export class ApiService {
     return this.http
       .put(taskResourcesURL, taskResource, {
         observe: 'response',
+      })
+      .pipe(tap(this.redirectTap));
+  }
+
+  putProjectResources(
+    projectId: number,
+    projectResourcesWithoutDeleted: ProjectResourceDTO[],
+    resourceCount: number
+  ) {
+    return this.http
+      .put(getUpdateProjectResourcesURL(projectId), {
+        resource_count: resourceCount,
+        project_resources: projectResourcesWithoutDeleted,
       })
       .pipe(tap(this.redirectTap));
   }

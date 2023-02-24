@@ -62,7 +62,7 @@ describe('TfrManagementService', () => {
             'putStatus',
             'putProject',
             'getProject',
-            'postProjectResources',
+            'putProjectResources',
             'getResourcesNamesByProjectIdFromDatabase',
             ,
             'getHasWritePermission',
@@ -286,7 +286,7 @@ describe('TfrManagementService', () => {
   });
 
   it('should update project to resource mapping in db success', () => {
-    apiServiceSpy.postProjectResources.and.returnValue(of(1));
+    apiServiceSpy.putProjectResources.and.returnValue(of(1));
     service.project = project;
     service.updateProjectToResourceMapping();
     expect(service.project.version).toBe(1);
