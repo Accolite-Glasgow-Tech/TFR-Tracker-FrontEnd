@@ -14,17 +14,24 @@ export class ResourceTableComponent {
   @Input() resourcesWithNames!: AllocatedResourceTypeDTO[];
 
   /*
-    If the withDelete is TRUE, an additional column with a delete symbol will 
+    If the withEdit is TRUE, an additional column with a delete and edit symbol will 
     be added to the table created.
   */
-  @Input() withDelete!: boolean;
+  @Input() withEdit!: boolean;
 
   /*
     Signifies to the parent component that the delete symbol was clicked.
   */
   @Output() removeResourceEmitter: EventEmitter<AllocatedResourceTypeDTO> =
     new EventEmitter();
+  @Output() editResourceEmitter: EventEmitter<AllocatedResourceTypeDTO> =
+    new EventEmitter();
+
   removeResource(resource: AllocatedResourceTypeDTO) {
     this.removeResourceEmitter.emit(resource);
+  }
+
+  editResource(resource: AllocatedResourceTypeDTO) {
+    this.editResourceEmitter.emit(resource);
   }
 }

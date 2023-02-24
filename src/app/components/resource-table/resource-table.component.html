@@ -5,7 +5,7 @@
     <th class="data-header">Email</th>
     <th class="data-header">Seniority</th>
     <th class="data-header">Role</th>
-    <th class="data-header" *ngIf="withDelete"></th>
+    <th class="data-header" *ngIf="withEdit"></th>
   </tr>
   <tr
     *ngFor="let resource of resourcesWithNames; let i = index"
@@ -16,19 +16,24 @@
     <td class="data-cell">{{ resource.resource_email }}</td>
     <td class="data-cell">{{ resource.seniority }}</td>
     <td class="data-cell">{{ resource.role }}</td>
-    <td *ngIf="withDelete">
-      <button mat-icon-button color="warn" (click)="removeResource(resource)">
-        <mat-icon>delete</mat-icon>
-      </button>
+    <td *ngIf="withEdit">
+      <div class="data-cell-btn">
+        <button mat-icon-button (click)="editResource(resource)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="removeResource(resource)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
     </td>
   </tr>
 </table>
 
 <table class="mat-elevation-z8 demo-table table-resource-mobile">
-  <tr *ngIf="withDelete">
+  <tr *ngIf="withEdit">
     <th></th>
     <th>Details</th>
-    <th *ngIf="withDelete"></th>
+    <th *ngIf="withEdit"></th>
   </tr>
   <tr *ngFor="let resource of resourcesWithNames; let i = index">
     <td class="data-cell-mobile">{{ i + 1 }}</td>
@@ -48,10 +53,15 @@
         </div>
       </div>
     </td>
-    <td *ngIf="withDelete">
-      <button mat-icon-button color="warn" (click)="removeResource(resource)">
-        <mat-icon>delete</mat-icon>
-      </button>
+    <td *ngIf="withEdit">
+      <div class="data-cell-btn">
+        <button mat-icon-button (click)="editResource(resource)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="removeResource(resource)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
     </td>
   </tr>
 </table>

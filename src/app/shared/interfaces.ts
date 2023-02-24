@@ -121,14 +121,14 @@ export interface LoginResponse {
   token: string;
 }
 
-export interface tfrCreationDialogContent {
+export interface TfrCreationDialogContent {
   title: string;
   content: string;
   confirmText: string;
   cancelText: string;
 }
 
-export interface notesDialogContent {
+export interface NotesDialogContent {
   notes: string;
   editable: boolean;
 }
@@ -153,6 +153,18 @@ export interface TaskResourceDTO {
   task_id: number;
   resource_id: number;
   enabled: boolean;
+}
+
+export interface AddResource {
+  resource_name: string;
+  role: string;
+  seniority: string;
+}
+
+export interface UpdateResourceDialogContent {
+  seniorityLevels: string[];
+  resources: ResourceListType[];
+  resourceToEdit: AllocatedResourceTypeDTO;
 }
 
 ///////////////////////////////////////////////////////////////////////////
