@@ -1,6 +1,7 @@
 import { CreateGuard } from 'src/app/services/guards/create-guard/create.guard';
 import { LoginGuardService } from 'src/app/services/guards/login-guard/login-guard.service';
 import { LogoutGuardService } from 'src/app/services/guards/logout-guard/logout-guard.service';
+import { ErrorGeneratorComponent } from './components/error-generator/error-generator.component';
 import { HomeComponent } from './components/home/home.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { ProjectSchedulesComponent } from './components/project-schedules/project-schedules.component';
@@ -86,6 +87,10 @@ export const appRoutes: TFRRoute[] = [
     canActivate: [LoginGuardService],
     path: 'tfr/:id/schedules',
     component: ProjectSchedulesComponent,
+  },
+  {
+    path: 'errors',
+    component: ErrorGeneratorComponent,
   },
   {
     path: '**',
