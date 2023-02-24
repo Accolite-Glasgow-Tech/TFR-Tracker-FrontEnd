@@ -31,6 +31,10 @@ export class ErrorInterceptorService implements HttpInterceptor {
               this.cleanAndRedirect();
               break;
             default:
+              this.router.navigate(['/error'], {
+                skipLocationChange: true,
+                queryParams: { error: JSON.stringify(error) },
+              });
               break;
           }
         },

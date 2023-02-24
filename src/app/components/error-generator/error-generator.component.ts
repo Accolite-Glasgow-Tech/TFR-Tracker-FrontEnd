@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from 'src/app/services/api/api.service';
 import { HttpErrorCodes } from 'src/app/shared/constants';
-import { log } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-error-generator',
@@ -30,7 +29,6 @@ export class ErrorGeneratorComponent {
     this.apiService.postError(dto).subscribe({
       error: (error: HttpErrorResponse) => {
         this.error = error;
-        log(error);
       },
     });
   }
