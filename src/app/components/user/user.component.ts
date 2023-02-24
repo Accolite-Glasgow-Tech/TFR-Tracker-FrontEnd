@@ -6,6 +6,7 @@ import { ApiService } from 'src/app/services/api/api.service';
 import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 import { LoginResponse, RegisterResponse } from 'src/app/shared/interfaces';
+import { log } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-user',
@@ -51,7 +52,7 @@ export class UserComponent implements OnInit {
         sessionStorage.setItem('user_role', info.role);
         sessionStorage.setItem('user_id', info.id.toString());
         sessionStorage.setItem('user_name', info.username);
-        console.log("jwt_token "+sessionStorage.getItem('jwt_token'));
+        log("jwt_token "+sessionStorage.getItem('jwt_token'))
         this.jumpToHome();
       } else {
         sessionStorage.removeItem('user_id');
