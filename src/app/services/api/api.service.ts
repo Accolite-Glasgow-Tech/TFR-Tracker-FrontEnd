@@ -180,12 +180,10 @@ export class ApiService {
     projectResourcesWithoutDeleted: ProjectResourceDTO[],
     resourceCount: number
   ) {
-    return this.http
-      .put(getUpdateProjectResourcesURL(projectId), {
-        resource_count: resourceCount,
-        project_resources: projectResourcesWithoutDeleted,
-      })
-      .pipe(tap(this.redirectTap));
+    return this.http.put(getUpdateProjectResourcesURL(projectId), {
+      resource_count: resourceCount,
+      project_resources: projectResourcesWithoutDeleted,
+    });
   }
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// DELETE ////////////////////////////////
