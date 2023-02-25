@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpErrorCodes } from 'src/app/shared/constants';
-import { log } from 'src/app/shared/utils';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-error',
@@ -13,6 +13,8 @@ export class ErrorComponent {
   error!: HttpErrorResponse;
   description!: string;
   message!: string;
+  debugInfo: string | undefined;
+  env = environment;
 
   constructor(private route: ActivatedRoute) {}
 
@@ -21,9 +23,14 @@ export class ErrorComponent {
     if (parameter !== null) {
       this.error = <HttpErrorResponse>JSON.parse(parameter);
     }
-
-    log(this.error);
     this.updateInfo();
+    if (!environment.production) {
+      this.debugInfo = JSON.stringify({
+        headers: this.error.headers,
+        statusText: this.error.statusText,
+        url: this.error.url,
+      });
+    }
   }
 
   updateInfo(): void {
