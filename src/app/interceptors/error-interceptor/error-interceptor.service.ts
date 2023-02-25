@@ -1,4 +1,5 @@
 import {
+  HttpErrorResponse,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
@@ -6,8 +7,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/internal/operators/tap';
+import { Observable, tap } from 'rxjs';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
 
 @Injectable({
@@ -27,14 +27,23 @@ export class ErrorInterceptorService implements HttpInterceptor {
       tap({
         error: (error) => {
           switch (error.status) {
+            case 0:
+              this.redirecToError(
+                new HttpErrorResponse({
+                  error:
+                    'Service is temporarily unavailable. Please try again later.',
+                  headers: error.headers,
+                  status: 503,
+                  statusText: error.statusText,
+                  url: error.url,
+                })
+              );
+              break;
             case 401:
-              this.cleanAndRedirect();
+              this.redirectToLogin();
               break;
             default:
-              this.router.navigate(['/error'], {
-                skipLocationChange: true,
-                queryParams: { error: JSON.stringify(error) },
-              });
+              this.redirecToError(error);
               break;
           }
         },
@@ -42,12 +51,19 @@ export class ErrorInterceptorService implements HttpInterceptor {
     );
   }
 
-  cleanAndRedirect(): void {
+  redirectToLogin(): void {
     sessionStorage.clear();
     this.router.navigateByUrl('login');
     this.snackBarService.showSnackBar(
       'Your token has expired; please log in again',
       5000
     );
+  }
+
+  redirecToError(error: HttpErrorResponse) {
+    this.router.navigate(['/error'], {
+      skipLocationChange: true,
+      queryParams: { error: JSON.stringify(error) },
+    });
   }
 }
