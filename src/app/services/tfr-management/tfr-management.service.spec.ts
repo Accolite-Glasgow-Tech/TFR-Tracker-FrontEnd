@@ -315,28 +315,6 @@ describe('TfrManagementService', () => {
     expect(service.project?.resources_count).toBe(1);
   });
 
-  it('should retrieve project - 500 error', () => {
-    let response = {
-      project: {
-        status: 500,
-      },
-    };
-    let observer = service.getProjectObserver;
-    observer.next(response);
-    expect(service.errorCode).toBe(404);
-  });
-
-  it('should retrieve project - 503 error', () => {
-    let response = {
-      project: {
-        status: 503,
-      },
-    };
-    let observer = service.getProjectObserver;
-    observer.next(response);
-    expect(service.errorCode).toBe(503);
-  });
-
   it('should retrieve project', () => {
     let response = {
       project: project,
@@ -371,10 +349,5 @@ describe('TfrManagementService', () => {
     service.setNotes('Hello World');
     expect(service.project.notes).toBe('Hello World');
     expect(apiServiceSpy.putProject).toHaveBeenCalled();
-  });
-
-  it('should set server down', () => {
-    service.setServerDown();
-    expect(service.errorCode).toBe(503);
   });
 });

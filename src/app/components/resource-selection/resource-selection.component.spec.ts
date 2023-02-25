@@ -139,7 +139,7 @@ describe('ResourceSelectionComponent', () => {
   });
 
   it('should notify display skill', () => {
-    component.updateResourceMode = true;
+    component.updateResourceMode = false;
     let selectedResource: ResourceListType = DummyResources[0];
     spyOn(component.displaySkillEmitter, 'emit');
     component.getSkills(selectedResource);
