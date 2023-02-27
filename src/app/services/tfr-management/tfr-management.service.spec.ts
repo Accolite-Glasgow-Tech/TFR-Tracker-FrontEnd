@@ -305,9 +305,9 @@ describe('TfrManagementService', () => {
   });
 
   it('should update project status to db', () => {
-    apiServiceSpy.putStatus.and.returnValue(of(true));
+    apiServiceSpy.putProject.and.returnValue(of(1));
     let result = service.updateStatusToDatabase();
-    result.subscribe((response) => expect(response).toBe(true));
+    result.subscribe((response) => expect(response).toBe(1));
   });
 
   it('should set resources count', () => {

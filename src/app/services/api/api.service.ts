@@ -211,12 +211,4 @@ export class ApiService {
   searchProjects(body: any): Observable<ProjectDTO[]> {
     return this.http.post<ProjectDTO[]>(projectSearchURL, body);
   }
-
-  // Bad use of put request, instead of using the URL to update the status and passing null as data, use the data to update the status
-  putStatus(projectId: number, status: string): Observable<boolean> {
-    return this.http.put<boolean>(
-      `${projectsURL}/${projectId}/status/${status}`,
-      null
-    );
-  }
 }
