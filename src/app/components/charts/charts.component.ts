@@ -20,11 +20,10 @@ export class ChartsComponent implements OnInit {
   pieChartLabels: any[] = [];
   ngOnInit() {
     this.apiService.getTFRStatusCount().subscribe((responsedata: any) => {
-      (this.pieChartLabels = Object.keys(JSON.parse(responsedata.response))),
-        (this.serverup = true);
+      (this.pieChartLabels = Object.keys(responsedata)), (this.serverup = true);
       this.pieChartData = [
         {
-          data: Object.values(JSON.parse(responsedata.response)),
+          data: Object.values(responsedata),
           backgroundColor: [
             'orange',
             'blue',
