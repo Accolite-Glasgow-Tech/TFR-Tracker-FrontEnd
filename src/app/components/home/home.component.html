@@ -27,15 +27,7 @@
       class="ngxgriditem"
       *ngFor="let widget of widgets; index as i"
     >
-      <div
-        style="
-          height: 400px;
-          width: inherit;
-          position: relative;
-          margin: 8px;
-          inline-size: auto;
-        "
-      >
+      <div class="ngxgriditemdiv">
         <mat-card class="widget">
           <h1 class="header">
             <a class="headerText"> {{ widget.componentName }}</a>

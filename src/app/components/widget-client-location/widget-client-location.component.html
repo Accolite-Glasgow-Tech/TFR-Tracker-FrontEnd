@@ -1,10 +1,8 @@
 <mat-card class="nodata" *ngIf="dataPoints.length === 0 && serverup">
-  <h1 style="align-self: center; color: antiquewhite">No Data to show</h1>
+  <h1 class="head">No Data to show</h1>
 </mat-card>
 <mat-card class="nodata" *ngIf="!serverup">
-  <h1 style="align-self: center; color: antiquewhite">
-    Service unavailable. Try again
-  </h1>
+  <h1 class="head">Service unavailable. Try again</h1>
 </mat-card>
 <mat-card class="chartstyle" *ngIf="dataPoints.length > 0">
   <canvasjs-chart [options]="chartOptions"></canvasjs-chart>

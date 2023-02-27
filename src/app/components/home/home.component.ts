@@ -33,22 +33,18 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.widgets.push({
       componentName: 'Client Location',
-      present: true,
       componentType: WidgetClientLocationComponent,
     });
     this.widgets.push({
       componentName: 'Our Clients',
-      present: true,
       componentType: WidgetClientProjectCountComponent,
     });
     this.widgets.push({
       componentName: 'TFR Status',
-      present: true,
       componentType: ChartsComponent,
     });
     this.widgets.push({
       componentName: 'Upcoming TFRs',
-      present: true,
       componentType: WidgetApproachingProjectsComponent,
     });
   }
@@ -95,11 +91,9 @@ export class HomeComponent implements OnInit {
   }
 
   public onClick_removeItem(_widget: any): void {
-    console.log('### ' + Object.values(_widget));
     this.widgets.splice(this.widgets.indexOf(_widget), 1);
     this.widgetsfalse.push({
       componentName: _widget.componentName,
-      present: false,
       componentType: _widget.componentType,
     });
   }
@@ -128,11 +122,10 @@ export class HomeComponent implements OnInit {
               this.flag = 1;
             }
           }
-          // if widget is not present in home screen then add the widget in the home page
+          // if widget is not present in home screen then add the widget in the home page and remove widget from widgetfalse list
           if (this.flag === 0) {
             this.widgets.push({
               componentName: 'TFR Status',
-              present: true,
               componentType: ChartsComponent,
             });
 
@@ -151,7 +144,6 @@ export class HomeComponent implements OnInit {
             );
             this.widgetsfalse.push({
               componentName: 'TFR Status',
-              present: false,
               componentType: ChartsComponent,
             });
           }
@@ -168,7 +160,6 @@ export class HomeComponent implements OnInit {
           if (this.flag === 0) {
             this.widgets.push({
               componentName: 'Upcoming TFRs',
-              present: true,
               componentType: WidgetApproachingProjectsComponent,
             });
 
@@ -189,7 +180,6 @@ export class HomeComponent implements OnInit {
             );
             this.widgetsfalse.push({
               componentName: 'Upcoming TFRs',
-              present: false,
               componentType: WidgetApproachingProjectsComponent,
             });
           }
@@ -206,7 +196,6 @@ export class HomeComponent implements OnInit {
           if (this.flag === 0) {
             this.widgets.push({
               componentName: 'Our Clients',
-              present: true,
               componentType: WidgetClientProjectCountComponent,
             });
             this.widgetsfalse.splice(
@@ -222,7 +211,6 @@ export class HomeComponent implements OnInit {
             );
             this.widgetsfalse.push({
               componentName: 'Our Clients',
-              present: false,
               componentType: WidgetClientProjectCountComponent,
             });
           }
@@ -239,7 +227,6 @@ export class HomeComponent implements OnInit {
           if (this.flag === 0) {
             this.widgets.push({
               componentName: 'Client Location',
-              present: true,
               componentType: WidgetClientLocationComponent,
             });
 
@@ -258,7 +245,6 @@ export class HomeComponent implements OnInit {
             );
             this.widgetsfalse.push({
               componentName: 'Client Location',
-              present: false,
               componentType: WidgetClientLocationComponent,
             });
           }

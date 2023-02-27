@@ -256,6 +256,13 @@ section {
   height: -webkit-fill-available;
 }
 
+.ngxgriditemdiv {
+  height: 400px;
+  width: inherit;
+  position: relative;
+  margin: 8px;
+  inline-size: auto;
+}
 @media all and (min-device-width: 1700px) and (-webkit-min-device-pixel-ratio: 1) {
   .widget {
     border: 8px solid #fbfbfb;

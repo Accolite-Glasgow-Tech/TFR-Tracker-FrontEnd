@@ -1,16 +1,8 @@
-<mat-card
-  *ngIf="ProjectDetails.length === 0 && serverup"
-  style="background-color: transparent; padding: 15px"
->
-  <h1 style="align-self: center; color: antiquewhite">No Data to show</h1>
+<mat-card class="nodataclass" *ngIf="ProjectDetails.length === 0 && serverup">
+  <h1 class="head">No Data to show</h1>
 </mat-card>
-<mat-card
-  *ngIf="!serverup"
-  style="background-color: transparent; padding: 15px"
->
-  <h1 style="align-self: center; color: antiquewhite">
-    Service unavailable. Try again
-  </h1>
+<mat-card class="nodataclass" *ngIf="!serverup">
+  <h1 class="head">Service unavailable. Try again</h1>
 </mat-card>
 <igx-list *ngIf="ProjectDetails.length > 0">
   <mat-card class="igxlistbox">

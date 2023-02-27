@@ -8,41 +8,24 @@
     margin: auto;
     text-align: center;
   }
-
-  .isPresentstyle {
-    background-color: rgb(154, 154, 154);
-    color: rgb(89, 85, 85);
-    font-size: 1vw;
-  }
-  .notPresentstyle {
-    background-color: #507fc6;
-    color: white;
-    font-size: 1vw;
-  }
 }
 
 @media all and (max-width: 799px) and (-webkit-min-device-pixel-ratio: 1) {
   .title {
-    font-size: 6vw;
-    font-family: ui-rounded;
+    font-size: 4vw;
     background-color: $primary;
     color: whitesmoke;
     margin: auto;
     text-align: center;
   }
-
-  .isPresentstyle {
-    background-color: rgb(154, 154, 154);
-    color: rgb(89, 85, 85);
-    font-size: 3.5vw;
-  }
-  .notPresentstyle {
-    background-color: #507fc6;
-    color: white;
-    font-size: 3.5vw;
-  }
 }
 
 .foot {
   justify-content: right;
+}
+
+.top-btn-left {
+  font-size: 120%;
+  white-space: pre-wrap;
+  text-align-last: left;
 }
