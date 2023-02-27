@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
+import {
+  AllocatedResourceTypeDTO,
+  ProjectResourceDTO,
+} from 'src/app/shared/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -16,5 +19,11 @@ export class ResourceService {
       : resourcesWithNames.filter(
           (resource: AllocatedResourceTypeDTO) => !resource.is_deleted
         );
+  }
+
+  projectResourcesWithoutDeleted(
+    projectResources: ProjectResourceDTO[]
+  ): ProjectResourceDTO[] {
+    return projectResources.filter((pr) => !pr.is_deleted);
   }
 }

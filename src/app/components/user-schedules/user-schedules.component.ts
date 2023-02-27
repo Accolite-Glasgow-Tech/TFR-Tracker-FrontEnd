@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ApiService } from 'src/app/services/api/api.service';
 import { SnackBarService } from 'src/app/services/snack-bar/snack-bar.service';
@@ -34,8 +33,6 @@ export class UserSchedulesComponent {
     if (!Number.isNaN(userId)) {
       this.apiService.getUserTasks(<number>userId).subscribe({
         next: (response: any) => (this.userTasks = <UserTaskDTO[]>response),
-        error: (error: HttpErrorResponse) =>
-          this.snackBarService.showSnackBar(error.error),
         complete: () => (this.loading = false),
       });
     }
@@ -51,8 +48,6 @@ export class UserSchedulesComponent {
     this.apiService.putTaskAvailability(taskResourceDTO).subscribe({
       next: () =>
         this.snackBarService.showSnackBar('Schedule updated successfully'),
-      error: (error: HttpErrorResponse) =>
-        this.snackBarService.showSnackBar(error.error),
       complete: () => (this.loading = false),
     });
   }

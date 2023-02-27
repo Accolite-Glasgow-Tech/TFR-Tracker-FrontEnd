@@ -1,4 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { HttpErrorCodes } from 'src/app/shared/constants';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-error',
@@ -6,39 +10,32 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./error.component.scss'],
 })
 export class ErrorComponent {
-  @Input() code!: number;
+  error!: HttpErrorResponse;
+  description!: string;
+  message!: string;
+  debugInfo: string | undefined;
+  env = environment;
 
-  message: string = '';
-  error: string = '';
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    if (this.code !== undefined) {
-      switch (this.code) {
-        case 404: {
-          this.error = 'Not Found';
-          this.message = "The Page you are looking for doesn't exist.";
-          break;
-        }
-        case 503: {
-          this.error = 'Service unavailable';
-          this.message = 'Sorry. This page is currently unavailable.';
-          break;
-        }
-        case 500: {
-          this.error = 'Internal Service Error';
-          this.message = 'Sorry. Something went wrong.';
-          break;
-        }
-        case 403: {
-          this.error = 'Access Denied';
-          this.message = 'You do not have access to view this page.';
-          break;
-        }
-        default: {
-          this.error = 'Unknown Error';
-          this.message = 'Sorry. Something went wrong.';
-        }
-      }
+    const parameter = this.route.snapshot.queryParamMap.get('error');
+    if (parameter !== null) {
+      this.error = <HttpErrorResponse>JSON.parse(parameter);
     }
+    this.updateInfo();
+    if (!environment.production) {
+      this.debugInfo = JSON.stringify({
+        headers: this.error.headers,
+        statusText: this.error.statusText,
+        url: this.error.url,
+      });
+    }
+  }
+
+  updateInfo(): void {
+    const desc = HttpErrorCodes.get(this.error.status);
+    this.description = desc === undefined ? 'Unknown error!' : desc;
+    this.message = JSON.stringify(this.error.error).slice(1, -1);
   }
 }

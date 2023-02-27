@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -124,8 +123,6 @@ export class ReportsComponent implements OnInit {
     this.apiService.postTask(taskObject).subscribe({
       next: () =>
         this.snackBarService.showSnackBar('Report was scheduled successfully'),
-      error: (error: HttpErrorResponse) =>
-        this.snackBarService.showSnackBar(error.error),
     });
   }
 }

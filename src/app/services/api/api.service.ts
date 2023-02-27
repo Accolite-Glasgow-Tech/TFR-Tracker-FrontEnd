@@ -1,15 +1,11 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/internal/operators/tap';
 import {
   getAllocatedResourcesURL,
   getSkillsURL,
+  getUpdateProjectResourcesURL,
   getWritePermissionCheckUrl,
 } from 'src/app/shared/utils';
 import { environment } from 'src/environments/environment';
@@ -19,11 +15,11 @@ import {
   clientProjectCountURL,
   clientsURL,
   clientsURLdupe,
+  errorsURL,
   loginURL,
   projectSearchURL,
   projectsURL,
   registrationURL,
-  resourceProjectsURL,
   seniorityLevelsURL,
   taskResourcesURL,
   tasksURL,
@@ -40,6 +36,7 @@ import {
   Project,
   ProjectDTO,
   ProjectMilestoneDTO,
+  ProjectResourceDTO,
   RegisterResponse,
   ResourceDTO,
   ResourceListType,
@@ -60,178 +57,140 @@ export class ApiService {
     private snackBarService: SnackBarService
   ) {}
 
-  // These are not APIs, move them to a suitable file, also use interceptors instead of manually changing every single api
-
-  redirectTap = {
-    error: (error: HttpErrorResponse) => {
-      error.status == 401 ? this.cleanAndRedirect() : true;
-    },
-  };
-
-  cleanAndRedirect(): void {
-    sessionStorage.clear();
-    this.router.navigateByUrl('login');
-    this.snackBarService.showSnackBar(
-      'login expired, please log in again',
-      5000
-    );
-  }
-
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// POST //////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
 
   postTask(taskObject: TaskCreationDTO) {
-    return this.http
-      .post(tasksURL, taskObject, {
-        observe: 'response',
-      })
-      .pipe(tap(this.redirectTap));
+    return this.http.post(tasksURL, taskObject, {
+      observe: 'response',
+    });
   }
 
   postProject(project: Project | undefined | ProjectMilestoneDTO) {
-    return this.http.post(projectsURL, project).pipe(tap(this.redirectTap));
-  }
-
-  postProjectResources(project: Project | undefined) {
-    return this.http
-      .post(resourceProjectsURL, project)
-      .pipe(tap(this.redirectTap));
+    return this.http.post(projectsURL, project);
   }
 
   postRegister(body: any) {
-    return this.http
-      .post<RegisterResponse>(registrationURL, body)
-      .pipe(tap(this.redirectTap));
+    return this.http.post<RegisterResponse>(registrationURL, body);
   }
 
   postLogin(body: any) {
-    return this.http
-      .post<LoginResponse>(loginURL, body)
-      .pipe(tap(this.redirectTap));
+    return this.http.post<LoginResponse>(loginURL, body);
+  }
+
+  postError(error: any) {
+    return this.http.post(errorsURL, error);
   }
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// GET ///////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
 
   getTFRLocationCount(): Observable<any> {
-    return this.http.get<any>(TFRLocationCountURL).pipe(tap(this.redirectTap));
+    return this.http.get<any>(TFRLocationCountURL);
   }
 
   getClientProjectCount(): Observable<any> {
-    return this.http
-      .get<any>(clientProjectCountURL)
-      .pipe(tap(this.redirectTap));
+    return this.http.get<any>(clientProjectCountURL);
   }
 
   getApproachingProjectNames(): Observable<any> {
-    return this.http
-      .get<any>(approachingProjectsURL)
-      .pipe(tap(this.redirectTap));
+    return this.http.get<any>(approachingProjectsURL);
   }
 
   getTFRStatusCount(): Observable<any> {
-    return this.http.get<any>(TFRStatusCountURL).pipe(tap(this.redirectTap));
+    return this.http.get<any>(TFRStatusCountURL);
   }
 
   getResourcesByProjectId(projectId: number): Observable<ResourceDTO[]> {
-    return this.http
-      .get<ResourceDTO[]>(`${backendURL}/search/resource/project/${projectId}`)
-      .pipe(tap(this.redirectTap));
+    return this.http.get<ResourceDTO[]>(
+      `${backendURL}/search/resource/project/${projectId}`
+    );
   }
 
   getClientAttributes(clientId: number): Observable<ClientAttributeDTO[]> {
-    return this.http
-      .get<ClientAttributeDTO[]>(`${backendURL}/vendorAttributes/${clientId}`)
-      .pipe(tap(this.redirectTap));
+    return this.http.get<ClientAttributeDTO[]>(
+      `${backendURL}/vendorAttributes/${clientId}`
+    );
   }
 
   getAllClientAttributes(): Observable<ClientAttributeDTO[][]> {
-    return this.http
-      .get<ClientAttributeDTO[][]>(`${backendURL}/vendorAttributes`)
-      .pipe(tap(this.redirectTap));
+    return this.http.get<ClientAttributeDTO[][]>(
+      `${backendURL}/vendorAttributes`
+    );
   }
 
   getProject(projectId: Number): Observable<HttpResponse<Project>> {
-    return this.http
-      .get<Project>(`${projectsURL}/${projectId}`, {
-        observe: 'response',
-      })
-      .pipe(tap(this.redirectTap));
+    return this.http.get<Project>(`${projectsURL}/${projectId}`, {
+      observe: 'response',
+    });
   }
 
   getUserTasks(userId: number) {
-    return this.http
-      .get(`${backendURL}/tasks/user/${userId}`)
-      .pipe(tap(this.redirectTap));
+    return this.http.get(`${backendURL}/tasks/user/${userId}`);
   }
 
   getAllProjects(): Observable<ProjectDTO[]> {
-    return this.http
-      .get<ProjectDTO[]>(allProjectsURL)
-      .pipe(tap(this.redirectTap));
+    return this.http.get<ProjectDTO[]>(allProjectsURL);
   }
 
   getSkillsByResourceId(resourceId: number): Observable<DisplaySkillDTO[]> {
-    return this.http
-      .get<DisplaySkillDTO[]>(getSkillsURL(resourceId))
-      .pipe(tap(this.redirectTap));
+    return this.http.get<DisplaySkillDTO[]>(getSkillsURL(resourceId));
   }
 
   getAllResources(): Observable<ResourceListType[]> {
-    return this.http
-      .get<ResourceListType[]>(TFRCreationResourceURL)
-      .pipe(tap(this.redirectTap));
+    return this.http.get<ResourceListType[]>(TFRCreationResourceURL);
   }
 
   getAllSeniorityLevels(): Observable<string[]> {
-    return this.http
-      .get<string[]>(seniorityLevelsURL)
-      .pipe(tap(this.redirectTap));
+    return this.http.get<string[]>(seniorityLevelsURL);
   }
 
   getResourcesNamesByProjectIdFromDatabase(
     projectId: Number
   ): Observable<AllocatedResourceTypeDTO[]> {
-    return this.http
-      .get<AllocatedResourceTypeDTO[]>(getAllocatedResourcesURL(projectId))
-      .pipe(tap(this.redirectTap));
+    return this.http.get<AllocatedResourceTypeDTO[]>(
+      getAllocatedResourcesURL(projectId)
+    );
   }
 
   getHasWritePermission(projectId: number): Observable<boolean> {
-    return this.http
-      .get<boolean>(getWritePermissionCheckUrl(projectId))
-      .pipe(tap(this.redirectTap));
+    return this.http.get<boolean>(getWritePermissionCheckUrl(projectId));
   }
 
   getProjectTasks(projectId: number) {
-    return this.http
-      .get(`${backendURL}/tasks/project/${projectId}`)
-      .pipe(tap(this.redirectTap));
+    return this.http.get(`${backendURL}/tasks/project/${projectId}`);
   }
 
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// PUT ///////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
   putProject(project: Project | undefined | ProjectMilestoneDTO) {
-    return this.http.put(projectsURL, project).pipe(tap(this.redirectTap));
+    return this.http.put(projectsURL, project);
   }
 
   putTaskAvailability(taskResource: TaskResourceDTO) {
-    return this.http
-      .put(taskResourcesURL, taskResource, {
-        observe: 'response',
-      })
-      .pipe(tap(this.redirectTap));
+    return this.http.put(taskResourcesURL, taskResource, {
+      observe: 'response',
+    });
+  }
+
+  putProjectResources(
+    projectId: number,
+    projectResourcesWithoutDeleted: ProjectResourceDTO[],
+    resourceCount: number
+  ) {
+    return this.http.put(getUpdateProjectResourcesURL(projectId), {
+      resource_count: resourceCount,
+      project_resources: projectResourcesWithoutDeleted,
+    });
   }
   ///////////////////////////////////////////////////////////////////////////
   /////////////////////////////////// DELETE ////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
 
   deleteTaskById(taskId: number) {
-    return this.http
-      .delete(`${backendURL}/tasks/${taskId}`)
-      .pipe(tap(this.redirectTap));
+    return this.http.delete(`${backendURL}/tasks/${taskId}`);
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -240,25 +199,24 @@ export class ApiService {
 
   // Duplicate code (getClients)
   getAllClients() {
-    return this.http.get(clientsURLdupe).pipe(tap(this.redirectTap));
+    return this.http.get(clientsURLdupe);
   }
 
   // Duplicate code (getAllClients)
   getClients(): Observable<ClientDTO[]> {
-    return this.http.get<ClientDTO[]>(clientsURL).pipe(tap(this.redirectTap));
+    return this.http.get<ClientDTO[]>(clientsURL);
   }
 
   // Rename to something like PostProjectSearch
   searchProjects(body: any): Observable<ProjectDTO[]> {
-    return this.http
-      .post<ProjectDTO[]>(projectSearchURL, body)
-      .pipe(tap(this.redirectTap));
+    return this.http.post<ProjectDTO[]>(projectSearchURL, body);
   }
 
   // Bad use of put request, instead of using the URL to update the status and passing null as data, use the data to update the status
   putStatus(projectId: number, status: string): Observable<boolean> {
-    return this.http
-      .put<boolean>(`${projectsURL}/${projectId}/status/${status}`, null)
-      .pipe(tap(this.redirectTap));
+    return this.http.put<boolean>(
+      `${projectsURL}/${projectId}/status/${status}`,
+      null
+    );
   }
 }

@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { notesDialogContent } from 'src/app/shared/interfaces';
+import { NotesDialogContent } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-notes-dialog',
@@ -10,7 +10,7 @@ import { notesDialogContent } from 'src/app/shared/interfaces';
 export class NotesDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<NotesDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: notesDialogContent
+    @Inject(MAT_DIALOG_DATA) public data: NotesDialogContent
   ) {}
 
   onNoClick(): void {

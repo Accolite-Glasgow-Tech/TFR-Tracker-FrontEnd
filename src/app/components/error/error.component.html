@@ -1,8 +1,7 @@
 <div class="container">
-  <h1>{{ code }}</h1>
-  <h2>{{ error }}</h2>
-  <p>
-    {{ message }}
-    <a href="/home">Home Page</a>.
-  </p>
+  <h1>{{ error.status }}</h1>
+  <h2>{{ description }}</h2>
+  <h3>{{ message }}</h3>
+  <h2 *ngIf="!env.production">{{ debugInfo }}</h2>
+  <p><a href="/home">Home Page</a>.</p>
 </div>

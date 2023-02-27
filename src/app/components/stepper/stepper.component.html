@@ -1,114 +1,97 @@
-<div *ngIf="tfrManagementService.errorCode === 200">
-  <mat-stepper [linear]="isLinear" #stepper [labelPosition]="'bottom'">
-    <mat-step [completed]="stepsValid[0]" state="basic-details-icon">
-      <ng-template matStepLabel>{{
-        (this.stepLabels | async)![0]
-      }}</ng-template>
-      <app-tfr-basic-details
-        (nextStepEmitter)="nextStep($event)"
-        (stepCompletedEmitter)="stepCompleted(0, $event)"
-        (editModeEmitter)="setEditMode($event)"
-      ></app-tfr-basic-details>
-    </mat-step>
+<mat-stepper [linear]="isLinear" #stepper [labelPosition]="'bottom'">
+  <mat-step [completed]="stepsValid[0]" state="basic-details-icon">
+    <ng-template matStepLabel>{{ (this.stepLabels | async)![0] }}</ng-template>
+    <app-tfr-basic-details
+      (nextStepEmitter)="nextStep($event)"
+      (stepCompletedEmitter)="stepCompleted(0, $event)"
+      (editModeEmitter)="setEditMode($event)"
+    ></app-tfr-basic-details>
+  </mat-step>
 
-    <mat-step [completed]="stepsValid[1]" state="milestone-icon">
-      <ng-template matStepLabel>{{
-        (this.stepLabels | async)![1]
-      }}</ng-template>
-      <app-milestones
-        (nextStepEmitter)="nextStep($event)"
-        (stepCompletedEmitter)="stepCompleted(1, $event)"
+  <mat-step [completed]="stepsValid[1]" state="milestone-icon">
+    <ng-template matStepLabel>{{ (this.stepLabels | async)![1] }}</ng-template>
+    <app-milestones
+      (nextStepEmitter)="nextStep($event)"
+      (stepCompletedEmitter)="stepCompleted(1, $event)"
+    >
+    </app-milestones>
+  </mat-step>
+
+  <mat-step [completed]="stepsValid[2]" state="resources-icon">
+    <ng-template matStepLabel>{{ (this.stepLabels | async)![2] }}</ng-template>
+    <!-- Resource Component Here -->
+    <app-tfr-creation-resource
+      (nextStepEmitter)="nextStep($event)"
+      (stepCompletedEmitter)="stepCompleted(2, $event)"
+      [editMode]="editMode"
+    ></app-tfr-creation-resource>
+    <!--  -->
+  </mat-step>
+
+  <mat-step id="last-step" state="summary-icon">
+    <ng-template matStepLabel>{{ (this.stepLabels | async)![3] }}</ng-template>
+
+    <div id="title"><h2>TFR Submission</h2></div>
+    <app-project-summary
+      [currentProject]="tfrManagementService.getProject"
+      [resourcesWithNames]="currentResourcesWithNames"
+      [clientName]="tfrManagementService.getClientName"
+    ></app-project-summary>
+
+    <div class="floating-btn-div">
+      <button
+        mat-raised-button
+        class="navigation-btn"
+        color="primary"
+        matStepperPrevious
       >
-      </app-milestones>
-    </mat-step>
+        Back
+      </button>
 
-    <mat-step [completed]="stepsValid[2]" state="resources-icon">
-      <ng-template matStepLabel>{{
-        (this.stepLabels | async)![2]
-      }}</ng-template>
-      <!-- Resource Component Here -->
-      <app-tfr-creation-resource
-        (nextStepEmitter)="nextStep($event)"
-        (stepCompletedEmitter)="stepCompleted(2, $event)"
-        [editMode]="editMode"
-      ></app-tfr-creation-resource>
-      <!--  -->
-    </mat-step>
-
-    <mat-step id="last-step" state="summary-icon">
-      <ng-template matStepLabel>{{
-        (this.stepLabels | async)![3]
-      }}</ng-template>
-
-      <div id="title"><h2>TFR Submission</h2></div>
-      <app-project-summary
-        [currentProject]="tfrManagementService.getProject"
-        [resourcesWithNames]="currentResourcesWithNames"
-        [clientName]="tfrManagementService.getClientName"
-      ></app-project-summary>
-
-      <div class="floating-btn-div">
-        <button
-          mat-raised-button
-          class="navigation-btn"
-          color="primary"
-          matStepperPrevious
-        >
-          Back
-        </button>
-
-        <!-- CREATE MODE buttons -->
-        <button
-          class="navigation-btn success-btn"
-          mat-raised-button
-          color="success"
-          (click)="redirect(true)"
-          *ngIf="!this.editMode"
-        >
-          Submit
-        </button>
-
-        <!-- EDIT MODE buttons -->
-        <button
-          class="navigation-btn success-btn"
-          mat-raised-button
-          color="success"
-          (click)="redirect(false)"
-          *ngIf="this.editMode"
-        >
-          Done
-        </button>
-      </div>
-    </mat-step>
-
-    <ng-template matStepperIcon="basic-details-icon">
-      <mat-icon>folder</mat-icon>
-    </ng-template>
-
-    <ng-template matStepperIcon="milestone-icon">
-      <mat-icon>place</mat-icon>
-    </ng-template>
-
-    <ng-template matStepperIcon="resources-icon">
-      <mat-icon>people</mat-icon>
-    </ng-template>
-
-    <ng-template matStepperIcon="summary-icon">
-      <mat-icon>format_align_justify</mat-icon>
-    </ng-template>
-
-    <ng-template matStepperIcon="done">
-      <mat-icon
-        style="
-          color: darkblue;
-          background-color: greenyellow;
-          border-radius: 50%;
-        "
-        >done_all</mat-icon
+      <!-- CREATE MODE buttons -->
+      <button
+        class="navigation-btn success-btn"
+        mat-raised-button
+        color="success"
+        (click)="redirect(true)"
+        *ngIf="!this.editMode"
       >
-    </ng-template>
-  </mat-stepper>
-</div>
-<div *ngIf="!(tfrManagementService.errorCode === 200)" class="server-down-div">
-  <app-error [code]="tfrManagementService.errorCode"></app-error>
-</div>
+        Submit
+      </button>
+
+      <!-- EDIT MODE buttons -->
+      <button
+        class="navigation-btn success-btn"
+        mat-raised-button
+        color="success"
+        (click)="redirect(false)"
+        *ngIf="this.editMode"
+      >
+        Done
+      </button>
+    </div>
+  </mat-step>
+
+  <ng-template matStepperIcon="basic-details-icon">
+    <mat-icon>folder</mat-icon>
+  </ng-template>
+
+  <ng-template matStepperIcon="milestone-icon">
+    <mat-icon>place</mat-icon>
+  </ng-template>
+
+  <ng-template matStepperIcon="resources-icon">
+    <mat-icon>people</mat-icon>
+  </ng-template>
+
+  <ng-template matStepperIcon="summary-icon">
+    <mat-icon>format_align_justify</mat-icon>
+  </ng-template>
+
+  <ng-template matStepperIcon="done">
+    <mat-icon
+      style="color: darkblue; background-color: greenyellow; border-radius: 50%"
+      >done_all</mat-icon
+    >
+  </ng-template>
+</mat-stepper>

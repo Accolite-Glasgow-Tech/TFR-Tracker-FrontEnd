@@ -33,22 +33,26 @@ import { TfrBasicDetailsComponent } from './components/tfrbasic-details/tfr-basi
 import { TfrsComponent } from './components/tfrs/tfrs.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { UserComponent } from './components/user/user.component';
-import { TokenInterceptorService } from './interceptors/token-interceptor.service';
+import { ErrorInterceptorService } from './interceptors/error-interceptor/error-interceptor.service';
+import { TokenInterceptorService } from './interceptors/token-interceptor/token-interceptor.service';
 
 import { DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IgxListModule, IgxRippleModule } from 'igniteui-angular';
+import { ErrorGeneratorComponent } from './components/error-generator/error-generator.component';
 import { ErrorComponent } from './components/error/error.component';
+import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
 import { LogOutComponent } from './components/log-out/log-out.component';
 import { ManageWidgetModalComponent } from './components/manage-widget-modal/manage-widget-modal.component';
 import { ChipComponent } from './components/milestones/chip/chip.component';
 import { NotesDialogComponent } from './components/notes-dialog/notes-dialog.component';
 import { ProjectSchedulesComponent } from './components/project-schedules/project-schedules.component';
+import { ResourceSelectionComponent } from './components/resource-selection/resource-selection.component';
+import { UpdateResourceDialogComponent } from './components/update-resource-dialog/update-resource-dialog.component';
 import { UserNameComponent } from './components/user-name/user-name.component';
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
 import { WidgetClientLocationComponent } from './components/widget-client-location/widget-client-location.component';
-import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +89,10 @@ import { LoadingScreenComponent } from './components/loading-screen/loading-scre
     ErrorComponent,
     UserNameComponent,
     ProjectSchedulesComponent,
+    ResourceSelectionComponent,
+    UpdateResourceDialogComponent,
     LoadingScreenComponent,
+    ErrorGeneratorComponent,
   ],
 
   providers: [
@@ -93,6 +100,11 @@ import { LoadingScreenComponent } from './components/loading-screen/loading-scre
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptorService,
       multi: true,
     },
   ],

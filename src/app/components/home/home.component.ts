@@ -98,9 +98,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  optionsChange(options: IGridsterOptions) {
-    // console.log('options change:', options.lanes);
-  }
+  optionsChange(options: IGridsterOptions) {}
 
   OpenPopup() {
     const popup = this.matdialog.open(ManageWidgetModalComponent, {

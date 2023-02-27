@@ -1,20 +1,20 @@
-<mat-card class="nodataclass" *ngIf="ProjectDetails.length === 0 && serverup">
+<mat-card class="nodataclass" *ngIf="UpcomingProjects.length === 0 && serverup">
   <h1 class="head">No Data to show</h1>
 </mat-card>
 <mat-card class="nodataclass" *ngIf="!serverup">
   <h1 class="head">Service unavailable. Try again</h1>
 </mat-card>
-<igx-list *ngIf="ProjectDetails.length > 0">
+<igx-list *ngIf="UpcomingProjects.length > 0">
   <mat-card class="igxlistbox">
     <br />
     <igx-list-item
-      *ngFor="let projectDetails of ProjectDetails; index as i"
+      *ngFor="let project of UpcomingProjects; index as i"
       igxRipple
       igxRippleTarget=".igx-list__item-content"
       ><div>
         <span
-          ><b>{{ i + 1 }}. {{ projectDetails[0] }}</b> starts in
-          <strong>{{ projectDetails[1] }}</strong> days
+          ><b>{{ i + 1 }}. {{ project.name }}</b> starts in
+          <strong>{{ project.daysToStart }}</strong> days
         </span>
         <br />
         <br />

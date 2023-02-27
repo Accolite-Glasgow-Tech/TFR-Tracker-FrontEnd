@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/services/api/api.service';
@@ -39,8 +38,6 @@ export class ProjectSchedulesComponent {
       if (!Number.isNaN(this.projectId)) {
         this.apiService.getProjectTasks(this.projectId).subscribe({
           next: (response: any) => (this.tasks = <TaskDTO[]>response),
-          error: (error: HttpErrorResponse) =>
-            this.snackBarService.showSnackBar(error.error),
           complete: () => (this.loading = false),
         });
       }
@@ -63,8 +60,6 @@ export class ProjectSchedulesComponent {
         this.snackBarService.showSnackBar('Task deleted successfully');
         this.tasks = this.tasks.filter((task) => task.id !== taskId);
       },
-      error: (error: HttpErrorResponse) =>
-        this.snackBarService.showSnackBar(error.error),
       complete: () => (this.loading = false),
     });
     log(taskId);
