@@ -327,7 +327,10 @@ export class TfrManagementService {
   }
 
   updateStatusToDatabase(): Observable<boolean> {
-    return this.apiService.putStatus(this.project!.id, 'AGREED');
+    if (this.project !== undefined) {
+      this.project.status = 'AGREED';
+    }
+    return this.updateProjectToDatabase();
   }
 
   setNotes(notes: string) {
