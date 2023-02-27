@@ -7,42 +7,25 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
-import { Observable } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  startWith,
-} from 'rxjs/operators';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ResourceService } from 'src/app/services/resource/resource.service';
 import { ResponseHandlerService } from 'src/app/services/response-handler/response-handler.service';
 import { TfrManagementService } from 'src/app/services/tfr-management/tfr-management.service';
 import {
+  AddResource,
   AllocatedResourceTypeDTO,
   DisplaySkillDTO,
   Project,
   ProjectResourceDTO,
   ResourceListType,
 } from 'src/app/shared/interfaces';
+import { UpdateResourceDialogComponent } from '../update-resource-dialog/update-resource-dialog.component';
 
-export function autoCompleteResourceNameValidator(
-  validOptions: ResourceListType[]
-): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: any } | null => {
-    if (validOptions.find((e) => e.resource_name === control.value)) {
-      return null; /* valid option selected */
-    }
-    return { invalidAutoCompleteResourceName: { value: control.value } };
-  };
-}
+export const RESOURCE_NAME = 'resource_name';
+export const RESOURCE_ID = 'resource_id';
 
 @Component({
   selector: 'app-tfr-creation-resource',
@@ -54,6 +37,7 @@ export class TfrCreationResourceComponent implements OnInit {
     protected resourceService: ResourceService,
     protected tfrManagementService: TfrManagementService,
     private responseHandlerService: ResponseHandlerService,
+    private dialog: MatDialog,
     @Inject(ApiService) private apiService: ApiService
   ) {}
 
@@ -63,7 +47,6 @@ export class TfrCreationResourceComponent implements OnInit {
   currentResourceSkills: DisplaySkillDTO[] = [];
   currentResourceName!: string;
   seniorityLevels!: string[];
-  filteredResourceOption!: Observable<ResourceListType[]>;
   allocatedResources: AllocatedResourceTypeDTO[] = [];
   resourceDetailsUpdated: boolean = false;
   previousUpdateSuccessful: boolean = true;
@@ -129,33 +112,9 @@ export class TfrCreationResourceComponent implements OnInit {
     },
   };
 
-  public validation_msgs = {
-    resource_name: [
-      {
-        type: 'invalidAutoCompleteResourceName',
-        message:
-          'Resource name not recognized. Click one of the autocomplete options.',
-      },
-      { type: 'required', message: 'Resource is required.' },
-    ],
-    role: [{ type: 'required', message: 'Role is required.' }],
-    seniorityLevel: [
-      { type: 'required', message: 'Seniority Level is required.' },
-    ],
-  };
-
   ngOnInit(): void {
     this.resourceFormGroup = new FormGroup({
       resources_count: new FormControl('', {
-        validators: [Validators.required],
-      }),
-      resource_name: new FormControl('', {
-        validators: [Validators.required],
-      }),
-      seniorityLevel: new FormControl('', {
-        validators: [Validators.required],
-      }),
-      role: new FormControl('', {
         validators: [Validators.required],
       }),
     });
@@ -166,17 +125,6 @@ export class TfrCreationResourceComponent implements OnInit {
 
     this.apiService.getAllResources().subscribe((data: ResourceListType[]) => {
       this.resources = data;
-
-      this.resourceFormGroup.controls['resource_name'].addValidators([
-        autoCompleteResourceNameValidator(this.resources),
-      ]);
-
-      this.filteredResourceOption = this.resourceFormGroup.controls[
-        'resource_name'
-      ].valueChanges.pipe(
-        startWith(''),
-        map((value) => this.filterResource(value || ''))
-      );
 
       let temp: ProjectResourceDTO[] | undefined =
         this.tfrManagementService.getProjectResources;
@@ -198,28 +146,36 @@ export class TfrCreationResourceComponent implements OnInit {
           ?.setValue(this.tfrManagementService.getResourcesCount);
         this.resourcesCount = this.tfrManagementService.getResourcesCount!;
       }
-
       this.refreshTooltipMsg();
       this.addEventListener();
     });
   }
 
-  public filterResource(value: string): ResourceListType[] {
-    const filterValue = value.toLowerCase();
-
-    return this.resources
-      .filter((resource) => !resource.selected)
-      .filter((resource) =>
-        resource.resource_name.toLowerCase().includes(filterValue)
-      );
+  valueChanges(allocationFormGroup: FormGroup) {
+    if (this.resourceFormGroup.contains('allocation_form_group')) {
+      this.resourceFormGroup.removeControl('allocation_form_group');
+    }
+    this.resourceFormGroup.addControl(
+      'allocation_form_group',
+      allocationFormGroup
+    );
   }
 
-  addResource(resource_name: string, role: string, seniority: string) {
+  addResource(
+    resource_name: string = this.resourceFormGroup.controls[
+      'allocation_form_group'
+    ].get('resource_name')?.value,
+    role: string = this.resourceFormGroup.controls['allocation_form_group'].get(
+      'role'
+    )?.value,
+    seniority: string = this.resourceFormGroup.controls[
+      'allocation_form_group'
+    ].get('seniorityLevel')?.value
+  ) {
     this.resourceDetailsUpdated = true;
 
-    const index = this.resources.findIndex(
-      (resource) => resource.resource_name === resource_name
-    );
+    const index = this.findResourceIndex(resource_name, RESOURCE_NAME);
+
     this.resources[index].selected = true;
 
     const allocatedResource: AllocatedResourceTypeDTO = {
@@ -253,8 +209,9 @@ export class TfrCreationResourceComponent implements OnInit {
   removeResource(removedResource: AllocatedResourceTypeDTO) {
     this.resourceDetailsUpdated = true;
 
-    const indexForResourcesArr = this.resources.findIndex(
-      (resource) => resource.resource_id === removedResource.resource_id
+    const indexForResourcesArr = this.findResourceIndex(
+      removedResource.resource_id,
+      RESOURCE_ID
     );
     this.resources[indexForResourcesArr].selected = false;
     const indexForAllocatedResourceArr = this.allocatedResources.findIndex(
@@ -268,12 +225,14 @@ export class TfrCreationResourceComponent implements OnInit {
   }
 
   resetFormGroup() {
-    this.resourceFormGroup.get('resource_name')?.setValue('');
-    this.resourceFormGroup.get('role')?.setValue('');
-    this.resourceFormGroup.get('seniorityLevel')?.setValue('');
-    this.resourceFormGroup.controls['resource_name'].setErrors(null);
-    this.resourceFormGroup.controls['role'].setErrors(null);
-    this.resourceFormGroup.controls['seniorityLevel'].setErrors(null);
+    this.resourceFormGroup.controls['allocation_form_group'].patchValue({
+      resource_name: '',
+      role: '',
+      seniorityLevel: '',
+    });
+
+    this.resourceFormGroup.controls['allocation_form_group'].markAsPristine();
+    this.resourceFormGroup.controls['allocation_form_group'].markAsUntouched();
 
     this.currentResourceSkills = [];
 
@@ -286,8 +245,9 @@ export class TfrCreationResourceComponent implements OnInit {
 
   updateResourceList(projectResources: ProjectResourceDTO[]) {
     projectResources.forEach((resource: ProjectResourceDTO) => {
-      let indexOfResource = this.resources.findIndex(
-        (val) => val.resource_id === resource.resource_id
+      let indexOfResource = this.findResourceIndex(
+        resource.resource_id,
+        RESOURCE_ID
       );
 
       if (!resource.is_deleted) {
@@ -367,5 +327,63 @@ export class TfrCreationResourceComponent implements OnInit {
       this.resourcesCount > allocatedResourceCount
         ? `${this.resourcesCount - allocatedResourceCount} more to allocate`
         : `${allocatedResourceCount - this.resourcesCount} allocated in excess`;
+  }
+
+  editResource(resourceToEdit: AllocatedResourceTypeDTO) {
+    let indexOfResource: number = this.findResourceIndex(
+      resourceToEdit.resource_id,
+      RESOURCE_ID
+    );
+
+    this.resources[indexOfResource].selected = false;
+    let dialogRef!: MatDialogRef<UpdateResourceDialogComponent, any>;
+    dialogRef = this.dialog.open(UpdateResourceDialogComponent, {
+      data: {
+        resources: this.resources,
+        seniorityLevels: this.seniorityLevels,
+        resourceToEdit: resourceToEdit,
+      },
+      autoFocus: false,
+    });
+
+    dialogRef.afterClosed().subscribe((result: AddResource) => {
+      if (result) {
+        if (
+          result.resource_name !== this.resources[indexOfResource].resource_name
+        ) {
+          indexOfResource = this.allocatedResources.findIndex(
+            (r) =>
+              r.resource_name ===
+                this.resources[indexOfResource].resource_name &&
+              r.is_deleted === false
+          );
+          this.allocatedResources[indexOfResource].is_deleted = true;
+          indexOfResource = this.findResourceIndex(
+            result.resource_name,
+            RESOURCE_NAME
+          );
+          this.resources[indexOfResource].selected = true;
+          this.addResource(result.resource_name, result.role, result.seniority);
+        } else {
+          this.resources[indexOfResource].selected = true;
+          indexOfResource = this.allocatedResources.findIndex(
+            (r) =>
+              r.resource_name ===
+                this.resources[indexOfResource].resource_name &&
+              r.is_deleted === false
+          );
+          this.allocatedResources[indexOfResource].role = result.role;
+          this.allocatedResources[indexOfResource].seniority = result.seniority;
+        }
+        this.resourceDetailsUpdated = true;
+      } else {
+        this.resources[indexOfResource].selected = true;
+      }
+    });
+  }
+
+  findResourceIndex(searchValue: any, keyString: string): number {
+    let key = keyString as keyof ResourceListType;
+    return this.resources.findIndex((r) => r[key] === searchValue);
   }
 }

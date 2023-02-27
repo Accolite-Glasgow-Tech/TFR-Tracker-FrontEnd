@@ -47,6 +47,8 @@ import { ManageWidgetModalComponent } from './components/manage-widget-modal/man
 import { ChipComponent } from './components/milestones/chip/chip.component';
 import { NotesDialogComponent } from './components/notes-dialog/notes-dialog.component';
 import { ProjectSchedulesComponent } from './components/project-schedules/project-schedules.component';
+import { ResourceSelectionComponent } from './components/resource-selection/resource-selection.component';
+import { UpdateResourceDialogComponent } from './components/update-resource-dialog/update-resource-dialog.component';
 import { UserNameComponent } from './components/user-name/user-name.component';
 import { UserSchedulesComponent } from './components/user-schedules/user-schedules.component';
 import { WidgetApproachingProjectsComponent } from './components/widget-approaching-projects/widget-approaching-projects.component';
@@ -87,6 +89,8 @@ import { WidgetClientLocationComponent } from './components/widget-client-locati
     ErrorComponent,
     UserNameComponent,
     ProjectSchedulesComponent,
+    ResourceSelectionComponent,
+    UpdateResourceDialogComponent,
     LoadingScreenComponent,
     ErrorGeneratorComponent,
   ],

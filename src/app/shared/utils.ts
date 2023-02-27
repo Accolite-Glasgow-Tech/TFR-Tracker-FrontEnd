@@ -45,3 +45,7 @@ export function getSkillsURL(resourceId: number): string {
 export function getWritePermissionCheckUrl(projectId: number): string {
   return `${environment.backendURL}/projects/${projectId}/can-write`;
 }
+
+export function getUpdateProjectResourcesURL(projectId: number): string {
+  return `${environment.backendURL}/projects/resources/${projectId}`;
+}

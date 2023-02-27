@@ -12,6 +12,7 @@ import {
   ProjectResourceDTO,
 } from 'src/app/shared/interfaces';
 import { ApiService } from '../api/api.service';
+import { ResourceService } from '../resource/resource.service';
 import { ResponseHandlerService } from '../response-handler/response-handler.service';
 
 @Injectable({
@@ -22,7 +23,7 @@ export class TfrManagementService {
   projectResourcesWithNames!: AllocatedResourceTypeDTO[];
   subject = new Subject<boolean>();
   clientReset = new EventEmitter<boolean>();
-  canEdit: boolean = true;
+  canEdit: boolean = false;
 
   clientName: string = '';
 
@@ -85,7 +86,8 @@ export class TfrManagementService {
 
   constructor(
     private apiService: ApiService,
-    private responseHandlerService: ResponseHandlerService
+    private responseHandlerService: ResponseHandlerService,
+    private resourceService: ResourceService
   ) {}
 
   get getProjectObserver() {
@@ -304,7 +306,13 @@ export class TfrManagementService {
 
   updateProjectToResourceMapping(): Observable<boolean> {
     this.apiService
-      .postProjectResources(this.project)
+      .putProjectResources(
+        this.project?.id!,
+        this.resourceService.projectResourcesWithoutDeleted(
+          this.project?.project_resources!
+        ),
+        this.getResourcesCount!
+      )
       .subscribe(this.updateProjectToDatabaseObserver);
     return this.subject.asObservable();
   }

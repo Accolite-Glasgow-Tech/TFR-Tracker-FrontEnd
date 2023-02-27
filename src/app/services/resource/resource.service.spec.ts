@@ -1,7 +1,10 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { AllocatedResourceTypeDTO } from 'src/app/shared/interfaces';
-import { DummyAllocatedResources } from 'src/app/types/dummy-data';
+import {
+  DummyAllocatedResources,
+  DummyProjectResources,
+} from 'src/app/types/dummy-data';
 import { ResourceService } from './resource.service';
 
 describe('ResourceService', () => {
@@ -47,5 +50,18 @@ describe('ResourceService', () => {
     let result = service.resourcesWithoutDeleted(undefined);
 
     expect(result).toEqual([]);
+  });
+
+  it('should return list of project resources that are not deleted - with empty list', () => {
+    expect(service.projectResourcesWithoutDeleted([])).toEqual([]);
+  });
+
+  it('should return list of project resources that are not deleted', () => {
+    let dummyProjectResources = [...DummyProjectResources];
+    dummyProjectResources[0].is_deleted = true;
+    let expectedResult = [dummyProjectResources[1]];
+    expect(
+      service.projectResourcesWithoutDeleted(dummyProjectResources)
+    ).toEqual(expectedResult);
   });
 });

@@ -12,7 +12,6 @@ export const clientsURLdupe = `${backendURL}/search/clients/all`;
 export const projectSearchURL = `${backendURL}/search/project`;
 export const registrationURL = `${backendURL}/users/register`;
 export const loginURL = `${backendURL}/users/login`;
-export const resourceProjectsURL = `${backendURL}/resources/projects`;
 export const TFRCreationResourceURL = `${backendURL}/resources/all/tfr-creation-resource`;
 export const projectsURL = `${backendURL}/projects`;
 export const approachingProjectsURL = `${backendURL}/UpcomingProjects`;

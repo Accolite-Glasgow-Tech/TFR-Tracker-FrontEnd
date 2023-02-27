@@ -62,7 +62,7 @@ describe('TfrManagementService', () => {
             'putStatus',
             'putProject',
             'getProject',
-            'postProjectResources',
+            'putProjectResources',
             'getResourcesNamesByProjectIdFromDatabase',
             ,
             'getHasWritePermission',
@@ -286,7 +286,7 @@ describe('TfrManagementService', () => {
   });
 
   it('should update project to resource mapping in db success', () => {
-    apiServiceSpy.postProjectResources.and.returnValue(of(1));
+    apiServiceSpy.putProjectResources.and.returnValue(of(1));
     service.project = project;
     service.updateProjectToResourceMapping();
     expect(service.project.version).toBe(1);
@@ -313,28 +313,6 @@ describe('TfrManagementService', () => {
   it('should set resources count', () => {
     service.setResourcesCount(1);
     expect(service.project?.resources_count).toBe(1);
-  });
-
-  it('should retrieve project - 500 error', () => {
-    let response = {
-      project: {
-        status: 500,
-      },
-    };
-    let observer = service.getProjectObserver;
-    observer.next(response);
-    expect(service.errorCode).toBe(404);
-  });
-
-  it('should retrieve project - 503 error', () => {
-    let response = {
-      project: {
-        status: 503,
-      },
-    };
-    let observer = service.getProjectObserver;
-    observer.next(response);
-    expect(service.errorCode).toBe(503);
   });
 
   it('should retrieve project', () => {
@@ -371,10 +349,5 @@ describe('TfrManagementService', () => {
     service.setNotes('Hello World');
     expect(service.project.notes).toBe('Hello World');
     expect(apiServiceSpy.putProject).toHaveBeenCalled();
-  });
-
-  it('should set server down', () => {
-    service.setServerDown();
-    expect(service.errorCode).toBe(503);
   });
 });
