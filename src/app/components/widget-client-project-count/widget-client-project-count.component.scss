@@ -8,22 +8,45 @@
   font-family: sans-serif;
 }
 
-@media all and (min-device-width: 3501px) and (max-width: 4500px) and (-webkit-min-device-pixel-ratio: 0.5) {
+@media all and (min-device-width: 0px) and (max-width: 1250px) and (-webkit-min-device-pixel-ratio: 0.5) {
   .chartstyle {
-    margin: -30px;
+    padding: 12px;
+    padding-left: 20px;
+    justify-content: center;
+    height: fit-content;
+    justify-content: flex-start;
   }
 }
 
-@media all and (min-device-width: 4501px) and (max-width: 5500px) and (-webkit-min-device-pixel-ratio: 0.5) {
+@media all and (min-device-width: 1251px) and (max-width: 1801px) and (-webkit-min-device-pixel-ratio: 0.5) {
   .chartstyle {
-    margin: -60px;
-    margin-top: -105px;
+    padding: 12px;
+    padding-left: 20px;
+    justify-content: center;
+    height: fit-content;
+    justify-content: flex-start;
+    margin: -4%;
+    margin-top: -6%;
   }
 }
 
-@media all and (min-device-width: 5501px) {
+@media all and (min-device-width: 1800px) and (max-width: 3700px) and (-webkit-min-device-pixel-ratio: 0.5) {
   .chartstyle {
-    margin: -20px;
-    margin-top: -169px;
+    padding: 12px;
+    padding-left: 20px;
+    justify-content: center;
+    height: fit-content;
+    justify-content: flex-start;
+    margin: -4%;
+    margin-top: -8%;
+  }
+}
+@media all and (min-device-width: 3701px) and (-webkit-min-device-pixel-ratio: 0.5) {
+  .chartstyle {
+    padding: 12px;
+    padding-left: 20px;
+    justify-content: center;
+    height: fit-content;
+    justify-content: flex-start;
   }
 }
